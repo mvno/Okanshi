@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Okanshi</id>
+    <version>0.0.0.0-dev</version>
+    <title>Okanshi</title>
+    <authors>Mvno</authors>
+    <owners>Mvno</owners>
+    <projectUrl>http://www.mvno.dk</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>In-process monitoring library.</description>
+    <copyright>Copyright @ 2014</copyright>
+  </metadata>
+  <files />
+</package>

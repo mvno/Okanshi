@@ -1,0 +1,6 @@
+FluentAssertions
+FSharp.Core
+Newtonsoft.Json
+NSubstitute
+xunit
+xunit.extensions
