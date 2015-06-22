@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Tutorial
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="In-process monitoring solution"/>
+    <meta name="author" content="Telenor MVNO"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="//content/style.css" />
+    <script type="text/javascript" src="//content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://github.com/mvno/Okanshi">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="//index.html">Okanshi</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1><a name="Tutorial" class="anchor" href="#Tutorial">Tutorial</a></h1>
+
+<h2><a name="Starting-the-API" class="anchor" href="#Starting-the-API">Starting the API</a></h2>
+
+<p>After Okanshi has been added to your project, you start the monitor like this:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="csharp"><span class="k">var</span> api <span class="o">=</span> <span class="k">new</span> MonitorApi();
+api.Start();
+
+[lang=fsharp]
+<span class="k">let</span> api <span class="o">=</span> <span class="k">new</span> MonitorApi()
+api.Start()
+</pre></td></tr></table>
+
+<p>You should now be able to access the HTTP endpoint using <a href="http://localhost:13004"><a href="http://localhost:13004">http://localhost:13004</a></a>.
+As nothing has been monitored yet, it will return an JSON response with an empty object, like this:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+{}
+</pre>
+</td>
+</tr>
+</table>
+
+<h2><a name="Metrics" class="anchor" href="#Metrics">Metrics</a></h2>
+
+<p>Okanshi has a couple of different metrics, you can measure Success, Failure and Time function calls.</p>
+
+<p>The most basic metric is, Success and Failure, used like this:</p>
+
+<p>C#:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="csharp">Monitor.Success(<span class="s">"success"</span>);
+Monitor.Failed(<span class="s">"failure"</span>);
+</pre></td></tr></table>
+
+<p>F#:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">success</span> <span class="s">&quot;success&quot;</span>
+<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">failed</span> <span class="s">&quot;failure&quot;</span>
+</pre>
+</td>
+</tr>
+</table>
+
+<p>If you access the <a href="http://localhost:13004">API</a> now, you'll see something like this:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+{
+    <span class="i">failure</span><span class="o">:</span> {
+        <span class="i">measurements</span><span class="o">:</span> [
+            {
+            <span class="i">average</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">1</span>,
+            <span class="i">minimum</span><span class="o">:</span> <span class="n">2147483647</span>,
+            <span class="i">maximum</span><span class="o">:</span> <span class="o">-</span><span class="n">2147483648</span>,
+            <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">mean</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T22:08:19.3509214+02:00&quot;</span>,
+            <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T23:08:19.3509214+02:00&quot;</span>,
+            <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
+            }
+        ],
+        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
+        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
+    },
+    <span class="i">success</span><span class="o">:</span> {
+        <span class="i">measurements</span><span class="o">:</span> [
+            {
+            <span class="i">average</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">1</span>,
+            <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">minimum</span><span class="o">:</span> <span class="n">2147483647</span>,
+            <span class="i">maximum</span><span class="o">:</span> <span class="o">-</span><span class="n">2147483648</span>,
+            <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">mean</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
+            <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T22:07:44.2658471+02:00&quot;</span>,
+            <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T23:07:44.2658471+02:00&quot;</span>,
+            <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
+            }
+        ],
+        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
+        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+
+<p>This contains a lot of information, not introduced yet, but it should be pretty self explanatory. The information will be explained later.
+The important information in this case is the two properties, <code>failure</code> and <code>success</code>, which also is the arguments passed
+into <code>Monitor.Success</code> and <code>Monitor.Failed</code>, these are used as keys to group metrics. You can see that the <code>success</code> property contains a measurement
+with <code>numberOfSuccess: 1</code> and the <code>failure</code> metric has <code>numberOfFailed: 0</code>, this makes it easy to see how many times the specific metric has
+succeeded and failed.</p>
+
+<p>The output also contains a lot of other information mostly related to the timing of function calls. Time a function call like this:</p>
+
+<p>C#:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="csharp"><span class="c">// Time an Action</span>
+Monitor.Time(<span class="s">"action"</span>, () <span class="o">=</span><span class="o">&gt;</span> { System.Threading.Thread.Sleep(2000); });
+<span class="c">// Time a Func</span>
+<span class="k">var</span> result <span class="o">=</span> Monitor.Time(<span class="s">"func"</span>, () <span class="o">=</span><span class="o">&gt;</span> { System.Threading.Thread.Sleep(2000); <span class="k">return</span> <span class="k">true</span>; });
+</pre></td></tr></table>
+
+<p>F#:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">time</span> <span class="s">&quot;func&quot;</span> (<span class="k">fun</span> () <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">Threading</span><span class="o">.</span><span class="i">Sleep</span>(<span class="n">2000</span>); <span class="k">true</span>)
+<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">time</span> <span class="s">&quot;action&quot;</span> (<span class="k">fun</span> () <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 3)" onmouseover="showTip(event, 'fs1', 3)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="i">Threading</span><span class="o">.</span><span class="i">Sleep</span>(<span class="n">2000</span>))
+</pre>
+</td>
+</tr>
+</table>
+
+<p>After running the statements above twice you should get output something like this:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+{
+    <span class="i">func</span><span class="o">:</span> {
+        <span class="i">measurements</span><span class="o">:</span> [
+            {
+                <span class="i">average</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
+                <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">2</span>,
+                <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">0</span>,
+                <span class="i">minimum</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">maximum</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">2</span>,
+                <span class="i">mean</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
+                <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T09:28:01.5582084+02:00&quot;</span>,
+                <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T10:28:01.5592085+02:00&quot;</span>,
+                <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
+            }
+        ],
+        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
+        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
+    },
+    <span class="i">action</span><span class="o">:</span> {
+        <span class="i">measurements</span><span class="o">:</span> [
+            {
+                <span class="i">average</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
+                <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">2</span>,
+                <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">0</span>,
+                <span class="i">minimum</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">maximum</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">2</span>,
+                <span class="i">mean</span><span class="o">:</span> <span class="n">1999</span>,
+                <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
+                <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T09:29:33.043356+02:00&quot;</span>,
+                <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T10:29:33.043356+02:00&quot;</span>,
+                <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
+            }
+        ],
+        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
+        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
+    }
+}
+</pre>
+</td>
+</tr>
+</table>
+
+<p>Now a lot more of the information is populated. As we can see <code>numberOfSuccess</code> is incremented as the functions didn't throw an exception, if one of the function calls throws an exception
+<code>numberOfFailed</code> is incremented instead. All the timing properties should be self explanatory, except <code>sumOfSquares</code> and <code>mean</code>, this is just values used
+internally to calculate the variance and standardDeviation, without saving all timing information for each call.</p>
+
+<p>The last part of the output is <code>maxMeasurements</code> and <code>windowSize</code>. These indicates the maximum number of measurements to save in memory and the window size
+of each measurement in milliseconds. These can be set by passing <code>MonitorOptions</code> into <code>monitorApi.Start</code>.</p>
+
+<h2><a name="Health-checks" class="anchor" href="#Health-checks">Health checks</a></h2>
+
+<p>You can also add different health checks to you application. For example the number of files in a directory or something else making sense in you case.
+Health checks are added like this:</p>
+
+<p>C#:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="csharp">HealthChecks.Add(<span class="s">"key"</span>, () <span class="o">=</span><span class="o">&gt;</span> Directory.GetFiles(<span class="s">"C:\\MyData"</span>).Length <span class="o">=</span><span class="o">=</span> 0);
+</pre></td></tr></table>
+
+<p>F#:
+    [lang=fsharp]
+    HealthChecks.Add("key", (fun () -&gt; System.IO.Directory.GetFiles("C:\MyData").Length = 0))</p>
+
+<p>The <code>Func</code> passed in just have to return a boolean, indicating pass or fail. The status of the health checks can be seen using
+<a href="http://localhost:13004/healthchecks"><a href="http://localhost:13004/healthchecks">http://localhost:13004/healthchecks</a></a>.</p>
+
+<h2><a name="Assembly-dependencies" class="anchor" href="#Assembly-dependencies">Assembly dependencies</a></h2>
+
+<p>To see all assembly dependencies for you application just access <a href="http://localhost:13004/dependencies"><a href="http://localhost:13004/dependencies">http://localhost:13004/dependencies</a></a>. It will provide
+a list of the names and version of all dependencies.</p>
+
+<div class="tip" id="fs1">namespace System</div>
+<div class="tip" id="fs2">namespace System.Threading</div>
+
+        </div>
+        <div class="span3">
+          <img src="//img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">Okanshi</li>
+            <li><a href="//index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/Okanshi">Get Library via NuGet</a></li>
+            <li><a href="http://github.com/mvno/Okanshi">Source Code on GitHub</a></li>
+            <li><a href="//license.html">License</a></li>
+            <li><a href="//release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="//tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="//reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="http://github.com/mvno/Okanshi"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
