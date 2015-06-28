@@ -73,5 +73,14 @@ namespace Okanshi.Test
 
 			monitor.Should().NotBeNull();
 		}
+
+		[Fact]
+		public void Stopping_api_multiple_times_does_not_hang()
+		{
+			CSharp.Monitor.Stop();
+			_monitorApi.Stop();
+			_monitorApi.Stop();
+			_monitorApi.Stop();
+		}
 	}
 }

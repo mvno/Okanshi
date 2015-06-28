@@ -28,6 +28,7 @@ type MonitorApi(options : MonitorApiOptions) =
     member __.Start(monitorOptions) =
         if monitor.IsSome then invalidOp "Already started"
         monitor <- monitorOptions |> Monitor.start |> Some
+        CSharp.Monitor.SetMonitor(monitor.Value)
         let sendResponse (context : HttpListenerContext) content =
             try
                 use response = context.Response
@@ -64,7 +65,7 @@ type MonitorApi(options : MonitorApiOptions) =
     member __.Stop() =
         if monitor.IsSome then
             monitor.Value |> Monitor.stop
+            CSharp.Monitor.ClearMonitor()
             monitor <- None
-        if not listener.IsListening then invalidOp "Not started"
+        if listener.IsListening then listener.Stop()
         Async.CancelDefaultToken()
-        listener.Stop()
