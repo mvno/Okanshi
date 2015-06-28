@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
@@ -18,6 +19,7 @@ namespace Okanshi.Test
 		{
 			_monitorApi = new MonitorApi(new MonitorApiOptions { HttpPrefix = _monitorUrl });
 			_monitorApi.Start();
+			Thread.Sleep(500);
 			HealthChecks.Clear();
 			CSharp.Monitor.ResetCounters();
 		}
