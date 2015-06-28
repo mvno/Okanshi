@@ -13,7 +13,7 @@ namespace Okanshi.Test
 	public class MonitorApiTest : IDisposable
 	{
 		private readonly MonitorApi _monitorApi;
-		private readonly string _monitorUrl = "http://localhost:13004/" + AppDomain.CurrentDomain.SetupInformation.ApplicationName + "/";
+		private readonly string _monitorUrl = "http://localhost:13004/" + Guid.NewGuid() + "/";
 
 		public MonitorApiTest()
 		{
