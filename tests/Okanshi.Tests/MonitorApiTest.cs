@@ -63,5 +63,15 @@ namespace Okanshi.Test
 
 			JsonConvert.DeserializeObject<Dictionary<string, bool>>(result).Should().BeEmpty();
 		}
+
+		[Fact]
+		public void Starting_api_returns_monitor_instance()
+		{
+			_monitorApi.Stop();
+
+			var monitor = _monitorApi.Start();
+
+			monitor.Should().NotBeNull();
+		}
 	}
 }

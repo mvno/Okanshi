@@ -25,7 +25,7 @@ type MonitorApi(options : MonitorApiOptions) =
         self.Start(new MonitorOptions())
 
     /// Start API and monitoring using the provided options
-    member self.Start(monitorOptions) =
+    member __.Start(monitorOptions) =
         if monitor.IsSome then invalidOp "Already started"
         monitor <- monitorOptions |> Monitor.start |> Some
         let sendResponse (context : HttpListenerContext) content =
@@ -58,9 +58,10 @@ type MonitorApi(options : MonitorApiOptions) =
                     Monitor.getMetrics() |> sendResponse context
         }
         Async.Start(server)
+        monitor.Value
 
     /// Stop the API and monitoring
-    member self.Stop() =
+    member __.Stop() =
         if monitor.IsSome then
             monitor.Value |> Monitor.stop
             monitor <- None
