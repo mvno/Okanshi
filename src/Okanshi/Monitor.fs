@@ -123,9 +123,10 @@ module Monitor =
 
     /// Stop monitoring
     let stop (monitor : Monitor) =
-        monitor.PostAndReply(Stop)
-        hashSet.Clear()
-        isStarted <- false
+        if isStarted then
+            monitor.PostAndReply(Stop)
+            hashSet.Clear()
+            isStarted <- false
 
     /// Get dependencies
     let getDependencies() =
@@ -176,10 +177,21 @@ namespace Okanshi.CSharp
     type Monitor private() =
         static let mutable instance : Monitor.Monitor option = None
         static let isStarted() = if instance.IsNone then false else true
+
+        /// Set monitor instance
+        static member SetMonitor(monitor) =
+            if isStarted() then invalidOp "Cannot set monitor when it is started"
+            instance <- Some monitor
+
+        /// Clear monitor instance
+        static member ClearMonitor() =
+            instance <- None
         
         /// Start monitoring with default options
         static member Start() =
-            instance <- Some <| Monitor.start Monitor.defaultOptions
+            let monitor = Monitor.start Monitor.defaultOptions
+            instance <- Some <| monitor
+            monitor
         
         /// Start monitoring with specified options
         static member Start(options) =

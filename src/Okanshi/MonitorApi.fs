@@ -25,9 +25,10 @@ type MonitorApi(options : MonitorApiOptions) =
         self.Start(new MonitorOptions())
 
     /// Start API and monitoring using the provided options
-    member self.Start(monitorOptions) =
+    member __.Start(monitorOptions) =
         if monitor.IsSome then invalidOp "Already started"
         monitor <- monitorOptions |> Monitor.start |> Some
+        CSharp.Monitor.SetMonitor(monitor.Value)
         let sendResponse (context : HttpListenerContext) content =
             try
                 use response = context.Response
@@ -58,12 +59,13 @@ type MonitorApi(options : MonitorApiOptions) =
                     Monitor.getMetrics() |> sendResponse context
         }
         Async.Start(server)
+        monitor.Value
 
     /// Stop the API and monitoring
-    member self.Stop() =
+    member __.Stop() =
         if monitor.IsSome then
             monitor.Value |> Monitor.stop
+            CSharp.Monitor.ClearMonitor()
             monitor <- None
-        if not listener.IsListening then invalidOp "Not started"
+            listener.Stop()
         Async.CancelDefaultToken()
-        listener.Stop()

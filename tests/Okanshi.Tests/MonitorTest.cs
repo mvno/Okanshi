@@ -187,5 +187,23 @@ namespace Okanshi.Test
 			metricUpdated.Metric.measurements.Single().minimum.Should().Be(tuple.Item2);
 			metricUpdated.Timestamp.Should().BeWithin(5.Seconds()).Before(DateTimeOffset.Now);
 		}
+
+		[Fact]
+		public void Passing_in_monitor_when_already_started_throws()
+		{
+			Action setMonitor = () => CSharp.Monitor.SetMonitor(Monitor.start(Monitor.defaultOptions));
+
+			setMonitor.ShouldThrow<InvalidOperationException>();
+		}
+
+		[Fact]
+		public void Starting_monitor_returns_monitor_instance()
+		{
+			CSharp.Monitor.Stop();
+			
+			var monitor = CSharp.Monitor.Start();
+
+			monitor.Should().NotBeNull();
+		}
 	}
 }

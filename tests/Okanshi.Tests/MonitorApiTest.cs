@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
@@ -12,12 +13,13 @@ namespace Okanshi.Test
 	public class MonitorApiTest : IDisposable
 	{
 		private readonly MonitorApi _monitorApi;
-		private readonly string _monitorUrl = "http://localhost:13004/" + AppDomain.CurrentDomain.SetupInformation.ApplicationName + "/";
+		private readonly string _monitorUrl = "http://localhost:13004/" + Guid.NewGuid() + "/";
 
 		public MonitorApiTest()
 		{
 			_monitorApi = new MonitorApi(new MonitorApiOptions { HttpPrefix = _monitorUrl });
 			_monitorApi.Start();
+			Thread.Sleep(500);
 			HealthChecks.Clear();
 			CSharp.Monitor.ResetCounters();
 		}
@@ -62,6 +64,25 @@ namespace Okanshi.Test
 			var result = httpClient.GetStringAsync(_monitorUrl).Result;
 
 			JsonConvert.DeserializeObject<Dictionary<string, bool>>(result).Should().BeEmpty();
+		}
+
+		[Fact]
+		public void Starting_api_returns_monitor_instance()
+		{
+			_monitorApi.Stop();
+
+			var monitor = _monitorApi.Start();
+
+			monitor.Should().NotBeNull();
+		}
+
+		[Fact]
+		public void Stopping_api_multiple_times_does_not_hang()
+		{
+			CSharp.Monitor.Stop();
+			_monitorApi.Stop();
+			_monitorApi.Stop();
+			_monitorApi.Stop();
 		}
 	}
 }
