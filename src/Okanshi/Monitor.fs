@@ -176,10 +176,16 @@ namespace Okanshi.CSharp
     type Monitor private() =
         static let mutable instance : Monitor.Monitor option = None
         static let isStarted() = if instance.IsNone then false else true
+
+        static member SetMonitor(monitor) =
+            if isStarted() then invalidOp "Cannot set monitor when it is started"
+            instance <- Some monitor
         
         /// Start monitoring with default options
         static member Start() =
-            instance <- Some <| Monitor.start Monitor.defaultOptions
+            let monitor = Monitor.start Monitor.defaultOptions
+            instance <- Some <| monitor
+            monitor
         
         /// Start monitoring with specified options
         static member Start(options) =
