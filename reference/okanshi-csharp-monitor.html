@@ -51,14 +51,35 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '68', 68)" onmouseover="showTip(event, '68', 68)">
-            Failed(name)
+            ClearMonitor()
           </code>
           <div class="tip" id="68">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L187-187" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Clear monitor instance</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '69', 69)" onmouseover="showTip(event, '69', 69)">
+            Failed(name)
+          </code>
+          <div class="tip" id="69">
             <strong>Signature:</strong> name:string -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L200-200" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L212-212" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -71,15 +92,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '69', 69)" onmouseover="showTip(event, '69', 69)">
+          <code onmouseout="hideTip(event, '70', 70)" onmouseover="showTip(event, '70', 70)">
             GetDependencies()
           </code>
-          <div class="tip" id="69">
+          <div class="tip" id="70">
             <strong>Signature:</strong> unit -&gt; Dependency []<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L236-236" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L248-248" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -92,15 +113,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '70', 70)" onmouseover="showTip(event, '70', 70)">
+          <code onmouseout="hideTip(event, '71', 71)" onmouseover="showTip(event, '71', 71)">
             GetMetrics()
           </code>
-          <div class="tip" id="70">
+          <div class="tip" id="71">
             <strong>Signature:</strong> unit -&gt; IDictionary&lt;string,Metric&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L240-240" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L252-252" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -113,15 +134,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '71', 71)" onmouseover="showTip(event, '71', 71)">
+          <code onmouseout="hideTip(event, '72', 72)" onmouseover="showTip(event, '72', 72)">
             ResetCounters()
           </code>
-          <div class="tip" id="71">
+          <div class="tip" id="72">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L227-227" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L239-239" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -134,15 +155,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '72', 72)" onmouseover="showTip(event, '72', 72)">
+          <code onmouseout="hideTip(event, '73', 73)" onmouseover="showTip(event, '73', 73)">
             RunHealthChecks()
           </code>
-          <div class="tip" id="72">
+          <div class="tip" id="73">
             <strong>Signature:</strong> unit -&gt; Dictionary&lt;string,bool&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L232-232" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L244-244" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -155,15 +176,36 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '73', 73)" onmouseover="showTip(event, '73', 73)">
+          <code onmouseout="hideTip(event, '74', 74)" onmouseover="showTip(event, '74', 74)">
+            SetMonitor(monitor)
+          </code>
+          <div class="tip" id="74">
+            <strong>Signature:</strong> monitor:Monitor -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L182-182" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Set monitor instance</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '75', 75)" onmouseover="showTip(event, '75', 75)">
             Start(options)
           </code>
-          <div class="tip" id="73">
+          <div class="tip" id="75">
             <strong>Signature:</strong> options:MonitorOptions -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L185-185" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L197-197" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -176,15 +218,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '74', 74)" onmouseover="showTip(event, '74', 74)">
+          <code onmouseout="hideTip(event, '76', 76)" onmouseover="showTip(event, '76', 76)">
             Start()
           </code>
-          <div class="tip" id="74">
-            <strong>Signature:</strong> unit -&gt; unit<br />
+          <div class="tip" id="76">
+            <strong>Signature:</strong> unit -&gt; Monitor<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L181-181" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L191-191" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -197,15 +239,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '75', 75)" onmouseover="showTip(event, '75', 75)">
+          <code onmouseout="hideTip(event, '77', 77)" onmouseover="showTip(event, '77', 77)">
             Stop()
           </code>
-          <div class="tip" id="75">
+          <div class="tip" id="77">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L189-189" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L201-201" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -218,15 +260,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '76', 76)" onmouseover="showTip(event, '76', 76)">
+          <code onmouseout="hideTip(event, '78', 78)" onmouseover="showTip(event, '78', 78)">
             Success(name)
           </code>
-          <div class="tip" id="76">
+          <div class="tip" id="78">
             <strong>Signature:</strong> name:string -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L195-195" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L207-207" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -239,15 +281,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '77', 77)" onmouseover="showTip(event, '77', 77)">
+          <code onmouseout="hideTip(event, '79', 79)" onmouseover="showTip(event, '79', 79)">
             Time(name, action)
           </code>
-          <div class="tip" id="77">
+          <div class="tip" id="79">
             <strong>Signature:</strong> (name:string * action:Action) -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L220-220" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L232-232" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -264,15 +306,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '78', 78)" onmouseover="showTip(event, '78', 78)">
+          <code onmouseout="hideTip(event, '80', 80)" onmouseover="showTip(event, '80', 80)">
             Time(name, func)
           </code>
-          <div class="tip" id="78">
+          <div class="tip" id="80">
             <strong>Signature:</strong> (name:string * func:Func&lt;&#39;T&gt;) -&gt; &#39;T<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L209-209" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L221-221" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
