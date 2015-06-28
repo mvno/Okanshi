@@ -178,10 +178,12 @@ namespace Okanshi.CSharp
         static let mutable instance : Monitor.Monitor option = None
         static let isStarted() = if instance.IsNone then false else true
 
+        /// Set monitor instance
         static member SetMonitor(monitor) =
             if isStarted() then invalidOp "Cannot set monitor when it is started"
             instance <- Some monitor
 
+        /// Clear monitor instance
         static member ClearMonitor() =
             instance <- None
         
