@@ -11,6 +11,9 @@ type MonitorApiOptions() =
     /// The HTTP prefix used as endpoint. Default value is "http://+:13004/"
     member val HttpPrefix = "http://+:13004/" with get, set
 
+/// Response object
+type Response<'T> = { Version : string; Data : 'T }
+
 /// The monitor API
 type MonitorApi(options : MonitorApiOptions) =
     let listener = new HttpListener()
