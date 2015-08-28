@@ -55,11 +55,11 @@ type MonitorApi(options : MonitorApiOptions) =
             while true do
                 let! context = listener.GetContextAsync() |> Async.AwaitTask
                 if context.Request.Url.AbsolutePath.EndsWith("/healthchecks", StringComparison.OrdinalIgnoreCase) then
-                    Monitor.runHealthChecks() |> sendResponse context
+                    { Version = "0"; Data = Monitor.runHealthChecks() } |> sendResponse context
                 elif context.Request.Url.AbsolutePath.EndsWith("/dependencies", StringComparison.OrdinalIgnoreCase) then
-                    Monitor.getDependencies() |> sendResponse context
+                    { Version = "0"; Data = Monitor.getDependencies() } |> sendResponse context
                 else
-                    Monitor.getMetrics() |> sendResponse context
+                    { Version = "0"; Data = Monitor.getMetrics() } |> sendResponse context
         }
         Async.Start(server)
         monitor.Value
