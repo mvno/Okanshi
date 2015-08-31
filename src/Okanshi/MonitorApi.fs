@@ -11,6 +11,9 @@ type MonitorApiOptions() =
     /// The HTTP prefix used as endpoint. Default value is "http://+:13004/"
     member val HttpPrefix = "http://+:13004/" with get, set
 
+/// Response object
+type Response<'T> = { Version : string; Data : 'T }
+
 /// The monitor API
 type MonitorApi(options : MonitorApiOptions) =
     let listener = new HttpListener()
@@ -52,11 +55,11 @@ type MonitorApi(options : MonitorApiOptions) =
             while true do
                 let! context = listener.GetContextAsync() |> Async.AwaitTask
                 if context.Request.Url.AbsolutePath.EndsWith("/healthchecks", StringComparison.OrdinalIgnoreCase) then
-                    Monitor.runHealthChecks() |> sendResponse context
+                    { Version = "0"; Data = Monitor.runHealthChecks() } |> sendResponse context
                 elif context.Request.Url.AbsolutePath.EndsWith("/dependencies", StringComparison.OrdinalIgnoreCase) then
-                    Monitor.getDependencies() |> sendResponse context
+                    { Version = "0"; Data = Monitor.getDependencies() } |> sendResponse context
                 else
-                    Monitor.getMetrics() |> sendResponse context
+                    { Version = "0"; Data = Monitor.getMetrics() } |> sendResponse context
         }
         Async.Start(server)
         monitor.Value

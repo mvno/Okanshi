@@ -29,6 +29,12 @@ namespace Okanshi.Test
 			_monitorApi.Stop();
 		}
 
+		public class Response<T>
+		{
+			public string Version;
+			public T Data;
+		}
+
 		public class AssemblyDependency
 		{
 			public string Name;
@@ -41,9 +47,10 @@ namespace Okanshi.Test
 			var httpClient = new HttpClient();
 			var result = httpClient.GetStringAsync(_monitorUrl + "dependencies").Result;
 
-			var listOfAssemblies = JsonConvert.DeserializeObject<List<AssemblyDependency>>(result);
+			var response = JsonConvert.DeserializeObject<Response<List<AssemblyDependency>>>(result);
 
-			listOfAssemblies.Single(depencency => depencency.Name == Assembly.GetExecutingAssembly().GetName().Name);
+			var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+			response.Data.Should().Contain(depencency => depencency.Name == assemblyName);
 		}
 
 		[Fact]
@@ -53,7 +60,7 @@ namespace Okanshi.Test
 
 			var result = httpClient.GetStringAsync(_monitorUrl + "healthchecks").Result;
 
-			JsonConvert.DeserializeObject<Dictionary<string, bool>>(result).Should().BeEmpty();
+			JsonConvert.DeserializeObject<Response<Dictionary<string, bool>>>(result).Data.Should().BeEmpty();
 		}
 
 		[Fact]
@@ -63,7 +70,7 @@ namespace Okanshi.Test
 
 			var result = httpClient.GetStringAsync(_monitorUrl).Result;
 
-			JsonConvert.DeserializeObject<Dictionary<string, bool>>(result).Should().BeEmpty();
+			JsonConvert.DeserializeObject<Response<Dictionary<string, bool>>>(result).Data.Should().BeEmpty();
 		}
 
 		[Fact]
