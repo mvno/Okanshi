@@ -6,9 +6,13 @@ Starting the API
 
 After Okanshi has been added to your project, you start the monitor like this:
 
+C#:
+
     [lang=csharp]
     var api = new MonitorApi();
     api.Start();
+
+F#:
 
     [lang=fsharp]
     let api = new MonitorApi()
