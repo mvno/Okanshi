@@ -70,5 +70,5 @@ type MonitorApi(options : MonitorApiOptions) =
             monitor.Value |> Monitor.stop
             CSharp.Monitor.ClearMonitor()
             monitor <- None
+            Async.CancelDefaultToken()
             listener.Stop()
-        Async.CancelDefaultToken()
