@@ -317,7 +317,6 @@ Target "ILMerge" (fun _ ->
         performMerge a s m
         CopyTo m [(f @@ ((fileNameWithoutExt a) + ".xml"))]
         let files = (!! (f @@ "*.*")) |> Seq.toList
-        printfn "%A" files
         DeleteFiles files
         !! (m @@ "*.*") |> Seq.iter(fun x -> x |> MoveFile f)
         DeleteDir m)
