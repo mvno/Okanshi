@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{579B8EF3-D8DC-4688-80D6-208C836B657F}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,6 +10,8 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Okanshi", "src\Okanshi\Okanshi.fsproj", "{C53B9B49-9BD0-4A1F-AC44-6E94628B3F2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.Tests", "tests\Okanshi.Tests\Okanshi.Tests.csproj", "{60A29CDD-57E6-4DD1-A66E-8FB7DAD860B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{73FDD149-9954-430C-AC86-EEB6DAC18521}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{60A29CDD-57E6-4DD1-A66E-8FB7DAD860B0} = {73FDD149-9954-430C-AC86-EEB6DAC18521}
 	EndGlobalSection
 EndGlobal
