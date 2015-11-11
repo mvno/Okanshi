@@ -311,7 +311,6 @@ Target "ILMerge" (fun _ ->
         let primaryAssembly = f @@ a
         let secondaryAssemblies = !! (f @@ "*.dll")
         (primaryAssembly, secondaryAssemblies, mergeDir, f))
-    //|> Seq.iter (fun (a, f, m) -> printfn "%A" f)
     |> Seq.map (fun (a, s, m, f) -> (a, s |> Seq.filter(fun x -> x.EndsWith(a) |> not), m, f))
     |> Seq.iter (fun (a, s, m, f) ->
         performMerge a s m
