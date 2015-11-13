@@ -298,6 +298,29 @@ Target "Release" (fun _ ->
     |> Async.RunSynchronously
 )
 
+Target "ILMerge" (fun _ ->
+    let performMerge primary secondaries mergePath =
+        let outputFilePath = mergePath @@ (filename primary)
+        ILMerge (fun p -> { p with Libraries = secondaries; TargetPlatform = "v4"; Internalize = Internalize; } ) outputFilePath primary
+
+    !! "src/**/*.??proj"
+    |> Seq.map (fun f -> ((fileNameWithoutExt f) + ".dll", "bin" @@ (System.IO.Path.GetFileNameWithoutExtension f)))
+    |> Seq.map (fun (a, f) ->
+        let mergeDir = f @@ "merge"
+        CreateDir mergeDir
+        let primaryAssembly = f @@ a
+        let secondaryAssemblies = !! (f @@ "*.dll")
+        (primaryAssembly, secondaryAssemblies, mergeDir, f))
+    |> Seq.map (fun (a, s, m, f) -> (a, s |> Seq.filter(fun x -> x.EndsWith(a) |> not), m, f))
+    |> Seq.iter (fun (a, s, m, f) ->
+        performMerge a s m
+        CopyTo m [(f @@ ((fileNameWithoutExt a) + ".xml"))]
+        let files = (!! (f @@ "*.*")) |> Seq.toList
+        DeleteFiles files
+        !! (m @@ "*.*") |> Seq.iter(fun x -> x |> MoveFile f)
+        DeleteDir m)
+)
+
 Target "BuildPackage" DoNothing
 
 // --------------------------------------------------------------------------------------
@@ -310,6 +333,7 @@ Target "All" DoNothing
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
+  ==> "ILMerge"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
   ==> "All"
