@@ -74,16 +74,6 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Starting_api_returns_monitor_instance()
-		{
-			_monitorApi.Stop();
-
-			var monitor = _monitorApi.Start();
-
-			monitor.Should().NotBeNull();
-		}
-
-		[Fact]
 		public void Stopping_api_multiple_times_does_not_hang()
 		{
 			CSharp.Monitor.Stop();

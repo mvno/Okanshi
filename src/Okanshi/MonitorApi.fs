@@ -62,7 +62,6 @@ type MonitorApi(options : MonitorApiOptions) =
                     { Version = "0"; Data = Monitor.getMetrics() } |> sendResponse context
         }
         Async.Start(server)
-        monitor.Value
 
     /// Stop the API and monitoring
     member __.Stop() =
