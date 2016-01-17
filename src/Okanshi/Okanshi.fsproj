@@ -52,8 +52,6 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="Statistics.fs" />
-    <Compile Include="Metric.fs" />
     <Compile Include="HealthCheck.fs" />
     <Compile Include="Atomic.fs" />
     <Compile Include="Config.fs" />
@@ -64,8 +62,8 @@
     <Compile Include="Poller.fs" />
     <Compile Include="Observer.fs" />
     <Compile Include="Monitor.fs" />
-    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="MonitorApi.fs" />
+    <Compile Include="AssemblyInfo.fs" />
     <None Include="paket.references" />
     <None Include="Okanshi.nuspec" />
   </ItemGroup>
@@ -81,6 +79,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

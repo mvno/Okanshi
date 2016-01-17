@@ -1,8 +1,17 @@
 ﻿namespace Okanshi
 
 open System
-open System.Net
+open System.Threading
 open Newtonsoft.Json
+
+/// Dependecy information
+type Dependency =
+    {
+        /// Name of the dependency
+        Name : string;
+        /// The dependency version
+        Version : string;
+    }
 
 /// Api options
 type MonitorApiOptions() =
@@ -14,25 +23,18 @@ type MonitorApiOptions() =
 /// Response object
 type Response<'T> = { Version : string; Data : 'T }
 
-/// The monitor API
 type MonitorApi(options : MonitorApiOptions) =
-    let listener = new HttpListener()
-    let mutable monitor : Monitor.Monitor option = None
-
+    let listener = new System.Net.HttpListener()
+    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, TimeSpan.FromMinutes(float 1)), 100)
+    let cancellationTokenSource = new CancellationTokenSource()
+    let cancellationToken = cancellationTokenSource.Token
+    
     /// Create the API with default values
-    new () =
-        MonitorApi(new MonitorApiOptions())
+    new () = MonitorApi(new MonitorApiOptions())
 
-    /// Start API and monitoring using the default values
-    member self.Start() =
-        self.Start(new MonitorOptions())
-
-    /// Start API and monitoring using the provided options
-    member __.Start(monitorOptions) =
-        if monitor.IsSome then invalidOp "Already started"
-        monitor <- monitorOptions |> Monitor.start |> Some
-        CSharp.Monitor.SetMonitor(monitor.Value)
-        let sendResponse (context : HttpListenerContext) content =
+    /// Start API and using the default metrics registry
+    member __.Start() =
+        let sendResponse (context : System.Net.HttpListenerContext) content =
             try
                 use response = context.Response
                 if options.EnableCors then
@@ -55,19 +57,16 @@ type MonitorApi(options : MonitorApiOptions) =
             while true do
                 let! context = listener.GetContextAsync() |> Async.AwaitTask
                 if context.Request.Url.AbsolutePath.EndsWith("/healthchecks", StringComparison.OrdinalIgnoreCase) then
-                    { Version = "0"; Data = Monitor.runHealthChecks() } |> sendResponse context
+                    { Version = "1"; Data = HealthChecks.RunAll() } |> sendResponse context
                 elif context.Request.Url.AbsolutePath.EndsWith("/dependencies", StringComparison.OrdinalIgnoreCase) then
-                    { Version = "0"; Data = Monitor.getDependencies() } |> sendResponse context
+                    let dependencies =
+                        List.ofSeq([for dep in AppDomain.CurrentDomain.GetAssemblies() -> { Name = dep.GetName().Name; Version = dep.GetName().Version.ToString() }])
+                        |> List.toArray
+                    { Version = "1"; Data = dependencies } |> sendResponse context
                 else
-                    { Version = "0"; Data = Monitor.getMetrics() } |> sendResponse context
+                    { Version = "1"; Data = observer.GetObservations() } |> sendResponse context
         }
-        Async.Start(server)
+        Async.Start(server, cancellationToken)
 
-    /// Stop the API and monitoring
     member __.Stop() =
-        if monitor.IsSome then
-            monitor.Value |> Monitor.stop
-            CSharp.Monitor.ClearMonitor()
-            monitor <- None
-            Async.CancelDefaultToken()
-            listener.Stop()
+        cancellationTokenSource.Cancel()
