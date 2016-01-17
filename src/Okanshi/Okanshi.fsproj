@@ -62,6 +62,7 @@
     <Compile Include="Counters.fs" />
     <Compile Include="Timers.fs" />
     <Compile Include="Poller.fs" />
+    <Compile Include="Observer.fs" />
     <Compile Include="Monitor.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="MonitorApi.fs" />
