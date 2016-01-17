@@ -56,6 +56,7 @@
     <Compile Include="Metric.fs" />
     <Compile Include="HealthCheck.fs" />
     <Compile Include="Atomic.fs" />
+    <Compile Include="Counters.fs" />
     <Compile Include="Monitor.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="MonitorApi.fs" />
