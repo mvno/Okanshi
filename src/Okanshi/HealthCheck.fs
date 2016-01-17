@@ -2,24 +2,21 @@
 
 open System
 open System.Collections.Generic
+open System.Collections.Concurrent
 
-module HealthChecks =
-    let mutable private healthChecks = Map.empty
+/// Handles healthchecks
+[<AbstractClass; Sealed>]
+type HealthChecks private () =
+    static let mutable healthChecks = new ConcurrentDictionary<_, _>()
 
     /// Add a health check
-    let Add (name : string, x : Func<bool>) =
-        healthChecks <- healthChecks.Add (name, x)
-
+    static member Add (name : string, x : Func<bool>) = healthChecks.TryAdd (name, x) |> ignore
     /// Check if a health check already exists
-    let Exists (name) =
-        name |> healthChecks.ContainsKey
-
+    static member Exists (name) = name |> healthChecks.ContainsKey
     /// Clear all healthchecks
-    let Clear() =
-        healthChecks <- Map.empty
-
+    static member Clear() = healthChecks.Clear()
     /// Run all healthchecks defined
-    let RunAll() =
+    static member RunAll() =
         let dict = new Dictionary<string, bool>()
-        healthChecks |> Map.iter (fun key value -> dict.Add(key, value.Invoke()))
+        healthChecks.ToArray() |> Seq.iter (fun kvp -> dict.Add(kvp.Key, kvp.Value.Invoke()))
         dict
