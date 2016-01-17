@@ -57,6 +57,7 @@
     <Compile Include="HealthCheck.fs" />
     <Compile Include="Atomic.fs" />
     <Compile Include="Config.fs" />
+    <Compile Include="Registry.fs" />
     <Compile Include="Gauges.fs" />
     <Compile Include="Counters.fs" />
     <Compile Include="Timers.fs" />
