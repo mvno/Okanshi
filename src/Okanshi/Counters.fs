@@ -91,8 +91,11 @@ type PeakRateCounter(config : MonitorConfig, step) =
             if current.CompareAndSet(value, originalValue) <> originalValue then updateValue()
         updateValue()
 
+    /// Gets the peak rate within the specified interval
     member __.GetValue() = peakRate.GetCurrent().Get()
+    /// Increment the value by one
     member self.Increment() = self.Increment(1L)
+    /// Increment the value by the specified amount
     member __.Increment(amount) =
         let now = DateTimeOffset.UtcNow.Ticks / TimeSpan.TicksPerSecond
         if now <> currentSecond.Get() then
@@ -100,6 +103,7 @@ type PeakRateCounter(config : MonitorConfig, step) =
             currentSecond.Set(now)
         currentCount.Increment(amount) |> ignore
         currentCount.Get() |> updatePeak
+    /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Rate)
 
     interface ICounter<int64> with
@@ -121,13 +125,17 @@ type DoubleCounter(config : MonitorConfig, step : TimeSpan) =
             if current.CompareAndSet(nextDouble, originalValue) <> originalValue then loop()
         loop()
 
+    /// Increment the value by the specified amount
     member __.Increment(amount : double) =
         if amount > 0.0 then add amount
+    /// Increment the value by one
     member self.Increment() = self.Increment(1.0)
+    /// Gets the rate per second
     member __.GetValue() =
         let datapoint = count.Poll()
         if datapoint = Datapoint.Empty then Double.NaN
         else (datapoint.Value |> BitConverter.Int64BitsToDouble) / stepSeconds
+    /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Rate)
 
     interface ICounter<double> with
@@ -141,9 +149,13 @@ type DoubleCounter(config : MonitorConfig, step : TimeSpan) =
 type BasicCounter(config : MonitorConfig) =
     let value = new AtomicLong()
 
+    /// Increment the value by one
     member __.Increment() = value.Increment() |> ignore
+    /// Increment the value by the specified amount
     member __.Increment(amount) = value.Increment(amount) |> ignore
+    /// Gets the value
     member __.GetValue() = value.Get()
+    /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
 
     interface ICounter<int64> with

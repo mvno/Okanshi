@@ -90,10 +90,13 @@ type CounterToRateMetricTransformObserver(observer : IMetricObserver, heartbeat 
             | None -> tail |> convertMetrics list
         | [] -> list
 
+    /// Update the stored metrics
     member __.Update(metrics : Metric array) =
         let newMetrics = metrics |> Seq.toList |> convertMetrics [] |> Seq.toArray
         observer.Update(newMetrics)
 
+    /// Get the stored observations. As this observer transforms the metrics and forwards them to another observer,
+    /// this will always return an empty array
     member __.GetObservations() = [||]
 
     interface IMetricObserver with
