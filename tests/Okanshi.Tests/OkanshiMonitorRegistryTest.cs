@@ -107,7 +107,7 @@ namespace Okanshi.Test
 				throw new System.NotImplementedException();
 			}
 
-			public MonitorConfig Config { get; }
+			public MonitorConfig Config { get; private set; }
 		}
 	}
 }
