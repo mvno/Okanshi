@@ -32,7 +32,7 @@ type StepLong(initialValue, step : TimeSpan) =
         rollCount(DateTime.Now.Ticks)
         data.[CurrentIndex]
 
-    /// Gets the value to the previous measurement
+    /// Gets the value of the previous measurement
     member __.Poll() =
         let now = DateTime.Now
         let nowTicks = now.Ticks
@@ -40,15 +40,15 @@ type StepLong(initialValue, step : TimeSpan) =
         let value = data.[PreviousIndex].Get()
         let last = lastPollTime.GetAndSet(nowTicks)
         let missed = (nowTicks - last) / step - 1L
-        let stepStart = new Nullable<_>(now.AddMilliseconds(float <| -now.Millisecond))
+        let stepStartWithWholeSeconds = new Nullable<_>(now.AddMilliseconds(float <| -now.Millisecond))
         if last > 0L && missed > 0L then Datapoint.Empty
-        else { Timestamp = stepStart; Value = value }
+        else { Timestamp = stepStartWithWholeSeconds; Value = value }
 
     /// Increment the current value by the specified amount
     member self.Increment(amount) =
         self.GetCurrent().Increment(amount)
 
-/// Tracks hwo often some event occurs
+/// Tracks how often some event occurs
 type ICounter<'T> =
     inherit IMonitor
     /// Increment the counter by one
