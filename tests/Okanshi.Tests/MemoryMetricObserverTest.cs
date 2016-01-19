@@ -18,7 +18,7 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Updates_from_poller_is_received()
+		public void Updates_from_poller_are_received()
 		{
 			var metrics = new[] { new Metric("Test", DateTimeOffset.Now, new[] { new Tag("Test", "Test"), }, 100), };
 			_metricPoller.MetricsPolled += Raise.Event<MetricEventDelegate>(this, new MetricEventArgs(metrics));
@@ -27,7 +27,7 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Multiple_updates_from_poller_is_received_in_different_batches()
+		public void Multiple_updates_from_poller_are_received_in_different_batches()
 		{
 			var metrics = new[] { new Metric("Test", DateTimeOffset.Now, new[] { new Tag("Test", "Test"), }, 100), };
 			var metrics2 = new[] { new Metric("Test2", DateTimeOffset.Now, new[] { new Tag("Test2", "Test2"), }, 100), };
