@@ -29,6 +29,7 @@ namespace Okanshi.Test
 		{
 			const string key = "key";
 			const string value = "value";
+
 			var config = MonitorConfig.Build("Anything").WithTag(key, value);
 
 			config.Tags.Should().HaveCount(1)
@@ -40,6 +41,7 @@ namespace Okanshi.Test
 		{
 			const string key = "key";
 			const string value = "value";
+
 			var config = MonitorConfig.Build("Anything").WithTag(new Tag(key, value));
 
 			config.Tags.Should().HaveCount(1)
@@ -50,6 +52,7 @@ namespace Okanshi.Test
 		public void Config_with_multiple_tags_chained_has_all_the_tags_specified()
 		{
 			var expectedTags = new[] { new Tag("key", "value"), new Tag("key2", "value") };
+
 			var config = MonitorConfig.Build("Anything");
 			foreach (var tag in expectedTags)
 			{
@@ -63,6 +66,7 @@ namespace Okanshi.Test
 		public void Config_with_multiple_tags_in_one_call_has_all_the_tags_specified()
 		{
 			var expectedTags = new[] { new Tag("key", "value"), new Tag("key2", "value") };
+
 			var config = MonitorConfig.Build("Anything").WithTags(expectedTags);
 
 			config.Tags.Should().BeEquivalentTo(expectedTags);
