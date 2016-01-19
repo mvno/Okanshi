@@ -20,6 +20,7 @@ namespace Okanshi.Test
 		[InlineData(10.2)]
 		[InlineData(17.22)]
 		[InlineData(1001.01)]
+		[InlineData(-5.1)]
 		public void Default_value_is_correctly_assigned_when_specified_in_constructor(double expectedValue)
 		{
 			var atomicDecimal = new AtomicDecimal(new decimal(expectedValue));
@@ -34,6 +35,7 @@ namespace Okanshi.Test
 		[InlineData(10.2)]
 		[InlineData(17.22)]
 		[InlineData(1001.01)]
+		[InlineData(-5.1)]
 		public void Get_and_set_returns_the_original_value(double originalValue)
 		{
 			var atomicDecimal = new AtomicDecimal(new decimal(originalValue));
@@ -48,6 +50,7 @@ namespace Okanshi.Test
 		[InlineData(10.2)]
 		[InlineData(17.22)]
 		[InlineData(1001.01)]
+		[InlineData(-5.1)]
 		public void Get_and_set_updates_the_value_as_specified(double newValue)
 		{
 			var atomicDecimal = new AtomicDecimal();
@@ -63,6 +66,7 @@ namespace Okanshi.Test
 		[InlineData(10.2)]
 		[InlineData(17.22)]
 		[InlineData(1001.01)]
+		[InlineData(-5.1)]
 		public void Compare_and_set_updates_the_value_when_original_value_is_correct(double newValue)
 		{
 			var atomicDecimal = new AtomicDecimal();
@@ -78,6 +82,7 @@ namespace Okanshi.Test
 		[InlineData(10.2)]
 		[InlineData(17.22)]
 		[InlineData(1001.01)]
+		[InlineData(-5.1)]
 		public void Compare_and_set_does_not_update_the_value_when_original_value_is_incorrect(double newValue)
 		{
 			var atomicDecimal = new AtomicDecimal();
@@ -93,6 +98,7 @@ namespace Okanshi.Test
 		[InlineData(10.2)]
 		[InlineData(17.22)]
 		[InlineData(1001.01)]
+		[InlineData(-5.1)]
 		public void Setting_the_value_updates_the_value_as_expected(double newValue)
 		{
 			var atomicDecimal = new AtomicDecimal();
@@ -108,6 +114,7 @@ namespace Okanshi.Test
 		[InlineData(10.2, 11.2)]
 		[InlineData(17.22, 18.22)]
 		[InlineData(1001.01, 1002.01)]
+		[InlineData(-5.1, -4.1)]
 		public void Incrementing_the_value_increments_the_value(double originvalValue, double expectedValue)
 		{
 			var atomicDecimal = new AtomicDecimal(new decimal(originvalValue));
@@ -123,6 +130,7 @@ namespace Okanshi.Test
 		[InlineData(10.2, 11.2, 21.4)]
 		[InlineData(17.22, 18.22, 35.44)]
 		[InlineData(1001.01, 1002.01, 2003.02)]
+		[InlineData(-5.1, -1.1, -6.2)]
 		public void Incrementing_the_value_by_the_specified_amount_increments_the_value_correctly(double originvalValue, double amount, double expectedValue)
 		{
 			var atomicDecimal = new AtomicDecimal(new decimal(originvalValue));
