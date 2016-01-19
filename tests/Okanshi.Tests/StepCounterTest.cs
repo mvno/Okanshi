@@ -8,7 +8,7 @@ namespace Okanshi.Test
 	public class StepCounterTest
 	{
 		[Fact]
-		public void Value_is_zero_if_multiple_steps_has_not_been_crossed()
+		public void Initial_value_is_zero()
 		{
 			var stepCounter = new StepCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
 
