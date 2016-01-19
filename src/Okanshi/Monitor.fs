@@ -3,6 +3,7 @@
 open System
 open System.Collections.Generic
 open System.Threading
+open System.Collections.Concurrent
 
 /// Tuple representing a key used to identify a monitor
 type MonitorKey = (string * Type)
@@ -12,11 +13,6 @@ type MonitorFactory = unit -> IMonitor
 type OkanshiMonitorMessage =
     private
     | GetMonitor of MonitorKey * MonitorFactory * AsyncReplyChannel<IMonitor>
-    
-type OkanshiTagMessage =
-    private
-    | SetTags of Tag array
-    | GetTags of AsyncReplyChannel<Tag array>
 
 /// Static use of monitors
 [<AbstractClass; Sealed>]
@@ -45,24 +41,16 @@ type OkanshiMonitor private() =
             }
         loop()
     static let monitorAgent = MailboxProcessor.Start(monitorAgentLoop, cancellationToken)
-    
-    static let tagAgentLoop (inbox : MailboxProcessor<OkanshiTagMessage>) =
-        let rec loop (tags : Tag array) =
-            async {
-                let! msg = inbox.Receive()
-                match msg with
-                | SetTags newTags -> return! loop newTags
-                | GetTags reply ->
-                    reply.Reply(tags)
-                    return! loop tags
-            }
-        loop [||]
-    static let tagAgent = MailboxProcessor.Start(tagAgentLoop, cancellationToken)
+
+    static let tagDictionary = new ConcurrentDictionary<Tag, byte>()
 
     /// Gets the default tags added to all monitors created
-    static member DefaultTags with get() = tagAgent.PostAndReply(fun reply -> GetTags(reply))
+    static member DefaultTags with get() = tagDictionary.Keys |> Seq.toArray
     /// Sets the default tags added to all monitors created
-    static member DefaultTags with set(value) = tagAgent.Post(SetTags(value))
+    static member DefaultTags
+        with set(value : Tag array) =
+            tagDictionary.Clear()
+            value |> Seq.iter (fun x -> tagDictionary.TryAdd(x, byte 0) |> ignore)
     /// Gets the monitor key used to identify monitors
     static member GetMonitorKey(name : string, monitorType : Type) = (name, monitorType)
 
