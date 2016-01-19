@@ -12,7 +12,7 @@ namespace Okanshi.Test
 
 			var value = atomicDecimal.Get();
 
-			value.Should().Be(0);
+			value.Should().Be(default(decimal));
 		}
 
 		[Theory]
