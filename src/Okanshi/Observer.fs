@@ -22,10 +22,10 @@ type IMetricObserver =
     abstract GetObservations : unit -> Metric array array
 
 /// Metric observer storing the specified number of observations in memory
-type MemoryMetricObserver(poller : IMetricPoller, numberToStore) as self =
+type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) as self =
     let observations = new System.Collections.Concurrent.ConcurrentQueue<_>()
     let addObservation x =
-        if observations.Count = numberToStore then observations.TryDequeue() |> ignore
+        if observations.Count = numberOfSamplesToStore then observations.TryDequeue() |> ignore
         observations.Enqueue(x)
     let innerPoller = poller.MetricsPolled.Subscribe(fun x -> self.Update(x.Metrics))
     
