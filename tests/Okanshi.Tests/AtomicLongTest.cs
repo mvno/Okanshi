@@ -114,7 +114,7 @@ namespace Okanshi.Test
 		[InlineData(10, 11)]
 		[InlineData(17, 18)]
 		[InlineData(1001, 1002)]
-		[InlineData(-5)]
+		[InlineData(-5, -4)]
 		public void Incrementing_the_value_increments_the_value(int originvalValue, int expectedValue)
 		{
 			var atomicLong = new AtomicLong(originvalValue);

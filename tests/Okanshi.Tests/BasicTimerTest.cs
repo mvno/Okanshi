@@ -60,13 +60,13 @@ namespace Okanshi.Test
 		[Fact]
 		public void Timing_a_call_sets_count_per_second_when_step_is_crossed()
 		{
-			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
+			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(1000));
 			timer.GetCount();
 
-			timer.Record(() => Thread.Sleep(50));
+			timer.Record(() => Thread.Sleep(500));
 
-			Thread.Sleep(600);
-			timer.GetCount().Should().Be(2);
+			Thread.Sleep(1100);
+			timer.GetCount().Should().BeApproximately(0.001, 0.001);
 		}
 
 		[Fact]
@@ -96,14 +96,14 @@ namespace Okanshi.Test
 		[Fact]
 		public void Timing_a_call_sets_total_time_per_second_when_step_is_crossed()
 		{
-			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
+			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(1000));
 			timer.GetTotalTime();
-			timer.Record(() => Thread.Sleep(50));
-			Thread.Sleep(600);
+			timer.Record(() => Thread.Sleep(500));
+			Thread.Sleep(1100);
 
 			var totalTime = timer.GetTotalTime();
 
-			totalTime.Should().BeInRange(90, 110);
+			totalTime.Should().BeApproximately(0.5, 0.1);
 		}
 	}
 }
