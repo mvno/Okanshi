@@ -65,7 +65,7 @@ type StepCounter(config : MonitorConfig, step : TimeSpan) =
     member __.Increment() = value.Increment(1L) |> ignore
     /// Increment the counter by the specified amount
     member __.Increment(amount) = if amount > 0L then value.Increment(amount) |> ignore
-    /// Gets rate of events per second
+    /// Gets rate of events per step
     member __.GetValue() : double =
         let datapoint = value.Poll()
         if datapoint = Datapoint.Empty then Double.NaN
@@ -79,7 +79,7 @@ type StepCounter(config : MonitorConfig, step : TimeSpan) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
 
-/// Counter tracking the maximum count per second within a specified interval
+/// Counter tracking the maximum count per step within a specified interval
 type PeakRateCounter(config : MonitorConfig, step) =
     let currentSecond = new AtomicLong()
     let currentCount = new AtomicLong()
@@ -114,7 +114,7 @@ type PeakRateCounter(config : MonitorConfig, step) =
 
 /// A simple double counter backed by a StepLong but using doubles. The value is the rate for the previous interval as defined by the step.
 type DoubleCounter(config : MonitorConfig, step : TimeSpan) =
-    let stepSeconds = double step.TotalSeconds
+    let stepMilliseconds = double step.TotalMilliseconds
     let count = new StepLong(step)
     let add (amount : double) =
         let current = count.GetCurrent()
@@ -130,11 +130,11 @@ type DoubleCounter(config : MonitorConfig, step : TimeSpan) =
         if amount > 0.0 then add amount
     /// Increment the value by one
     member self.Increment() = self.Increment(1.0)
-    /// Gets the rate per second
+    /// Gets the rate per step
     member __.GetValue() =
         let datapoint = count.Poll()
         if datapoint = Datapoint.Empty then Double.NaN
-        else (datapoint.Value |> BitConverter.Int64BitsToDouble) / stepSeconds
+        else (datapoint.Value |> BitConverter.Int64BitsToDouble) / stepMilliseconds
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Rate)
 
