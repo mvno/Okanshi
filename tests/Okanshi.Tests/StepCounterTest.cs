@@ -30,8 +30,8 @@ namespace Okanshi.Test
 		}
 
 		[Theory]
-		[InlineData(1, 0.001)]
-		[InlineData(5, 0.005)]
+		[InlineData(1, 1)]
+		[InlineData(5, 5)]
 		public void Value_is_number_of_counts_per_interval_in_previous_step(int amount, float expectedValue)
 		{
 			var stepCounter = new StepCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(1000));
@@ -41,7 +41,7 @@ namespace Okanshi.Test
 			
 			var value = stepCounter.GetValue();
 
-			value.Should().BeApproximately(expectedValue, 0.001);
+			value.Should().Be(expectedValue);
 		}
 
 		[Theory]

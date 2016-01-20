@@ -30,9 +30,9 @@ namespace Okanshi.Test
 		}
 
 		[Theory]
-		[InlineData(1.0, 2.0)]
-		[InlineData(1.1, 2.2)]
-		[InlineData(605.18, 1210.36)]
+		[InlineData(1.0, 0.5)]
+		[InlineData(2.2, 1.1)]
+		[InlineData(605.18, 302.59)]
 		public void Value_returns_previous_steps_value_per_second(double amount, double expectedValue)
 		{
 			var counter = new DoubleCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));

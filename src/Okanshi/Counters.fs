@@ -60,16 +60,17 @@ type ICounter<'T> =
 type StepCounter(config : MonitorConfig, step : TimeSpan) =
     let value = new StepLong(step)
     let stepMilliseconds = double step.TotalMilliseconds
+    let stepsPerSecond = double 1000 / stepMilliseconds
     
     /// Increment the counter by one
     member __.Increment() = value.Increment(1L) |> ignore
     /// Increment the counter by the specified amount
     member __.Increment(amount) = if amount > 0L then value.Increment(amount) |> ignore
-    /// Gets rate of events per step
+    /// Gets rate of events per second
     member __.GetValue() : double =
         let datapoint = value.Poll()
         if datapoint = Datapoint.Empty then Double.NaN
-        else double datapoint.Value / stepMilliseconds
+        else double datapoint.Value / stepsPerSecond
     /// Gets the monitor config
     member __.Config = config.WithTag(DataSourceType.Rate)
 
@@ -112,9 +113,10 @@ type PeakRateCounter(config : MonitorConfig, step) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
 
-/// A simple double counter backed by a StepLong but using doubles. The value is the rate for the previous interval as defined by the step.
+/// A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.
 type DoubleCounter(config : MonitorConfig, step : TimeSpan) =
     let stepMilliseconds = double step.TotalMilliseconds
+    let stepsPerSecond = double 1000 / stepMilliseconds
     let count = new StepLong(step)
     let add (amount : double) =
         let current = count.GetCurrent()
@@ -130,11 +132,11 @@ type DoubleCounter(config : MonitorConfig, step : TimeSpan) =
         if amount > 0.0 then add amount
     /// Increment the value by one
     member self.Increment() = self.Increment(1.0)
-    /// Gets the rate per step
+    /// Gets the rate per second
     member __.GetValue() =
         let datapoint = count.Poll()
         if datapoint = Datapoint.Empty then Double.NaN
-        else (datapoint.Value |> BitConverter.Int64BitsToDouble) / stepMilliseconds
+        else (datapoint.Value |> BitConverter.Int64BitsToDouble) / stepsPerSecond
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Rate)
 

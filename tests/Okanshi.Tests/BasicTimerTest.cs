@@ -66,7 +66,7 @@ namespace Okanshi.Test
 			timer.Record(() => Thread.Sleep(500));
 
 			Thread.Sleep(1100);
-			timer.GetCount().Should().BeApproximately(0.001, 0.001);
+			timer.GetCount().Should().Be(1);
 		}
 
 		[Fact]
@@ -103,7 +103,7 @@ namespace Okanshi.Test
 
 			var totalTime = timer.GetTotalTime();
 
-			totalTime.Should().BeApproximately(0.5, 0.1);
+			totalTime.Should().BeApproximately(500, 20);
 		}
 	}
 }
