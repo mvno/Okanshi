@@ -78,7 +78,7 @@ namespace Okanshi.Test
 
 			var max = timer.GetMax();
 
-			max.Should().BeInRange(40, 60);
+			max.Should().BeInRange(40, 70);
 		}
 
 		[Fact]
