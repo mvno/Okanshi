@@ -70,6 +70,7 @@
     <Compile Include="DefaultMonitorRegistryTest.cs" />
     <Compile Include="DoubleCounterTest.cs" />
     <Compile Include="DoubleGaugeTest.cs" />
+    <Compile Include="DurationTimerTest.cs" />
     <Compile Include="HealthCheckTest.cs" />
     <Compile Include="LongGaugeTest.cs" />
     <Compile Include="MaxGaugeTest.cs" />

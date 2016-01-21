@@ -73,3 +73,59 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) =
         member self.Record(f : Action) = self.Record(f)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+
+/// A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
+/// frequent calls that last less than the polling interval, use the BasicTimer instead.
+/// This timer can track multiple operations, each started by calling the Record method.
+/// This monitor will create two gauges:
+/// * A duration which reports the current duration in seconds. The duration is the sum of all active tasks
+/// * Number of active tasks
+/// The names of the monitors will be the base name passed in the config to the constructor, suffixed by
+/// .duration and .activetasks respectively.
+type DurationTimer(registry : IMonitorRegistry, config : MonitorConfig) =
+    let nextTaskId = new AtomicLong()
+    let tasks = new System.Collections.Concurrent.ConcurrentDictionary<int64, int64>()
+    let activeTasks = new BasicGauge<int>({ config with Name = sprintf "%s.activetasks" config.Name }, fun () -> tasks.Count)
+
+    let getDurationInSeconds () =
+        let now = DateTime.Now.Ticks
+        let durationInTicks = tasks.Values |> Seq.sumBy (fun x -> now - x)
+        let durationInMilliseconds = int64 <| TimeSpan.FromTicks(durationInTicks).TotalMilliseconds
+        let durationInMilliseconds = float <| Math.Max(durationInMilliseconds, int64 0)
+        durationInMilliseconds / float 1000
+
+    let totalDurationInSeconds = new BasicGauge<float>({ config with Name = sprintf "%s.duration" config.Name }, fun () -> getDurationInSeconds())
+    
+    let record (f : unit -> 'a)  =
+        let id = nextTaskId.Increment()
+        tasks.TryAdd(id, DateTime.Now.Ticks) |> ignore
+        try
+            let result = f()
+            result
+        finally
+            tasks.TryRemove(id) |> ignore
+
+    do
+        registry.Register(activeTasks)
+
+    new (config) = DurationTimer(DefaultMonitorRegistry.Instance, config)
+
+    /// Time a System.Func call and return the value
+    member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
+    /// Time a System.Action call
+    member __.Record(f : Action) = record (fun () -> f.Invoke())
+    /// Get the number of running tasks
+    member __.GetNumberOfActiveTasks() = activeTasks.GetValue()
+    /// Get the duration in seconds. Duration is the sum of all active tasks duration.
+    member __.GetDurationInSeconds() = totalDurationInSeconds.GetValue()
+    /// Get the duration in seconds. Duration is the sum of all active tasks duration.
+    member self.GetValue() = self.GetDurationInSeconds()
+    /// Gets the monitor config
+    member __.Config = totalDurationInSeconds.Config
+
+    interface ITimer with
+        member self.Record(f : Func<'T>) = self.Record(f)
+        member self.Record(f : Action) = self.Record(f)
+        member self.GetValue() = self.GetValue() :> obj
+        member self.Config = self.Config
+
