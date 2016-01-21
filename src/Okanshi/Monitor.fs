@@ -43,6 +43,7 @@ type OkanshiMonitor private() =
     static let monitorAgent = MailboxProcessor.Start(monitorAgentLoop, cancellationToken)
 
     static let tagDictionary = new ConcurrentDictionary<Tag, byte>()
+    static let defaultStep = TimeSpan.FromMinutes(float 1)
 
     /// Gets the default tags added to all monitors created
     static member DefaultTags with get() = tagDictionary.Keys |> Seq.toArray
@@ -60,17 +61,26 @@ type OkanshiMonitor private() =
         let factory = fun () -> (new BasicCounter(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags)) :> IMonitor)
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> BasicCounter
 
+    /// Get or add a StepCounter, with a step size of 1 minute
+    static member StepCounter(name) = OkanshiMonitor.StepCounter(name, defaultStep)
+
     /// Get or add a StepCounter
     static member StepCounter(name : string, step) =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<StepCounter>)
         let factory = fun () -> (new StepCounter(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags), step) :> IMonitor)
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> StepCounter
 
+    /// Get or add a PeakRateCounter, with a step size of 1 minute
+    static member PeakRateCounter(name) = OkanshiMonitor.PeakRateCounter(name, defaultStep)
+
     /// Get or add a PeakRateCounter
     static member PeakRateCounter(name : string, step) =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<PeakRateCounter>)
         let factory = fun () -> (new PeakRateCounter(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags), step) :> IMonitor)
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> PeakRateCounter
+
+    /// Get or add a DoubleCounter, with a step size of 1 minute
+    static member DoubleCounter(name) = OkanshiMonitor.DoubleCounter(name, defaultStep)
 
     /// Get or add a DoubleCounter
     static member DoubleCounter(name : string, step) =
@@ -113,6 +123,9 @@ type OkanshiMonitor private() =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<DecimalGauge>)
         let factory = fun () -> (new DecimalGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags))) :> IMonitor
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> DecimalGauge
+
+    /// Get or add a BasicTimer, with a step size of 1 minute
+    static member BasicTimer(name) = OkanshiMonitor.BasicTimer(name, defaultStep)
 
     /// Get or add a BasicTimer
     static member BasicTimer(name : string, step) =
