@@ -19,13 +19,15 @@ type MonitorApiOptions() =
     member val EnableCors = false with get, set
     /// The HTTP prefix used as endpoint. Default value is "http://+:13004/"
     member val HttpPrefix = "http://+:13004/" with get, set
+    /// The polling interval. Default value is 1 minute
+    member val PollingInterval = TimeSpan.FromMinutes(float 1)
 
 /// Response object
 type Response<'T> = { Version : string; Data : 'T }
 
 type MonitorApi(options : MonitorApiOptions) =
     let listener = new System.Net.HttpListener()
-    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, TimeSpan.FromMinutes(float 1)), 100)
+    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval), 100)
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
     
