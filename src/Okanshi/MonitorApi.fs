@@ -21,13 +21,15 @@ type MonitorApiOptions() =
     member val HttpPrefix = "http://+:13004/" with get, set
     /// The polling interval. Default value is 1 minute
     member val PollingInterval = TimeSpan.FromMinutes(float 1)
+    /// The number of samples to store in memory. Default value is 100
+    member val NumberOfSamplesToStore = 100
 
 /// Response object
 type Response<'T> = { Version : string; Data : 'T }
 
 type MonitorApi(options : MonitorApiOptions) =
     let listener = new System.Net.HttpListener()
-    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval), 100)
+    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval), options.NumberOfSamplesToStore)
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
     
