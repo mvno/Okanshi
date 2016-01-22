@@ -100,8 +100,7 @@ type DurationTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         let id = nextTaskId.Increment()
         tasks.TryAdd(id, DateTime.Now.Ticks) |> ignore
         try
-            let result = f()
-            result
+            f()
         finally
             tasks.TryRemove(id) |> ignore
 
