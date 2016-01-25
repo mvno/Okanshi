@@ -90,9 +90,7 @@ type DurationTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     let getDurationInSeconds () =
         let now = DateTime.Now.Ticks
         let durationInTicks = tasks.Values |> Seq.sumBy (fun x -> now - x)
-        let durationInMilliseconds = int64 <| TimeSpan.FromTicks(durationInTicks).TotalMilliseconds
-        let durationInMilliseconds = float <| Math.Max(durationInMilliseconds, int64 0)
-        durationInMilliseconds / float 1000
+        TimeSpan.FromTicks(durationInTicks).TotalSeconds
 
     let totalDurationInSeconds = new BasicGauge<float>({ config with Name = sprintf "%s.duration" config.Name }, fun () -> getDurationInSeconds())
     

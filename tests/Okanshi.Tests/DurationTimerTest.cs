@@ -58,8 +58,8 @@ namespace Okanshi.Test
 
 			var duration = _timer.GetDurationInSeconds();
 
-			task.Wait();
 			duration.Should().BeApproximately(0.5, 0.1);
+			task.Wait();
 		}
 
 		[Fact]
