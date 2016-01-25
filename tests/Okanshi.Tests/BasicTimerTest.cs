@@ -90,7 +90,7 @@ namespace Okanshi.Test
 
 			var min = timer.GetMin();
 
-			min.Should().BeInRange(40, 60);
+			min.Should().BeInRange(40, 70);
 		}
 
 		[Fact]
