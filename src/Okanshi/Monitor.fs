@@ -1,282 +1,134 @@
 ﻿namespace Okanshi
 
 open System
-open Metric
+open System.Collections.Generic
+open System.Threading
+open System.Collections.Concurrent
 
-/// Dependecy information
-type Dependency =
-    {
-        /// Name of the dependency
-        name : string;
-        /// The dependency version
-        version : string;
-    }
+/// Tuple representing a key used to identify a monitor
+type MonitorKey = (string * Type)
+/// Type representing a monitor factory
+type MonitorFactory = unit -> IMonitor
 
-/// Monitor messages
-type MonitorMessage =
-    /// Increment the success counter
-    | IncrementSuccess of string
-    /// Increment the failed counter
-    | IncrementFailed of string
-    /// Add timinig information
-    | Time of string * int64
-    /// Reset counters
-    | ResetCounters
-    /// Stop monitoring
-    | Stop of AsyncReplyChannel<unit>
+type OkanshiMonitorMessage =
+    private
+    | GetMonitor of MonitorKey * MonitorFactory * AsyncReplyChannel<IMonitor>
 
-/// Used to communicate with thrird-party systems when metric is updated
-type MetricUpdated =
-    {
-        /// The added message
-        Added : MonitorMessage;
-        /// The updated metric
-        Metric : Metric;
-        /// The update timestamp
-        Timestamp : DateTimeOffset;
-    }
+/// Static use of monitors
+[<AbstractClass; Sealed>]
+type OkanshiMonitor private() =
+    static let cancellationTokenSource = new CancellationTokenSource()
+    static let cancellationToken = cancellationTokenSource.Token
 
-/// Monitor options
-type MonitorOptions() =
-    
-    /// Gets or sets the maximum number of measurement windows to keep in memory.
-    ///
-    /// Default value is 100.
-    member val MaxNumberOfMeasurements = 100 with get, set
+    static let monitorAgentLoop (inbox : MailboxProcessor<OkanshiMonitorMessage>) =
+        let registeredMonitors = new Dictionary<MonitorKey, IMonitor>()
+        let monitorRegistry = DefaultMonitorRegistry.Instance
+        let rec loop () =
+            async {
+                let! msg = inbox.Receive()
+                match msg with
+                | GetMonitor (key, factory, reply) ->
+                    match registeredMonitors.TryGetValue(key) with
+                    | success, monitor when success -> reply.Reply(monitor)
+                    | success, _ when not success ->
+                        let monitor = factory()
+                        registeredMonitors.Add(key, monitor)
+                        monitorRegistry.Register(monitor)
+                        reply.Reply(monitor)
+                    | _ -> ()
 
-    /// Gets or sets the windows size in milliseconds.
-    ///
-    /// Default value is 1 minute.
-    member val WindowSize = float 100000 with get, set
+                return! loop()
+            }
+        loop()
+    static let monitorAgent = MailboxProcessor.Start(monitorAgentLoop, cancellationToken)
 
-    /// Gets or sets an action called when metrics are updated.
-    ///
-    /// This allows you to send metrics to third party systems in near realtime.
-    member val OnMetricUpdated = Action<MetricUpdated> (fun _ -> ()) with get, set
+    static let tagDictionary = new ConcurrentDictionary<Tag, byte>()
+    static let defaultStep = TimeSpan.FromMinutes(float 1)
 
+    /// Gets the default tags added to all monitors created
+    static member DefaultTags with get() = tagDictionary.Keys |> Seq.toArray
+    /// Sets the default tags added to all monitors created
+    static member DefaultTags
+        with set(value : Tag array) =
+            tagDictionary.Clear()
+            value |> Seq.iter (fun x -> tagDictionary.TryAdd(x, byte 0) |> ignore)
+    /// Gets the monitor key used to identify monitors
+    static member GetMonitorKey(name : string, monitorType : Type) = (name, monitorType)
 
-/// The monitor
-module Monitor =
-    open System.Collections.Concurrent
-    open System.Diagnostics
+    /// Get or add a BasicCounter
+    static member BasicCounter(name : string) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<BasicCounter>)
+        let factory = fun () -> (new BasicCounter(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags)) :> IMonitor)
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> BasicCounter
 
-    let defaultOptions = new MonitorOptions()
-    let private hashSet = new ConcurrentDictionary<string, Metric>()
-    let mutable private isStarted = false
+    /// Get or add a StepCounter, with a step size of 1 minute
+    static member StepCounter(name) = OkanshiMonitor.StepCounter(name, defaultStep)
 
-    /// [omit]
-    type Monitor = MailboxProcessor<MonitorMessage>
+    /// Get or add a StepCounter
+    static member StepCounter(name : string, step) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<StepCounter>)
+        let factory = fun () -> (new StepCounter(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags), step) :> IMonitor)
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> StepCounter
 
-    /// Start monitoring with specified options
-    let start (options : MonitorOptions) : Monitor =
-        if isStarted then invalidOp "Monitor is already started"
-        isStarted <- true
-        MailboxProcessor.Start(fun inbox ->
-            let getOrCreateMetricIfMissing (dictionary : ConcurrentDictionary<string, Metric>) key =
-                if dictionary.ContainsKey(key) then
-                    dictionary.[key]
-                else
-                    let metric = options.WindowSize |> Metric.createEmpty options.MaxNumberOfMeasurements
-                    dictionary.[key] <- metric
-                    metric
+    /// Get or add a PeakRateCounter, with a step size of 1 minute
+    static member PeakRateCounter(name) = OkanshiMonitor.PeakRateCounter(name, defaultStep)
 
-            let incrementSuccessCounter dictionary name =
-                let metric = name |> getOrCreateMetricIfMissing dictionary
-                let newMetric = metric |> addSuccess
-                async {
-                    { Added = IncrementSuccess name; Metric = newMetric; Timestamp = DateTimeOffset.Now }
-                    |> options.OnMetricUpdated.Invoke
-                } |> Async.Start
-                dictionary.[name] <- newMetric
+    /// Get or add a PeakRateCounter
+    static member PeakRateCounter(name : string, step) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<PeakRateCounter>)
+        let factory = fun () -> (new PeakRateCounter(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags), step) :> IMonitor)
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> PeakRateCounter
 
-            let incrementFailedCounter dictionary name =
-                let metric = name |> getOrCreateMetricIfMissing dictionary
-                let newMetric = metric |> addFailed
-                async {
-                    { Added = IncrementFailed name; Metric = newMetric; Timestamp = DateTimeOffset.Now }
-                    |> options.OnMetricUpdated.Invoke
-                } |> Async.Start
-                dictionary.[name] <- newMetric
+    /// Get or add a DoubleCounter, with a step size of 1 minute
+    static member DoubleCounter(name) = OkanshiMonitor.DoubleCounter(name, defaultStep)
 
-            let recordTiming dictionary (name, milliseconds) =
-                let metric = name |> getOrCreateMetricIfMissing dictionary
-                let newMetric = metric |> addTiming milliseconds
-                async {
-                    { Added = Time (name, milliseconds); Metric = newMetric; Timestamp = DateTimeOffset.Now }
-                    |> options.OnMetricUpdated.Invoke
-                } |> Async.Start
-                dictionary.[name] <- newMetric
+    /// Get or add a DoubleCounter
+    static member DoubleCounter(name : string, step) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<DoubleCounter>)
+        let factory = fun () -> (new DoubleCounter(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags), step) :> IMonitor)
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> DoubleCounter
 
-            let rec loop () =
-                async {
-                    let! msg = inbox.Receive()
-                    match msg with
-                        | IncrementSuccess name -> name |> incrementSuccessCounter hashSet
-                        | IncrementFailed name -> name |> incrementFailedCounter hashSet
-                        | Time (name, milliseconds) -> (name, milliseconds) |> recordTiming hashSet
-                        | ResetCounters -> hashSet.Clear() |> ignore
-                        | Stop reply -> reply.Reply(); return ()
+    /// Get or add a BasicGauge
+    static member BasicGauge<'T>(name : string, getValue : Func<'T>) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<BasicGauge<'T>>)
+        let factory = fun () -> (new BasicGauge<'T>(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags), getValue)) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> BasicGauge<'T>
 
-                    do! loop()
-                }
-            loop ())
+    /// Get or add a MaxGauge
+    static member MaxGauge(name : string) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<MaxGauge>)
+        let factory = fun () -> (new MaxGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags))) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> MaxGauge
 
-    /// Stop monitoring
-    let stop (monitor : Monitor) =
-        if isStarted then
-            monitor.PostAndReply(Stop)
-            hashSet.Clear()
-            isStarted <- false
+    /// Get or add a MinGauge
+    static member MinGauge(name : string) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<MinGauge>)
+        let factory = fun () -> (new MaxGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags))) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> MinGauge
 
-    /// Get dependencies
-    let getDependencies() =
-        List.ofSeq([for dep in AppDomain.CurrentDomain.GetAssemblies() -> { new Dependency with name = dep.GetName().Name and version = dep.GetName().Version.ToString() }])
-        |> List.toArray
+    /// Get or add a LongGauge
+    static member LongGauge(name : string) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<LongGauge>)
+        let factory = fun () -> (new LongGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags))) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> LongGauge
 
-    /// Get metrics
-    let getMetrics() = hashSet |> Seq.map (|KeyValue|) |> dict
+    /// Get or add a DoubleGauge
+    static member DoubleGauge(name : string) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<DoubleGauge>)
+        let factory = fun () -> (new DoubleGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags))) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> DoubleGauge
 
-    /// Run health checks
-    let runHealthChecks() = HealthChecks.RunAll()
+    /// Get or add a DecimalGauge
+    static member DecimalGauge(name : string) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<DecimalGauge>)
+        let factory = fun () -> (new DecimalGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags))) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> DecimalGauge
 
-    /// Increment the success counter for the provided key
-    let success name (monitor : Monitor) = monitor.Post(IncrementSuccess name)
+    /// Get or add a BasicTimer, with a step size of 1 minute
+    static member BasicTimer(name) = OkanshiMonitor.BasicTimer(name, defaultStep)
 
-    /// Increment the failed counter for the provided key
-    let failed name (monitor : Monitor) = monitor.Post(IncrementFailed name)
-
-    /// Time a function call, identified by the provided key.
-    ///
-    /// If the function succeeds, the success counter is incremented and the timinig information saved.
-    ///
-    /// If the function throws an exception, the failure counter is incremented and the exception is rethrown.
-    let time name f (monitor : Monitor) =
-        let stopWatch = new Stopwatch()
-        stopWatch.Start()
-        try
-            let result = f()
-            stopWatch.Stop()
-            monitor.Post(IncrementSuccess name)
-            monitor.Post(Time (name, stopWatch.ElapsedMilliseconds))
-            result
-        with
-            | _ ->
-                stopWatch.Stop()
-                monitor.Post(IncrementFailed name)
-                monitor.Post(Time (name, stopWatch.ElapsedMilliseconds))
-                reraise()
-
-    /// Reset all counters
-    let resetCounters (monitor : Monitor) = monitor.Post(ResetCounters)
-
-namespace Okanshi.CSharp
-    open Okanshi
-    open System
-
-    /// The monitor
-    type Monitor private() =
-        static let mutable instance : Monitor.Monitor option = None
-        static let isStarted() = if instance.IsNone then false else true
-
-        /// Set monitor instance
-        static member SetMonitor(monitor) =
-            if isStarted() then invalidOp "Cannot set monitor when it is started"
-            instance <- Some monitor
-
-        /// Clear monitor instance
-        static member ClearMonitor() =
-            instance <- None
-        
-        /// Start monitoring with default options
-        static member Start() =
-            let monitor = Monitor.start Monitor.defaultOptions
-            instance <- Some <| monitor
-            monitor
-        
-        /// Start monitoring with specified options
-        static member Start(options) =
-            instance <- Some <| Monitor.start options
-        
-        /// Stop monitoring
-        static member Stop() =
-            if isStarted() then
-                Monitor.stop instance.Value
-                instance <- None
-
-        /// Increment the success counter for the provided key
-        static member Success(name) =
-            if isStarted() then
-                Monitor.success name instance.Value
-
-        /// Increment the failure counter for the provided key
-        static member Failed(name) =
-            if isStarted() then
-                Monitor.failed name instance.Value
-        
-        /// Time a function call, identified by the provided key.
-        ///
-        /// If the function succeeds, the success counter is incremented and the timinig information saved.
-        ///
-        /// If the function throws an exception, the failure counter is incremented and the exception is rethrown.
-        static member Time(name, func : Func<'T>) =
-            if isStarted() then
-                Monitor.time name func.Invoke instance.Value
-            else
-                func.Invoke()
-
-        /// Time a function call, identified by the provided key.
-        ///
-        /// If the function succeeds, the success counter is incremented and the timinig information saved.
-        ///
-        /// If the function throws an exception, the failure counter is incremented and the exception is rethrown.
-        static member Time(name, action : Action) =
-            if isStarted() then
-                Monitor.time name action.Invoke instance.Value
-            else
-                action.Invoke()
-        
-        /// Reset all counters
-        static member ResetCounters() =
-            if isStarted() then
-                Monitor.resetCounters instance.Value
-
-        /// Run health checks
-        static member RunHealthChecks() =
-            Monitor.runHealthChecks()
-
-        /// Get dependencies
-        static member GetDependencies() =
-            Monitor.getDependencies()
-
-        /// Get metrics
-        static member GetMetrics() =
-            Monitor.getMetrics()
-
-    
-    /// [omit]
-    /// MonitorMessage extensions for better C# interoperability
-    [<System.Runtime.CompilerServices.Extension>]
-    module MonitorMessageExtensions =
-        /// [omit]
-        /// Get value of IncrementSuccess
-        [<System.Runtime.CompilerServices.Extension>]
-        let GetIncrementSuccess(message) =
-            match message with
-            | IncrementSuccess x -> x
-            | _ -> failwith "Not an increment success"
-
-        /// [omit]
-        /// Get value of IncrementFailed
-        [<System.Runtime.CompilerServices.Extension>]
-        let GetIncrementFailed(message) =
-            match message with
-            | IncrementFailed x -> x
-            | _ -> failwith "Not an increment failed"
-
-        /// [omit]
-        /// Get value of Time
-        [<System.Runtime.CompilerServices.Extension>]
-        let GetTime(message) =
-            match message with
-            | Time (x, y) -> (x, y)
-            | _ -> failwith "Not an time message"
+    /// Get or add a BasicTimer
+    static member BasicTimer(name : string, step) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<BasicTimer>)
+        let factory = fun () -> (new BasicTimer(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags), step)) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> BasicTimer
