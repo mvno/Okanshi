@@ -68,7 +68,7 @@ type MonitorApi(options : MonitorApiOptions) =
                         |> List.toArray
                     { Version = "1"; Data = dependencies } |> sendResponse context
                 else
-                    { Version = "1"; Data = observer.GetObservations() } |> sendResponse context
+                    { Version = "2"; Data = observer.GetObservations() } |> sendResponse context
         }
         Async.Start(server, cancellationToken)
 
