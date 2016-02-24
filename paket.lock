@@ -1,5 +1,5 @@
 NUGET
-  remote: https://nuget.org/api/v2
+  remote: https://www.nuget.org/api/v2
   specs:
     FAKE (4.3.4)
     FluentAssertions (3.2.2) - framework: >= net45
@@ -17,9 +17,11 @@ NUGET
     Microsoft.Net.Http (2.2.29)
       Microsoft.Bcl (>= 1.1.10)
       Microsoft.Bcl.Build (>= 1.0.14)
+    MSBuild.AutoILMerge.Task (1.0.3)
+      ilmerge (>= 2.13.0307)
     Newtonsoft.Json (7.0.1)
-    NSubstitute (1.8.1.0) - framework: >= net45
-    Octokit (0.14.0)
+    NSubstitute (1.8.1) - framework: >= net45
+    Octokit (0.18.0)
       Microsoft.Net.Http
     SourceLink.Fake (1.1.0)
     xunit (2.0.0) - framework: >= net45
@@ -37,5 +39,5 @@ NUGET
 GITHUB
   remote: fsharp/FAKE
   specs:
-    modules/Octokit/Octokit.fsx (545fb5d2cc7901bcbfd8f7f1a53da8f7f169deda)
+    modules/Octokit/Octokit.fsx (43c4800c5f132d2c2d6832a3a59232a64d83d4c0)
       Octokit

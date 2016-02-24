@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="..\..\packages\MSBuild.AutoILMerge.Task\build\MSBuild.AutoILMerge.Task.props" Condition="Exists('..\..\packages\MSBuild.AutoILMerge.Task\build\MSBuild.AutoILMerge.Task.props')" Label="Paket" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -52,6 +53,13 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Content Include="ILMergeInternalizeExcludeList.txt" />
+    <Content Include="ILMerge.props">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="content\ILMergeOrder.txt">
+      <Paket>True</Paket>
+    </Content>
     <Compile Include="HealthCheck.fs" />
     <Compile Include="Atomic.fs" />
     <Compile Include="Config.fs" />
@@ -66,6 +74,9 @@
     <Compile Include="AssemblyInfo.fs" />
     <None Include="paket.references" />
     <None Include="Okanshi.nuspec" />
+    <Content Include="ILMergeOrder.txt">
+      <Paket>True</Paket>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
@@ -89,4 +100,21 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Reference Include="System.Xml">
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+      <ItemGroup>
+        <Reference Include="MSBuild.AutoILMerge.Task">
+          <HintPath>..\..\packages\MSBuild.AutoILMerge.Task\lib\net40\MSBuild.AutoILMerge.Task.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="..\..\packages\MSBuild.AutoILMerge.Task\build\MSBuild.AutoILMerge.Task.targets" Condition="Exists('..\..\packages\MSBuild.AutoILMerge.Task\build\MSBuild.AutoILMerge.Task.targets')" Label="Paket" />
 </Project>
