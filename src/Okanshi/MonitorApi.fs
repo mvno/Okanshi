@@ -2,6 +2,8 @@
 
 open System
 open System.Threading
+open System.Xml
+open System.Xml.Linq
 open Newtonsoft.Json
 
 /// Dependecy information
@@ -75,6 +77,22 @@ type MonitorApi(options : MonitorApiOptions) =
                         List.ofSeq([for dep in AppDomain.CurrentDomain.GetAssemblies() -> { Name = dep.GetName().Name; Version = dep.GetName().Version.ToString() }])
                         |> List.toArray
                     { Version = "1"; Data = dependencies } |> sendResponse context
+                elif context.Request.Url.AbsolutePath.EndsWith("/packages", StringComparison.OrdinalIgnoreCase) then
+                    if System.IO.File.Exists("packages.config") then
+                        let xname s = XName.Get(s)
+                        let packages =
+                            try
+                                (XDocument.Load "packages.config")
+                                    .Descendants(xname "package")
+                                        |> Seq.map(fun p -> {
+                                                                Id = p.Attribute(xname "id").Value;
+                                                                Version = p.Attribute(xname "version").Value
+                                                            })
+                            with
+                            | _ -> Seq.empty<Package>
+                        { Version = "1"; Data = packages |> Seq.toArray } |> sendResponse context
+                    else
+                        { Version = "1"; Data = [] } |> sendResponse context
                 else
                     { Version = "2"; Data = observer.GetObservations() } |> sendResponse context
         }
