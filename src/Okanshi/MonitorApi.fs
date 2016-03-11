@@ -13,6 +13,14 @@ type Dependency =
         Version : string;
     }
 
+type Package =
+    {
+        /// Id of the package
+        Id : string;
+        /// The package version
+        Version : string;
+    }
+
 /// Api options
 type MonitorApiOptions() =
     /// Enable CORS request. Default value is false
