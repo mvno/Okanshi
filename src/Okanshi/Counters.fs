@@ -104,7 +104,7 @@ type PeakRateCounter(config : MonitorConfig, step) =
             currentSecond.Set(now)
         currentCount.Increment(amount) |> updatePeak
     /// Gets the configuration
-    member __.Config = config.WithTag(DataSourceType.Rate)
+    member __.Config = config.WithTag(DataSourceType.Counter)
 
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
