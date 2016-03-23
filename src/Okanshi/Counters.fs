@@ -93,7 +93,7 @@ type PeakRateCounter(config : MonitorConfig, step) =
         updateValue()
 
     /// Gets the peak rate within the specified interval
-    member __.GetValue() = peakRate.GetCurrent().Get()
+    member __.GetValue() = peakRate.Poll().Value
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
     /// Increment the value by the specified amount
@@ -102,10 +102,9 @@ type PeakRateCounter(config : MonitorConfig, step) =
         if now <> currentSecond.Get() then
             currentCount.Set(0L)
             currentSecond.Set(now)
-        currentCount.Increment(amount) |> ignore
-        currentCount.Get() |> updatePeak
+        currentCount.Increment(amount) |> updatePeak
     /// Gets the configuration
-    member __.Config = config.WithTag(DataSourceType.Rate)
+    member __.Config = config.WithTag(DataSourceType.Counter)
 
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
