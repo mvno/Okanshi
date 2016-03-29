@@ -1,3 +1,5 @@
+### 2.1.0
+* Added endpoint (/packages) which lists the nuget packages used at compile time for this application using the content of the packages.config file, if it is found in the application directory.
 ### 2.0.0
 * Add version information to response from API
 	* This is done to allow extending the response in future releases
