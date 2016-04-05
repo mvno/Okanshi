@@ -26,9 +26,9 @@
     <ILMergeAssemblyVersion></ILMergeAssemblyVersion>
 
     <!-- If True, all types from the merged assembly dependencies are marked as internal in the resulting file -->
-    <ILMergeInternalize>false</ILMergeInternalize>
+    <ILMergeInternalize>true</ILMergeInternalize>
    
     <!-- The file containing the list of type to exclude from internalization if different from ILMergeInternalizeExcludeList.txt (only relevant when "ILMergeInternalize" is true) -->
-    <ILMergeInternalizeExcludeFile></ILMergeInternalizeExcludeFile>
+    <ILMergeInternalizeExcludeFile>ILMergeInternalizeExcludeList.txt</ILMergeInternalizeExcludeFile>
   </PropertyGroup>
 </Project>
