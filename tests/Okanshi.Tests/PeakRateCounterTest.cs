@@ -48,11 +48,11 @@ namespace Okanshi.Test
 		[Fact]
 		public void Peak_rate_is_per_defined_step()
 		{
-			var counter = new PeakRateCounter(MonitorConfig.Build("Test"), TimeSpan.FromSeconds(2));
+			var counter = new PeakRateCounter(MonitorConfig.Build("Test"), TimeSpan.FromSeconds(5));
 			counter.Increment();
 			Thread.Sleep(1000);
 			counter.Increment();
-			Thread.Sleep(1000);
+			Thread.Sleep(6000);
 
 			counter.GetValue().Should().Be(2);
 		}
