@@ -3,8 +3,6 @@ source https://nuget.org/api/v2
 nuget FSharp.Core framework: >= net45
 nuget FSharp.Formatting
 nuget FluentAssertions 3.2.2 framework: >= net45
-nuget ilmerge
-nuget MSBuild.AutoILMerge.Task
 nuget NSubstitute 1.8.1.0 framework: >= net45
 nuget FAKE
 nuget Newtonsoft.Json
