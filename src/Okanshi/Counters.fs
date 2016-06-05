@@ -82,21 +82,14 @@ type StepCounter(config : MonitorConfig, step : TimeSpan) =
 
 /// Counter tracking the maximum count per step within a specified interval
 type PeakRateCounter(config : MonitorConfig, step) =
-    let currentCount = new AtomicLong()
     let peakRate = new StepLong(step)
-    let updatePeak value =
-        let current = peakRate.GetCurrent()
-        let rec updateValue () =
-            let originalValue = current.Get()
-            if current.CompareAndSet(value, originalValue) <> originalValue then updateValue()
-        updateValue()
 
     /// Gets the peak rate within the specified interval
     member __.GetValue() = peakRate.Poll().Value
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
     /// Increment the value by the specified amount
-    member __.Increment(amount) = currentCount.Increment(amount) |> updatePeak
+    member __.Increment(amount) = peakRate.Increment(amount) |> ignore
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
 

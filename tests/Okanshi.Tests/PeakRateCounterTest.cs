@@ -56,5 +56,17 @@ namespace Okanshi.Test
 
 			counter.GetValue().Should().Be(2);
 		}
+
+		[Fact]
+		public void Peak_rate_is_updated_correctly_by_interval()
+		{
+			var counter = new PeakRateCounter(MonitorConfig.Build("Test"), TimeSpan.FromSeconds(1));
+			counter.Increment();
+			Thread.Sleep(1300);
+			counter.Increment();
+			Thread.Sleep(1300);
+
+			counter.GetValue().Should().Be(1);
+		}
 	}
 }
