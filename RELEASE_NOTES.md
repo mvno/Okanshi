@@ -1,3 +1,7 @@
+### 3.0.0
+* No longer ILMerge dependencies
+* BREAKING: Total rewrite of the metrics structure to make it easy to control and customize
+
 ### 2.1.0
 * Added endpoint (/packages) which lists the nuget packages used at compile time for this application using the content of the packages.config file, if it is found in the application directory.
 
