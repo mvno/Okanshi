@@ -37,16 +37,17 @@ type MonitorApiOptions() =
 /// Response object
 type Response<'T> = { Version : string; Data : 'T }
 
+/// Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.
 type MonitorApi(options : MonitorApiOptions) =
     let listener = new System.Net.HttpListener()
     let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval), options.NumberOfSamplesToStore)
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
     
-    /// Create the API with default values
+    /// Create the endpoint with default values
     new () = MonitorApi(new MonitorApiOptions())
 
-    /// Start API and using the default metrics registry
+    /// Start endpoint and using the default metrics registry
     member __.Start() =
         let sendResponse (context : System.Net.HttpListenerContext) content =
             try
@@ -98,5 +99,6 @@ type MonitorApi(options : MonitorApiOptions) =
         }
         Async.Start(server, cancellationToken)
 
+    /// Stops the endpoint
     member __.Stop() =
         cancellationTokenSource.Cancel()

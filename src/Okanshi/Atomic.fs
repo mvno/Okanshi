@@ -53,6 +53,7 @@ type AtomicLong(intialValue) =
         member self.Increment() = self.Increment()
         member self.Increment(amount) = self.Increment(amount)
 
+/// Performs atomic operations on a double
 type AtomicDouble(intialValue) =
     let value = new AtomicLong(intialValue |> BitConverter.DoubleToInt64Bits)
 
@@ -90,6 +91,7 @@ type AtomicDouble(intialValue) =
         member self.Increment() = self.Increment()
         member self.Increment(amount) = self.Increment(amount)
     
+/// Performs atomic operations on a decimal
 type AtomicDecimal(initialValue) =
     let mutable value = initialValue
     let valueLock = new obj()
