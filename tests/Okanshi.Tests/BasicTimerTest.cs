@@ -103,7 +103,7 @@ namespace Okanshi.Test
 
 			var totalTime = timer.GetTotalTime();
 
-			totalTime.Should().BeApproximately(500, 20);
+			totalTime.Should().BeInRange(450, 550);
 		}
 	}
 }
