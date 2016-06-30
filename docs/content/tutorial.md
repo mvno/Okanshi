@@ -11,28 +11,28 @@ After Okanshi has been added to your project, you start the monitor like this:
     api.Start();
 
 You should now be able to access the HTTP endpoint using [http://localhost:13004](http://localhost:13004).
-As nothing has been monitored yet, it will return an JSON response with an empty object, like this:
+As nothing has been monitored yet, it will return a JSON response with an empty object, like this:
 
     {}
 
 Metrics
 -------
 
-Okanshi have a couple of different monitor types, divided into the following categories:
+Okanshi has a couple of different monitor types, divided into the following categories:
 
   * Gauges
   * Counters
   * Timers
 
-All monitor can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
+All monitors can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
 ### Gauges ###
 
-Gauges are monitors which returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.
+Gauges are monitors that returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.
 
 #### BasicGauge ####
 
-The `BasicGauge` is a monitor which takes a `Func<T>`, each time the value is polled from the gauge the `Func<T>` is called and the value returned is the current value.
+The `BasicGauge` is a monitor that takes a `Func<T>`. Each time the value is polled from the gauge, the `Func<T>` is called and the value returned is the current value.
 
 Example:
 
@@ -43,8 +43,8 @@ Example:
 
 #### Max/MinGauge ####
 
-The `MaxGauge` is a monitor which tracks the current maximum value. It can be used to track the maximum number of users logged in at the same time or similar. The initial value of the gauge is zero.
-The `MinGauge` is a monitor which tracks the current minimum value. The initial value of the gauge is zero, which means zero is treated as no value at all. This has the affect that if gauge is zero, and another non zero value is posted to the gauge, this would effectively change the minimum value. This is a bug which will be fixed in a future version.
+The `MaxGauge` is a monitor that tracks the current maximum value. It can be used to track the maximum number of users logged in at the same time or similar. The initial value of the gauge is zero.
+The `MinGauge` is a monitor that tracks the current minimum value. The initial value of the gauge is zero, which means zero is treated as no value at all. This has the affect that if the gauge is zero, and a non zero value is posted to the gauge, it would effectively change the minimum value. This is a bug that will be fixed in a future version.
 
 Example:
 
@@ -71,7 +71,7 @@ Example:
 
 #### Long/Double/DecimalGauge ####
 
-The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges which handles `long`, `double` and `decimal` values respectively. The value you set is the value you get. Usage of these monitors is the same.
+The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`, `double` and `decimal` values respectively. The value you set is the value you get. Usage of these monitors is the same.
 
     [lang=csharp]
     OkanshiMonitor.LongGauge("Maximum number of users").Set(1); // New value is 1
@@ -85,11 +85,11 @@ The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges which handles `long
 
 ### Counters ###
 
-Counters are monitors which you can increment as needed, and all counters are thread-safe by default.
+Counters are monitors that you can increment as needed. They are thread-safe by default.
 
 #### Step/DoubleCounter ####
 
-A `StepCounter` is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events per second based on the previous interval. The value of a `StepCounter` is a long.
+A `StepCounter` is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events per second, based on the previous interval. The value of a `StepCounter` is a long.
 A `DoubleCounter` works the same way as a `StepCounter`, the only difference is the value, which is a double.
 
     [lang=csharp]
@@ -99,16 +99,16 @@ A `DoubleCounter` works the same way as a `StepCounter`, the only difference is 
     OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(2)).Increment();
     Thread.Sleep(2000); // After another 2 seconds the value is 0.5
     // OR
-    var gauge = new StepCounter(MonitorConfig.Build("Name"), TimeSpan.FromSeconds(1));
-    gauge.Increment();
-    gauge.Increment();
+    var counter = new StepCounter(MonitorConfig.Build("Name"), TimeSpan.FromSeconds(1));
+    counter.Increment();
+    counter.Increment();
     Thread.Sleep(2000);
-    gauge.Increment();
+    counter.Increment();
     Thread.Sleep(2000);
 
 #### PeakRateCounter ####
 
-A `PeakRateCounter` is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events possible per second based on the previous interval.
+A `PeakRateCounter` is a counter defined by an interval. After each interval the counter is reset. The value of this counter gives you the number of events possible per second, based on the previous interval. 
 
     [lang=csharp]
     OkanshiMonitor.PeakRateCounter("Name", TimeSpan.FromSeconds(1)).Increment();
@@ -117,16 +117,16 @@ A `PeakRateCounter` is a counter defined by an interval, after each interval the
     OkanshiMonitor.PeakRateCounter("Name", TimeSpan.FromSeconds(1)).Increment();
     Thread.Sleep(1000); // After another second the value is 1
     // OR
-    var gauge = new PeakRateCounter(MonitorConfig.Build("Name"), TimeSpan.FromSeconds(1));
-    gauge.Increment();
-    gauge.Increment();
+    var counter = new PeakRateCounter(MonitorConfig.Build("Name"), TimeSpan.FromSeconds(1));
+    counter.Increment();
+    counter.Increment();
     Thread.Sleep(1000);
-    gauge.Increment();
+    counter.Increment();
     Thread.Sleep(1000);
 
 #### BasicCounter ####
 
-Is a counter which is never reset. Other than that, it works exactly like all other counters.
+Is a counter that is never reset. Other than that, it works exactly like all other counters.
 
     [lang=csharp]
     OkanshiMonitor.BasicCounter("Name").Increment();
@@ -135,11 +135,11 @@ Is a counter which is never reset. Other than that, it works exactly like all ot
     OkanshiMonitor.BasicCounter("Name").Increment();
     Thread.Sleep(1000); // After another second the value is 3
     // OR
-    var gauge = new BasicCounter(MonitorConfig.Build("Name"));
-    gauge.Increment();
-    gauge.Increment();
+    var counter = new BasicCounter(MonitorConfig.Build("Name"));
+    counter.Increment();
+    counter.Increment();
     Thread.Sleep(1000);
-    gauge.Increment();
+    counter.Increment();
     Thread.Sleep(1000);
 
 ### Timers ###
@@ -148,7 +148,11 @@ Timers measures the time it takes to execute a function.
 
 #### BasicTimer ####
 
-This is a simple timer which measures the execution time of a function, and tracks the minimum and maximum time of the function call, the number of times the function was called, and the total time of the all calls, all within a specified interval.
+This is a simple timer that, within a specified interval, measures:
+* the execution time of a function, 
+* tracks the minimum and maximum time of the function call,
+* the number of times the function was called,
+* and the total time of the all calls.
 
 Example:
 
@@ -162,7 +166,7 @@ Example:
 
 #### DurationTimer ####
 
-A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and the current total execution time, this is the sum of all the running operations current execution time.
+A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .
 
     [lang=csharp]
     OkanshiMonitor.DurationTimer("Query time")).Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 1
