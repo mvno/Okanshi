@@ -43,7 +43,7 @@
 api.Start();
 </code></pre></td></tr></table>
 <p>You should now be able to access the HTTP endpoint using <a href="http://localhost:13004"><a href="http://localhost:13004">http://localhost:13004</a></a>.
-As nothing has been monitored yet, it will return an JSON response with an empty object, like this:</p>
+As nothing has been monitored yet, it will return a JSON response with an empty object, like this:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">{}
@@ -51,17 +51,17 @@ As nothing has been monitored yet, it will return an JSON response with an empty
 </tr>
 </table>
 <h2><a name="Metrics" class="anchor" href="#Metrics">Metrics</a></h2>
-<p>Okanshi have a couple of different monitor types, divided into the following categories:</p>
+<p>Okanshi has a couple of different monitor types, divided into the following categories:</p>
 <ul>
 <li>Gauges</li>
 <li>Counters</li>
 <li>Timers</li>
 </ul>
-<p>All monitor can be instantiated directly or, declared and used through the static <code>OkanshiMonitor</code> class.</p>
+<p>All monitors can be instantiated directly or, declared and used through the static <code>OkanshiMonitor</code> class.</p>
 <h3><a name="Gauges" class="anchor" href="#Gauges">Gauges</a></h3>
-<p>Gauges are monitors which returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.</p>
+<p>Gauges are monitors that returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.</p>
 <h4><a name="BasicGauge" class="anchor" href="#BasicGauge">BasicGauge</a></h4>
-<p>The <code>BasicGauge</code> is a monitor which takes a <code>Func&lt;T&gt;</code>, each time the value is polled from the gauge the <code>Func&lt;T&gt;</code> is called and the value returned is the current value.</p>
+<p>The <code>BasicGauge</code> is a monitor that takes a <code>Func&lt;T&gt;</code>. Each time the value is polled from the gauge, the <code>Func&lt;T&gt;</code> is called and the value returned is the current value.</p>
 <p>Example:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -72,8 +72,8 @@ As nothing has been monitored yet, it will return an JSON response with an empty
 <span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> BasicGauge(MonitorConfig.Build(<span class="s">"Number of users"</span>), () <span class="o">=</span><span class="o">&gt;</span> _numberOfUsers);
 </code></pre></td></tr></table>
 <h4><a name="Max-MinGauge" class="anchor" href="#Max-MinGauge">Max/MinGauge</a></h4>
-<p>The <code>MaxGauge</code> is a monitor which tracks the current maximum value. It can be used to track the maximum number of users logged in at the same time or similar. The initial value of the gauge is zero.
-The <code>MinGauge</code> is a monitor which tracks the current minimum value. The initial value of the gauge is zero, which means zero is treated as no value at all. This has the affect that if gauge is zero, and another non zero value is posted to the gauge, this would effectively change the minimum value. This is a bug which will be fixed in a future version.</p>
+<p>The <code>MaxGauge</code> is a monitor that tracks the current maximum value. It can be used to track the maximum number of users logged in at the same time or similar. The initial value of the gauge is zero.
+The <code>MinGauge</code> is a monitor that tracks the current minimum value. The initial value of the gauge is zero, which means zero is treated as no value at all. This has the affect that if the gauge is zero, and a non zero value is posted to the gauge, it would effectively change the minimum value. This is a bug that will be fixed in a future version.</p>
 <p>Example:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -116,7 +116,7 @@ gauge.Set(<span class="n">0</span>);
 gauge.Set(<span class="n">1</span>);
 </code></pre></td></tr></table>
 <h4><a name="Long-Double-DecimalGauge" class="anchor" href="#Long-Double-DecimalGauge">Long/Double/DecimalGauge</a></h4>
-<p>The <code>LongGauge</code>, <code>DoubleGauge</code> and <code>DecimalGauge</code> are gauges which handles <code>long</code>, <code>double</code> and <code>decimal</code> values respectively. The value you set is the value you get. Usage of these monitors is the same.</p>
+<p>The <code>LongGauge</code>, <code>DoubleGauge</code> and <code>DecimalGauge</code> are gauges that handles <code>long</code>, <code>double</code> and <code>decimal</code> values respectively. The value you set is the value you get. Usage of these monitors is the same.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -136,9 +136,9 @@ gauge.Set(<span class="n">10</span>);
 gauge.Set(<span class="n">0</span>);
 </code></pre></td></tr></table>
 <h3><a name="Counters" class="anchor" href="#Counters">Counters</a></h3>
-<p>Counters are monitors which you can increment as needed, and all counters are thread-safe by default.</p>
+<p>Counters are monitors that you can increment as needed. They are thread-safe by default.</p>
 <h4><a name="Step-DoubleCounter" class="anchor" href="#Step-DoubleCounter">Step/DoubleCounter</a></h4>
-<p>A <code>StepCounter</code> is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events per second based on the previous interval. The value of a <code>StepCounter</code> is a long.
+<p>A <code>StepCounter</code> is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events per second, based on the previous interval. The value of a <code>StepCounter</code> is a long.
 A <code>DoubleCounter</code> works the same way as a <code>StepCounter</code>, the only difference is the value, which is a double.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -159,15 +159,15 @@ Thread.Sleep(<span class="n">2000</span>); <span class="c">// After 2 seconds th
 OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">2</span>)).Increment();
 Thread.Sleep(<span class="n">2000</span>); <span class="c">// After another 2 seconds the value is 0.5</span>
 <span class="c">// OR</span>
-<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> StepCounter(MonitorConfig.Build(<span class="s">"Name"</span>), TimeSpan.FromSeconds(<span class="n">1</span>));
-gauge.Increment();
-gauge.Increment();
+<span class="k">var</span> counter <span class="o">=</span> <span class="k">new</span> StepCounter(MonitorConfig.Build(<span class="s">"Name"</span>), TimeSpan.FromSeconds(<span class="n">1</span>));
+counter.Increment();
+counter.Increment();
 Thread.Sleep(<span class="n">2000</span>);
-gauge.Increment();
+counter.Increment();
 Thread.Sleep(<span class="n">2000</span>);
 </code></pre></td></tr></table>
 <h4><a name="PeakRateCounter" class="anchor" href="#PeakRateCounter">PeakRateCounter</a></h4>
-<p>A <code>PeakRateCounter</code> is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events possible per second based on the previous interval.</p>
+<p>A <code>PeakRateCounter</code> is a counter defined by an interval. After each interval the counter is reset. The value of this counter gives you the number of events possible per second, based on the previous interval.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -187,15 +187,15 @@ Thread.Sleep(<span class="n">1000</span>); <span class="c">// After 1 second the
 OkanshiMonitor.PeakRateCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Increment();
 Thread.Sleep(<span class="n">1000</span>); <span class="c">// After another second the value is 1</span>
 <span class="c">// OR</span>
-<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> PeakRateCounter(MonitorConfig.Build(<span class="s">"Name"</span>), TimeSpan.FromSeconds(<span class="n">1</span>));
-gauge.Increment();
-gauge.Increment();
+<span class="k">var</span> counter <span class="o">=</span> <span class="k">new</span> PeakRateCounter(MonitorConfig.Build(<span class="s">"Name"</span>), TimeSpan.FromSeconds(<span class="n">1</span>));
+counter.Increment();
+counter.Increment();
 Thread.Sleep(<span class="n">1000</span>);
-gauge.Increment();
+counter.Increment();
 Thread.Sleep(<span class="n">1000</span>);
 </code></pre></td></tr></table>
 <h4><a name="BasicCounter" class="anchor" href="#BasicCounter">BasicCounter</a></h4>
-<p>Is a counter which is never reset. Other than that, it works exactly like all other counters.</p>
+<p>Is a counter that is never reset. Other than that, it works exactly like all other counters.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -215,17 +215,21 @@ Thread.Sleep(<span class="n">1000</span>); <span class="c">// After 1 second the
 OkanshiMonitor.BasicCounter(<span class="s">"Name"</span>).Increment();
 Thread.Sleep(<span class="n">1000</span>); <span class="c">// After another second the value is 3</span>
 <span class="c">// OR</span>
-<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> BasicCounter(MonitorConfig.Build(<span class="s">"Name"</span>));
-gauge.Increment();
-gauge.Increment();
+<span class="k">var</span> counter <span class="o">=</span> <span class="k">new</span> BasicCounter(MonitorConfig.Build(<span class="s">"Name"</span>));
+counter.Increment();
+counter.Increment();
 Thread.Sleep(<span class="n">1000</span>);
-gauge.Increment();
+counter.Increment();
 Thread.Sleep(<span class="n">1000</span>);
 </code></pre></td></tr></table>
 <h3><a name="Timers" class="anchor" href="#Timers">Timers</a></h3>
 <p>Timers measures the time it takes to execute a function.</p>
 <h4><a name="BasicTimer" class="anchor" href="#BasicTimer">BasicTimer</a></h4>
-<p>This is a simple timer which measures the execution time of a function, and tracks the minimum and maximum time of the function call, the number of times the function was called, and the total time of the all calls, all within a specified interval.</p>
+<p>This is a simple timer that, within a specified interval, measures:
+<em> the execution time of a function,
+</em> tracks the minimum and maximum time of the function call,
+<em> the number of times the function was called,
+</em> and the total time of the all calls.</p>
 <p>Example:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -242,7 +246,7 @@ timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep
 timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100</span>))
 </code></pre></td></tr></table>
 <h4><a name="DurationTimer" class="anchor" href="#DurationTimer">DurationTimer</a></h4>
-<p>A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and the current total execution time, this is the sum of all the running operations current execution time.</p>
+<p>A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
