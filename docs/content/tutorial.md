@@ -194,8 +194,8 @@ C#:
     HealthChecks.Add("key", () => Directory.GetFiles("C:\\MyData").Length == 0);
 
 F#:
-	[lang=fsharp]
-	HealthChecks.Add("key", (fun () -> System.IO.Directory.GetFiles("C:\\MyData").Length = 0))
+    [lang=fsharp]
+    HealthChecks.Add("key", (fun () -> System.IO.Directory.GetFiles("C:\\MyData").Length = 0))
 
 The `Func` passed in just have to return a boolean, indicating pass or fail. The status of the health checks can be seen using
 [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
