@@ -21,40 +21,14 @@ The monitoring information can be accessed using the provided HTTP endpoint (JSO
 
 It is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronous, and won't impact the application performane that much. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed. 
 
-Example
--------
-
-C#:
-
-```csharp
-using Okanshi.CSharp
-
-Monitor.Start();
-Monitor.Time("action", () => Thread.Sleep(2000));
-var result = Monitor.Time("func", () => "Result value");
-Monitor.Success("success");
-Monitor.Failed("failed");
-```
-
-F#:
-
-```fsharp
-open Okansi
-
-let monitor = Monitor.start Monitor.defaultOptions
-monitor |> Monitor.time "function" (fun () -> System.Threading.Thread.Sleep(2000))
-monitor |> Monitor.success "success"
-monitor |> Monitor.failed "failed"
-```
-
 Samples & documentation
 -----------------------
 
 The library comes with comprehensible documentation. 
 
- * [Tutorial](tutorial.html) contains a further explanation of this library.
+ * [Tutorial](http://mvno.github.io/Okanshi/tutorial.html) contains a further explanation of this library.
 
- * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
+ * [API Reference](http://mvno.github.io/Okanshi/reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library.
  
 Contributing and copyright
