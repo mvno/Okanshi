@@ -165,3 +165,12 @@ type OkanshiMonitor private() =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<BasicTimer>, tags)
         let factory = fun () -> (new BasicTimer(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags), step)) :> IMonitor
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> BasicTimer
+
+    /// Get or add a DurationTimer
+    static member DurationTimer(name) = OkanshiMonitor.DurationTimer(name, [||])
+
+    /// Get or add a DurationTimer with custom tags
+    static member DurationTimer(name : string, tags : Tag array) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<DurationTimer>, tags)
+        let factory = fun () -> (new DurationTimer(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> BasicTimer
