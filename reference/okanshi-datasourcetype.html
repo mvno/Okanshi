@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Metric - Okanshi</title>
+    <title>DataSourceType - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,98 +35,83 @@
 
 
 
-<h1>Metric</h1>
+<h1>DataSourceType</h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>The metric type</p>
+<p>The types used to indicate the type of a value</p>
 
 </div>
-  <h3>Record Fields</h3>
+  <h3>Static members</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Static member</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
-            Name
+          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
+            Counter
           </code>
-          <div class="tip" id="119">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="48">
+            <strong>Signature:</strong> Tag<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L10-10" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L48-48" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Name of the metric</p>
+          <p>A counter is for numeric values that get incremented when some event occurs.</p>
+<p>Most counters will be sampled and converted to a rate of change per second.</p>
 
 
+              <p>CompiledName: <code>get_Counter</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
-            Tags
+          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
+            Gauge
           </code>
-          <div class="tip" id="120">
-            <strong>Signature:</strong> Tag array<br />
+          <div class="tip" id="49">
+            <strong>Signature:</strong> Tag<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L14-14" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L43-43" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The metric tags</p>
+          <p>A gauge is a metric that can be sampled without modification</p>
+<p>Examples of metrics could be number of connections, disk usage, etc.</p>
 
 
+              <p>CompiledName: <code>get_Gauge</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
-            Timestamp
+          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
+            Rate
           </code>
-          <div class="tip" id="121">
-            <strong>Signature:</strong> DateTimeOffset<br />
+          <div class="tip" id="50">
+            <strong>Signature:</strong> Tag<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L12-12" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L51-51" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The timestamp where the metric was observed</p>
+          <p>A rate is for numeric values that represents a rate per second.</p>
 
 
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
-            Value
-          </code>
-          <div class="tip" id="122">
-            <strong>Signature:</strong> obj<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L16-16" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The value</p>
-
-
+              <p>CompiledName: <code>get_Rate</code></p>
         </td>
       </tr>
     </tbody>

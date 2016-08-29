@@ -36,9 +36,11 @@
 
 
 <h1>MonitorApi</h1>
+<p>
+  <span>Namespace: Okanshi</span><br />
+</p>
 <div class="xmldoc">
-<p>The monitor API</p>
-
+<p>Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.</p>
 
 </div>
   <h3>Constructors</h3>
@@ -50,40 +52,41 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
+          <code onmouseout="hideTip(event, '137', 137)" onmouseover="showTip(event, '137', 137)">
             new()
           </code>
-          <div class="tip" id="46">
+          <div class="tip" id="137">
             <strong>Signature:</strong> unit -&gt; MonitorApi<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L20-20" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L48-48" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Create the API with default values</p>
+          <p>Create the endpoint with default values</p>
 
 
-
+              <p>CompiledName: <code>.ctor</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
+          <code onmouseout="hideTip(event, '138', 138)" onmouseover="showTip(event, '138', 138)">
             new(options)
           </code>
-          <div class="tip" id="47">
+          <div class="tip" id="138">
             <strong>Signature:</strong> options:MonitorApiOptions -&gt; MonitorApi<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L15-15" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L41-41" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
+              <p>CompiledName: <code>.ctor</code></p>
         </td>
       </tr>
     </tbody>
@@ -97,62 +100,39 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
-            Start(monitorOptions)
-          </code>
-          <div class="tip" id="48">
-            <strong>Signature:</strong> monitorOptions:MonitorOptions -&gt; Monitor<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L28-28" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Start API and monitoring using the provided options</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
+          <code onmouseout="hideTip(event, '139', 139)" onmouseover="showTip(event, '139', 139)">
             Start()
           </code>
-          <div class="tip" id="49">
-            <strong>Signature:</strong> unit -&gt; Monitor<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L24-24" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Start API and monitoring using the default values</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
-            Stop()
-          </code>
-          <div class="tip" id="50">
+          <div class="tip" id="139">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L65-65" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L51-51" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Stop the API and monitoring</p>
+          <p>Start endpoint and using the default metrics registry</p>
 
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '140', 140)" onmouseover="showTip(event, '140', 140)">
+            Stop()
+          </code>
+          <div class="tip" id="140">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L103-103" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Stops the endpoint</p>
 
 
         </td>

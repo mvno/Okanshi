@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Metric - Okanshi</title>
+    <title>DoubleCounter - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,36 +35,84 @@
 
 
 
-<h1>Metric</h1>
+<h1>DoubleCounter</h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>The metric type</p>
+<p>A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.</p>
 
 </div>
-  <h3>Record Fields</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
-            Name
+          <code onmouseout="hideTip(event, '62', 62)" onmouseover="showTip(event, '62', 62)">
+            new(config, step)
           </code>
-          <div class="tip" id="119">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="62">
+            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan) -&gt; DoubleCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L10-10" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L103-103" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Name of the metric</p>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '63', 63)" onmouseover="showTip(event, '63', 63)">
+            Config
+          </code>
+          <div class="tip" id="63">
+            <strong>Signature:</strong> MonitorConfig<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L127-127" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the configuration</p>
+
+
+              <p>CompiledName: <code>get_Config</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '64', 64)" onmouseover="showTip(event, '64', 64)">
+            GetValue()
+          </code>
+          <div class="tip" id="64">
+            <strong>Signature:</strong> unit -&gt; float<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L122-122" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the rate per second</p>
 
 
         </td>
@@ -72,19 +120,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
-            Tags
+          <code onmouseout="hideTip(event, '65', 65)" onmouseover="showTip(event, '65', 65)">
+            Increment()
           </code>
-          <div class="tip" id="120">
-            <strong>Signature:</strong> Tag array<br />
+          <div class="tip" id="65">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L14-14" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L120-120" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The metric tags</p>
+          <p>Increment the value by one</p>
 
 
         </td>
@@ -92,39 +140,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
-            Timestamp
+          <code onmouseout="hideTip(event, '66', 66)" onmouseover="showTip(event, '66', 66)">
+            Increment(amount)
           </code>
-          <div class="tip" id="121">
-            <strong>Signature:</strong> DateTimeOffset<br />
+          <div class="tip" id="66">
+            <strong>Signature:</strong> amount:double -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L12-12" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L117-117" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The timestamp where the metric was observed</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
-            Value
-          </code>
-          <div class="tip" id="122">
-            <strong>Signature:</strong> obj<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L16-16" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The value</p>
+          <p>Increment the value by the specified amount</p>
 
 
         </td>

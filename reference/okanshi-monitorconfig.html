@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Metric - Okanshi</title>
+    <title>MonitorConfig - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,12 +35,12 @@
 
 
 
-<h1>Metric</h1>
+<h1>MonitorConfig</h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>The metric type</p>
+<p>Configuration of a monitor</p>
 
 </div>
   <h3>Record Fields</h3>
@@ -52,19 +52,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
+          <code onmouseout="hideTip(event, '150', 150)" onmouseover="showTip(event, '150', 150)">
             Name
           </code>
-          <div class="tip" id="119">
+          <div class="tip" id="150">
             <strong>Signature:</strong> string<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L10-10" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L10-10" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Name of the metric</p>
+          <p>Name of the monitor</p>
 
 
         </td>
@@ -72,19 +72,47 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+          <code onmouseout="hideTip(event, '151', 151)" onmouseover="showTip(event, '151', 151)">
             Tags
           </code>
-          <div class="tip" id="120">
+          <div class="tip" id="151">
             <strong>Signature:</strong> Tag array<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L14-14" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L12-12" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The metric tags</p>
+          <p>Monitor tags</p>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '152', 152)" onmouseover="showTip(event, '152', 152)">
+            WithTag(tag)
+          </code>
+          <div class="tip" id="152">
+            <strong>Signature:</strong> tag:Tag -&gt; MonitorConfig<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L21-21" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Adds a tag</p>
 
 
         </td>
@@ -92,19 +120,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
-            Timestamp
+          <code onmouseout="hideTip(event, '153', 153)" onmouseover="showTip(event, '153', 153)">
+            WithTag(key, value)
           </code>
-          <div class="tip" id="121">
-            <strong>Signature:</strong> DateTimeOffset<br />
+          <div class="tip" id="153">
+            <strong>Signature:</strong> (key:string * value:string) -&gt; MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L12-12" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L18-18" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The timestamp where the metric was observed</p>
+          <p>Adds a tag specified by the key and value</p>
 
 
         </td>
@@ -112,19 +140,47 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
-            Value
+          <code onmouseout="hideTip(event, '154', 154)" onmouseover="showTip(event, '154', 154)">
+            WithTags(tags)
           </code>
-          <div class="tip" id="122">
-            <strong>Signature:</strong> obj<br />
+          <div class="tip" id="154">
+            <strong>Signature:</strong> tags:seq&lt;Tag&gt; -&gt; MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L16-16" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L24-24" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The value</p>
+          <p>Adds multiple tags to the configuration</p>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '155', 155)" onmouseover="showTip(event, '155', 155)">
+            Build(name)
+          </code>
+          <div class="tip" id="155">
+            <strong>Signature:</strong> name:string -&gt; MonitorConfig<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L15-15" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Builder method of the configuration</p>
 
 
         </td>

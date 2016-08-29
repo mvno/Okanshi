@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Metric - Okanshi</title>
+    <title>StopwatchExtensions - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,98 +35,42 @@
 
 
 
-<h1>Metric</h1>
+<h1>StopwatchExtensions</h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>The metric type</p>
+<p>Extenstions for the System.Diagnostics.StopWatch class</p>
 
 </div>
-  <h3>Record Fields</h3>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Type extensions</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Type extension</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
-            Name
+          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
+            Time(f)
           </code>
-          <div class="tip" id="119">
-            <strong>Signature:</strong> string<br />
-                      </div>
+          <div class="tip" id="2">
+            <strong>Signature:</strong> (f:(unit -&gt; &#39;?7571)) -&gt; &#39;?7571 * int64<br />
+                          <strong>Type parameters:</strong> '?7571          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L10-10" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L11-11" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Name of the metric</p>
+          <p>Time a function and return the result and elapsed milliseconds as a tuple</p>
 
 
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
-            Tags
-          </code>
-          <div class="tip" id="120">
-            <strong>Signature:</strong> Tag array<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L14-14" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The metric tags</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
-            Timestamp
-          </code>
-          <div class="tip" id="121">
-            <strong>Signature:</strong> DateTimeOffset<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L12-12" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The timestamp where the metric was observed</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
-            Value
-          </code>
-          <div class="tip" id="122">
-            <strong>Signature:</strong> obj<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L16-16" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The value</p>
-
-
+              <p>CompiledName: <code>Stopwatch.Time.Static</code></p>
         </td>
       </tr>
     </tbody>

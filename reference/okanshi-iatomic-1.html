@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Metric - Okanshi</title>
+    <title>IAtomic<'T> - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,36 +35,38 @@
 
 
 
-<h1>Metric</h1>
+<h1>IAtomic<'T></h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>The metric type</p>
+<p>Perform atomic operations on a type</p>
 
 </div>
-  <h3>Record Fields</h3>
+  <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Instance member</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
-            Name
+          <code onmouseout="hideTip(event, '83', 83)" onmouseover="showTip(event, '83', 83)">
+            CompareAndSet(arg1, arg2)
           </code>
-          <div class="tip" id="119">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="83">
+            <strong>Signature:</strong> (&#39;T * &#39;T) -&gt; &#39;T<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L10-10" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L14-14" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Name of the metric</p>
+          <p>Compare and set the value. If the value returned isn't equal the specified original value, it means
+that the value has changed since the last fetch and the new value hasn't been used</p>
 
 
         </td>
@@ -72,19 +74,20 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
-            Tags
+          <code onmouseout="hideTip(event, '84', 84)" onmouseover="showTip(event, '84', 84)">
+            Get()
           </code>
-          <div class="tip" id="120">
-            <strong>Signature:</strong> Tag array<br />
+          <div class="tip" id="84">
+            <strong>Signature:</strong> unit -&gt; &#39;T<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L14-14" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L9-9" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The metric tags</p>
+          <p>Get the value</p>
 
 
         </td>
@@ -92,19 +95,20 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
-            Timestamp
+          <code onmouseout="hideTip(event, '85', 85)" onmouseover="showTip(event, '85', 85)">
+            GetAndSet(arg1)
           </code>
-          <div class="tip" id="121">
-            <strong>Signature:</strong> DateTimeOffset<br />
+          <div class="tip" id="85">
+            <strong>Signature:</strong> &#39;T -&gt; &#39;T<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L12-12" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L11-11" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The timestamp where the metric was observed</p>
+          <p>Sets the value and returns the old value</p>
 
 
         </td>
@@ -112,19 +116,62 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
-            Value
+          <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
+            Increment(arg1)
           </code>
-          <div class="tip" id="122">
-            <strong>Signature:</strong> obj<br />
+          <div class="tip" id="86">
+            <strong>Signature:</strong> &#39;T -&gt; &#39;T<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L16-16" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L20-20" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The value</p>
+          <p>Increment the value by the specified amount</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
+            Increment()
+          </code>
+          <div class="tip" id="87">
+            <strong>Signature:</strong> unit -&gt; &#39;T<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Increment the value by one</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '88', 88)" onmouseover="showTip(event, '88', 88)">
+            Set(arg1)
+          </code>
+          <div class="tip" id="88">
+            <strong>Signature:</strong> &#39;T -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L16-16" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Set the value</p>
 
 
         </td>

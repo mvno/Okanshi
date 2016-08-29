@@ -45,19 +45,266 @@
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="okanshi-dependency.html">Dependency</a>
+            <a href="okanshi-atomicdecimal.html">AtomicDecimal</a>
           </td>
-          <td class="xmldoc"><p>Dependecy information</p>
-
+          <td class="xmldoc"><p>Performs atomic operations on a decimal</p>
 
 </td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-metricupdated.html">MetricUpdated</a>
+            <a href="okanshi-atomicdouble.html">AtomicDouble</a>
           </td>
-          <td class="xmldoc"><p>Used to communicate with thrird-party systems when metric is updated</p>
+          <td class="xmldoc"><p>Performs atomic operations on a double</p>
 
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-atomiclong.html">AtomicLong</a>
+          </td>
+          <td class="xmldoc"><p>Performs atomic operations on a long</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-basiccounter.html">BasicCounter</a>
+          </td>
+          <td class="xmldoc"><p>A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
+Observers are responsible for converting to a rate and handling overflows if they occur.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-basicgauge-1.html">BasicGauge<'T></a>
+          </td>
+          <td class="xmldoc"><p>A gauge implemenation that invokes a func to get the current value</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-basictimer.html">BasicTimer</a>
+          </td>
+          <td class="xmldoc"><p>A simple timer providing the total time, count, min and max for the times that have been recorded</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-countertoratemetrictransformobserver.html">CounterToRateMetricTransformObserver</a>
+          </td>
+          <td class="xmldoc"><p>Convert counter metrics to rate per second. The rate is calculated by comparing two samples of the given metric
+and looking at the delta. This means that two samples are required to compute the rate, and that no value will be
+sent to the wrapped observer until a second sample arrives. If the metric is not updated within the heartbeat interval
+the previous cached value will be dropped, and new sample coming in will be treated as the first sample for that metric.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-datasourcetype.html">DataSourceType</a>
+          </td>
+          <td class="xmldoc"><p>The types used to indicate the type of a value</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-datapoint.html">Datapoint</a>
+          </td>
+          <td class="xmldoc"><p>Utility class used to describe step intervals</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-decimalgauge.html">DecimalGauge</a>
+          </td>
+          <td class="xmldoc"><p>A gauge that reports a decimal value</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-defaultmonitorregistry.html">DefaultMonitorRegistry</a>
+          </td>
+          <td class="xmldoc"><p>The default monitor registry handled as a singleton. Currently this is a OkanshiMonitorRegistry.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-dependency.html">Dependency</a>
+          </td>
+          <td class="xmldoc"><p>Dependecy information</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-doublecounter.html">DoubleCounter</a>
+          </td>
+          <td class="xmldoc"><p>A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-doublegauge.html">DoubleGauge</a>
+          </td>
+          <td class="xmldoc"><p>A gauge that reports a double value</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-durationtimer.html">DurationTimer</a>
+          </td>
+          <td class="xmldoc"><p>A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
+frequent calls that last less than the polling interval, use the BasicTimer instead.
+This timer can track multiple operations, each started by calling the Record method.
+This monitor will create two gauges:
+<em> A duration which reports the current duration in seconds. The duration is the sum of all active tasks
+</em> Number of active tasks
+The names of the monitors will be the base name passed in the config to the constructor, suffixed by
+.duration and .activetasks respectively.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-healthchecks.html">HealthChecks</a>
+          </td>
+          <td class="xmldoc"><p>Handles healthchecks</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-iatomic-1.html">IAtomic<'T></a>
+          </td>
+          <td class="xmldoc"><p>Perform atomic operations on a type</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-icounter-1.html">ICounter<'T></a>
+          </td>
+          <td class="xmldoc"><p>Tracks how often some event occurs</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-igauge-1.html">IGauge<'T></a>
+          </td>
+          <td class="xmldoc"><p>Monitor type that provides the current value, fx. the percentage of disk space used</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imetricobserver.html">IMetricObserver</a>
+          </td>
+          <td class="xmldoc"><p>Observer that can receive updates about metrics</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imetricpoller.html">IMetricPoller</a>
+          </td>
+          <td class="xmldoc"><p>A poller that can be used to fetch the current values for a list of metrics</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imonitor.html">IMonitor</a>
+          </td>
+          <td class="xmldoc"><p>A monitor</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imonitorregistry.html">IMonitorRegistry</a>
+          </td>
+          <td class="xmldoc"><p>Registry to keep track for monitors</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-itimer.html">ITimer</a>
+          </td>
+          <td class="xmldoc"><p>Times System.Action and Systen.Func calls</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-longgauge.html">LongGauge</a>
+          </td>
+          <td class="xmldoc"><p>A gauge the reports a long value</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-maxgauge.html">MaxGauge</a>
+          </td>
+          <td class="xmldoc"><p>Gauge that keeps track of the maximum value seen since the last reset. Updates should be
+non-negative, the initial value is 0.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-memorymetricobserver.html">MemoryMetricObserver</a>
+          </td>
+          <td class="xmldoc"><p>Metric observer storing the specified number of observations in memory</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-metric.html">Metric</a>
+          </td>
+          <td class="xmldoc"><p>The metric type</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-metriceventargs.html">MetricEventArgs</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-metriceventdelegate.html">MetricEventDelegate</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-metricmonitorregistrypoller.html">MetricMonitorRegistryPoller</a>
+          </td>
+          <td class="xmldoc"><p>Poller for fetching metrics from a monitor registry</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-mingauge.html">MinGauge</a>
+          </td>
+          <td class="xmldoc"><p>Gauge that keeps track of the minimum value seen since the last reset. Updates should be
+non-negative, the initial value is 0.</p>
 
 </td>
         </tr>
@@ -65,8 +312,7 @@
           <td class="type-name">
             <a href="okanshi-monitorapi.html">MonitorApi</a>
           </td>
-          <td class="xmldoc"><p>The monitor API</p>
-
+          <td class="xmldoc"><p>Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.</p>
 
 </td>
         </tr>
@@ -76,24 +322,98 @@
           </td>
           <td class="xmldoc"><p>Api options</p>
 
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-monitorconfig.html">MonitorConfig</a>
+          </td>
+          <td class="xmldoc"><p>Configuration of a monitor</p>
 
 </td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-monitormessage.html">MonitorMessage</a>
+            <a href="okanshi-monitorfactory.html">MonitorFactory</a>
           </td>
-          <td class="xmldoc"><p>Monitor messages</p>
-
+          <td class="xmldoc"><p>Type representing a monitor factory</p>
 
 </td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-monitoroptions.html">MonitorOptions</a>
+            <a href="okanshi-monitorkey.html">MonitorKey</a>
           </td>
-          <td class="xmldoc"><p>Monitor options</p>
+          <td class="xmldoc"><p>Tuple representing a key used to identify a monitor</p>
 
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-okanshimonitor.html">OkanshiMonitor</a>
+          </td>
+          <td class="xmldoc"><p>Static use of monitors</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-okanshimonitormessage.html">OkanshiMonitorMessage</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-okanshimonitorregistry.html">OkanshiMonitorRegistry</a>
+          </td>
+          <td class="xmldoc"><p>Monitor registry used by the OkanshiMonitor. This registry allows registration of monitors
+with the same name, but different types</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-package.html">Package</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-peakratecounter.html">PeakRateCounter</a>
+          </td>
+          <td class="xmldoc"><p>Counter tracking the maximum count per step within a specified interval</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-response-1.html">Response<'T></a>
+          </td>
+          <td class="xmldoc"><p>Response object</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-stepcounter.html">StepCounter</a>
+          </td>
+          <td class="xmldoc"><p>A simple counter backed by a StepLong. The value is the rate for the previous interval as defined by the step.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-steplong.html">StepLong</a>
+          </td>
+          <td class="xmldoc"><p>Utility class for managing a set of AtomicLong instances mapped to a particular step interval.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-tag.html">Tag</a>
+          </td>
+          <td class="xmldoc"><p>A tag used to attach information to a monitor</p>
 
 </td>
         </tr>
@@ -106,48 +426,17 @@
     <tbody>
         <tr>
           <td class="module-name">
-            <a href="okanshi-healthchecks.html">HealthChecks</a>
+            <a href="okanshi-memorycacheextensions.html">MemoryCacheExtensions</a>
           </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="okanshi-metric.html">Metric</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="okanshi-monitor.html">Monitor</a>
-          </td>
-          <td class="xmldoc"><p>The monitor</p>
-
+          <td class="xmldoc"><p>Helper extensions for the System.Runtime.Caching.MemoryCache</p>
 
 </td>
         </tr>
         <tr>
           <td class="module-name">
-            <a href="okanshi-statistics.html">Statistics</a>
+            <a href="okanshi-stopwatchextensions.html">StopwatchExtensions</a>
           </td>
-          <td class="xmldoc"></td>
-        </tr>
-    </tbody>
-  </table>
-
-    </div>
-  <h2>Okanshi.CSharp Namespace</h2>
-    <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="okanshi-csharp-monitor.html">Monitor</a>
-          </td>
-          <td class="xmldoc"><p>The monitor</p>
-
+          <td class="xmldoc"><p>Extenstions for the System.Diagnostics.StopWatch class</p>
 
 </td>
         </tr>

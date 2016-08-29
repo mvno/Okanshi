@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>MonitorApiOptions - Okanshi</title>
+    <title>AtomicLong - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,12 +35,12 @@
 
 
 
-<h1>MonitorApiOptions</h1>
+<h1>AtomicLong</h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>Api options</p>
+<p>Performs atomic operations on a long</p>
 
 </div>
   <h3>Constructors</h3>
@@ -52,15 +52,34 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '141', 141)" onmouseover="showTip(event, '141', 141)">
+          <code onmouseout="hideTip(event, '19', 19)" onmouseover="showTip(event, '19', 19)">
             new()
           </code>
-          <div class="tip" id="141">
-            <strong>Signature:</strong> unit -&gt; MonitorApiOptions<br />
+          <div class="tip" id="19">
+            <strong>Signature:</strong> unit -&gt; AtomicLong<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L27-27" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L26-26" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '20', 20)" onmouseover="showTip(event, '20', 20)">
+            new(intialValue)
+          </code>
+          <div class="tip" id="20">
+            <strong>Signature:</strong> intialValue:int64 -&gt; AtomicLong<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L23-23" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -79,169 +98,122 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '142', 142)" onmouseover="showTip(event, '142', 142)">
-            EnableCors()
+          <code onmouseout="hideTip(event, '21', 21)" onmouseover="showTip(event, '21', 21)">
+            CompareAndSet(newValue, originalValue)
           </code>
-          <div class="tip" id="142">
-            <strong>Signature:</strong> unit -&gt; bool<br />
+          <div class="tip" id="21">
+            <strong>Signature:</strong> (newValue:int64 * originalValue:int64) -&gt; int64<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L29-29" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L34-34" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Enable CORS request. Default value is false</p>
+          <p>Compare and set the value. If the value returned isn't equal the specified original value, it means
+that the value has changed since the last fetch and the new value hasn't been used</p>
 
 
-              <p>CompiledName: <code>set_EnableCors</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '143', 143)" onmouseover="showTip(event, '143', 143)">
-            EnableCors()
+          <code onmouseout="hideTip(event, '22', 22)" onmouseover="showTip(event, '22', 22)">
+            Get()
           </code>
-          <div class="tip" id="143">
-            <strong>Signature:</strong> unit -&gt; unit<br />
+          <div class="tip" id="22">
+            <strong>Signature:</strong> unit -&gt; int64<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L29-29" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L29-29" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Enable CORS request. Default value is false</p>
+          <p>Get the value</p>
 
 
-              <p>CompiledName: <code>get_EnableCors</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '144', 144)" onmouseover="showTip(event, '144', 144)">
-            HttpPrefix()
+          <code onmouseout="hideTip(event, '23', 23)" onmouseover="showTip(event, '23', 23)">
+            GetAndSet(newValue)
           </code>
-          <div class="tip" id="144">
-            <strong>Signature:</strong> unit -&gt; string<br />
+          <div class="tip" id="23">
+            <strong>Signature:</strong> newValue:int64 -&gt; int64<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L31-31" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L31-31" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The HTTP prefix used as endpoint. Default value is "<a href="http://+:13004/"">http://+:13004/"</a></p>
+          <p>Sets the value and returns the old value</p>
 
 
-              <p>CompiledName: <code>set_HttpPrefix</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '145', 145)" onmouseover="showTip(event, '145', 145)">
-            HttpPrefix()
+          <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
+            Increment(amount)
           </code>
-          <div class="tip" id="145">
-            <strong>Signature:</strong> unit -&gt; unit<br />
+          <div class="tip" id="24">
+            <strong>Signature:</strong> amount:int64 -&gt; int64<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L31-31" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The HTTP prefix used as endpoint. Default value is "<a href="http://+:13004/"">http://+:13004/"</a></p>
+          <p>Increment the value by the specified amount</p>
 
 
-              <p>CompiledName: <code>get_HttpPrefix</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '146', 146)" onmouseover="showTip(event, '146', 146)">
-            NumberOfSamplesToStore()
+          <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
+            Increment()
           </code>
-          <div class="tip" id="146">
-            <strong>Signature:</strong> unit -&gt; int<br />
+          <div class="tip" id="25">
+            <strong>Signature:</strong> unit -&gt; int64<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L35-35" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L38-38" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The number of samples to store in memory. Default value is 100</p>
+          <p>Increment the value by one</p>
 
 
-              <p>CompiledName: <code>set_NumberOfSamplesToStore</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '147', 147)" onmouseover="showTip(event, '147', 147)">
-            NumberOfSamplesToStore()
+          <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
+            Set(newValue)
           </code>
-          <div class="tip" id="147">
-            <strong>Signature:</strong> unit -&gt; unit<br />
+          <div class="tip" id="26">
+            <strong>Signature:</strong> newValue:int64 -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L35-35" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L36-36" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The number of samples to store in memory. Default value is 100</p>
+          <p>Set the value</p>
 
 
-              <p>CompiledName: <code>get_NumberOfSamplesToStore</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '148', 148)" onmouseover="showTip(event, '148', 148)">
-            PollingInterval()
-          </code>
-          <div class="tip" id="148">
-            <strong>Signature:</strong> unit -&gt; TimeSpan<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L33-33" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The polling interval. Default value is 1 minute</p>
-
-
-              <p>CompiledName: <code>set_PollingInterval</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '149', 149)" onmouseover="showTip(event, '149', 149)">
-            PollingInterval()
-          </code>
-          <div class="tip" id="149">
-            <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/MonitorApi.fs#L33-33" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The polling interval. Default value is 1 minute</p>
-
-
-              <p>CompiledName: <code>get_PollingInterval</code></p>
         </td>
       </tr>
     </tbody>

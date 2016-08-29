@@ -34,78 +34,113 @@
         <div class="span9" id="main">
           
 <h1><a name="Tutorial" class="anchor" href="#Tutorial">Tutorial</a></h1>
-
 <h2><a name="Starting-the-API" class="anchor" href="#Starting-the-API">Starting the API</a></h2>
-
 <p>After Okanshi has been added to your project, you start the monitor like this:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">var</span> api <span class="o">=</span> <span class="k">new</span> MonitorApi();
+api.Start();
+</code></pre></td></tr></table>
+<p>You should now be able to access the HTTP endpoint using <a href="http://localhost:13004"><a href="http://localhost:13004">http://localhost:13004</a></a>.
+As nothing has been monitored yet, it will return an JSON response with an empty object, like this:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">{}
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="Metrics" class="anchor" href="#Metrics">Metrics</a></h2>
+<p>Okanshi have a couple of different monitor types, divided into the following categories:</p>
+<ul>
+<li>Gauges</li>
+<li>Counters</li>
+<li>Timers</li>
+</ul>
+<p>All monitor can be instantiated directly or, declared and used through the static <code>OkanshiMonitor</code> class.</p>
+<h3><a name="Gauges" class="anchor" href="#Gauges">Gauges</a></h3>
+<p>Gauges are monitors which returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.</p>
+<h4><a name="BasicGauge" class="anchor" href="#BasicGauge">BasicGauge</a></h4>
+<p>The <code>BasicGauge</code> is a monitor which takes a <code>Func&lt;T&gt;</code>, each time the value is polled from the gauge the <code>Func&lt;T&gt;</code> is called and the value returned is the current value.</p>
+<p>Example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.BasicGauge(<span class="s">"Number of users"</span>, () <span class="o">=</span><span class="o">&gt;</span> _numberOfUsers);
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> BasicGauge(MonitorConfig.Build(<span class="s">"Number of users"</span>), () <span class="o">=</span><span class="o">&gt;</span> _numberOfUsers);
+</code></pre></td></tr></table>
+<h4><a name="Max-MinGauge" class="anchor" href="#Max-MinGauge">Max/MinGauge</a></h4>
+<p>The <code>MaxGauge</code> is a monitor which tracks the current maximum value. It can be used to track the maximum number of users logged in at the same time or similar. The initial value of the gauge is zero.
+The <code>MinGauge</code> is a monitor which tracks the current minimum value. The initial value of the gauge is zero, which means zero is treated as no value at all. This has the affect that if gauge is zero, and another non zero value is posted to the gauge, this would effectively change the minimum value. This is a bug which will be fixed in a future version.</p>
+<p>Example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.MaxGauge(<span class="s">"Maximum number of users"</span>).Set(<span class="n">1</span>); <span class="c">// New maximum is 1</span>
+OkanshiMonitor.MaxGauge(<span class="s">"Maximum number of users"</span>).Set(<span class="n">10</span>); <span class="c">// New maximum is 10</span>
+OkanshiMonitor.MaxGauge(<span class="s">"Maximum number of users"</span>).Set(<span class="n">0</span>); <span class="c">// Maximum is still 10</span>
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> MaxGauge(MonitorConfig.Build(<span class="s">"Maximum number of users"</span>));
+gauge.Set(<span class="n">1</span>);
+gauge.Set(<span class="n">10</span>);
+gauge.Set(<span class="n">0</span>);
 
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+OkanshiMonitor.MinGauge(<span class="s">"Minimum number of users"</span>).Set(<span class="n">1</span>); <span class="c">// New minimum is 1</span>
+OkanshiMonitor.MinGauge(<span class="s">"Minimum number of users"</span>).Set(<span class="n">10</span>); <span class="c">// Minimum is still 1</span>
+OkanshiMonitor.MinGauge(<span class="s">"Minimum number of users"</span>).Set(<span class="n">0</span>); <span class="c">// Minimum is 0</span>
+OkanshiMonitor.MinGauge(<span class="s">"Minimum number of users"</span>).Set(<span class="n">1</span>); <span class="c">// Minimum is 1</span>
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> MinGauge(MonitorConfig.Build(<span class="s">"Minimum number of users"</span>));
+gauge.Set(<span class="n">1</span>);
+gauge.Set(<span class="n">10</span>);
+gauge.Set(<span class="n">0</span>);
+gauge.Set(<span class="n">1</span>);
+</code></pre></td></tr></table>
+<h4><a name="Long-Double-DecimalGauge" class="anchor" href="#Long-Double-DecimalGauge">Long/Double/DecimalGauge</a></h4>
+<p>The <code>LongGauge</code>, <code>DoubleGauge</code> and <code>DecimalGauge</code> are gauges which handles <code>long</code>, <code>double</code> and <code>decimal</code> values respectively. The value you set is the value you get. Usage of these monitors is the same.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip" lang="csharp"><span class="k">var</span> api <span class="o">=</span> <span class="k">new</span> MonitorApi();
-api.Start();
-
-[lang=fsharp]
-<span class="k">let</span> api <span class="o">=</span> <span class="k">new</span> MonitorApi()
-api.Start()
-</pre></td></tr></table>
-
-<p>You should now be able to access the HTTP endpoint using <a href="http://localhost:13004"><a href="http://localhost:13004">http://localhost:13004</a></a>.
-As nothing has been monitored yet, it will return an JSON response with an empty object, like this:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-{}
-</pre>
-</td>
-</tr>
-</table>
-
-<h2><a name="Metrics" class="anchor" href="#Metrics">Metrics</a></h2>
-
-<p>Okanshi has a couple of different metrics, you can measure Success, Failure and Time function calls.</p>
-
-<p>The most basic metric is, Success and Failure, used like this:</p>
-
-<p>C#:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-<span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip" lang="csharp">Monitor.Success(<span class="s">"success"</span>);
-Monitor.Failed(<span class="s">"failure"</span>);
-</pre></td></tr></table>
-
-<p>F#:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-<span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">success</span> <span class="s">&quot;success&quot;</span>
-<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">failed</span> <span class="s">&quot;failure&quot;</span>
-</pre>
-</td>
-</tr>
-</table>
-
-<p>If you access the <a href="http://localhost:13004">API</a> now, you'll see something like this:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.LongGauge(<span class="s">"Maximum number of users"</span>).Set(<span class="n">1</span>); <span class="c">// New value is 1</span>
+OkanshiMonitor.LongGauge(<span class="s">"Maximum number of users"</span>).Set(<span class="n">10</span>); <span class="c">// New value is 10</span>
+OkanshiMonitor.LongGauge(<span class="s">"Maximum number of users"</span>).Set(<span class="n">0</span>); <span class="c">// New value is 0</span>
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> LongGauge(MonitorConfig.Build(<span class="s">"Maximum number of users"</span>));
+gauge.Set(<span class="n">1</span>);
+gauge.Set(<span class="n">10</span>);
+gauge.Set(<span class="n">0</span>);
+</code></pre></td></tr></table>
+<h3><a name="Counters" class="anchor" href="#Counters">Counters</a></h3>
+<p>Counters are monitors which you can increment as needed, and all counters are thread-safe by default.</p>
+<h4><a name="Step-DoubleCounter" class="anchor" href="#Step-DoubleCounter">Step/DoubleCounter</a></h4>
+<p>A <code>StepCounter</code> is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events per second based on the previous interval. The value of a <code>StepCounter</code> is a long.
+A <code>DoubleCounter</code> works the same way as a <code>StepCounter</code>, the only difference is the value, which is a double.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -117,128 +152,98 @@ Monitor.Failed(<span class="s">"failure"</span>);
 <span class="l">10: </span>
 <span class="l">11: </span>
 <span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
-<span class="l">19: </span>
-<span class="l">20: </span>
-<span class="l">21: </span>
-<span class="l">22: </span>
-<span class="l">23: </span>
-<span class="l">24: </span>
-<span class="l">25: </span>
-<span class="l">26: </span>
-<span class="l">27: </span>
-<span class="l">28: </span>
-<span class="l">29: </span>
-<span class="l">30: </span>
-<span class="l">31: </span>
-<span class="l">32: </span>
-<span class="l">33: </span>
-<span class="l">34: </span>
-<span class="l">35: </span>
-<span class="l">36: </span>
-<span class="l">37: </span>
-<span class="l">38: </span>
-<span class="l">39: </span>
-<span class="l">40: </span>
-<span class="l">41: </span>
-<span class="l">42: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-{
-    <span class="i">failure</span><span class="o">:</span> {
-        <span class="i">measurements</span><span class="o">:</span> [
-            {
-            <span class="i">average</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">1</span>,
-            <span class="i">minimum</span><span class="o">:</span> <span class="n">2147483647</span>,
-            <span class="i">maximum</span><span class="o">:</span> <span class="o">-</span><span class="n">2147483648</span>,
-            <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">mean</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T22:08:19.3509214+02:00&quot;</span>,
-            <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T23:08:19.3509214+02:00&quot;</span>,
-            <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
-            }
-        ],
-        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
-        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
-    },
-    <span class="i">success</span><span class="o">:</span> {
-        <span class="i">measurements</span><span class="o">:</span> [
-            {
-            <span class="i">average</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">1</span>,
-            <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">minimum</span><span class="o">:</span> <span class="n">2147483647</span>,
-            <span class="i">maximum</span><span class="o">:</span> <span class="o">-</span><span class="n">2147483648</span>,
-            <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">mean</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
-            <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T22:07:44.2658471+02:00&quot;</span>,
-            <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-11T23:07:44.2658471+02:00&quot;</span>,
-            <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
-            }
-        ],
-        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
-        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
-    }
-}
-</pre>
-</td>
-</tr>
-</table>
-
-<p>This contains a lot of information, not introduced yet, but it should be pretty self explanatory. The information will be explained later.
-The important information in this case is the two properties, <code>failure</code> and <code>success</code>, which also is the arguments passed
-into <code>Monitor.Success</code> and <code>Monitor.Failed</code>, these are used as keys to group metrics. You can see that the <code>success</code> property contains a measurement
-with <code>numberOfSuccess: 1</code> and the <code>failure</code> metric has <code>numberOfFailed: 0</code>, this makes it easy to see how many times the specific metric has
-succeeded and failed.</p>
-
-<p>The output also contains a lot of other information mostly related to the timing of function calls. Time a function call like this:</p>
-
-<p>C#:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">2</span>)).Increment();
+OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">2</span>)).Increment();
+Thread.Sleep(<span class="n">2000</span>); <span class="c">// After 2 seconds the value is 1</span>
+OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">2</span>)).Increment();
+Thread.Sleep(<span class="n">2000</span>); <span class="c">// After another 2 seconds the value is 0.5</span>
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> StepCounter(MonitorConfig.Build(<span class="s">"Name"</span>), TimeSpan.FromSeconds(<span class="n">1</span>));
+gauge.Increment();
+gauge.Increment();
+Thread.Sleep(<span class="n">2000</span>);
+gauge.Increment();
+Thread.Sleep(<span class="n">2000</span>);
+</code></pre></td></tr></table>
+<h4><a name="PeakRateCounter" class="anchor" href="#PeakRateCounter">PeakRateCounter</a></h4>
+<p>A <code>PeakRateCounter</code> is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events possible per second based on the previous interval.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.PeakRateCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Increment();
+OkanshiMonitor.PeakRateCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Increment();
+Thread.Sleep(<span class="n">1000</span>); <span class="c">// After 1 second the value is 2</span>
+OkanshiMonitor.PeakRateCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Increment();
+Thread.Sleep(<span class="n">1000</span>); <span class="c">// After another second the value is 1</span>
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> PeakRateCounter(MonitorConfig.Build(<span class="s">"Name"</span>), TimeSpan.FromSeconds(<span class="n">1</span>));
+gauge.Increment();
+gauge.Increment();
+Thread.Sleep(<span class="n">1000</span>);
+gauge.Increment();
+Thread.Sleep(<span class="n">1000</span>);
+</code></pre></td></tr></table>
+<h4><a name="BasicCounter" class="anchor" href="#BasicCounter">BasicCounter</a></h4>
+<p>Is a counter which is never reset. Other than that, it works exactly like all other counters.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.BasicCounter(<span class="s">"Name"</span>).Increment();
+OkanshiMonitor.BasicCounter(<span class="s">"Name"</span>).Increment();
+Thread.Sleep(<span class="n">1000</span>); <span class="c">// After 1 second the value is 2</span>
+OkanshiMonitor.BasicCounter(<span class="s">"Name"</span>).Increment();
+Thread.Sleep(<span class="n">1000</span>); <span class="c">// After another second the value is 3</span>
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> BasicCounter(MonitorConfig.Build(<span class="s">"Name"</span>));
+gauge.Increment();
+gauge.Increment();
+Thread.Sleep(<span class="n">1000</span>);
+gauge.Increment();
+Thread.Sleep(<span class="n">1000</span>);
+</code></pre></td></tr></table>
+<h3><a name="Timers" class="anchor" href="#Timers">Timers</a></h3>
+<p>Timers measures the time it takes to execute a function.</p>
+<h4><a name="BasicTimer" class="anchor" href="#BasicTimer">BasicTimer</a></h4>
+<p>This is a simple timer which measures the execution time of a function, and tracks the minimum and maximum time of the function call, the number of times the function was called, and the total time of the all calls, all within a specified interval.</p>
+<p>Example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip" lang="csharp"><span class="c">// Time an Action</span>
-Monitor.Time(<span class="s">"action"</span>, () <span class="o">=</span><span class="o">&gt;</span> { System.Threading.Thread.Sleep(2000); });
-<span class="c">// Time a Func</span>
-<span class="k">var</span> result <span class="o">=</span> Monitor.Time(<span class="s">"func"</span>, () <span class="o">=</span><span class="o">&gt;</span> { System.Threading.Thread.Sleep(2000); <span class="k">return</span> <span class="k">true</span>; });
-</pre></td></tr></table>
-
-<p>F#:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-<span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">time</span> <span class="s">&quot;func&quot;</span> (<span class="k">fun</span> () <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">Threading</span><span class="o">.</span><span class="i">Sleep</span>(<span class="n">2000</span>); <span class="k">true</span>)
-<span class="i">monitor</span> <span class="o">|&gt;</span> <span class="i">Monitor</span><span class="o">.</span><span class="i">time</span> <span class="s">&quot;action&quot;</span> (<span class="k">fun</span> () <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 3)" onmouseover="showTip(event, 'fs1', 3)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="i">Threading</span><span class="o">.</span><span class="i">Sleep</span>(<span class="n">2000</span>))
-</pre>
-</td>
-</tr>
-</table>
-
-<p>After running the statements above twice you should get output something like this:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.BasicTimer(<span class="s">"Query time"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">500</span>)); <span class="c">// Min is 500, Max is 500, Count is 1, TotalTime is 500</span>
+OkanshiMonitor.BasicTimer(<span class="s">"Query time"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100</span>)); <span class="c">// Min is 100, Max is 500, Count is 2, TotalTime is 600</span>
+<span class="c">// OR</span>
+<span class="k">var</span> timer <span class="o">=</span> <span class="k">new</span> BasicTimer(MonitorConfig.Build(<span class="s">"Query time"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)));
+timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">500</span>));
+timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100</span>))
+</code></pre></td></tr></table>
+<h4><a name="DurationTimer" class="anchor" href="#DurationTimer">DurationTimer</a></h4>
+<p>A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and the current total execution time, this is the sum of all the running operations current execution time.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -250,121 +255,37 @@ Monitor.Time(<span class="s">"action"</span>, () <span class="o">=</span><span c
 <span class="l">10: </span>
 <span class="l">11: </span>
 <span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
-<span class="l">19: </span>
-<span class="l">20: </span>
-<span class="l">21: </span>
-<span class="l">22: </span>
-<span class="l">23: </span>
-<span class="l">24: </span>
-<span class="l">25: </span>
-<span class="l">26: </span>
-<span class="l">27: </span>
-<span class="l">28: </span>
-<span class="l">29: </span>
-<span class="l">30: </span>
-<span class="l">31: </span>
-<span class="l">32: </span>
-<span class="l">33: </span>
-<span class="l">34: </span>
-<span class="l">35: </span>
-<span class="l">36: </span>
-<span class="l">37: </span>
-<span class="l">38: </span>
-<span class="l">39: </span>
-<span class="l">40: </span>
-<span class="l">41: </span>
-<span class="l">42: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-{
-    <span class="i">func</span><span class="o">:</span> {
-        <span class="i">measurements</span><span class="o">:</span> [
-            {
-                <span class="i">average</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
-                <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">2</span>,
-                <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">0</span>,
-                <span class="i">minimum</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">maximum</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">2</span>,
-                <span class="i">mean</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
-                <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T09:28:01.5582084+02:00&quot;</span>,
-                <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T10:28:01.5592085+02:00&quot;</span>,
-                <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
-            }
-        ],
-        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
-        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
-    },
-    <span class="i">action</span><span class="o">:</span> {
-        <span class="i">measurements</span><span class="o">:</span> [
-            {
-                <span class="i">average</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">variance</span><span class="o">:</span> <span class="n">0</span>,
-                <span class="i">numberOfSuccess</span><span class="o">:</span> <span class="n">2</span>,
-                <span class="i">numberOfFailed</span><span class="o">:</span> <span class="n">0</span>,
-                <span class="i">minimum</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">maximum</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">numberOfTimedCalls</span><span class="o">:</span> <span class="n">2</span>,
-                <span class="i">mean</span><span class="o">:</span> <span class="n">1999</span>,
-                <span class="i">sumOfSquares</span><span class="o">:</span> <span class="n">0</span>,
-                <span class="i">startTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T09:29:33.043356+02:00&quot;</span>,
-                <span class="i">endTime</span><span class="o">:</span> <span class="s">&quot;2015-06-12T10:29:33.043356+02:00&quot;</span>,
-                <span class="i">standardDeviation</span><span class="o">:</span> <span class="n">0</span>
-            }
-        ],
-        <span class="i">maxMeasurements</span><span class="o">:</span> <span class="n">100</span>,
-        <span class="i">windowSize</span><span class="o">:</span> <span class="n">3600000</span>
-    }
-}
-</pre>
-</td>
-</tr>
-</table>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.DurationTimer(<span class="s">"Query time"</span>)).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>)); <span class="c">// Duration is around 0 and number of active operations is 1</span>
+<span class="c">// On another thread</span>
+OkanshiMonitor.DurationTimer(<span class="s">"Query time"</span>).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>)); <span class="c">// Duration is around 0 and number of active operations is 2</span>
+Thread.Sleep(<span class="n">5000</span>);
+<span class="c">// Duration is known around 5 seconds and number of active tasks is still 2</span>
 
-<p>Now a lot more of the information is populated. As we can see <code>numberOfSuccess</code> is incremented as the functions didn't throw an exception, if one of the function calls throws an exception
-<code>numberOfFailed</code> is incremented instead. All the timing properties should be self explanatory, except <code>sumOfSquares</code> and <code>mean</code>, this is just values used
-internally to calculate the variance and standardDeviation, without saving all timing information for each call.</p>
+<span class="c">// OR</span>
 
-<p>The last part of the output is <code>maxMeasurements</code> and <code>windowSize</code>. These indicates the maximum number of measurements to save in memory and the window size
-of each measurement in milliseconds. These can be set by passing <code>MonitorOptions</code> into <code>monitorApi.Start</code>.</p>
-
+<span class="k">var</span> timer <span class="o">=</span> <span class="k">new</span> DurationTimer(MonitorConfig.Build(<span class="s">"Query time"</span>));
+timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>));
+timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>));
+Thread.Sleep(<span class="n">5000</span>);
+</code></pre></td></tr></table>
 <h2><a name="Health-checks" class="anchor" href="#Health-checks">Health checks</a></h2>
-
 <p>You can also add different health checks to you application. For example the number of files in a directory or something else making sense in you case.
 Health checks are added like this:</p>
-
 <p>C#:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip" lang="csharp">HealthChecks.Add(<span class="s">"key"</span>, () <span class="o">=</span><span class="o">&gt;</span> Directory.GetFiles(<span class="s">"C:\\MyData"</span>).Length <span class="o">=</span><span class="o">=</span> 0);
-</pre></td></tr></table>
-
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">HealthChecks.Add(<span class="s">"key"</span>, () <span class="o">=</span><span class="o">&gt;</span> Directory.GetFiles(<span class="s">"C:\\MyData"</span>).Length <span class="o">=</span><span class="o">=</span> <span class="n">0</span>);
+</code></pre></td></tr></table>
 <p>F#:
-    [lang=fsharp]
-    HealthChecks.Add("key", (fun () -&gt; System.IO.Directory.GetFiles("C:\MyData").Length = 0))</p>
-
+[lang=fsharp]
+HealthChecks.Add("key", (fun () -&gt; System.IO.Directory.GetFiles("C:\MyData").Length = 0))</p>
 <p>The <code>Func</code> passed in just have to return a boolean, indicating pass or fail. The status of the health checks can be seen using
 <a href="http://localhost:13004/healthchecks"><a href="http://localhost:13004/healthchecks">http://localhost:13004/healthchecks</a></a>.</p>
-
 <h2><a name="Assembly-dependencies" class="anchor" href="#Assembly-dependencies">Assembly dependencies</a></h2>
-
 <p>To see all assembly dependencies for you application just access <a href="http://localhost:13004/dependencies"><a href="http://localhost:13004/dependencies">http://localhost:13004/dependencies</a></a>. It will provide
 a list of the names and version of all dependencies.</p>
 
-<div class="tip" id="fs1">namespace System</div>
-<div class="tip" id="fs2">namespace System.Threading</div>
 
         </div>
         <div class="span3">
