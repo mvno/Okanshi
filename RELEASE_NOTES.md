@@ -1,3 +1,6 @@
+### 3.1.0
+* Allow setting custom tags on metrics generated through OkanshiMonitor.
+
 ### 3.0.0
 * No longer ILMerge dependencies
 * BREAKING: Total rewrite of the metrics structure to make it easy to control and customize
