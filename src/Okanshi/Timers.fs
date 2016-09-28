@@ -29,8 +29,8 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) =
 
     let max = new MaxGauge(config.WithTag(StatisticKey, "max"))
     let min = new MinGauge(config.WithTag(StatisticKey, "min"))
-    let count = new PeakRateCounter(config.WithTag(StatisticKey, "count"), step)
-    let total = new PeakRateCounter(config.WithTag(StatisticKey, "totalTime"), step)
+    let count = new StepCounter(config.WithTag(StatisticKey, "count"), step)
+    let total = new StepCounter(config.WithTag(StatisticKey, "totalTime"), step)
 
     let record f =
         let (result, elapsed) = Stopwatch.Time(fun () -> f())
@@ -55,9 +55,9 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) =
     /// Gets the rate of calls timed within the specified step
     member __.GetCount() = count.GetValue()
     /// Gets the average calls time within the specified step
-    member self.GetValue() =
+    member self.GetValue() : double =
         let count = self.GetCount()
-        if count = 0L then 0L
+        if count = 0.0 then 0.0
         else self.GetTotalTime() / count
     /// Get the maximum value of all calls
     member __.GetMax() = max.GetValue()
