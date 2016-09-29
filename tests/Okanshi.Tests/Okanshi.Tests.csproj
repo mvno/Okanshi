@@ -79,6 +79,7 @@
     <Compile Include="MinGaugeTest.cs" />
     <Compile Include="MonitorConfigTest.cs" />
     <Compile Include="OkanshiMonitorRegistryTest.cs" />
+    <Compile Include="OkanshiMonitorTest.cs" />
     <Compile Include="PeakRateCounterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StepCounterTest.cs" />
