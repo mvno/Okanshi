@@ -6,7 +6,7 @@ open System.Threading
 open System.Collections.Concurrent
 
 /// Tuple representing a key used to identify a monitor
-type MonitorKey = (string * Type * Tag array)
+type MonitorKey = (string * Type * string)
 /// Type representing a monitor factory
 type MonitorFactory = unit -> IMonitor
 
@@ -54,7 +54,8 @@ type OkanshiMonitor private() =
             value |> Seq.iter (fun x -> tagDictionary.TryAdd(x, byte 0) |> ignore)
     /// Gets the monitor key used to identify monitors
     static member GetMonitorKey(name : string, monitorType : Type, tags : Tag array) =
-        (name, monitorType, tags)
+        let tagKeys = tags |> Seq.map (fun x -> x.Key)
+        (name, monitorType, String.Concat(tagKeys))
 
     /// Get or add a BasicCounter
     static member BasicCounter(name : string) = OkanshiMonitor.BasicCounter(name, [||])
