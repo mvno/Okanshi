@@ -93,8 +93,8 @@ A `StepCounter` is a counter defined by an interval, after each interval the cou
 A `DoubleCounter` works the same way as a `StepCounter`, the only difference is the value, which is a double.
 
     [lang=csharp]
-    OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(2)).Increment();
-    OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(2)).Increment();
+    OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(1)).Increment();
+    OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(1)).Increment();
     Thread.Sleep(2000); // After 2 seconds the value is 1
     OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(2)).Increment();
     Thread.Sleep(2000); // After another 2 seconds the value is 0.5
