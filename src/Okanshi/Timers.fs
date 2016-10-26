@@ -104,6 +104,7 @@ type DurationTimer(registry : IMonitorRegistry, config : MonitorConfig) =
 
     do
         registry.Register(activeTasks)
+        registry.Register(totalDurationInSeconds)
 
     new (config) = DurationTimer(DefaultMonitorRegistry.Instance, config)
 
