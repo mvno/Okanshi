@@ -1,5 +1,15 @@
 ### 3.1.0
-* Allow setting custom tags on metrics generated through OkanshiMonitor.
+Allow setting custom tags on metrics generated through OkanshiMonitor.
+For example:
+
+```csharp
+OkanshiMonitor.BasicTimer("Test", new[] { new Tag("CustomerTag", "CustomValue") });
+```
+
+**Fixed bugs**
+
+* OkanshiMonitor.DurationTimer now correctly returns a DurationTimer
+* DurationTimer now also registers the "total duration in seconds" gauge
 
 ### 3.0.0
 * No longer ILMerge dependencies
