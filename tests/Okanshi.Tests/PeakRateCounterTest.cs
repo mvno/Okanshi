@@ -52,7 +52,7 @@ namespace Okanshi.Test
 			counter.Increment();
 			Thread.Sleep(1000);
 			counter.Increment();
-			Thread.Sleep(6000);
+			Thread.Sleep(7000);
 
 			counter.GetValue().Should().Be(2);
 		}

@@ -1,3 +1,7 @@
+### 3.1.1
+
+Fix bug when multiple tags
+
 ### 3.1.0
 Allow setting custom tags on metrics generated through OkanshiMonitor.
 For example:

@@ -54,8 +54,8 @@ type OkanshiMonitor private() =
             value |> Seq.iter (fun x -> tagDictionary.TryAdd(x, byte 0) |> ignore)
     /// Gets the monitor key used to identify monitors
     static member GetMonitorKey(name : string, monitorType : Type, tags : Tag array) =
-        let tagKeys = tags |> Seq.map (fun x -> x.Key)
-        (name, monitorType, String.Concat(tagKeys))
+        let tagKeys = tags |> Array.map (fun x -> sprintf "%s; %s" x.Key x.Value)
+        (name, monitorType, String.Join(",", tagKeys))
 
     /// Get or add a BasicCounter
     static member BasicCounter(name : string) = OkanshiMonitor.BasicCounter(name, [||])

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
@@ -88,6 +89,22 @@ namespace Okanshi.Test
 
 			_okanshiMonitorRegistry.GetRegisteredMonitors()
 				.Should().HaveCount(1);
+		}
+
+		[Fact]
+		public void Generating_keys_for_two_different_monitors_with_different_tags_results_in_different_keys()
+		{
+			var first = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "test12") });
+			var second = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "") });
+			first.Should().NotBe(second);
+		}
+
+		[Fact]
+		public void Generating_keys_for_two_monitors_with_same_name_and_tags_results_in_equal_keys()
+		{
+			var first = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "test12") });
+			var second = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "test12") });
+			first.Should().Be(second);
 		}
 
 		private class FakeMonitor : IMonitor
