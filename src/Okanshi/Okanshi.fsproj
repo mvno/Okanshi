@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Name>Okanshi</Name>
@@ -55,6 +55,7 @@
     <Compile Include="Counters.fs" />
     <Compile Include="HealthCheck.fs" />
     <Compile Include="Timers.fs" />
+    <Compile Include="PerformanceCounter.fs" />
     <Compile Include="Poller.fs" />
     <Compile Include="Observer.fs" />
     <Compile Include="Monitor.fs" />
