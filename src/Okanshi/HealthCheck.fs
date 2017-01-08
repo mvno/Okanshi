@@ -11,12 +11,36 @@ type HealthChecks private () =
 
     /// Add a health check
     static member Add (name : string, x : Func<bool>) = healthChecks.TryAdd (name, x) |> ignore
+   
     /// Check if a health check already exists
     static member Exists (name) = name |> healthChecks.ContainsKey
+   
     /// Clear all healthchecks
     static member Clear() = healthChecks.Clear()
+    
     /// Run all healthchecks defined
     static member RunAll() =
         let dict = new Dictionary<string, bool>()
         healthChecks.ToArray() |> Seq.iter (fun kvp -> dict.Add(kvp.Key, kvp.Value.Invoke()))
         dict
+
+/// Health check monitor
+type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Func<bool>) =
+    let config' = config.WithTag(DataSourceType.HealthCheck)
+
+    let check' = new BasicGauge<bool>(config', check)
+
+    do
+        registry.Register(check')
+    
+    new (config, check) = HealthCheck(DefaultMonitorRegistry.Instance, config, check)
+
+    /// Get value
+    member __.GetValue() = check'.GetValue()
+    
+    /// The config
+    member __.Config = config'
+
+    interface IMonitor with
+        member self.GetValue() = self.GetValue() :> obj
+        member self.Config = self.Config

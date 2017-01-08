@@ -176,3 +176,12 @@ type OkanshiMonitor private() =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<DurationTimer>, tags)
         let factory = fun () -> (new DurationTimer(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> DurationTimer
+
+    /// Get or add a HealthCheck
+    static member HealthCheck(check, name) = OkanshiMonitor.HealthCheck(check, name)
+
+    /// Get or add a HealthCheck with custom tags
+    static member HealthCheck(check, name : string, tags : Tag array) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<HealthCheck>, tags)
+        let factory = fun () -> (new HealthCheck(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags), check)) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> HealthCheck

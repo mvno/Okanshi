@@ -49,3 +49,6 @@ type DataSourceType private() =
     
     /// A rate is for numeric values that represents a rate per second.
     static member Rate = { Key = Key; Value = "rate" }
+
+    /// A health check value
+    static member HealthCheck = { Key = Key; Value = "healthCheck" }
