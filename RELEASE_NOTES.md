@@ -1,4 +1,10 @@
-### 3.1.1
+### 4.0.0
+
+#### BREAKING CHANGES
+
+* Renames DurationTimer to LongTaskTimer
+
+#### Other
 
 * Fix bug when multiple tags where used
 * Add support for using HealthChecks as a monitor

@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Okanshi.Test
 {
-	public class DurationTimerTest
+	public class LongTaskTimerTest
 	{
-		private readonly DurationTimer _timer;
+		private readonly LongTaskTimer _timer;
 
-		public DurationTimerTest()
+		public LongTaskTimerTest()
 		{
-			_timer = new DurationTimer(MonitorConfig.Build("Test"));
+			_timer = new LongTaskTimer(MonitorConfig.Build("Test"));
 		}
 
 		[Fact]

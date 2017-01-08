@@ -82,7 +82,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) =
 /// * Number of active tasks
 /// The names of the monitors will be the base name passed in the config to the constructor, suffixed by
 /// .duration and .activetasks respectively.
-type DurationTimer(registry : IMonitorRegistry, config : MonitorConfig) =
+type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     let nextTaskId = new AtomicLong()
     let tasks = new System.Collections.Concurrent.ConcurrentDictionary<int64, int64>()
     let activeTasks = new BasicGauge<int>({ config with Name = sprintf "%s.activetasks" config.Name }, fun () -> tasks.Count)
@@ -106,7 +106,7 @@ type DurationTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         registry.Register(activeTasks)
         registry.Register(totalDurationInSeconds)
 
-    new (config) = DurationTimer(DefaultMonitorRegistry.Instance, config)
+    new (config) = LongTaskTimer(DefaultMonitorRegistry.Instance, config)
 
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())

@@ -169,13 +169,13 @@ type OkanshiMonitor private() =
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> BasicTimer
 
     /// Get or add a DurationTimer
-    static member DurationTimer(name) = OkanshiMonitor.DurationTimer(name, [||])
+    static member LongTaskTimer(name) = OkanshiMonitor.LongTaskTimer(name, [||])
 
     /// Get or add a DurationTimer with custom tags
-    static member DurationTimer(name : string, tags : Tag array) =
-        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<DurationTimer>, tags)
-        let factory = fun () -> (new DurationTimer(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
-        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> DurationTimer
+    static member LongTaskTimer(name : string, tags : Tag array) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<LongTaskTimer>, tags)
+        let factory = fun () -> (new LongTaskTimer(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> LongTaskTimer
 
     /// Get or add a HealthCheck
     static member HealthCheck(check, name) = OkanshiMonitor.HealthCheck(check, name)
