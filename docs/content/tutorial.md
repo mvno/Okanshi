@@ -164,23 +164,34 @@ Example:
     timer.Record(() => Thread.Sleep(500));
     timer.Record(() => Thread.Sleep(100))
 
-#### DurationTimer ####
+#### LongTaskTimer ####
 
 A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .
 
     [lang=csharp]
-    OkanshiMonitor.DurationTimer("Query time")).Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 1
+    OkanshiMonitor.LongTaskTimer("Query time")).Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 1
     // On another thread
-    OkanshiMonitor.DurationTimer("Query time").Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 2
+    OkanshiMonitor.LongTaskTimer("Query time").Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 2
     Thread.Sleep(5000);
     // Duration is known around 5 seconds and number of active tasks is still 2
     
     // OR
     
-    var timer = new DurationTimer(MonitorConfig.Build("Query time"));
+    var timer = new LongTaskTimer(MonitorConfig.Build("Query time"));
     timer.Record(() => Thread.Sleep(100000));
     timer.Record(() => Thread.Sleep(100000));
     Thread.Sleep(5000);
+
+### Performance counters
+
+As of v4.0.0 it is also possible to monitor Windows performance counters.
+
+    [lang=csharp]
+    OkanshiMonitor.PerformanceCounter(PerformanceCounterConfig.Build("Memory", "Available Bytes"), "AvailableBytes");
+
+    // OR
+
+    var performanceCounterMonitor = new PerformanceCounterMonitor(MonitorConfig.Build("Available Bytes"), PerformanceCounterConfig.Build("Memory", "Available Bytes"));
 
 Health checks
 -------------
@@ -200,6 +211,11 @@ F#:
 
 The `Func` passed in just have to return a boolean, indicating pass or fail. The status of the health checks can be seen using
 [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
+
+As of version 4.0.0 health checks can also be registered as a monitor. This is done like this:
+
+    [lang=csharp]
+    OkanshiMonitor.HealthCheck(() => Directory.GetFiles("C:\\MyData").Length == 0, "NoFilesInDirectory")
 
 Assembly dependencies
 ---------------------
