@@ -185,3 +185,12 @@ type OkanshiMonitor private() =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<HealthCheck>, tags)
         let factory = fun () -> (new HealthCheck(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags), check)) :> IMonitor
         monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> HealthCheck
+
+    /// Get or add a performance counter monitor
+    static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name)
+
+    /// Get or add a performance counter monitor with custom tags
+    static member PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<PerformanceCounterMonitor>, tags)
+        let factory = fun () -> (new PerformanceCounterMonitor(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags), counterConfig)) :> IMonitor
+        monitorAgent.PostAndReply(fun reply -> GetMonitor(monitorKey, factory, reply)) :?> PerformanceCounterMonitor
