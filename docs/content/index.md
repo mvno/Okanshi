@@ -19,7 +19,7 @@ Okanshi is a library providing in-process monitoring of an application, it is cr
 
 The monitoring information can be accessed using the provided HTTP endpoint (JSON output) or by another custom implemented way.
 
-It is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronous, and won't impact the application performane that much. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed. 
+It is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronous, and won't impact the application performance that much. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed. 
 
 Samples & documentation
 -----------------------
