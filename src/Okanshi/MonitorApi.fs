@@ -33,6 +33,8 @@ type MonitorApiOptions() =
     member val PollingInterval = TimeSpan.FromMinutes(float 1) with get, set
     /// The number of samples to store in memory. Default value is 100
     member val NumberOfSamplesToStore = 100 with get, set
+    /// Should metrics be collected when process is exiting. Default value is false.
+    member val CollectMetricsOnProcessExit = false with get, set
 
 /// Response object
 type Response<'T> = { Version : string; Data : 'T }
@@ -40,7 +42,7 @@ type Response<'T> = { Version : string; Data : 'T }
 /// Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.
 type MonitorApi(options : MonitorApiOptions) =
     let listener = new System.Net.HttpListener()
-    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval), options.NumberOfSamplesToStore)
+    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
     
