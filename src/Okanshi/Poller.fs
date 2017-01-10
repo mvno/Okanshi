@@ -31,18 +31,26 @@ type IMetricPoller =
     abstract Stop : unit -> unit
 
 /// Poller for fetching metrics from a monitor registry
-type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan) as self =
+type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan, pollOnExit : bool) as self =
     let metricsPolled = new Event<MetricEventDelegate, MetricEventArgs>()
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
+    
+    let pollMetrics () =
+        let metrics =
+            registry.GetRegisteredMonitors()
+            |> Seq.map (fun x -> { Name = x.Config.Name; Timestamp = DateTimeOffset.UtcNow; Tags = x.Config.Tags; Value = x.GetValue() })
+            |> Seq.toArray
+        metricsPolled.Trigger(self, new MetricEventArgs(metrics))
+
+    let onExitSubscriber =
+        if pollOnExit then AppDomain.CurrentDomain.ProcessExit.Subscribe(fun _ -> pollMetrics())
+        else { new IDisposable with member __.Dispose() = () }
+
     let rec poll () =
         async {
             do! Async.Sleep(int interval.TotalMilliseconds)
-            let metrics =
-                registry.GetRegisteredMonitors()
-                |> Seq.map (fun x -> { Name = x.Config.Name; Timestamp = DateTimeOffset.UtcNow; Tags = x.Config.Tags; Value = x.GetValue() })
-                |> Seq.toArray
-            metricsPolled.Trigger(self, new MetricEventArgs(metrics))
+            pollMetrics()
             return! poll()
         }
 
@@ -50,12 +58,17 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
         Async.Start(poll(), cancellationToken)
 
     new (registry) = new MetricMonitorRegistryPoller(registry, TimeSpan.FromMinutes(float 1))
+    new (registry, interval) = new MetricMonitorRegistryPoller(registry, interval, false)
 
     /// Event raised when metric have been polled.
     [<CLIEvent>]
     member __.MetricsPolled = metricsPolled.Publish
+    
     /// Stop polling for new metrics
-    member __.Stop() = cancellationTokenSource.Cancel()
+    member __.Stop() =
+        cancellationTokenSource.Cancel()
+        onExitSubscriber.Dispose()
+
     /// Disposes the poller, stopping metrics collection
     member self.Dispose() = self.Stop()
 
