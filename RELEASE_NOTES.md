@@ -9,6 +9,7 @@
 * Fix bug when multiple tags where used
 * Add support for using HealthChecks as a monitor
 * Support for monitoring Windows performance counters
+* Support for automatically poll of metrics when process is about to exit, the default behaviour is not to poll
 
 ### 3.1.0
 Allow setting custom tags on metrics generated through OkanshiMonitor.
