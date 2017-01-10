@@ -8,6 +8,7 @@
 
 * Fix bug when multiple tags where used
 * Add support for using HealthChecks as a monitor
+* Support for monitoring Windows performance counters
 
 ### 3.1.0
 Allow setting custom tags on metrics generated through OkanshiMonitor.
