@@ -146,6 +146,14 @@ Is a counter that is never reset. Other than that, it works exactly like all oth
 
 Timers measures the time it takes to execute a function.
 
+All timers also support "manual" timing, that are stopped manually instead of passing a Func<T> or Action.
+Example:
+
+    [lang=csharp]
+    var timer = OkanshiMonitor.BasicTimer("Query time", TimeSpan.FromSeconds(1)).Start()
+    Thread.Sleep(500);
+    timer.Stop(); // When stopped the timing is registered
+
 #### BasicTimer ####
 
 This is a simple timer that, within a specified interval, measures:
