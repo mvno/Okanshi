@@ -80,6 +80,7 @@
     <Compile Include="MonitorConfigTest.cs" />
     <Compile Include="OkanshiMonitorRegistryTest.cs" />
     <Compile Include="OkanshiMonitorTest.cs" />
+    <Compile Include="OkanshiTimerTest.cs" />
     <Compile Include="PeakRateCounterTest.cs" />
     <Compile Include="PerformanceCounterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,6 +14,30 @@ module StopwatchExtensions =
             stopwatch.Stop()
             (result, stopwatch.ElapsedMilliseconds)
 
+/// Timer that is started and stopped manually
+type OkanshiTimer(onStop : Action<int64>) = 
+    let mutable stopwatch = Some <| new Stopwatch()
+    
+    /// Create a start a new timer
+    static member StartNew(onStop) = 
+        let s = new OkanshiTimer(onStop)
+        s.Start()
+        s
+    
+    /// Start the timer
+    member __.Start() = 
+        if stopwatch.IsNone then invalidOp "Timer cannot be used multiple times"
+        if stopwatch.Value.IsRunning then invalidOp "Timer already started"
+        stopwatch.Value.Start()
+    
+    /// Stop the timer
+    member __.Stop() = 
+        if stopwatch.IsNone then invalidOp "Timer cannot be used multiple times"
+        if not stopwatch.Value.IsRunning then invalidOp "Timer not started"
+        stopwatch.Value.Stop()
+        onStop.Invoke(stopwatch.Value.ElapsedMilliseconds)
+        stopwatch <- None
+
 /// Times System.Action and Systen.Func calls
 type ITimer = 
     inherit IMonitor
