@@ -10,6 +10,7 @@
 * Add support for using HealthChecks as a monitor
 * Support for monitoring Windows performance counters
 * Support for automatically poll of metrics when process is about to exit, the default behaviour is not to poll
+* Support for manual timing of operations, using the Start() method on the existing timers, which returns an object that when stopped registers timing to the timer.
 
 ### 3.1.0
 Allow setting custom tags on metrics generated through OkanshiMonitor.
