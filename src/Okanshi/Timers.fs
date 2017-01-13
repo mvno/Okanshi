@@ -47,6 +47,9 @@ type ITimer =
     
     /// Time a System.Action call
     abstract Record : Action -> unit
+    
+    /// Start a manually controlled timinig
+    abstract Start : unit -> OkanshiTimer
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
 type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) = 
@@ -59,12 +62,15 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) =
     let count = new StepCounter(config.WithTag(StatisticKey, "count"), step)
     let total = new StepCounter(config.WithTag(StatisticKey, "totalTime"), step)
     
-    let record f = 
-        let (result, elapsed) = Stopwatch.Time(fun () -> f())
+    let updateStatistics elapsed = 
         count.Increment() |> ignore
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
+    
+    let record f = 
+        let (result, elapsed) = Stopwatch.Time(fun () -> f())
+        elapsed |> updateStatistics
         result
     
     do 
@@ -102,11 +108,15 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) =
     /// Gets the monitor config
     member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
     
+    /// Start a manually controlled timinig
+    member __.Start() = OkanshiTimer.StartNew(fun x -> updateStatistics x)
+    
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
         member self.Record(f : Action) = self.Record(f)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.Start() = self.Start()
 
 /// A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
 /// frequent calls that last less than the polling interval, use the BasicTimer instead.
@@ -129,14 +139,17 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     
     let totalDurationInSeconds = 
         new BasicGauge<float>({ config with Name = sprintf "%s.duration" config.Name }, fun () -> getDurationInSeconds())
+    let getNextId() = nextTaskId.Increment()
+    let markAsStarted id = tasks.TryAdd(id, DateTime.Now.Ticks) |> ignore
+    let markAsCompleted id = tasks.TryRemove(id) |> ignore
     
     let record (f : unit -> 'a) = 
-        let id = nextTaskId.Increment()
-        tasks.TryAdd(id, DateTime.Now.Ticks) |> ignore
+        let id = getNextId()
+        id |> markAsStarted
         try 
             f()
         finally
-            tasks.TryRemove(id) |> ignore
+            id |> markAsCompleted
     
     do 
         registry.Register(activeTasks)
@@ -162,8 +175,15 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     /// Gets the monitor config
     member __.Config = totalDurationInSeconds.Config
     
+    /// Start a manually controlled timinig
+    member __.Start() = 
+        let id = getNextId()
+        id |> markAsStarted
+        OkanshiTimer.StartNew(fun _ -> id |> markAsCompleted)
+    
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
         member self.Record(f : Action) = self.Record(f)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.Start() = self.Start()

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace Okanshi.Test
@@ -99,6 +100,63 @@ namespace Okanshi.Test
 			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(1000));
 			timer.GetTotalTime();
 			timer.Record(() => Thread.Sleep(500));
+			Thread.Sleep(1100);
+
+			var totalTime = timer.GetTotalTime();
+
+			totalTime.Should().BeApproximately(500, 20);
+		}
+
+		[Fact]
+		public void Manual_timing_sets_count_per_second_when_step_is_crossed()
+		{
+			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(1000));
+			timer.GetCount();
+
+			var okanshiTimer = timer.Start();
+			Thread.Sleep(500);
+			okanshiTimer.Stop();
+
+			Thread.Sleep(1100);
+			timer.GetCount().Should().Be(1);
+		}
+
+		[Fact]
+		public void Manual_timing_sets_max()
+		{
+			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
+			timer.GetCount();
+			var okanshiTimer = timer.Start();
+			Thread.Sleep(50);
+			okanshiTimer.Stop();
+
+			var max = timer.GetMax();
+
+			max.Should().BeInRange(40, 70);
+		}
+
+		[Fact]
+		public void Manual_timing_sets_min()
+		{
+			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
+			timer.GetCount();
+			var okanshiTimer = timer.Start();
+			Thread.Sleep(50);
+			okanshiTimer.Stop();
+
+			var min = timer.GetMin();
+
+			min.Should().BeInRange(40, 70);
+		}
+
+		[Fact]
+		public void Manual_timing_sets_total_time_per_second_when_step_is_crossed()
+		{
+			var timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(1000));
+			timer.GetTotalTime();
+			var okanshiTimer = timer.Start();
+			Thread.Sleep(500);
+			okanshiTimer.Stop();
 			Thread.Sleep(1100);
 
 			var totalTime = timer.GetTotalTime();

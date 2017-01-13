@@ -69,5 +69,39 @@ namespace Okanshi.Test
 
 			monitorConfig.Name.Should().EndWith(".duration");
 		}
+
+		[Fact]
+		public void Manual_timing_of_a_task_increments_the_number_of_active_tasks()
+		{
+			var task = Task.Run(() =>
+			{
+				var okanshiTimer = _timer.Start();
+				Thread.Sleep(1000);
+				okanshiTimer.Stop();
+			});
+			Thread.Sleep(100);
+
+			var numberOfActiveTasks = _timer.GetNumberOfActiveTasks();
+
+			task.Wait();
+			numberOfActiveTasks.Should().Be(1);
+		}
+
+		[Fact]
+		public void Manual_timing_of_a_task_updates_the_duration()
+		{
+			var task = Task.Run(() =>
+			{
+				var okanshiTimer = _timer.Start();
+				Thread.Sleep(1000);
+				okanshiTimer.Stop();
+			});
+			Thread.Sleep(500);
+
+			var duration = _timer.GetDurationInSeconds();
+
+			duration.Should().BeApproximately(0.5, 0.1);
+			task.Wait();
+		}
 	}
 }
