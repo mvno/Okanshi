@@ -17,7 +17,7 @@ namespace Okanshi.Test
 			monitor.GetValue()
 				.Should()
 				.BeGreaterThan(0)
-				.And.BeApproximately(performanceCounter.NextValue(), 100000,
+				.And.BeApproximately(performanceCounter.NextValue(), 500000,
 					"Because memory usage can change between the two values");
 		}
 
@@ -32,7 +32,7 @@ namespace Okanshi.Test
 			monitor.GetValue()
 				.Should()
 				.BeGreaterThan(0)
-				.And.BeApproximately(performanceCounter.NextValue(), 100000,
+				.And.BeApproximately(performanceCounter.NextValue(), 500000,
 					"Because memory usage can change between the two values");
 		}
 	}
