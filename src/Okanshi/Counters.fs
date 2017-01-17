@@ -29,12 +29,12 @@ type StepLong(initialValue, step : TimeSpan) =
 
     // Gets the current count
     member __.GetCurrent() =
-        rollCount(DateTime.Now.Ticks)
+        rollCount(DateTime.UtcNow.Ticks)
         data.[CurrentIndex]
 
     /// Gets the value of the previous measurement
     member __.Poll() =
-        let now = DateTime.Now
+        let now = DateTime.UtcNow
         let nowTicks = now.Ticks
         rollCount(nowTicks)
         let value = data.[PreviousIndex].Get()

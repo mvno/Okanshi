@@ -133,14 +133,14 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         new BasicGauge<int>({ config with Name = sprintf "%s.activetasks" config.Name }, fun () -> tasks.Count)
     
     let getDurationInSeconds() = 
-        let now = DateTime.Now.Ticks
+        let now = DateTime.UtcNow.Ticks
         let durationInTicks = tasks.Values |> Seq.sumBy (fun x -> now - x)
         TimeSpan.FromTicks(durationInTicks).TotalSeconds
     
     let totalDurationInSeconds = 
         new BasicGauge<float>({ config with Name = sprintf "%s.duration" config.Name }, fun () -> getDurationInSeconds())
     let getNextId() = nextTaskId.Increment()
-    let markAsStarted id = tasks.TryAdd(id, DateTime.Now.Ticks) |> ignore
+    let markAsStarted id = tasks.TryAdd(id, DateTime.UtcNow.Ticks) |> ignore
     let markAsCompleted id = tasks.TryRemove(id) |> ignore
     
     let record (f : unit -> 'a) = 
