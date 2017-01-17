@@ -89,7 +89,7 @@ type PeakRateCounter(config : MonitorConfig, step) =
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
     /// Increment the value by the specified amount
-    member __.Increment(amount) = peakRate.Increment(amount) |> ignore
+    member __.Increment(amount) = if amount > 0L then peakRate.Increment(amount) |> ignore
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
 
