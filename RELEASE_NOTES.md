@@ -12,6 +12,7 @@
 * Support for automatically poll of metrics when process is about to exit, the default behaviour is not to poll
 * Support for manual timing of operations, using the Start() method on the existing timers, which returns an object that when stopped registers timing to the timer.
 * Improved performance of timers and counters using time windows by ~75%
+* Fix bug where the PeakRateCounter would not respect maximum value when decremented
 
 ### 3.1.0
 Allow setting custom tags on metrics generated through OkanshiMonitor.
