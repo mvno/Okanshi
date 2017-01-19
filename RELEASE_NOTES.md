@@ -13,6 +13,7 @@
 * Support for manual timing of operations, using the Start() method on the existing timers, which returns an object that when stopped registers timing to the timer.
 * Improved performance of timers and counters using time windows by ~75%
 * Fix bug where the PeakRateCounter would not respect maximum value when decremented
+* Added Reset method to gauges as resetting gauges was described in the documentation, but not possible
 
 ### 3.1.0
 Allow setting custom tags on metrics generated through OkanshiMonitor.
