@@ -80,5 +80,17 @@ namespace Okanshi.Test
 			Thread.Sleep(600);
 			counter.GetValue().Should().Be(1);
 		}
+
+		[Fact]
+		public void Incrementing_with_negative_numbers_and_then_with_a_positive_does_not_change_the_value()
+		{
+			var counter = new PeakRateCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
+			counter.Increment();
+			counter.Increment(-1);
+			counter.Increment();
+
+			Thread.Sleep(600);
+			counter.GetValue().Should().Be(1);
+		}
 	}
 }

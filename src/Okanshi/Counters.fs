@@ -96,6 +96,7 @@ type StepCounter(config : MonitorConfig, step : TimeSpan) =
 /// Counter tracking the maximum count per step within a specified interval
 type PeakRateCounter(config : MonitorConfig, step) = 
     let peakRate = new StepLong(step)
+    let current = new StepLong(step)
     
     /// Gets the peak rate within the specified interval
     member __.GetValue() = peakRate.Poll().Value
@@ -105,7 +106,9 @@ type PeakRateCounter(config : MonitorConfig, step) =
     
     /// Increment the value by the specified amount
     member __.Increment(amount) = 
-        if amount > 0L then peakRate.Increment(amount) |> ignore
+        let newValue = current.Increment(amount)
+        if newValue > peakRate.GetCurrent().Get() then
+            peakRate.Increment(amount) |> ignore
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
