@@ -7,6 +7,8 @@ type IGauge<'T> =
     inherit IMonitor
     /// Sets the value
     abstract Set : 'T -> unit
+    /// Resets the gauge
+    abstract Reset : unit -> unit
 
 /// A gauge implemenation that invokes a func to get the current value
 type BasicGauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
@@ -37,11 +39,14 @@ type MaxGauge(config : MonitorConfig) =
     member __.GetValue() = value.Get()
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
+    /// Reset the gauge
+    member __.Reset() = value.Set(0L)
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.Reset() = self.Reset()
 
 /// Gauge that keeps track of the minimum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
@@ -61,11 +66,14 @@ type MinGauge(config : MonitorConfig) =
     member __.GetValue() = value.Get()
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
+    /// Reset the gauge
+    member __.Reset() = value.Set(0L)
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.Reset() = self.Reset()
 
 /// A gauge the reports a long value
 type LongGauge(config : MonitorConfig) =
@@ -77,11 +85,14 @@ type LongGauge(config : MonitorConfig) =
     member __.GetValue() = value.Get()
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
+    /// Reset the gauge
+    member __.Reset() = value.Set(0L)
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.Reset() = self.Reset()
 
 /// A gauge that reports a double value
 type DoubleGauge(config : MonitorConfig) =
@@ -93,11 +104,14 @@ type DoubleGauge(config : MonitorConfig) =
     member __.GetValue() = value.Get()
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
+    /// Reset the gauge
+    member __.Reset() = value.Set(0.0)
 
     interface IGauge<double> with
         member self.Set(newValue) = self.Set(newValue)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.Reset() = self.Reset()
 
 /// A gauge that reports a decimal value
 type DecimalGauge(config : MonitorConfig) =
@@ -109,8 +123,11 @@ type DecimalGauge(config : MonitorConfig) =
     member __.GetValue() = value.Get()
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
+    /// Reset the gauge
+    member __.Reset() = value.Set(0m)
 
     interface IGauge<decimal> with
         member self.Set(newValue) = self.Set(newValue)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.Reset() = self.Reset()

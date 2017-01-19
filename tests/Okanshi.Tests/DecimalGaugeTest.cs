@@ -33,5 +33,15 @@ namespace Okanshi.Test
 
 			gauge.GetValue().Should().Be(new decimal(expectedValue));
 		}
+
+        [Fact]
+	    public void Reset_sets_the_value_to_zero() {
+            var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
+            gauge.Set(100m);
+
+            gauge.Reset();
+
+            gauge.GetValue().Should().Be(0m);
+        }
 	}
 }

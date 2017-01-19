@@ -45,6 +45,17 @@ namespace Okanshi.Test
 			gauge.Set(maximumValue);
 
 			gauge.GetValue().Should().Be(minimumValue);
-		}
-	}
+        }
+
+        [Fact]
+        public void Reset_sets_the_value_to_zero()
+        {
+            var gauge = new MaxGauge(MonitorConfig.Build("Test"));
+            gauge.Set(-100L);
+
+            gauge.Reset();
+
+            gauge.GetValue().Should().Be(0L);
+        }
+    }
 }
