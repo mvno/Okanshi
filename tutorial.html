@@ -153,8 +153,8 @@ A <code>DoubleCounter</code> works the same way as a <code>StepCounter</code>, t
 <span class="l">11: </span>
 <span class="l">12: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">2</span>)).Increment();
-OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">2</span>)).Increment();
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Increment();
+OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Increment();
 Thread.Sleep(<span class="n">2000</span>); <span class="c">// After 2 seconds the value is 1</span>
 OkanshiMonitor.StepCounter(<span class="s">"Name"</span>, TimeSpan.FromSeconds(<span class="n">2</span>)).Increment();
 Thread.Sleep(<span class="n">2000</span>); <span class="c">// After another 2 seconds the value is 0.5</span>
@@ -224,6 +224,16 @@ Thread.Sleep(<span class="n">1000</span>);
 </code></pre></td></tr></table>
 <h3><a name="Timers" class="anchor" href="#Timers">Timers</a></h3>
 <p>Timers measures the time it takes to execute a function.</p>
+<p>All timers also support "manual" timing, that are stopped manually instead of passing a Func<T> or Action.
+Example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">var</span> timer <span class="o">=</span> OkanshiMonitor.BasicTimer(<span class="s">"Query time"</span>, TimeSpan.FromSeconds(<span class="n">1</span>)).Start()
+Thread.Sleep(<span class="n">500</span>);
+timer.Stop(); <span class="c">// When stopped the timing is registered</span>
+</code></pre></td></tr></table>
 <h4><a name="BasicTimer" class="anchor" href="#BasicTimer">BasicTimer</a></h4>
 <p>This is a simple timer that, within a specified interval, measures:
 <em> the execution time of a function,
@@ -245,7 +255,7 @@ OkanshiMonitor.BasicTimer(<span class="s">"Query time"</span>, TimeSpan.FromSeco
 timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">500</span>));
 timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100</span>))
 </code></pre></td></tr></table>
-<h4><a name="DurationTimer" class="anchor" href="#DurationTimer">DurationTimer</a></h4>
+<h4><a name="LongTaskTimer" class="anchor" href="#LongTaskTimer">LongTaskTimer</a></h4>
 <p>A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -260,18 +270,32 @@ timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep
 <span class="l">11: </span>
 <span class="l">12: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.DurationTimer(<span class="s">"Query time"</span>)).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>)); <span class="c">// Duration is around 0 and number of active operations is 1</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.LongTaskTimer(<span class="s">"Query time"</span>)).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>)); <span class="c">// Duration is around 0 and number of active operations is 1</span>
 <span class="c">// On another thread</span>
-OkanshiMonitor.DurationTimer(<span class="s">"Query time"</span>).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>)); <span class="c">// Duration is around 0 and number of active operations is 2</span>
+OkanshiMonitor.LongTaskTimer(<span class="s">"Query time"</span>).Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>)); <span class="c">// Duration is around 0 and number of active operations is 2</span>
 Thread.Sleep(<span class="n">5000</span>);
 <span class="c">// Duration is known around 5 seconds and number of active tasks is still 2</span>
 
 <span class="c">// OR</span>
 
-<span class="k">var</span> timer <span class="o">=</span> <span class="k">new</span> DurationTimer(MonitorConfig.Build(<span class="s">"Query time"</span>));
+<span class="k">var</span> timer <span class="o">=</span> <span class="k">new</span> LongTaskTimer(MonitorConfig.Build(<span class="s">"Query time"</span>));
 timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>));
 timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100000</span>));
 Thread.Sleep(<span class="n">5000</span>);
+</code></pre></td></tr></table>
+<h3><a name="Performance-counters" class="anchor" href="#Performance-counters">Performance counters</a></h3>
+<p>As of v4.0.0 it is also possible to monitor Windows performance counters.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.PerformanceCounter(PerformanceCounterConfig.Build(<span class="s">"Memory"</span>, <span class="s">"Available Bytes"</span>), <span class="s">"AvailableBytes"</span>);
+
+<span class="c">// OR</span>
+
+<span class="k">var</span> performanceCounterMonitor <span class="o">=</span> <span class="k">new</span> PerformanceCounterMonitor(MonitorConfig.Build(<span class="s">"Available Bytes"</span>), PerformanceCounterConfig.Build(<span class="s">"Memory"</span>, <span class="s">"Available Bytes"</span>));
 </code></pre></td></tr></table>
 <h2><a name="Health-checks" class="anchor" href="#Health-checks">Health checks</a></h2>
 <p>You can also add different health checks to you application. For example the number of files in a directory or something else making sense in you case.
@@ -290,6 +314,11 @@ Health checks are added like this:</p>
 </table>
 <p>The <code>Func</code> passed in just have to return a boolean, indicating pass or fail. The status of the health checks can be seen using
 <a href="http://localhost:13004/healthchecks"><a href="http://localhost:13004/healthchecks">http://localhost:13004/healthchecks</a></a>.</p>
+<p>As of version 4.0.0 health checks can also be registered as a monitor. This is done like this:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.HealthCheck(() <span class="o">=</span><span class="o">&gt;</span> Directory.GetFiles(<span class="s">"C:\\MyData"</span>).Length <span class="o">=</span><span class="o">=</span> <span class="n">0</span>, <span class="s">"NoFilesInDirectory"</span>)
+</code></pre></td></tr></table>
 <h2><a name="Assembly-dependencies" class="anchor" href="#Assembly-dependencies">Assembly dependencies</a></h2>
 <p>To see all assembly dependencies for you application just access <a href="http://localhost:13004/dependencies"><a href="http://localhost:13004/dependencies">http://localhost:13004/dependencies</a></a>. It will provide
 a list of the names and version of all dependencies.</p>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>BasicTimer - Okanshi</title>
+    <title>LongTaskTimer - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,12 +35,19 @@
 
 
 
-<h1>BasicTimer</h1>
+<h1>LongTaskTimer</h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>A simple timer providing the total time, count, min and max for the times that have been recorded</p>
+<p>A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
+frequent calls that last less than the polling interval, use the BasicTimer instead.
+This timer can track multiple operations, each started by calling the Record method.
+This monitor will create two gauges:
+<em> A duration which reports the current duration in seconds. The duration is the sum of all active tasks
+</em> Number of active tasks
+The names of the monitors will be the base name passed in the config to the constructor, suffixed by
+.duration and .activetasks respectively.</p>
 
 </div>
   <h3>Constructors</h3>
@@ -52,15 +59,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
-            new(config, step)
+          <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
+            new(config)
           </code>
-          <div class="tip" id="35">
-            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan) -&gt; BasicTimer<br />
+          <div class="tip" id="113">
+            <strong>Signature:</strong> config:MonitorConfig -&gt; LongTaskTimer<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L82-82" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L158-158" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -71,15 +78,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '36', 36)" onmouseover="showTip(event, '36', 36)">
-            new(registry, config, step)
+          <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
+            new(registry, config)
           </code>
-          <div class="tip" id="36">
-            <strong>Signature:</strong> (registry:IMonitorRegistry * config:MonitorConfig * step:TimeSpan) -&gt; BasicTimer<br />
+          <div class="tip" id="114">
+            <strong>Signature:</strong> (registry:IMonitorRegistry * config:MonitorConfig) -&gt; LongTaskTimer<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L55-55" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L129-129" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -98,15 +105,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '37', 37)" onmouseover="showTip(event, '37', 37)">
+          <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
             Config
           </code>
-          <div class="tip" id="37">
+          <div class="tip" id="115">
             <strong>Signature:</strong> MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L109-109" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L176-176" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -119,19 +126,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
-            GetCount()
+          <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
+            GetDurationInSeconds()
           </code>
-          <div class="tip" id="38">
-            <strong>Signature:</strong> unit -&gt; double<br />
+          <div class="tip" id="116">
+            <strong>Signature:</strong> unit -&gt; float<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L91-91" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L170-170" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the rate of calls timed within the specified step</p>
+          <p>Get the duration in seconds. Duration is the sum of all active tasks duration.</p>
 
 
         </td>
@@ -139,19 +146,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
-            GetMax()
+          <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
+            GetNumberOfActiveTasks()
           </code>
-          <div class="tip" id="39">
-            <strong>Signature:</strong> unit -&gt; int64<br />
+          <div class="tip" id="117">
+            <strong>Signature:</strong> unit -&gt; int<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L100-100" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L167-167" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Get the maximum value of all calls</p>
+          <p>Get the number of running tasks</p>
 
 
         </td>
@@ -159,59 +166,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
-            GetMin()
-          </code>
-          <div class="tip" id="40">
-            <strong>Signature:</strong> unit -&gt; int64<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L103-103" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Get the manimum value of all calls</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
-            GetTotalTime()
-          </code>
-          <div class="tip" id="41">
-            <strong>Signature:</strong> unit -&gt; double<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L106-106" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Gets the rate of the total time for all calls within the specified step</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
+          <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
             GetValue()
           </code>
-          <div class="tip" id="42">
-            <strong>Signature:</strong> unit -&gt; double<br />
+          <div class="tip" id="118">
+            <strong>Signature:</strong> unit -&gt; float<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L94-94" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L173-173" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the average calls time within the specified step</p>
+          <p>Get the duration in seconds. Duration is the sum of all active tasks duration.</p>
 
 
         </td>
@@ -219,15 +186,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
+          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
             Record(f)
           </code>
-          <div class="tip" id="43">
+          <div class="tip" id="119">
             <strong>Signature:</strong> f:Action -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L88-88" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L164-164" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -239,15 +206,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
+          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
             Record(f)
           </code>
-          <div class="tip" id="44">
+          <div class="tip" id="120">
             <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; &#39;T<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L85-85" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L161-161" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -259,15 +226,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
+          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
             Start()
           </code>
-          <div class="tip" id="45">
+          <div class="tip" id="121">
             <strong>Signature:</strong> unit -&gt; OkanshiTimer<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L112-112" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L179-179" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

@@ -161,16 +161,9 @@ the previous cached value will be dropped, and new sample coming in will be trea
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-durationtimer.html">DurationTimer</a>
+            <a href="okanshi-healthcheck.html">HealthCheck</a>
           </td>
-          <td class="xmldoc"><p>A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
-frequent calls that last less than the polling interval, use the BasicTimer instead.
-This timer can track multiple operations, each started by calling the Record method.
-This monitor will create two gauges:
-<em> A duration which reports the current duration in seconds. The duration is the sum of all active tasks
-</em> Number of active tasks
-The names of the monitors will be the base name passed in the config to the constructor, suffixed by
-.duration and .activetasks respectively.</p>
+          <td class="xmldoc"><p>Health check monitor</p>
 
 </td>
         </tr>
@@ -251,6 +244,21 @@ The names of the monitors will be the base name passed in the config to the cons
             <a href="okanshi-longgauge.html">LongGauge</a>
           </td>
           <td class="xmldoc"><p>A gauge the reports a long value</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-longtasktimer.html">LongTaskTimer</a>
+          </td>
+          <td class="xmldoc"><p>A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
+frequent calls that last less than the polling interval, use the BasicTimer instead.
+This timer can track multiple operations, each started by calling the Record method.
+This monitor will create two gauges:
+<em> A duration which reports the current duration in seconds. The duration is the sum of all active tasks
+</em> Number of active tasks
+The names of the monitors will be the base name passed in the config to the constructor, suffixed by
+.duration and .activetasks respectively.</p>
 
 </td>
         </tr>
@@ -373,6 +381,14 @@ with the same name, but different types</p>
         </tr>
         <tr>
           <td class="type-name">
+            <a href="okanshi-okanshitimer.html">OkanshiTimer</a>
+          </td>
+          <td class="xmldoc"><p>Timer that is started and stopped manually</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="okanshi-package.html">Package</a>
           </td>
           <td class="xmldoc"></td>
@@ -382,6 +398,23 @@ with the same name, but different types</p>
             <a href="okanshi-peakratecounter.html">PeakRateCounter</a>
           </td>
           <td class="xmldoc"><p>Counter tracking the maximum count per step within a specified interval</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-performancecounterconfig.html">PerformanceCounterConfig</a>
+          </td>
+          <td class="xmldoc"><p>Performance counter configuration</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-performancecountermonitor.html">PerformanceCounterMonitor</a>
+          </td>
+          <td class="xmldoc"><p>Used to monitor Windows performance counters. Be aware that some performance counters, requires multiple readings before
+returning any value.</p>
 
 </td>
         </tr>

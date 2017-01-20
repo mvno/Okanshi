@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>IMonitor - Okanshi</title>
+    <title>PerformanceCounterMonitor - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,14 +35,61 @@
 
 
 
-<h1>IMonitor</h1>
+<h1>PerformanceCounterMonitor</h1>
 <p>
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>A monitor</p>
+<p>Used to monitor Windows performance counters. Be aware that some performance counters, requires multiple readings before
+returning any value.</p>
 
 </div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '229', 229)" onmouseover="showTip(event, '229', 229)">
+            new(...)
+          </code>
+          <div class="tip" id="229">
+            <strong>Signature:</strong> (monitorConfig:MonitorConfig * performanceCounterConfig:PerformanceCounterConfig) -&gt; PerformanceCounterMonitor<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/PerformanceCounter.fs#L34-34" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '230', 230)" onmouseover="showTip(event, '230', 230)">
+            new(...)
+          </code>
+          <div class="tip" id="230">
+            <strong>Signature:</strong> (registry:IMonitorRegistry * monitorConfig:MonitorConfig * performanceCounterConfig:PerformanceCounterConfig) -&gt; PerformanceCounterMonitor<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/PerformanceCounter.fs#L28-28" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -52,20 +99,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
+          <code onmouseout="hideTip(event, '231', 231)" onmouseover="showTip(event, '231', 231)">
             Config
           </code>
-          <div class="tip" id="99">
+          <div class="tip" id="231">
             <strong>Signature:</strong> MonitorConfig<br />
-              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L32-32" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/PerformanceCounter.fs#L41-41" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the configuration of the monitor</p>
+          <p>Gets the monitor config</p>
 
 
               <p>CompiledName: <code>get_Config</code></p>
@@ -74,20 +120,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
+          <code onmouseout="hideTip(event, '232', 232)" onmouseover="showTip(event, '232', 232)">
             GetValue()
           </code>
-          <div class="tip" id="100">
-            <strong>Signature:</strong> unit -&gt; obj<br />
-              <strong>Modifiers:</strong> abstract<br />
+          <div class="tip" id="232">
+            <strong>Signature:</strong> unit -&gt; float32<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L30-30" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/PerformanceCounter.fs#L38-38" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the value of the monitor</p>
+          <p>Gets the performance counter value</p>
 
 
         </td>

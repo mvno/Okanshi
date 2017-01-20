@@ -52,15 +52,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '156', 156)" onmouseover="showTip(event, '156', 156)">
+          <code onmouseout="hideTip(event, '173', 173)" onmouseover="showTip(event, '173', 173)">
+            BasicCounter(name, tags)
+          </code>
+          <div class="tip" id="173">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; BasicCounter<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L64-64" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a BasicCounter with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
             BasicCounter(name)
           </code>
-          <div class="tip" id="156">
+          <div class="tip" id="174">
             <strong>Signature:</strong> name:string -&gt; BasicCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L59-59" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -72,15 +92,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '157', 157)" onmouseover="showTip(event, '157', 157)">
+          <code onmouseout="hideTip(event, '175', 175)" onmouseover="showTip(event, '175', 175)">
+            BasicGauge(name, getValue, tags)
+          </code>
+          <div class="tip" id="175">
+            <strong>Signature:</strong> (name:string * getValue:Func&lt;&#39;T&gt; * tags:Tag array) -&gt; BasicGauge&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L109-109" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a BasicGauge with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
             BasicGauge(name, getValue)
           </code>
-          <div class="tip" id="157">
+          <div class="tip" id="176">
             <strong>Signature:</strong> (name:string * getValue:Func&lt;&#39;T&gt;) -&gt; BasicGauge&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L92-92" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L106-106" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -92,15 +132,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '158', 158)" onmouseover="showTip(event, '158', 158)">
-            BasicTimer(name, step)
+          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
+            BasicTimer(name, step, tags)
           </code>
-          <div class="tip" id="158">
-            <strong>Signature:</strong> (name:string * step:TimeSpan) -&gt; BasicTimer<br />
+          <div class="tip" id="177">
+            <strong>Signature:</strong> (name:string * step:TimeSpan * tags:Tag array) -&gt; BasicTimer<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L131-131" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L166-166" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -112,15 +152,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '159', 159)" onmouseover="showTip(event, '159', 159)">
+          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
+            BasicTimer(name, tags)
+          </code>
+          <div class="tip" id="178">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; BasicTimer<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L163-163" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a BasicTimer with custom tags and a step size of 1 minute</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '179', 179)" onmouseover="showTip(event, '179', 179)">
             BasicTimer(name)
           </code>
-          <div class="tip" id="159">
+          <div class="tip" id="179">
             <strong>Signature:</strong> name:string -&gt; BasicTimer<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L128-128" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L160-160" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -132,15 +192,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '160', 160)" onmouseover="showTip(event, '160', 160)">
+          <code onmouseout="hideTip(event, '180', 180)" onmouseover="showTip(event, '180', 180)">
+            DecimalGauge(name, tags)
+          </code>
+          <div class="tip" id="180">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; DecimalGauge<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L154-154" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a DecimalGauge with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '181', 181)" onmouseover="showTip(event, '181', 181)">
             DecimalGauge(name)
           </code>
-          <div class="tip" id="160">
+          <div class="tip" id="181">
             <strong>Signature:</strong> name:string -&gt; DecimalGauge<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L122-122" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L151-151" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -152,10 +232,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '161', 161)" onmouseover="showTip(event, '161', 161)">
+          <code onmouseout="hideTip(event, '182', 182)" onmouseover="showTip(event, '182', 182)">
             DefaultTags()
           </code>
-          <div class="tip" id="161">
+          <div class="tip" id="182">
             <strong>Signature:</strong> unit -&gt; Tag array<br />
                       </div>
         </td>
@@ -173,10 +253,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '162', 162)" onmouseover="showTip(event, '162', 162)">
+          <code onmouseout="hideTip(event, '183', 183)" onmouseover="showTip(event, '183', 183)">
             DefaultTags()
           </code>
-          <div class="tip" id="162">
+          <div class="tip" id="183">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
@@ -194,15 +274,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '163', 163)" onmouseover="showTip(event, '163', 163)">
-            DoubleCounter(name, step)
+          <code onmouseout="hideTip(event, '184', 184)" onmouseover="showTip(event, '184', 184)">
+            DoubleCounter(name, step, tags)
           </code>
-          <div class="tip" id="163">
-            <strong>Signature:</strong> (name:string * step:TimeSpan) -&gt; DoubleCounter<br />
+          <div class="tip" id="184">
+            <strong>Signature:</strong> (name:string * step:TimeSpan * tags:Tag array) -&gt; DoubleCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L86-86" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L100-100" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -214,15 +294,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '164', 164)" onmouseover="showTip(event, '164', 164)">
+          <code onmouseout="hideTip(event, '185', 185)" onmouseover="showTip(event, '185', 185)">
+            DoubleCounter(name, tags)
+          </code>
+          <div class="tip" id="185">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; DoubleCounter<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L97-97" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a DoubleCounter with custom tags and a step size of 1 minute</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '186', 186)" onmouseover="showTip(event, '186', 186)">
             DoubleCounter(name)
           </code>
-          <div class="tip" id="164">
+          <div class="tip" id="186">
             <strong>Signature:</strong> name:string -&gt; DoubleCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L83-83" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L94-94" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -234,15 +334,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '165', 165)" onmouseover="showTip(event, '165', 165)">
+          <code onmouseout="hideTip(event, '187', 187)" onmouseover="showTip(event, '187', 187)">
+            DoubleGauge(name, tags)
+          </code>
+          <div class="tip" id="187">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; DoubleGauge<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L145-145" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a DoubleGauge with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '188', 188)" onmouseover="showTip(event, '188', 188)">
             DoubleGauge(name)
           </code>
-          <div class="tip" id="165">
+          <div class="tip" id="188">
             <strong>Signature:</strong> name:string -&gt; DoubleGauge<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L116-116" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L142-142" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -254,11 +374,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '166', 166)" onmouseover="showTip(event, '166', 166)">
-            GetMonitorKey(name, monitorType)
+          <code onmouseout="hideTip(event, '189', 189)" onmouseover="showTip(event, '189', 189)">
+            GetMonitorKey(name, monitorType, tags)
           </code>
-          <div class="tip" id="166">
-            <strong>Signature:</strong> (name:string * monitorType:Type) -&gt; string * Type<br />
+          <div class="tip" id="189">
+            <strong>Signature:</strong> (name:string * monitorType:Type * tags:Tag array) -&gt; string * Type * string<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -274,15 +394,55 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '167', 167)" onmouseover="showTip(event, '167', 167)">
-            LongGauge(name)
+          <code onmouseout="hideTip(event, '190', 190)" onmouseover="showTip(event, '190', 190)">
+            HealthCheck(check, name, tags)
           </code>
-          <div class="tip" id="167">
-            <strong>Signature:</strong> name:string -&gt; LongGauge<br />
+          <div class="tip" id="190">
+            <strong>Signature:</strong> (check:Func&lt;bool&gt; * name:string * tags:Tag array) -&gt; HealthCheck<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L110-110" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L184-184" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a HealthCheck with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '191', 191)" onmouseover="showTip(event, '191', 191)">
+            HealthCheck(check, name)
+          </code>
+          <div class="tip" id="191">
+            <strong>Signature:</strong> (check:&#39;?7253 * name:&#39;?7254) -&gt; &#39;?7255<br />
+                          <strong>Type parameters:</strong> '?7253, '?7254, '?7255          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L181-181" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a HealthCheck</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '192', 192)" onmouseover="showTip(event, '192', 192)">
+            LongGauge(name, tags)
+          </code>
+          <div class="tip" id="192">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; LongGauge<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L136-136" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -294,15 +454,95 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '168', 168)" onmouseover="showTip(event, '168', 168)">
+          <code onmouseout="hideTip(event, '193', 193)" onmouseover="showTip(event, '193', 193)">
+            LongGauge(name)
+          </code>
+          <div class="tip" id="193">
+            <strong>Signature:</strong> name:string -&gt; LongGauge<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L133-133" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a LongGauge</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '194', 194)" onmouseover="showTip(event, '194', 194)">
+            LongTaskTimer(name, tags)
+          </code>
+          <div class="tip" id="194">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; LongTaskTimer<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L175-175" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a DurationTimer with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '195', 195)" onmouseover="showTip(event, '195', 195)">
+            LongTaskTimer(name)
+          </code>
+          <div class="tip" id="195">
+            <strong>Signature:</strong> name:string -&gt; LongTaskTimer<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L172-172" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a DurationTimer</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '196', 196)" onmouseover="showTip(event, '196', 196)">
+            MaxGauge(name, tags)
+          </code>
+          <div class="tip" id="196">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; MaxGauge<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L118-118" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a MaxGaug with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '197', 197)" onmouseover="showTip(event, '197', 197)">
             MaxGauge(name)
           </code>
-          <div class="tip" id="168">
+          <div class="tip" id="197">
             <strong>Signature:</strong> name:string -&gt; MaxGauge<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L98-98" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L115-115" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -314,15 +554,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '169', 169)" onmouseover="showTip(event, '169', 169)">
+          <code onmouseout="hideTip(event, '198', 198)" onmouseover="showTip(event, '198', 198)">
+            MinGauge(name, tags)
+          </code>
+          <div class="tip" id="198">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; MinGauge<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L127-127" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a MinGauge with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '199', 199)" onmouseover="showTip(event, '199', 199)">
             MinGauge(name)
           </code>
-          <div class="tip" id="169">
+          <div class="tip" id="199">
             <strong>Signature:</strong> name:string -&gt; MinGauge<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L104-104" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L124-124" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -334,15 +594,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '170', 170)" onmouseover="showTip(event, '170', 170)">
-            PeakRateCounter(name, step)
+          <code onmouseout="hideTip(event, '200', 200)" onmouseover="showTip(event, '200', 200)">
+            PeakRateCounter(name, step, tags)
           </code>
-          <div class="tip" id="170">
-            <strong>Signature:</strong> (name:string * step:TimeSpan) -&gt; PeakRateCounter<br />
+          <div class="tip" id="200">
+            <strong>Signature:</strong> (name:string * step:TimeSpan * tags:Tag array) -&gt; PeakRateCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L77-77" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L88-88" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -354,15 +614,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '171', 171)" onmouseover="showTip(event, '171', 171)">
+          <code onmouseout="hideTip(event, '201', 201)" onmouseover="showTip(event, '201', 201)">
+            PeakRateCounter(name, tags)
+          </code>
+          <div class="tip" id="201">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; PeakRateCounter<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L85-85" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a PeakRateCounter with custom tags and a step size of 1 minute</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '202', 202)" onmouseover="showTip(event, '202', 202)">
             PeakRateCounter(name)
           </code>
-          <div class="tip" id="171">
+          <div class="tip" id="202">
             <strong>Signature:</strong> name:string -&gt; PeakRateCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L74-74" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L82-82" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -374,15 +654,55 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '172', 172)" onmouseover="showTip(event, '172', 172)">
-            StepCounter(name, step)
+          <code onmouseout="hideTip(event, '203', 203)" onmouseover="showTip(event, '203', 203)">
+            PerformanceCounter(...)
           </code>
-          <div class="tip" id="172">
-            <strong>Signature:</strong> (name:string * step:TimeSpan) -&gt; StepCounter<br />
+          <div class="tip" id="203">
+            <strong>Signature:</strong> (counterConfig:PerformanceCounterConfig * name:string * tags:Tag array) -&gt; PerformanceCounterMonitor<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L68-68" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L193-193" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a performance counter monitor with custom tags</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '204', 204)" onmouseover="showTip(event, '204', 204)">
+            PerformanceCounter(check, name)
+          </code>
+          <div class="tip" id="204">
+            <strong>Signature:</strong> (check:&#39;?7258 * name:&#39;?7259) -&gt; &#39;?7260<br />
+                          <strong>Type parameters:</strong> '?7258, '?7259, '?7260          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L190-190" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a performance counter monitor</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
+            StepCounter(name, step, tags)
+          </code>
+          <div class="tip" id="205">
+            <strong>Signature:</strong> (name:string * step:TimeSpan * tags:Tag array) -&gt; StepCounter<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L76-76" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -394,15 +714,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '173', 173)" onmouseover="showTip(event, '173', 173)">
+          <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
+            StepCounter(name, tags)
+          </code>
+          <div class="tip" id="206">
+            <strong>Signature:</strong> (name:string * tags:Tag array) -&gt; StepCounter<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L73-73" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a StepCounter with custom tags and a step size of 1 minute</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
             StepCounter(name)
           </code>
-          <div class="tip" id="173">
+          <div class="tip" id="207">
             <strong>Signature:</strong> name:string -&gt; StepCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L65-65" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Monitor.fs#L70-70" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

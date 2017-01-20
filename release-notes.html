@@ -32,6 +32,34 @@
       <div class="row">
         <div class="span9" id="main">
           
+<h3><a name="4-0-0-beta" class="anchor" href="#4-0-0-beta">4.0.0-beta</a></h3>
+<p><strong>BREAKING CHANGES</strong></p>
+<ul>
+<li>Renames DurationTimer to LongTaskTimer</li>
+</ul>
+<p><strong>Other</strong></p>
+<ul>
+<li>Fix bug when multiple tags where used</li>
+<li>Add support for using HealthChecks as a monitor</li>
+<li>Support for monitoring Windows performance counters</li>
+<li>Support for automatically poll of metrics when process is about to exit, the default behaviour is not to poll</li>
+<li>Support for manual timing of operations, using the Start() method on the existing timers, which returns an object that when stopped registers timing to the timer.</li>
+<li>Improved performance of timers and counters using time windows by ~75%</li>
+<li>Fix bug where the PeakRateCounter would not respect maximum value when decremented</li>
+<li>Added Reset method to gauges as resetting gauges was described in the documentation, but not possible</li>
+</ul>
+<h3><a name="3-1-0" class="anchor" href="#3-1-0">3.1.0</a></h3>
+<p>Allow setting custom tags on metrics generated through OkanshiMonitor.
+For example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.BasicTimer(<span class="s">"Test"</span>, <span class="k">new</span>[] { <span class="k">new</span> Tag(<span class="s">"CustomerTag"</span>, <span class="s">"CustomValue"</span>) });
+</code></pre></td></tr></table>
+<p><strong>Fixed bugs</strong></p>
+<ul>
+<li>OkanshiMonitor.DurationTimer now correctly returns a DurationTimer</li>
+<li>DurationTimer now also registers the "total duration in seconds" gauge</li>
+</ul>
 <h3><a name="3-0-0" class="anchor" href="#3-0-0">3.0.0</a></h3>
 <ul>
 <li>No longer ILMerge dependencies</li>
