@@ -51,7 +51,6 @@ namespace Okanshi.Test
 		public void Peak_rate_is_per_defined_step()
 		{
 			counter.Increment();
-            manualClock.Advance(TimeSpan.FromMilliseconds(100));
 			counter.Increment();
             manualClock.Advance(TimeSpan.FromMilliseconds(700));
 
