@@ -52,15 +52,15 @@ type ITimer =
     abstract Start : unit -> OkanshiTimer
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
-type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) = 
+type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock : IClock) = 
     
     [<Literal>]
     let StatisticKey = "statistic"
     
     let max = new MaxGauge(config.WithTag(StatisticKey, "max"))
     let min = new MinGauge(config.WithTag(StatisticKey, "min"))
-    let count = new StepCounter(config.WithTag(StatisticKey, "count"), step)
-    let total = new StepCounter(config.WithTag(StatisticKey, "totalTime"), step)
+    let count = new StepCounter(config.WithTag(StatisticKey, "count"), step, clock)
+    let total = new StepCounter(config.WithTag(StatisticKey, "totalTime"), step, clock)
     
     let updateStatistics elapsed = 
         count.Increment() |> ignore
@@ -79,7 +79,8 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step) =
         registry.Register(count)
         registry.Register(total)
     
-    new(config, step) = BasicTimer(DefaultMonitorRegistry.Instance, config, step)
+    new(config, step) = BasicTimer(config, step, SystemClock.Instance)
+    new(config, step, clock : IClock) = BasicTimer(DefaultMonitorRegistry.Instance, config, step, clock)
     
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
