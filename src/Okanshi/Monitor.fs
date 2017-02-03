@@ -45,6 +45,8 @@ type OkanshiMonitor private() =
     static let tagDictionary = new ConcurrentDictionary<Tag, byte>()
     static let defaultStep = TimeSpan.FromMinutes(float 1)
 
+    /// Gets the default step size
+    static member DefaultStep = defaultStep
     /// Gets the default tags added to all monitors created
     static member DefaultTags with get() = tagDictionary.Keys |> Seq.toArray
     /// Sets the default tags added to all monitors created
