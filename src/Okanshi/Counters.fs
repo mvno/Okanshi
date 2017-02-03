@@ -12,7 +12,7 @@ type Datapoint =
           Value = -1L }
 
 /// Utility class for managing a set of AtomicLong instances mapped to a particular step interval.
-type StepLong(initialValue, step : TimeSpan) = 
+type StepLong(initialValue, step : TimeSpan, clock : IClock) = 
     let step = int64 step.Ticks
     
     [<Literal>]
@@ -31,16 +31,17 @@ type StepLong(initialValue, step : TimeSpan) =
         if lastInit < stepTime && lastInitPosition.CompareAndSet(stepTime, lastInit) = lastInit then 
             data.[CurrentIndex].GetAndSet(initialValue) |> data.[PreviousIndex].Set
     
-    new(interval) = new StepLong(0L, interval)
+    new(interval) = new StepLong(0L, interval, SystemClock.Instance)
+    new(interval, clock) = new StepLong(0L, interval, clock)
     
     // Gets the current count
     member __.GetCurrent() = 
-        rollCount (DateTime.UtcNow.Ticks)
+        rollCount (clock.NowTicks())
         data.[CurrentIndex]
     
     /// Gets the value of the previous measurement
     member __.Poll() = 
-        let now = DateTime.UtcNow
+        let now = clock.Now()
         let nowTicks = now.Ticks
         rollCount (nowTicks)
         let value = data.[PreviousIndex].Get()
@@ -66,10 +67,12 @@ type ICounter<'T> =
     abstract Increment : 'T -> unit
 
 /// A simple counter backed by a StepLong. The value is the rate for the previous interval as defined by the step.
-type StepCounter(config : MonitorConfig, step : TimeSpan) = 
-    let value = new StepLong(step)
+type StepCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) = 
+    let value = new StepLong(step, clock)
     let stepMilliseconds = double step.TotalMilliseconds
     let stepsPerSecond = double 1000 / stepMilliseconds
+
+    new(config, step) = new StepCounter(config, step, SystemClock.Instance)
     
     /// Increment the counter by one
     member __.Increment() = value.Increment(1L) |> ignore
@@ -94,9 +97,11 @@ type StepCounter(config : MonitorConfig, step : TimeSpan) =
         member self.Config = self.Config
 
 /// Counter tracking the maximum count per step within a specified interval
-type PeakRateCounter(config : MonitorConfig, step) = 
-    let peakRate = new StepLong(step)
-    let current = new StepLong(step)
+type PeakRateCounter(config : MonitorConfig, step, clock : IClock) = 
+    let peakRate = new StepLong(step, clock)
+    let current = new StepLong(step, clock)
+
+    new(config, step) = new PeakRateCounter(config, step, SystemClock.Instance)
     
     /// Gets the peak rate within the specified interval
     member __.GetValue() = peakRate.Poll().Value
@@ -120,10 +125,10 @@ type PeakRateCounter(config : MonitorConfig, step) =
         member self.Config = self.Config
 
 /// A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.
-type DoubleCounter(config : MonitorConfig, step : TimeSpan) = 
+type DoubleCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) = 
     let stepMilliseconds = double step.TotalMilliseconds
     let stepsPerSecond = double 1000 / stepMilliseconds
-    let count = new StepLong(step)
+    let count = new StepLong(step, clock)
     
     let add (amount : double) = 
         let current = count.GetCurrent()
@@ -134,6 +139,8 @@ type DoubleCounter(config : MonitorConfig, step : TimeSpan) =
             let nextDouble = BitConverter.DoubleToInt64Bits(originalDouble + amount)
             if current.CompareAndSet(nextDouble, originalValue) <> originalValue then loop()
         loop()
+
+    new(config, step) = new DoubleCounter(config, step, SystemClock.Instance)
     
     /// Increment the value by the specified amount
     member __.Increment(amount : double) = 

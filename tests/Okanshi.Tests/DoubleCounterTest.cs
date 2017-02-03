@@ -7,11 +7,17 @@ namespace Okanshi.Test
 {
 	public class DoubleCounterTest
 	{
-		[Fact]
+	    private DoubleCounter counter;
+	    private readonly ManualClock manualClock = new ManualClock();
+
+	    public DoubleCounterTest()
+	    {
+			counter = new DoubleCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500), manualClock);
+        }
+
+        [Fact]
 		public void Initial_value_is_zero()
 		{
-			var counter = new DoubleCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
-
 			var value = counter.GetValue();
 
 			value.Should().Be(0);
@@ -20,9 +26,8 @@ namespace Okanshi.Test
 		[Fact]
 		public void Value_is_reset_when_steps_is_crossed()
 		{
-			var counter = new DoubleCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
 			counter.GetValue();
-			Thread.Sleep(600);
+			manualClock.Advance(TimeSpan.FromMilliseconds(600));
 
 			var value = counter.GetValue();
 
@@ -35,12 +40,11 @@ namespace Okanshi.Test
 		[InlineData(605.18, 302.59)]
 		public void Value_returns_previous_steps_value_per_second(double amount, double expectedValue)
 		{
-			var counter = new DoubleCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500));
 			counter.GetValue();
 			counter.Increment(amount);
-			Thread.Sleep(600);
+			manualClock.Advance(TimeSpan.FromMilliseconds(600));
 
-			var value = counter.GetValue();
+            var value = counter.GetValue();
 
 			value.Should().Be(expectedValue);
 		}
