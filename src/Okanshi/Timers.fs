@@ -59,11 +59,13 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     
     let max = new MaxGauge(config.WithTag(StatisticKey, "max"))
     let min = new MinGauge(config.WithTag(StatisticKey, "min"))
-    let count = new StepCounter(config.WithTag(StatisticKey, "count"), step, clock)
-    let total = new StepCounter(config.WithTag(StatisticKey, "totalTime"), step, clock)
+    let count = new PeakRateCounter(config.WithTag(StatisticKey, "count"), step, clock)
+    let rate = new StepCounter(config.WithTag(StatisticKey, "rate"), step, clock)
+    let total = new PeakRateCounter(config.WithTag(StatisticKey, "totalTime"), step, clock)
     
     let updateStatistics elapsed = 
         count.Increment() |> ignore
+        rate.Increment() |> ignore
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
@@ -76,6 +78,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     do 
         registry.Register(max)
         registry.Register(min)
+        registry.Register(rate)
         registry.Register(count)
         registry.Register(total)
     
@@ -92,9 +95,9 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     member __.GetCount() = count.GetValue()
     
     /// Gets the average calls time within the specified step
-    member self.GetValue() : double = 
+    member self.GetValue() : int64 = 
         let count = self.GetCount()
-        if count = 0.0 then 0.0
+        if count = 0L then 0L
         else self.GetTotalTime() / count
     
     /// Get the maximum value of all calls
@@ -103,7 +106,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     /// Get the manimum value of all calls
     member __.GetMin() = min.GetValue()
     
-    /// Gets the rate of the total time for all calls within the specified step
+    /// Gets the the total time for all calls within the specified step
     member __.GetTotalTime() = total.GetValue()
     
     /// Gets the monitor config
