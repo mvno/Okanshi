@@ -59,11 +59,13 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     
     let max = new MaxGauge(config.WithTag(StatisticKey, "max"))
     let min = new MinGauge(config.WithTag(StatisticKey, "min"))
-    let count = new StepCounter(config.WithTag(StatisticKey, "count"), step, clock)
+    let count = new PeakRateCounter(config.WithTag(StatisticKey, "count"), step, clock)
+    let rate = new StepCounter(config.WithTag(StatisticKey, "rate"), step, clock)
     let total = new StepCounter(config.WithTag(StatisticKey, "totalTime"), step, clock)
     
     let updateStatistics elapsed = 
         count.Increment() |> ignore
+        rate.Increment() |> ignore
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
@@ -76,6 +78,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     do 
         registry.Register(max)
         registry.Register(min)
+        registry.Register(rate)
         registry.Register(count)
         registry.Register(total)
     
