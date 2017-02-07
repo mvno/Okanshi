@@ -95,9 +95,9 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     member __.GetCount() = count.GetValue()
     
     /// Gets the average calls time within the specified step
-    member self.GetValue() : double = 
+    member self.GetValue() : int64 = 
         let count = self.GetCount()
-        if count = 0.0 then 0.0
+        if count = 0L then 0L
         else self.GetTotalTime() / count
     
     /// Get the maximum value of all calls
@@ -106,7 +106,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     /// Get the manimum value of all calls
     member __.GetMin() = min.GetValue()
     
-    /// Gets the rate of the total time for all calls within the specified step
+    /// Gets the the total time for all calls within the specified step
     member __.GetTotalTime() = total.GetValue()
     
     /// Gets the monitor config
