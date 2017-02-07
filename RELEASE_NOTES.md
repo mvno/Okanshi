@@ -4,6 +4,7 @@
 
 * Renames DurationTimer to LongTaskTimer
 * BasicTimer now has both rate and count. This means the old count value (which was a rate), now is a counter
+* Make totalTime value in BasicTimer as counter instead of a rate
 
 **Other**
 
