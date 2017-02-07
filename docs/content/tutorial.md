@@ -161,7 +161,7 @@ This is a simple timer that, within a specified interval, measures:
   * The execution time of a function,
   * Tracks the minimum and maximum time of the function call
   * The number of times the function was called
-  * The total time of the all calls
+  * The total time of the all calls in the specified step
   * The rate of the calls (the number of calls per second)
 
 Example:
