@@ -51,6 +51,9 @@ type ITimer =
     /// Start a manually controlled timinig
     abstract Start : unit -> OkanshiTimer
 
+    /// Manually register a timing, should only be used in special case
+    abstract Register : int64 -> unit
+
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
 type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock : IClock) = 
     
@@ -114,6 +117,9 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     
     /// Start a manually controlled timinig
     member __.Start() = OkanshiTimer.StartNew(fun x -> updateStatistics x)
+
+    /// Manually register a timing, should only be used in special case
+    member __.Register(elapsed) = elapsed |> updateStatistics
     
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
@@ -121,6 +127,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Start() = self.Start()
+        member self.Register(elapsed) = self.Register(elapsed)
 
 /// A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
 /// frequent calls that last less than the polling interval, use the BasicTimer instead.
@@ -184,10 +191,14 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         let id = getNextId()
         id |> markAsStarted
         OkanshiTimer.StartNew(fun _ -> id |> markAsCompleted)
-    
+
+    /// Manually register a timing, should only be used in special case
+    member __.Register(elapsed : int64) : unit = raise (NotSupportedException("LongTaskTimer does not support manually registering timings"))
+
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
         member self.Record(f : Action) = self.Record(f)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Start() = self.Start()
+        member self.Register(elapsed) = self.Register(elapsed)

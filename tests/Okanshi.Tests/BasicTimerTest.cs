@@ -1,14 +1,13 @@
 using System;
 using System.Threading;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace Okanshi.Test
 {
 	public class BasicTimerTest
 	{
-	    private BasicTimer timer;
+	    private readonly BasicTimer timer;
 	    private readonly ManualClock manualClock = new ManualClock();
 
 	    public BasicTimerTest()
@@ -153,5 +152,44 @@ namespace Okanshi.Test
 
 			totalTime.Should().BeInRange(480, 520);
 		}
-	}
+
+	    [Fact]
+	    public void Manual_registration_updates_sets_max()
+	    {
+	        const long elapsed = 1000;
+
+            timer.Register(elapsed);
+
+	        timer.GetMax().Should().Be(elapsed);
+	    }
+
+	    [Fact]
+	    public void Manual_registration_updates_sets_min()
+	    {
+	        const long elapsed = 1000;
+
+            timer.Register(elapsed);
+
+	        timer.GetMin().Should().Be(elapsed);
+        }
+
+        [Fact]
+        public void Manual_registration_sets_count_per_second_when_step_is_crossed() {
+            const long elapsed = 1000;
+            timer.Register(elapsed);
+
+            manualClock.Advance(TimeSpan.FromMilliseconds(1100));
+            timer.GetCount().Should().Be(1);
+        }
+
+        [Fact]
+        public void Manual_registration_sets_total_time_per_second_when_step_is_crossed() {
+            const long elapsed = 1000;
+
+            timer.Register(elapsed);
+
+            manualClock.Advance(TimeSpan.FromMilliseconds(1100));
+            timer.GetTotalTime().Should().Be(elapsed);
+        }
+    }
 }
