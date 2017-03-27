@@ -1,7 +1,6 @@
 NUGET
   remote: https://www.nuget.org/api/v2
     FAKE (4.28)
-    FluentAssertions (3.2.2) - framework: >= net45
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Core (4.0.0.1) - framework: >= net45
     FSharp.Formatting (2.14.3)
@@ -16,10 +15,18 @@ NUGET
       Microsoft.Bcl (>= 1.1.10)
       Microsoft.Bcl.Build (>= 1.0.14)
     Newtonsoft.Json (7.0.1)
-    NSubstitute (1.8.1) - framework: >= net45
-    Octokit (0.19)
-      Microsoft.Net.Http
+    Octokit (0.24)
+      Microsoft.Net.Http  - framework: net10, net11, net20, net30, net35, net40, net40-full
     SourceLink.Fake (1.1)
+GITHUB
+  remote: fsharp/FAKE
+    modules/Octokit/Octokit.fsx (0cca21da332895437de5785210610bd055a77ac2)
+      Octokit (>= 0.20)
+GROUP Test
+NUGET
+  remote: https://www.nuget.org/api/v2
+    FluentAssertions (3.2.2) - framework: >= net45
+    NSubstitute (1.8.1) - framework: >= net45
     xunit (2.0) - framework: >= net45
       xunit.assert (2.0)
       xunit.core (2.0)
@@ -32,7 +39,3 @@ NUGET
     xunit.extensions (2.0) - framework: >= net45
       xunit (2.0)
     xunit.runner.console (2.0)
-GITHUB
-  remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (60acb2f035cb39f2bd40a6c58a4de10d915da248)
-      Octokit
