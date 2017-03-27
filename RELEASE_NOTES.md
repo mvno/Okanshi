@@ -1,3 +1,7 @@
+### 4.0.0
+
+* Automatic polling on metrics on process exit, now also supports AppDomain unloads
+
 ### 4.0.0-beta
 
 **BREAKING CHANGES**

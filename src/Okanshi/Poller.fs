@@ -44,7 +44,13 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
         metricsPolled.Trigger(self, new MetricEventArgs(metrics))
 
     let onExitSubscriber =
-        if pollOnExit then AppDomain.CurrentDomain.ProcessExit.Subscribe(fun _ -> pollMetrics())
+        if pollOnExit then
+            let currentDomain = AppDomain.CurrentDomain
+            let pollMetrics = fun _ -> pollMetrics()
+            if currentDomain.IsDefaultAppDomain() then
+                currentDomain.ProcessExit.Subscribe(pollMetrics)
+            else
+                currentDomain.DomainUnload.Subscribe(pollMetrics)
         else { new IDisposable with member __.Dispose() = () }
 
     let rec poll () =
