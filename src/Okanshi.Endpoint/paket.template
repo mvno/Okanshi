@@ -1,0 +1,23 @@
+type project
+owners
+    Telenor MVNO
+authors 
+    Telenor MVNO
+projectUrl
+    http://github.com/mvno/Okanshi
+iconUrl
+    https://raw.githubusercontent.com/mvno/Okanshi/master/docs/files/img/logo.png
+licenseUrl
+    http://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    monitoring
+summary
+    JSON endpoint for Okanshi
+description
+    JSON endpoint for Okanshi
+
+
