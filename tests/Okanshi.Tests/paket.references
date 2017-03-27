@@ -1,6 +1,8 @@
-FluentAssertions
 FSharp.Core
 Newtonsoft.Json
-NSubstitute
-xunit
-xunit.extensions
+
+group Test
+    NSubstitute
+    xunit
+    xunit.extensions
+    FluentAssertions
