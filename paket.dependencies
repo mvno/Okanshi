@@ -1,13 +1,14 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core framework: >= net45
-nuget FSharp.Formatting
-nuget FAKE
 nuget Newtonsoft.Json >= 7.0.1
-nuget Octokit
-nuget SourceLink.Fake
 
-github fsharp/FAKE modules/Octokit/Octokit.fsx
+group Build
+    source https://nuget.org/api/v2
+    nuget SourceLink.Fake
+    nuget FSharp.Formatting
+    nuget FAKE
+    github fsharp/FAKE modules/Octokit/Octokit.fsx
 
 group Test
     source https://nuget.org/api/v2
