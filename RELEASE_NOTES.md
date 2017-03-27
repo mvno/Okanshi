@@ -1,6 +1,7 @@
-### 4.0.0
+### 4.0.0-beta2
 
 * Automatic polling on metrics on process exit, now also supports AppDomain unloads
+* Fix dependencies on NuGet package
 
 ### 4.0.0-beta
 
