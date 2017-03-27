@@ -1,6 +1,5 @@
 NUGET
   remote: https://www.nuget.org/api/v2
-  specs:
     FAKE (4.28)
     FluentAssertions (3.2.2) - framework: >= net45
     FSharp.Compiler.Service (2.0.0.6)
@@ -35,6 +34,5 @@ NUGET
     xunit.runner.console (2.0)
 GITHUB
   remote: fsharp/FAKE
-  specs:
     modules/Octokit/Octokit.fsx (60acb2f035cb39f2bd40a6c58a4de10d915da248)
       Octokit
