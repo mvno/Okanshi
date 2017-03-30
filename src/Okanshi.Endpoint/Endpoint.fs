@@ -1,10 +1,11 @@
-﻿namespace Okanshi
+﻿namespace Okanshi.Endpoint
 
 open System
 open System.Threading
 open System.Xml
 open System.Xml.Linq
 open Newtonsoft.Json
+open Okanshi
 
 /// Dependecy information
 type Dependency =
@@ -15,6 +16,7 @@ type Dependency =
         Version : string;
     }
 
+/// Pacakge information
 type Package =
     {
         /// Id of the package
@@ -23,8 +25,11 @@ type Package =
         Version : string;
     }
 
+/// Response object
+type Response<'T> = { Version : string; Data : 'T }
+
 /// Api options
-type MonitorApiOptions() =
+type EndpointOptions() =
     /// Enable CORS request. Default value is false
     member val EnableCors = false with get, set
     /// The HTTP prefix used as endpoint. Default value is "http://+:13004/"
@@ -36,18 +41,15 @@ type MonitorApiOptions() =
     /// Should metrics be collected when process is exiting. Default value is false.
     member val CollectMetricsOnProcessExit = false with get, set
 
-/// Response object
-type Response<'T> = { Version : string; Data : 'T }
-
 /// Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.
-type MonitorApi(options : MonitorApiOptions) =
+type MonitorEndpoint(options : EndpointOptions) =
     let listener = new System.Net.HttpListener()
     let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
     
     /// Create the endpoint with default values
-    new () = MonitorApi(new MonitorApiOptions())
+    new () = MonitorEndpoint(new EndpointOptions())
 
     /// Start endpoint and using the default metrics registry
     member __.Start() =
