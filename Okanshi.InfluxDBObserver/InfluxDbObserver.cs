@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using InfluxDB.WriteOnly;
 
@@ -35,19 +36,21 @@ namespace Okanshi.Observers
         }
 
         public void Update(Metric[] metrics) {
-            var points = metrics.Select(m => {
-                var metricTags = m.Tags.Where(x => !options.TagsToIgnore.Contains(x.Key)).ToArray();
-                var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
-                var fields = metricTags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
-                fields.Add(new Field("value", Convert.ToSingle(m.Value)));
-                return new Point {
-                    Measurement = m.Name,
-                    Timestamp = DateTime.UtcNow,
-                    Fields = fields,
-                    Tags = tags,
-                };
-            });
+            var points = metrics.Select(ConvertToPoint);
             client.WriteAsync(options.RetentionPolicy, options.DatabaseName, points);
+        }
+
+        private Point ConvertToPoint(Metric metric) {
+            var metricTags = metric.Tags.Where(x => !options.TagsToIgnore.Contains(x.Key)).ToArray();
+            var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
+            var fields = metricTags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
+            fields.Add(new Field("value", Convert.ToSingle(metric.Value)));
+            return new Point {
+                Measurement = metric.Name,
+                Timestamp = DateTime.UtcNow,
+                Fields = fields,
+                Tags = tags,
+            };
         }
 
         public Metric[][] GetObservations() {
