@@ -35,13 +35,16 @@ namespace Okanshi.Observers
         }
 
         public void Update(Metric[] metrics) {
-            var points = metrics.Select(m => new Point {
-                Measurement = m.Name,
-                Timestamp = DateTime.UtcNow,
-                Fields = new[] {
-                    new Field("value", Convert.ToSingle(m.Value)),
-                },
-                Tags = m.Tags.Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value)),
+            var points = metrics.Select(m => {
+                var tags = m.Tags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
+                var fields = m.Tags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
+                fields.Add(new Field("value", Convert.ToSingle(m.Value)));
+                return new Point {
+                    Measurement = m.Name,
+                    Timestamp = DateTime.UtcNow,
+                    Fields = fields,
+                    Tags = tags,
+                };
             });
             client.WriteAsync(options.RetentionPolicy, options.DatabaseName, points);
         }
