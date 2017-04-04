@@ -36,8 +36,11 @@ namespace Okanshi.Observers
         }
 
         public void Update(Metric[] metrics) {
-            var points = metrics.Select(ConvertToPoint);
-            client.WriteAsync(options.RetentionPolicy, options.DatabaseName, points);
+            var groupedMetrics = metrics.GroupBy(options.DatabaseSelector);
+            foreach (var metricGroup in groupedMetrics) {
+                var points = metricGroup.Select(ConvertToPoint);
+                client.WriteAsync(options.RetentionPolicy, metricGroup.Key, points);
+            }
         }
 
         private Point ConvertToPoint(Metric metric) {

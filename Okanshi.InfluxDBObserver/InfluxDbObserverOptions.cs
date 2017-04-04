@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Okanshi.Observers {
     public class InfluxDbObserverOptions {
-        public string DatabaseName { get; }
+        public Func<Metric, string> DatabaseSelector { get; set; }
 
         public string RetentionPolicy { get; set; }
 
@@ -13,7 +13,7 @@ namespace Okanshi.Observers {
         public IEnumerable<string> TagsToIgnore { get; set; } = Enumerable.Empty<string>();
 
         public InfluxDbObserverOptions(string databaseName) {
-            DatabaseName = databaseName;
+            DatabaseSelector = _ => databaseName;
         }
     }
 }
