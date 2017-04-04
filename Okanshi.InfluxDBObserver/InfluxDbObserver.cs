@@ -36,8 +36,9 @@ namespace Okanshi.Observers
 
         public void Update(Metric[] metrics) {
             var points = metrics.Select(m => {
-                var tags = m.Tags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
-                var fields = m.Tags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
+                var metricTags = m.Tags.Where(x => !options.TagsToIgnore.Contains(x.Key)).ToArray();
+                var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
+                var fields = metricTags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
                 fields.Add(new Field("value", Convert.ToSingle(m.Value)));
                 return new Point {
                     Measurement = m.Name,
