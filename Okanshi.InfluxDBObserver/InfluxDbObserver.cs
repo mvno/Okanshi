@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using InfluxDB.WriteOnly;
 
@@ -38,8 +37,10 @@ namespace Okanshi.Observers
         public void Update(Metric[] metrics) {
             var groupedMetrics = metrics.GroupBy(options.DatabaseSelector);
             foreach (var metricGroup in groupedMetrics) {
-                var points = metricGroup.Select(ConvertToPoint);
-                client.WriteAsync(options.RetentionPolicy, metricGroup.Key, points);
+                var groupedByRetention = metricGroup.GroupBy(x => options.RetentionPolicySelector(x, metricGroup.Key));
+                foreach (var retentionGroup in groupedByRetention) {
+                    client.WriteAsync(retentionGroup.Key, metricGroup.Key, metricGroup.Select(ConvertToPoint));
+                }
             }
         }
 
