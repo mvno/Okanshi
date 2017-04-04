@@ -8,16 +8,20 @@ namespace Okanshi.Observers
     {
         private readonly IMetricPoller poller;
         private readonly IInfluxDbClient client;
-        private readonly string databaseName;
+        private readonly InfluxDbObserverOptions options;
 
-        public InfluxDbObserver(IMetricPoller poller, IInfluxDbClient client, string databaseName) {
+        public InfluxDbObserver(IMetricPoller poller, IInfluxDbClient client, InfluxDbObserverOptions options) {
             if (poller == null) {
                 throw new ArgumentNullException(nameof(poller));
             }
 
+            if (options == null) {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             this.poller = poller;
             this.client = client;
-            this.databaseName = databaseName;
+            this.options = options;
             poller.MetricsPolled +=  OnMetricsPolled;
         }
 
@@ -39,7 +43,7 @@ namespace Okanshi.Observers
                 },
                 Tags = m.Tags.Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value)),
             });
-            client.WriteAsync(databaseName, points);
+            client.WriteAsync(options.RetentionPolicy, options.DatabaseName, points);
         }
 
         public Metric[][] GetObservations() {
