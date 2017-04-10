@@ -4,12 +4,21 @@ using InfluxDB.WriteOnly;
 
 namespace Okanshi.Observers
 {
+    /// <summary>
+    /// Observer for posting metrics to InfluxDB.
+    /// </summary>
     public class InfluxDbObserver : IMetricObserver
     {
         private readonly IMetricPoller poller;
         private readonly IInfluxDbClient client;
         private readonly InfluxDbObserverOptions options;
 
+        /// <summary>
+        /// Creates a new instance of the observer.
+        /// </summary>
+        /// <param name="poller">The poller.</param>
+        /// <param name="client">The InfluxDB client.</param>
+        /// <param name="options">The observer options.</param>
         public InfluxDbObserver(IMetricPoller poller, IInfluxDbClient client, InfluxDbObserverOptions options) {
             if (poller == null) {
                 throw new ArgumentNullException(nameof(poller));
@@ -38,6 +47,10 @@ namespace Okanshi.Observers
             poller.Stop();
         }
 
+        /// <summary>
+        /// Method used to write metrics to InfluxDB. This method are not meant to be used externally.
+        /// </summary>
+        /// <param name="metrics"></param>
         public void Update(Metric[] metrics) {
             var groupedMetrics = metrics.GroupBy(options.DatabaseSelector);
             foreach (var metricGroup in groupedMetrics) {
@@ -61,6 +74,9 @@ namespace Okanshi.Observers
             };
         }
 
+        /// <summary>
+        /// Get observations. This is not supported in this observer.
+        /// </summary>
         public Metric[][] GetObservations() {
             throw new NotSupportedException("This observer doesn't support getting observations");
         }
