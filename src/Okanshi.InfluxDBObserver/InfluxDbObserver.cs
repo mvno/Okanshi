@@ -45,7 +45,7 @@ namespace Okanshi.Observers
         }
 
         private Point ConvertToPoint(Metric metric) {
-            var metricTags = metric.Tags.Where(x => !options.TagsToIgnore.Contains(x.Key)).ToArray();
+            var metricTags = metric.Tags.Where(x => !options.TagsToIgnore.Contains(x.Key) && !x.Key.Equals("dataSource", StringComparison.OrdinalIgnoreCase)).ToArray();
             var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
             var fields = metricTags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
             fields.Add(new Field("value", Convert.ToSingle(metric.Value)));

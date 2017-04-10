@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{73FDD149
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Okanshi.Endpoint", "src\Okanshi.Endpoint\Okanshi.Endpoint.fsproj", "{D9DCD181-2583-4284-9472-D8BE225DF3AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.InfluxDBObserver", "Okanshi.InfluxDBObserver\Okanshi.InfluxDBObserver.csproj", "{B6686297-D070-4EBC-829A-1E29988C37AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.InfluxDBObserver", "src\Okanshi.InfluxDBObserver\Okanshi.InfluxDBObserver.csproj", "{B6686297-D070-4EBC-829A-1E29988C37AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
