@@ -15,6 +15,10 @@ namespace Okanshi.Observers
                 throw new ArgumentNullException(nameof(poller));
             }
 
+            if (client == null) {
+                throw new ArgumentNullException(nameof(client));
+            }
+
             if (options == null) {
                 throw new ArgumentNullException(nameof(options));
             }
