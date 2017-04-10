@@ -54,7 +54,7 @@ namespace Okanshi.Observers
             var fields = metricTags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
             fields.Add(new Field("value", Convert.ToSingle(metric.Value)));
             return new Point {
-                Measurement = metric.Name,
+                Measurement = options.MeasurementNameSelector(metric),
                 Timestamp = DateTime.UtcNow,
                 Fields = fields,
                 Tags = tags,

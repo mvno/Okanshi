@@ -116,5 +116,30 @@ namespace Okanshi.InfluxDBObserver.Tests {
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
                     Arg.Is<IEnumerable<Point>>(points => points.All(point => point.Tags.All(tag => tag.Key != tagName))));
         }
+
+        [Fact]
+        public void Default_measurement_name_is_metric_name() {
+            const string databaseName = "databaseName";
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                new InfluxDbObserverOptions(databaseName));
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], 0) });
+
+            influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Is<IEnumerable<Point>>(x => x.All(y => y.Measurement == "name")));
+        }
+
+        [Fact]
+        public void Measurement_name_selector_is_used_to_select_measurement_name() {
+            const string expectedMeasurementName = "expectedMeasurementName";
+            var options = new InfluxDbObserverOptions("databaseName") {
+                MeasurementNameSelector = metric => expectedMeasurementName
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], 0) });
+
+            influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Is<IEnumerable<Point>>(x => x.All(y => y.Measurement == expectedMeasurementName)));
+        }
     }
 }
