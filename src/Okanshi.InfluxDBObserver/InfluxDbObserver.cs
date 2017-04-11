@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using InfluxDB.WriteOnly;
 
@@ -56,22 +57,34 @@ namespace Okanshi.Observers
             foreach (var metricGroup in groupedMetrics) {
                 var groupedByRetention = metricGroup.GroupBy(x => options.RetentionPolicySelector(x, metricGroup.Key));
                 foreach (var retentionGroup in groupedByRetention) {
-                    client.WriteAsync(retentionGroup.Key, metricGroup.Key, retentionGroup.Select(ConvertToPoint));
+                    var points = ConvertToPoints(retentionGroup);
+                    client.WriteAsync(retentionGroup.Key, metricGroup.Key, points);
                 }
             }
         }
 
-        private Point ConvertToPoint(Metric metric) {
-            var metricTags = metric.Tags.Where(x => !options.TagsToIgnore.Contains(x.Key) && !x.Key.Equals("dataSource", StringComparison.OrdinalIgnoreCase)).ToArray();
-            var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
-            var fields = metricTags.Where(options.TagToFieldSelector).Select(t => new Field(t.Key, Convert.ToSingle(t.Value))).ToList();
-            fields.Add(new Field("value", Convert.ToSingle(metric.Value)));
-            return new Point {
-                Measurement = options.MeasurementNameSelector(metric),
-                Timestamp = DateTime.UtcNow,
-                Fields = fields,
-                Tags = tags,
-            };
+        private IEnumerable<Point> ConvertToPoints(IEnumerable<Metric> metrics) {
+            var groupedByName = metrics.GroupBy(options.MeasurementNameSelector);
+            foreach (var metricGroup in groupedByName) {
+                var metricTags = metricGroup.First().Tags
+                    .Where(x => !options.TagsToIgnore.Contains(x.Key) && !x.Key.Equals("dataSource", StringComparison.OrdinalIgnoreCase) &&
+                                     !x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
+                var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
+                var statisticFields = metricGroup
+                    .Select(metric => new { metric, statisticsTag = metric.Tags.SingleOrDefault(tag => tag.Key.Equals("statistic")) })
+                    .Where(x => x.statisticsTag != null)
+                    .Select(x => new Field(x.statisticsTag.Value, Convert.ToSingle(x.metric.Value)))
+                    .ToList();
+                var fields = statisticFields.Any() ? statisticFields : new List<Field> { new Field("value", Convert.ToSingle(metricGroup.First().Value)) };
+                fields.AddRange(metricTags.Where(options.TagToFieldSelector).Select(tag => new Field(tag.Key, Convert.ToSingle(tag.Value))));
+                yield return new Point {
+                    Measurement = metricGroup.Key,
+                    Timestamp = metricGroup.First().Timestamp.DateTime,
+                    Fields = fields,
+                    Tags = tags
+                };
+            }
         }
 
         /// <summary>
