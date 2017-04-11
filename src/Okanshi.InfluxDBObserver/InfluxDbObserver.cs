@@ -56,7 +56,7 @@ namespace Okanshi.Observers
             foreach (var metricGroup in groupedMetrics) {
                 var groupedByRetention = metricGroup.GroupBy(x => options.RetentionPolicySelector(x, metricGroup.Key));
                 foreach (var retentionGroup in groupedByRetention) {
-                    client.WriteAsync(retentionGroup.Key, metricGroup.Key, metricGroup.Select(ConvertToPoint));
+                    client.WriteAsync(retentionGroup.Key, metricGroup.Key, retentionGroup.Select(ConvertToPoint));
                 }
             }
         }
