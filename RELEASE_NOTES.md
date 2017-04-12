@@ -2,6 +2,7 @@
 
 * Automatic polling on metrics on process exit, now also supports AppDomain unloads
 * Fix dependencies on NuGet package
+* Add new NuGet package with support for OWIN.
 
 ### 4.0.0-beta
 
