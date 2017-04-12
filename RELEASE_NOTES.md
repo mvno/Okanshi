@@ -2,6 +2,7 @@
 
 * Automatic polling on metrics on process exit, now also supports AppDomain unloads
 * Fix dependencies on NuGet package
+* Improved performance when using OkanshiMonitor to get monitors
 
 ### 4.0.0-beta
 
