@@ -54,7 +54,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Okanshi.Owin\Okanshi.Owin.csproj">
+    <ProjectReference Include="..\..\src\Okanshi.Owin\Okanshi.Owin.csproj">
       <Project>{43c267ba-8c63-4617-bb00-439c9790062d}</Project>
       <Name>Okanshi.Owin</Name>
     </ProjectReference>

@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{73FDD149
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Okanshi.Endpoint", "src\Okanshi.Endpoint\Okanshi.Endpoint.fsproj", "{D9DCD181-2583-4284-9472-D8BE225DF3AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.Owin", "Okanshi.Owin\Okanshi.Owin.csproj", "{43C267BA-8C63-4617-BB00-439C9790062D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.Owin", "src\Okanshi.Owin\Okanshi.Owin.csproj", "{43C267BA-8C63-4617-BB00-439C9790062D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F72EF624-66CF-4CB1-8FCA-07653655F969}"
 EndProject
