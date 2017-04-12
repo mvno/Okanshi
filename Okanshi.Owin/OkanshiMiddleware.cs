@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
@@ -9,7 +8,7 @@ namespace Okanshi.Owin
     {
         private readonly AppFunc next;
         private readonly OkanshiOwinOptions options;
-        private static readonly Tag[] EmptyTagArray = new Tag[0];
+        private static readonly List<Tag> EmptyTagList = new List<Tag>();
 
         public OkanshiMiddleware(AppFunc next, OkanshiOwinOptions options)
         {
@@ -23,19 +22,20 @@ namespace Okanshi.Owin
             var timer = OkanshiTimer.StartNew(x => elapsed = x);
             await next.Invoke(environment);
             timer.Stop();
-            var tags = EmptyTagArray;
+            var tags = EmptyTagList;
             if (options.AddStatusCodeTag)
             {
                 object responseCode;
                 var found = environment.TryGetValue("owin.ResponseStatusCode", out responseCode);
                 if (found)
                 {
-                    var tagList = tags.ToList();
-                    tagList.Add(new Tag("responseCode", responseCode.ToString()));
-                    tags = tagList.ToArray();
+                    tags.Add(new Tag("responseCode", responseCode.ToString()));
                 }
             }
-            var basicTimer = OkanshiMonitor.BasicTimer(options.MetricName, options.StepSize ?? OkanshiMonitor.DefaultStep, tags);
+            
+            tags.Add(new Tag("path", environment["owin.RequestPath"].ToString()));
+            tags.Add(new Tag("method", environment["owin.RequestMethod"].ToString()));
+            var basicTimer = OkanshiMonitor.BasicTimer(options.MetricName, options.StepSize, tags.ToArray());
             basicTimer.Register(elapsed);
         }
     }
