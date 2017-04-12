@@ -2,6 +2,7 @@ source https://nuget.org/api/v2
 
 nuget FSharp.Core 4.0.0.1 framework: >= net45, redirects: force
 nuget Newtonsoft.Json >= 7.0.1
+nuget Owin
 
 group Build
     source https://nuget.org/api/v2
