@@ -6,5 +6,6 @@ namespace Okanshi.Owin
     {
         public TimeSpan? StepSize { get; set; }
         public bool AddStatusCodeTag { get; set; } = true;
+        public string MetricName { get; set; } = "Request";
     }
 }

@@ -35,7 +35,7 @@ namespace Okanshi.Owin
                     tags = tagList.ToArray();
                 }
             }
-            var basicTimer = OkanshiMonitor.BasicTimer("Request", options.StepSize ?? OkanshiMonitor.DefaultStep, tags);
+            var basicTimer = OkanshiMonitor.BasicTimer(options.MetricName, options.StepSize ?? OkanshiMonitor.DefaultStep, tags);
             basicTimer.Register(elapsed);
         }
     }
