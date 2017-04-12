@@ -3,6 +3,7 @@
 * Automatic polling on metrics on process exit, now also supports AppDomain unloads
 * Fix dependencies on NuGet package
 * Add new NuGet package with support for OWIN.
+* Added support for registering a custom timing by providing a number describing the elapsed number of milliseconds.
 
 ### 4.0.0-beta
 
