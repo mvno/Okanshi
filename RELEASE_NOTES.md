@@ -2,6 +2,7 @@
 
 * Automatic polling on metrics on process exit, now also supports AppDomain unloads
 * Fix dependencies on NuGet package
+* Implemented InfluxDB observer for pushing metrics to InfluxDB. It is released in a separate package, Okanshi.InfluxDBObserver.
 * Improved performance when using OkanshiMonitor to get monitors
 
 ### 4.0.0-beta
