@@ -1,6 +1,7 @@
 NUGET
   remote: https://www.nuget.org/api/v2
     FSharp.Core (4.0.0.1) - redirects: force, framework: >= net45
+    InfluxDB.WriteOnly (1.2)
     Newtonsoft.Json (7.0.1)
     Owin (1.0)
 

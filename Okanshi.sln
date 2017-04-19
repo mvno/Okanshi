@@ -21,6 +21,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F72EF624-66CF-4CB1-8FCA-07653655F969}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin", "samples\Owin\Owin.csproj", "{5A5171E6-B47B-43C5-8164-2D09658622AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.InfluxDBObserver", "src\Okanshi.InfluxDBObserver\Okanshi.InfluxDBObserver.csproj", "{B6686297-D070-4EBC-829A-1E29988C37AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.InfluxDBObserver.Tests", "tests\Okanshi.InfluxDBObserver.Tests\Okanshi.InfluxDBObserver.Tests.csproj", "{AC130C3B-DEB5-4482-90AF-9309119F7AC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +51,14 @@ Global
 		{5A5171E6-B47B-43C5-8164-2D09658622AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A5171E6-B47B-43C5-8164-2D09658622AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A5171E6-B47B-43C5-8164-2D09658622AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6686297-D070-4EBC-829A-1E29988C37AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6686297-D070-4EBC-829A-1E29988C37AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6686297-D070-4EBC-829A-1E29988C37AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6686297-D070-4EBC-829A-1E29988C37AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC130C3B-DEB5-4482-90AF-9309119F7AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC130C3B-DEB5-4482-90AF-9309119F7AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC130C3B-DEB5-4482-90AF-9309119F7AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC130C3B-DEB5-4482-90AF-9309119F7AC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{60A29CDD-57E6-4DD1-A66E-8FB7DAD860B0} = {73FDD149-9954-430C-AC86-EEB6DAC18521}
 		{5A5171E6-B47B-43C5-8164-2D09658622AF} = {F72EF624-66CF-4CB1-8FCA-07653655F969}
+		{AC130C3B-DEB5-4482-90AF-9309119F7AC0} = {73FDD149-9954-430C-AC86-EEB6DAC18521}
 	EndGlobalSection
 EndGlobal
