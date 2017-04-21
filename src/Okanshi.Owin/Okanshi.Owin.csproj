@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6686297-D070-4EBC-829A-1E29988C37AD}</ProjectGuid>
+    <ProjectGuid>{43C267BA-8C63-4617-BB00-439C9790062D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Okanshi.Observers</RootNamespace>
-    <AssemblyName>Okanshi.InfluxDBObserver</AssemblyName>
+    <RootNamespace>Okanshi.Owin</RootNamespace>
+    <AssemblyName>Okanshi.Owin</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Okanshi.InfluxDBObserver.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Okanshi.Owin.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,7 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Okanshi.InfluxDBObserver.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Okanshi.Owin.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,19 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InfluxDbObserver.cs" />
-    <Compile Include="InfluxDbObserverOptions.cs" />
+    <Compile Include="AppBuilderExtensions.cs" />
+    <Compile Include="OkanshiMiddleware.cs" />
+    <Compile Include="OkanshiOwinOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Okanshi\Okanshi.fsproj">
+      <Project>{C53B9B49-9BD0-4A1F-AC44-6E94628B3F2A}</Project>
+      <Name>Okanshi</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />
     <None Include="paket.template" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Okanshi\Okanshi.fsproj">
-      <Project>{c53b9b49-9bd0-4a1f-ac44-6e94628b3f2a}</Project>
-      <Name>Okanshi</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -65,21 +66,10 @@
   </Target>
   -->
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
       <ItemGroup>
-        <Reference Include="FSharp.Core">
-          <HintPath>..\..\packages\FSharp.Core\lib\net40\FSharp.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
-      <ItemGroup>
-        <Reference Include="InfluxDB.WriteOnly">
-          <HintPath>..\..\packages\InfluxDB.WriteOnly\lib\net45\InfluxDB.WriteOnly.dll</HintPath>
+        <Reference Include="Owin">
+          <HintPath>..\..\packages\Owin\lib\net40\Owin.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
