@@ -2,6 +2,7 @@
 
 open System
 open System.Diagnostics
+open Okanshi.Helpers
 
 /// Extenstions for the System.Diagnostics.StopWatch class
 [<AutoOpen>]
@@ -55,7 +56,7 @@ type ITimer =
     abstract Register : int64 -> unit
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
-type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock : IClock) = 
+type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock : IClock) as self = 
     
     [<Literal>]
     let StatisticKey = "statistic"
@@ -65,18 +66,27 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     let count = new PeakRateCounter(config.WithTag(StatisticKey, "count"), step, clock)
     let rate = new StepCounter(config.WithTag(StatisticKey, "rate"), step, clock)
     let total = new PeakRateCounter(config.WithTag(StatisticKey, "totalTime"), step, clock)
-    
-    let updateStatistics elapsed = 
+    let syncRoot = new obj()
+
+    let updateStatistics' elapsed =
         count.Increment() |> ignore
         rate.Increment() |> ignore
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
     
+    let updateStatistics elapsed = 
+        lockWithArg syncRoot elapsed updateStatistics'
+    
     let record f = 
         let (result, elapsed) = Stopwatch.Time(fun () -> f())
         elapsed |> updateStatistics
         result
+
+    let getValue' () =
+        let count = self.GetCount()
+        if count = 0L then 0L
+        else self.GetTotalTime() / count
     
     do 
         registry.Register(max)
@@ -95,22 +105,19 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     member __.Record(f : Action) = record (fun () -> f.Invoke())
     
     /// Gets the rate of calls timed within the specified step
-    member __.GetCount() = count.GetValue()
+    member __.GetCount() = lock syncRoot count.GetValue
     
     /// Gets the average calls time within the specified step
-    member self.GetValue() : int64 = 
-        let count = self.GetCount()
-        if count = 0L then 0L
-        else self.GetTotalTime() / count
+    member self.GetValue() : int64 = lock syncRoot getValue'
     
     /// Get the maximum value of all calls
-    member __.GetMax() = max.GetValue()
+    member __.GetMax() = lock syncRoot max.GetValue
     
     /// Get the manimum value of all calls
-    member __.GetMin() = min.GetValue()
+    member __.GetMin() = lock syncRoot min.GetValue
     
     /// Gets the the total time for all calls within the specified step
-    member __.GetTotalTime() = total.GetValue()
+    member __.GetTotalTime() = lock syncRoot total.GetValue
     
     /// Gets the monitor config
     member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
