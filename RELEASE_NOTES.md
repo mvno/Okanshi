@@ -6,6 +6,7 @@
 * Add new NuGet package with support for OWIN.
 * Added support for registering a custom timing by providing a number describing the elapsed number of milliseconds.
 * Improved performance when using OkanshiMonitor to get monitors
+* Ensured thread safety in metric types by using locks where needed
 
 ### 4.0.0-beta
 

@@ -1,6 +1,7 @@
 ﻿namespace Okanshi
 
 open System
+open Okanshi.Helpers
 
 /// Utility class used to describe step intervals
 [<System.Diagnostics.DebuggerDisplay("Timestamp = {Timestamp}; Value = {Value}")>]
@@ -12,7 +13,7 @@ type Datapoint =
           Value = -1L }
 
 /// Utility class for managing a set of AtomicLong instances mapped to a particular step interval.
-type StepLong(initialValue, step : TimeSpan, clock : IClock) = 
+type StepLong(initialValue, step : TimeSpan, clock : IClock) as self = 
     let step = int64 step.Ticks
     
     [<Literal>]
@@ -24,23 +25,15 @@ type StepLong(initialValue, step : TimeSpan, clock : IClock) =
     let data = Array.init 2 (fun _ -> new AtomicLong(initialValue))
     let lastPollTime = new AtomicLong()
     let lastInitPosition = new AtomicLong()
+    let syncRoot = new obj()
     
     let rollCount now = 
         let stepTime = now / step
         let lastInit = lastInitPosition.Get()
         if lastInit < stepTime && lastInitPosition.CompareAndSet(stepTime, lastInit) = lastInit then 
             data.[CurrentIndex].GetAndSet(initialValue) |> data.[PreviousIndex].Set
-    
-    new(interval) = new StepLong(0L, interval, SystemClock.Instance)
-    new(interval, clock) = new StepLong(0L, interval, clock)
-    
-    // Gets the current count
-    member __.GetCurrent() = 
-        rollCount (clock.NowTicks())
-        data.[CurrentIndex]
-    
-    /// Gets the value of the previous measurement
-    member __.Poll() = 
+
+    let poll' () =
         let now = clock.Now()
         let nowTicks = now.Ticks
         rollCount (nowTicks)
@@ -50,11 +43,26 @@ type StepLong(initialValue, step : TimeSpan, clock : IClock) =
         let stepStartWithWholeSeconds = new Nullable<_>(now.AddMilliseconds(float <| -now.Millisecond))
         if last > 0L && missed > 0L then Datapoint.Empty
         else 
-            { Timestamp = stepStartWithWholeSeconds
-              Value = value }
+            { Timestamp = stepStartWithWholeSeconds;
+                Value = value }
+
+    let getCurrent' () =
+        rollCount (clock.NowTicks())
+        data.[CurrentIndex]
+
+    let increment' amount = self.GetCurrent().Increment(amount)
+
+    new(interval) = new StepLong(0L, interval, SystemClock.Instance)
+    new(interval, clock) = new StepLong(0L, interval, clock)
+    
+    // Gets the current count
+    member __.GetCurrent() : AtomicLong = lock syncRoot getCurrent'
+    
+    /// Gets the value of the previous measurement
+    member __.Poll() = lock syncRoot poll'
     
     /// Increment the current value by the specified amount
-    member self.Increment(amount) = self.GetCurrent().Increment(amount)
+    member self.Increment(amount) = lockWithArg syncRoot amount increment'
 
 /// Tracks how often some event occurs
 type ICounter<'T> = 
@@ -100,20 +108,24 @@ type StepCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) =
 type PeakRateCounter(config : MonitorConfig, step, clock : IClock) = 
     let peakRate = new StepLong(step, clock)
     let current = new StepLong(step, clock)
+    let syncRoot = new obj()
+
+    let getValue' () = peakRate.Poll().Value
 
     new(config, step) = new PeakRateCounter(config, step, SystemClock.Instance)
     
     /// Gets the peak rate within the specified interval
-    member __.GetValue() = peakRate.Poll().Value
+    member __.GetValue() = lock syncRoot getValue'
     
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
     
     /// Increment the value by the specified amount
     member __.Increment(amount) = 
-        let newValue = current.Increment(amount)
-        if newValue > peakRate.GetCurrent().Get() then
-            peakRate.Increment(amount) |> ignore
+        lock syncRoot (fun () ->
+            let newValue = current.Increment(amount)
+            if newValue > peakRate.GetCurrent().Get() then
+                peakRate.Increment(amount) |> ignore)
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)

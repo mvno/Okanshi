@@ -43,6 +43,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers.fs" />
     <Compile Include="Clock.fs" />
     <Compile Include="Atomic.fs" />
     <Compile Include="Config.fs" />
