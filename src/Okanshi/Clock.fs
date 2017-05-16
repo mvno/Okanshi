@@ -20,7 +20,6 @@ type IClock =
 
 /// Wrapper around the system time
 type SystemClock() = 
-    static let instance = new SystemClock()
     let mutable frozenAt : DateTime option = None
     let freeze() = frozenAt <- Some(DateTime.UtcNow)
     let unfreeze() = frozenAt <- None
@@ -46,7 +45,6 @@ type SystemClock() =
     /// Unfreezes the time
     member __.Unfreeze() = frozenAt <- None
     
-    static member Instance = instance
     interface IClock with
         
         /// Gets the current time

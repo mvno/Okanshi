@@ -18,7 +18,7 @@ type StepCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) =
     let stepMilliseconds = double step.TotalMilliseconds
     let stepsPerSecond = double 1000 / stepMilliseconds
 
-    new(config, step) = new StepCounter(config, step, SystemClock.Instance)
+    new(config, step) = new StepCounter(config, step, new SystemClock())
     
     /// Increment the counter by one
     member __.Increment() = value.Increment(1L) |> ignore
@@ -50,7 +50,7 @@ type PeakRateCounter(config : MonitorConfig, step, clock : IClock) =
 
     let getValue' () = peakRate.Poll().Value
 
-    new(config, step) = new PeakRateCounter(config, step, SystemClock.Instance)
+    new(config, step) = new PeakRateCounter(config, step, new SystemClock())
     
     /// Gets the peak rate within the specified interval
     member __.GetValue() = lock syncRoot getValue'
@@ -90,7 +90,7 @@ type DoubleCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) =
             if current.CompareAndSet(nextDouble, originalValue) <> originalValue then loop()
         loop()
 
-    new(config, step) = new DoubleCounter(config, step, SystemClock.Instance)
+    new(config, step) = new DoubleCounter(config, step, new SystemClock())
     
     /// Increment the value by the specified amount
     member __.Increment(amount : double) = 

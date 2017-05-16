@@ -144,7 +144,7 @@ type AverageGauge(config : MonitorConfig, step : TimeSpan, clock : IClock) =
         let original = value.GetCurrent().Get()
         value.GetCurrent().Set(((original * (count - 1L)) + v) / count)
 
-    new (config, step) = AverageGauge(config, step, SystemClock.Instance)
+    new (config, step) = AverageGauge(config, step, new SystemClock())
 
     /// Sets the value
     member __.Set(newValue) =
