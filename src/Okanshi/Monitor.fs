@@ -116,8 +116,17 @@ type OkanshiMonitor private() =
     /// Get or add a MinGauge with custom tags
     static member MinGauge(name : string, tags : Tag array) =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<MinGauge>, tags)
-        let factory = fun () -> (new MaxGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
+        let factory = fun () -> (new MinGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
         getOrAddMonitor monitorKey factory :?> MinGauge
+
+    /// Get or add a AverageGauge
+    static member AverageGauge(name : string, step) = OkanshiMonitor.AverageGauge(name, step, [||])
+
+    /// Get or add a AverageGauge with custom tags
+    static member AverageGauge(name : string, step, tags : Tag array) =
+        let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<AverageGauge>, tags)
+        let factory = fun () -> (new AverageGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags), step)) :> IMonitor
+        getOrAddMonitor monitorKey factory :?> AverageGauge
 
     /// Get or add a LongGauge
     static member LongGauge(name : string) = OkanshiMonitor.LongGauge(name, [||])

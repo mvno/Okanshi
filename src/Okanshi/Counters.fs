@@ -1,68 +1,6 @@
 ﻿namespace Okanshi
 
 open System
-open Okanshi.Helpers
-
-/// Utility class used to describe step intervals
-[<System.Diagnostics.DebuggerDisplay("Timestamp = {Timestamp}; Value = {Value}")>]
-type Datapoint = 
-    { Timestamp : Nullable<DateTime>
-      Value : int64 }
-    static member Empty = 
-        { Timestamp = new System.Nullable<_>()
-          Value = -1L }
-
-/// Utility class for managing a set of AtomicLong instances mapped to a particular step interval.
-type StepLong(initialValue, step : TimeSpan, clock : IClock) as self = 
-    let step = int64 step.Ticks
-    
-    [<Literal>]
-    let CurrentIndex = 0
-    
-    [<Literal>]
-    let PreviousIndex = 1
-    
-    let data = Array.init 2 (fun _ -> new AtomicLong(initialValue))
-    let lastPollTime = new AtomicLong()
-    let lastInitPosition = new AtomicLong()
-    let syncRoot = new obj()
-    
-    let rollCount now = 
-        let stepTime = now / step
-        let lastInit = lastInitPosition.Get()
-        if lastInit < stepTime && lastInitPosition.CompareAndSet(stepTime, lastInit) = lastInit then 
-            data.[CurrentIndex].GetAndSet(initialValue) |> data.[PreviousIndex].Set
-
-    let poll' () =
-        let now = clock.Now()
-        let nowTicks = now.Ticks
-        rollCount (nowTicks)
-        let value = data.[PreviousIndex].Get()
-        let last = lastPollTime.GetAndSet(nowTicks)
-        let missed = (nowTicks - last) / step - 1L
-        let stepStartWithWholeSeconds = new Nullable<_>(now.AddMilliseconds(float <| -now.Millisecond))
-        if last > 0L && missed > 0L then Datapoint.Empty
-        else 
-            { Timestamp = stepStartWithWholeSeconds;
-                Value = value }
-
-    let getCurrent' () =
-        rollCount (clock.NowTicks())
-        data.[CurrentIndex]
-
-    let increment' amount = self.GetCurrent().Increment(amount)
-
-    new(interval) = new StepLong(0L, interval, SystemClock.Instance)
-    new(interval, clock) = new StepLong(0L, interval, clock)
-    
-    // Gets the current count
-    member __.GetCurrent() : AtomicLong = lock syncRoot getCurrent'
-    
-    /// Gets the value of the previous measurement
-    member __.Poll() = lock syncRoot poll'
-    
-    /// Increment the current value by the specified amount
-    member self.Increment(amount) = lockWithArg syncRoot amount increment'
 
 /// Tracks how often some event occurs
 type ICounter<'T> = 
