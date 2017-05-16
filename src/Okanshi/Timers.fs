@@ -69,11 +69,13 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     let syncRoot = new obj()
 
     let updateStatistics' elapsed =
+        clock.Freeze()
         count.Increment() |> ignore
         rate.Increment() |> ignore
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
+        clock.Unfreeze()
     
     let updateStatistics elapsed = 
         lockWithArg syncRoot elapsed updateStatistics'
@@ -95,7 +97,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
         registry.Register(count)
         registry.Register(total)
     
-    new(config, step) = BasicTimer(config, step, SystemClock.Instance)
+    new(config, step) = BasicTimer(config, step, new SystemClock())
     new(config, step, clock : IClock) = BasicTimer(DefaultMonitorRegistry.Instance, config, step, clock)
     
     /// Time a System.Func call and return the value

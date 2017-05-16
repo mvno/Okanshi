@@ -1,6 +1,7 @@
 ﻿namespace Okanshi
 
 open System
+open Okanshi.Helpers
 
 /// Tracks how often some event occurs
 type ICounter<'T> = 
@@ -18,7 +19,7 @@ type StepCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) =
     let stepMilliseconds = double step.TotalMilliseconds
     let stepsPerSecond = double 1000 / stepMilliseconds
 
-    new(config, step) = new StepCounter(config, step, SystemClock.Instance)
+    new(config, step) = new StepCounter(config, step, new SystemClock())
     
     /// Increment the counter by one
     member __.Increment() = value.Increment(1L) |> ignore
@@ -49,8 +50,14 @@ type PeakRateCounter(config : MonitorConfig, step, clock : IClock) =
     let syncRoot = new obj()
 
     let getValue' () = peakRate.Poll().Value
+    let increment' amount =
+        clock.Freeze()
+        let newValue = current.Increment(amount)
+        if newValue > peakRate.GetCurrent().Get() then
+            peakRate.Increment(amount) |> ignore
+        clock.Unfreeze()
 
-    new(config, step) = new PeakRateCounter(config, step, SystemClock.Instance)
+    new(config, step) = new PeakRateCounter(config, step, new SystemClock())
     
     /// Gets the peak rate within the specified interval
     member __.GetValue() = lock syncRoot getValue'
@@ -59,11 +66,7 @@ type PeakRateCounter(config : MonitorConfig, step, clock : IClock) =
     member self.Increment() = self.Increment(1L)
     
     /// Increment the value by the specified amount
-    member __.Increment(amount) = 
-        lock syncRoot (fun () ->
-            let newValue = current.Increment(amount)
-            if newValue > peakRate.GetCurrent().Get() then
-                peakRate.Increment(amount) |> ignore)
+    member __.Increment(amount) = lockWithArg syncRoot amount increment'
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
@@ -90,7 +93,7 @@ type DoubleCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) =
             if current.CompareAndSet(nextDouble, originalValue) <> originalValue then loop()
         loop()
 
-    new(config, step) = new DoubleCounter(config, step, SystemClock.Instance)
+    new(config, step) = new DoubleCounter(config, step, new SystemClock())
     
     /// Increment the value by the specified amount
     member __.Increment(amount : double) = 

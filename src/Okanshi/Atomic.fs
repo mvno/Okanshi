@@ -181,7 +181,7 @@ type StepLong(initialValue, step : TimeSpan, clock : IClock) as self =
 
     let increment' amount = self.GetCurrent().Increment(amount)
 
-    new(interval) = new StepLong(0L, interval, SystemClock.Instance)
+    new(interval) = new StepLong(0L, interval, new SystemClock())
     new(interval, clock) = new StepLong(0L, interval, clock)
     
     // Gets the current count
