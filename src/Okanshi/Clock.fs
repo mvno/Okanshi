@@ -8,16 +8,42 @@ type IClock =
     abstract member Now : unit -> DateTime
     /// Gets the current ticks
     abstract member NowTicks : unit -> int64
+    /// Freezes the time. Used to make sure composite metrics go into the same
+    /// buckets across atomics
+    abstract member Freeze : unit -> unit
+    /// Unfreezes the time
+    abstract member Unfreeze : unit -> unit
 
 /// Wrapper around the system time
 type SystemClock() =
     static let instance = new SystemClock()
+    let mutable frozenAt : DateTime option = None
+
+    let freeze() = frozenAt <- Some(DateTime.UtcNow)
+    let unfreeze() = frozenAt <- None
+    
+    let now() =
+        match frozenAt with
+        | Some(x) -> x
+        | None -> DateTime.UtcNow
 
     /// Gets the current time
-    member __.Now() = DateTime.UtcNow
+    member __.Now() =
+        match frozenAt with
+        | Some(x) -> x
+        | None -> DateTime.UtcNow
     
     /// Gets the current ticks
-    member __.NowTicks() = DateTime.UtcNow.Ticks
+    member self.NowTicks() = self.Now().Ticks
+
+    /// Freezes the time. Used to make sure composite metrics go into the same
+    /// buckets across atomics
+    member __.Freeze() =
+        frozenAt <- Some(DateTime.UtcNow)
+
+    /// Unfreezes the time
+    member __.Unfreeze() =
+        frozenAt <- None
 
     static member Instance = instance
 
@@ -26,6 +52,11 @@ type SystemClock() =
         member self.Now() = self.Now()
         /// Gets the current ticks
         member self.NowTicks() = self.NowTicks()
+        /// Freezes the time. Used to make sure composite metrics go into the same
+        /// buckets across atomics
+        member self.Freeze() = ()
+        /// Unfreezes the time
+        member self.Unfreeze() = ()
 
 /// Manual clock, should only be used in tests
 type ManualClock() =
@@ -50,3 +81,7 @@ type ManualClock() =
         member self.Now() = self.Now()
         /// Gets the current ticks
         member self.NowTicks() = self.NowTicks()
+        /// Does nothing in ManualClock, as time is always frozen
+        member self.Freeze() = ()
+        /// Does nothing in ManualClock, as time is always frozen
+        member self.Unfreeze() = ()
