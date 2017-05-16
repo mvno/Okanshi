@@ -116,7 +116,7 @@ type OkanshiMonitor private() =
     /// Get or add a MinGauge with custom tags
     static member MinGauge(name : string, tags : Tag array) =
         let monitorKey = OkanshiMonitor.GetMonitorKey(name, typeof<MinGauge>, tags)
-        let factory = fun () -> (new MaxGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
+        let factory = fun () -> (new MinGauge(MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags))) :> IMonitor
         getOrAddMonitor monitorKey factory :?> MinGauge
 
     /// Get or add a AverageGauge
