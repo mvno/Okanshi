@@ -131,3 +131,31 @@ type DecimalGauge(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
+
+/// Gauge that keeps track of the average value since last reset. Initial value is 0.
+//type AverageGauge(config : MonitorConfig) =
+//    let value = 0
+//    let count = 0
+//    let syncRoot = new obj()
+//
+//    /// Sets the value
+//    member __.Set(newValue) =
+//        let rec exchangeValue () =
+//            let originalValue = value.Get()
+//            if originalValue = 0L || originalValue > newValue then
+//                let result = value.CompareAndSet(newValue, originalValue)
+//                if result <> originalValue then exchangeValue()
+//        exchangeValue()
+//
+//    /// Gets the current value
+//    member __.GetValue() = value.Get()
+//    /// Gets the monitor configuration
+//    member __.Config = config.WithTag(DataSourceType.Gauge)
+//    /// Reset the gauge
+//    member __.Reset() = value.Set(0L)
+//
+//    interface IGauge<int64> with
+//        member self.Set(newValue) = self.Set(newValue)
+//        member self.GetValue() = self.GetValue() :> obj
+//        member self.Config = self.Config
+//        member self.Reset() = self.Reset()
