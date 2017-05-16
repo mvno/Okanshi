@@ -69,11 +69,13 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     let syncRoot = new obj()
 
     let updateStatistics' elapsed =
+        clock.Freeze()
         count.Increment() |> ignore
         rate.Increment() |> ignore
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
+        clock.Unfreeze()
     
     let updateStatistics elapsed = 
         lockWithArg syncRoot elapsed updateStatistics'

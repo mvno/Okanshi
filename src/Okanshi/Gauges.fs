@@ -140,9 +140,11 @@ type AverageGauge(config : MonitorConfig, step : TimeSpan, clock : IClock) =
     let syncRoot = new obj()
 
     let rec updateAverage v =
+        clock.Freeze()
         let count = count.Increment(1L)
         let original = value.GetCurrent().Get()
         value.GetCurrent().Set(((original * (count - 1L)) + v) / count)
+        clock.Unfreeze()
 
     new (config, step) = AverageGauge(config, step, new SystemClock())
 
