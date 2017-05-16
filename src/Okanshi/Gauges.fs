@@ -1,6 +1,7 @@
 ﻿namespace Okanshi
 
 open System
+open Okanshi.Helpers
 
 /// Monitor type that provides the current value, fx. the percentage of disk space used
 type IGauge<'T> =
@@ -133,29 +134,31 @@ type DecimalGauge(config : MonitorConfig) =
         member self.Reset() = self.Reset()
 
 /// Gauge that keeps track of the average value since last reset. Initial value is 0.
-//type AverageGauge(config : MonitorConfig) =
-//    let value = 0
-//    let count = 0
-//    let syncRoot = new obj()
-//
-//    /// Sets the value
-//    member __.Set(newValue) =
-//        let rec exchangeValue () =
-//            let originalValue = value.Get()
-//            if originalValue = 0L || originalValue > newValue then
-//                let result = value.CompareAndSet(newValue, originalValue)
-//                if result <> originalValue then exchangeValue()
-//        exchangeValue()
-//
-//    /// Gets the current value
-//    member __.GetValue() = value.Get()
-//    /// Gets the monitor configuration
-//    member __.Config = config.WithTag(DataSourceType.Gauge)
-//    /// Reset the gauge
-//    member __.Reset() = value.Set(0L)
-//
-//    interface IGauge<int64> with
-//        member self.Set(newValue) = self.Set(newValue)
-//        member self.GetValue() = self.GetValue() :> obj
-//        member self.Config = self.Config
-//        member self.Reset() = self.Reset()
+type AverageGauge(config : MonitorConfig, step : TimeSpan, clock : IClock) =
+    let value = new StepLong(0L, step, clock)
+    let count = new StepLong(0L, step, clock)
+    let syncRoot = new obj()
+
+    let rec updateAverage v =
+        let count = count.Increment(1L)
+        let original = value.GetCurrent().Get()
+        value.GetCurrent().Set(((original * (count - 1L)) + v) / count)
+
+    new (config, step) = AverageGauge(config, step, SystemClock.Instance)
+
+    /// Sets the value
+    member __.Set(newValue) =
+        lockWithArg syncRoot newValue updateAverage
+
+    /// Gets the current value
+    member __.GetValue() = value.Poll().Value
+    /// Gets the monitor configuration
+    member __.Config = config.WithTag(DataSourceType.Gauge)
+    /// Reset the gauge
+    member __.Reset() = value.GetCurrent().Set(0L)
+
+    interface IGauge<int64> with
+        member self.Set(newValue) = self.Set(newValue)
+        member self.GetValue() = self.GetValue() :> obj
+        member self.Config = self.Config
+        member self.Reset() = self.Reset()

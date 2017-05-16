@@ -44,6 +44,7 @@
     <Compile Include="AtomicDecimalTest.cs" />
     <Compile Include="AtomicDoubleTest.cs" />
     <Compile Include="AtomicLongTest.cs" />
+    <Compile Include="AverageGaugeTest.cs" />
     <Compile Include="BasicCounterTest.cs" />
     <Compile Include="BasicGaugeTest.cs" />
     <Compile Include="BasicTimerTest.cs" />
