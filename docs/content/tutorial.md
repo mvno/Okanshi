@@ -1,20 +1,6 @@
 Tutorial
 ========================
 
-Starting the API
-----------------
-
-After Okanshi has been added to your project, you start the monitor like this:
-
-    [lang=csharp]
-    var api = new MonitorApi();
-    api.Start();
-
-You should now be able to access the HTTP endpoint using [http://localhost:13004](http://localhost:13004).
-As nothing has been monitored yet, it will return a JSON response with an empty object, like this:
-
-    {}
-
 Metrics
 -------
 
@@ -68,6 +54,20 @@ Example:
     gauge.Set(10);
     gauge.Set(0);
     gauge.Set(1);
+
+#### AverageGauge ####
+
+The `AverageGauge` monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval.
+
+Example:
+
+    [lang=csharp]
+    OkanshiMonitor.AverageGauge("Average queue length", TimeSpan.FromMinutes(1)).Set(100); // Average is 100
+    OkanshiMonitor.AverageGauge("Average queue length", TimeSpan.FromMinutes(1)).Set(200); // Average is 150
+    // OR
+    var gauge = new AverageGauge(MonitorConfig.Build("Maximum number of users"), TimeSpan.FromMinutes(1));
+    gauge.Set(100);
+    gauge.Set(200);
 
 #### Long/Double/DecimalGauge ####
 
@@ -174,7 +174,9 @@ Example:
     timer.Record(() => Thread.Sleep(500));
     timer.Record(() => Thread.Sleep(100))
 
-#### LongTaskTimer ####
+#### DurationTimer ####
+
+Prior to version 4, this was called LongTaskTimer.
 
 A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .
 
@@ -194,7 +196,7 @@ A monitor for tracking long running operations that might last for many minutes 
 
 ### Performance counters
 
-As of v4.0.0 it is also possible to monitor Windows performance counters.
+As of version 4 it is also possible to monitor Windows performance counters.
 
     [lang=csharp]
     OkanshiMonitor.PerformanceCounter(PerformanceCounterConfig.Build("Memory", "Available Bytes"), "AvailableBytes");
@@ -219,16 +221,78 @@ F#:
     [lang=fsharp]
     HealthChecks.Add("key", (fun () -> System.IO.Directory.GetFiles("C:\\MyData").Length = 0))
 
-The `Func` passed in just have to return a boolean, indicating pass or fail. The status of the health checks can be seen using
-[http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
+The `Func` passed in just have to return a boolean, indicating pass or fail.
 
-As of version 4.0.0 health checks can also be registered as a monitor. This is done like this:
+As of version 4 health checks can also be registered as a monitor. This is done like this:
 
     [lang=csharp]
     OkanshiMonitor.HealthCheck(() => Directory.GetFiles("C:\\MyData").Length == 0, "NoFilesInDirectory")
 
+HTTP Endpoint
+=============
+
+Prior to version 4, the HTTP endpoint was include in the core package. This is no longer the case, it now exists in a separate package called Okanshi.Endpoint.
+
+Starting the endpoint
+---------------------
+
+You start the monitor like this:
+
+    [lang=csharp]
+    var api = new MonitorApi();
+    api.Start();
+
+You should now be able to access the HTTP endpoint using [http://localhost:13004](http://localhost:13004).
+As nothing has been monitored yet, it will return a JSON response with an empty object, like this:
+
+    {}
+
+For custom configuration of the endpoint see the API reference.
+
+Health checks
+-------------
+
+To see the current status of all defined healthchecks, go to [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
+
 Assembly dependencies
 ---------------------
 
-To see all assembly dependencies for you application just access [http://localhost:13004/dependencies](http://localhost:13004/dependencies). It will provide
-a list of the names and version of all dependencies.
+The endpoint can show all assemblies currently loaded in the AppDomain.
+
+To see all assembly dependencies for you application just access [http://localhost:13004/dependencies](http://localhost:13004/dependencies). It will provide a list of the names and version of all dependencies.
+
+NuGet dependencies
+------------------
+
+If the package.config file is available in the current directory of the process. The endpoint can show all NuGet dependencies and their version. This information can be accessed through [http://localhost:13004/packages](http://localhost:13004/packages).
+
+Observers
+=========
+
+Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database. An observer storing metrics in-memory is included in the Okanshi package.
+
+An observer to send metrics to InfluxDB is provided through another NuGet package called, Okanshi.InfluxDBObserver.
+
+Observer setup
+--------------
+
+Setting up an observer is easy:
+
+    [lang=csharp]
+    var observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
+
+This observer stores metrics in-memory using a poller getting data from the default monitor registry.
+
+OWIN
+====
+
+Using the package Okanshi.Owin it is possible to measure the request duration grouped by path, HTTP method and optionally the response status code.
+
+To enable use the `AppBuilder` extension method, `UseOkanshi`:
+
+    [lang=csharp]
+    app.UseOkanshi()
+
+For configuration see the API reference.
+
+Currently the OWIN integration always uses the default registry.
