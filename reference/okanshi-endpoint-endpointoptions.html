@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>BasicTimer - Okanshi</title>
+    <title>EndpointOptions - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,12 +35,12 @@
 
 
 
-<h1>BasicTimer</h1>
+<h1>EndpointOptions</h1>
 <p>
-  <span>Namespace: Okanshi</span><br />
+  <span>Namespace: Okanshi.Endpoint</span><br />
 </p>
 <div class="xmldoc">
-<p>A simple timer providing the total time, count, min and max for the times that have been recorded</p>
+<p>Api options</p>
 
 </div>
   <h3>Constructors</h3>
@@ -52,53 +52,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
-            new(config, step, clock)
+          <code onmouseout="hideTip(event, '261', 261)" onmouseover="showTip(event, '261', 261)">
+            new()
           </code>
-          <div class="tip" id="43">
-            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan * clock:IClock) -&gt; BasicTimer<br />
+          <div class="tip" id="261">
+            <strong>Signature:</strong> unit -&gt; EndpointOptions<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L101-101" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
-            new(config, step)
-          </code>
-          <div class="tip" id="44">
-            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan) -&gt; BasicTimer<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L100-100" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
-            new(registry, config, step, clock)
-          </code>
-          <div class="tip" id="45">
-            <strong>Signature:</strong> (registry:IMonitorRegistry * config:MonitorConfig * step:TimeSpan * clock:IClock) -&gt; BasicTimer<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L59-59" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L32-32" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -117,202 +79,211 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            Config
+          <code onmouseout="hideTip(event, '262', 262)" onmouseover="showTip(event, '262', 262)">
+            CollectMetricsOnProcessExit()
           </code>
-          <div class="tip" id="46">
-            <strong>Signature:</strong> MonitorConfig<br />
+          <div class="tip" id="262">
+            <strong>Signature:</strong> unit -&gt; bool<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L125-125" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the monitor config</p>
+          <p>Should metrics be collected when process is exiting. Default value is false.</p>
 
 
-              <p>CompiledName: <code>get_Config</code></p>
+              <p>CompiledName: <code>set_CollectMetricsOnProcessExit</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
-            GetCount()
+          <code onmouseout="hideTip(event, '263', 263)" onmouseover="showTip(event, '263', 263)">
+            CollectMetricsOnProcessExit()
           </code>
-          <div class="tip" id="47">
-            <strong>Signature:</strong> unit -&gt; int64<br />
+          <div class="tip" id="263">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L110-110" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the rate of calls timed within the specified step</p>
+          <p>Should metrics be collected when process is exiting. Default value is false.</p>
 
 
+              <p>CompiledName: <code>get_CollectMetricsOnProcessExit</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
-            GetMax()
+          <code onmouseout="hideTip(event, '264', 264)" onmouseover="showTip(event, '264', 264)">
+            EnableCors()
           </code>
-          <div class="tip" id="48">
-            <strong>Signature:</strong> unit -&gt; int64<br />
+          <div class="tip" id="264">
+            <strong>Signature:</strong> unit -&gt; bool<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L116-116" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L34-34" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Get the maximum value of all calls</p>
+          <p>Enable CORS request. Default value is false</p>
 
 
+              <p>CompiledName: <code>set_EnableCors</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
-            GetMin()
+          <code onmouseout="hideTip(event, '265', 265)" onmouseover="showTip(event, '265', 265)">
+            EnableCors()
           </code>
-          <div class="tip" id="49">
-            <strong>Signature:</strong> unit -&gt; int64<br />
+          <div class="tip" id="265">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L119-119" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L34-34" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Get the manimum value of all calls</p>
+          <p>Enable CORS request. Default value is false</p>
 
 
+              <p>CompiledName: <code>get_EnableCors</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
-            GetTotalTime()
+          <code onmouseout="hideTip(event, '266', 266)" onmouseover="showTip(event, '266', 266)">
+            HttpPrefix()
           </code>
-          <div class="tip" id="50">
-            <strong>Signature:</strong> unit -&gt; int64<br />
+          <div class="tip" id="266">
+            <strong>Signature:</strong> unit -&gt; string<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L122-122" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L36-36" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the the total time for all calls within the specified step</p>
+          <p>The HTTP prefix used as endpoint. Default value is "<a href="http://+:13004/"">http://+:13004/"</a></p>
 
 
+              <p>CompiledName: <code>set_HttpPrefix</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
-            GetValue()
+          <code onmouseout="hideTip(event, '267', 267)" onmouseover="showTip(event, '267', 267)">
+            HttpPrefix()
           </code>
-          <div class="tip" id="51">
-            <strong>Signature:</strong> unit -&gt; int64<br />
+          <div class="tip" id="267">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L113-113" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L36-36" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the average calls time within the specified step</p>
+          <p>The HTTP prefix used as endpoint. Default value is "<a href="http://+:13004/"">http://+:13004/"</a></p>
 
 
+              <p>CompiledName: <code>get_HttpPrefix</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '52', 52)" onmouseover="showTip(event, '52', 52)">
-            Record(f)
+          <code onmouseout="hideTip(event, '268', 268)" onmouseover="showTip(event, '268', 268)">
+            NumberOfSamplesToStore()
           </code>
-          <div class="tip" id="52">
-            <strong>Signature:</strong> f:Action -&gt; unit<br />
+          <div class="tip" id="268">
+            <strong>Signature:</strong> unit -&gt; int<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L107-107" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Time a System.Action call</p>
+          <p>The number of samples to store in memory. Default value is 100</p>
 
 
+              <p>CompiledName: <code>set_NumberOfSamplesToStore</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '53', 53)" onmouseover="showTip(event, '53', 53)">
-            Record(f)
+          <code onmouseout="hideTip(event, '269', 269)" onmouseover="showTip(event, '269', 269)">
+            NumberOfSamplesToStore()
           </code>
-          <div class="tip" id="53">
-            <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; &#39;T<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="269">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L104-104" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Time a System.Func call and return the value</p>
+          <p>The number of samples to store in memory. Default value is 100</p>
 
 
+              <p>CompiledName: <code>get_NumberOfSamplesToStore</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '54', 54)" onmouseover="showTip(event, '54', 54)">
-            Register(elapsed)
+          <code onmouseout="hideTip(event, '270', 270)" onmouseover="showTip(event, '270', 270)">
+            PollingInterval()
           </code>
-          <div class="tip" id="54">
-            <strong>Signature:</strong> elapsed:int64 -&gt; unit<br />
+          <div class="tip" id="270">
+            <strong>Signature:</strong> unit -&gt; TimeSpan<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L131-131" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L38-38" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Manually register a timing, should only be used in special case</p>
+          <p>The polling interval. Default value is 1 minute</p>
 
 
+              <p>CompiledName: <code>set_PollingInterval</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '55', 55)" onmouseover="showTip(event, '55', 55)">
-            Start()
+          <code onmouseout="hideTip(event, '271', 271)" onmouseover="showTip(event, '271', 271)">
+            PollingInterval()
           </code>
-          <div class="tip" id="55">
-            <strong>Signature:</strong> unit -&gt; OkanshiTimer<br />
+          <div class="tip" id="271">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L128-128" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L38-38" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Start a manually controlled timinig</p>
+          <p>The polling interval. Default value is 1 minute</p>
 
 
+              <p>CompiledName: <code>get_PollingInterval</code></p>
         </td>
       </tr>
     </tbody>

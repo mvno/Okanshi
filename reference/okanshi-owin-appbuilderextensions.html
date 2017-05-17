@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>ICounter<'T> - Okanshi</title>
+    <title>AppBuilderExtensions - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,58 +35,32 @@
 
 
 
-<h1>ICounter<'T></h1>
+<h1>AppBuilderExtensions</h1>
 <p>
-  <span>Namespace: Okanshi</span><br />
+  <span>Namespace: Okanshi.Owin</span><br />
 </p>
 <div class="xmldoc">
-<p>Tracks how often some event occurs</p>
+<p>IAppBuilder extensions</p>
 
 </div>
-  <h3>Instance members</h3>
+  <h3>Static members</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Instance member</td><td>Description</td></tr>
+      <tr><td>Static member</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
-            Increment(arg1)
+          <code onmouseout="hideTip(event, '290', 290)" onmouseover="showTip(event, '290', 290)">
+            UseOkanshi(appBuilder, options)
           </code>
-          <div class="tip" id="102">
-            <strong>Signature:</strong> &#39;T -&gt; unit<br />
-              <strong>Modifiers:</strong> abstract<br />
+          <div class="tip" id="290">
+            <strong>Signature:</strong> (appBuilder:IAppBuilder * options:OkanshiOwinOptions) -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L14-14" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Increment the counter by the specified amount</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
-            Increment()
-          </code>
-          <div class="tip" id="103">
-            <strong>Signature:</strong> unit -&gt; unit<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L11-11" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Increment the counter by one</p>
+          <p>Use Okanshi middleware for timining all the requests.</p>
 
 
         </td>

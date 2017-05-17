@@ -52,15 +52,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '240', 240)" onmouseover="showTip(event, '240', 240)">
-            new(interval)
+          <code onmouseout="hideTip(event, '246', 246)" onmouseover="showTip(event, '246', 246)">
+            new(interval, clock)
           </code>
-          <div class="tip" id="240">
-            <strong>Signature:</strong> interval:TimeSpan -&gt; StepLong<br />
+          <div class="tip" id="246">
+            <strong>Signature:</strong> (interval:TimeSpan * clock:IClock) -&gt; StepLong<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L34-34" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L185-185" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -71,15 +71,34 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '241', 241)" onmouseover="showTip(event, '241', 241)">
-            new(initialValue, step)
+          <code onmouseout="hideTip(event, '247', 247)" onmouseover="showTip(event, '247', 247)">
+            new(interval)
           </code>
-          <div class="tip" id="241">
-            <strong>Signature:</strong> (initialValue:int64 * step:TimeSpan) -&gt; StepLong<br />
+          <div class="tip" id="247">
+            <strong>Signature:</strong> interval:TimeSpan -&gt; StepLong<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L15-15" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L184-184" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '248', 248)" onmouseover="showTip(event, '248', 248)">
+            new(initialValue, step, clock)
+          </code>
+          <div class="tip" id="248">
+            <strong>Signature:</strong> (initialValue:int64 * step:TimeSpan * clock:IClock) -&gt; StepLong<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L145-145" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -98,15 +117,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '242', 242)" onmouseover="showTip(event, '242', 242)">
+          <code onmouseout="hideTip(event, '249', 249)" onmouseover="showTip(event, '249', 249)">
             GetCurrent()
           </code>
-          <div class="tip" id="242">
+          <div class="tip" id="249">
             <strong>Signature:</strong> unit -&gt; AtomicLong<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L37-37" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L188-188" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -116,15 +135,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '243', 243)" onmouseover="showTip(event, '243', 243)">
+          <code onmouseout="hideTip(event, '250', 250)" onmouseover="showTip(event, '250', 250)">
             Increment(amount)
           </code>
-          <div class="tip" id="243">
+          <div class="tip" id="250">
             <strong>Signature:</strong> amount:int64 -&gt; int64<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L56-56" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L194-194" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -136,15 +155,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '244', 244)" onmouseover="showTip(event, '244', 244)">
+          <code onmouseout="hideTip(event, '251', 251)" onmouseover="showTip(event, '251', 251)">
             Poll()
           </code>
-          <div class="tip" id="244">
+          <div class="tip" id="251">
             <strong>Signature:</strong> unit -&gt; Datapoint<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L42-42" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Atomic.fs#L191-191" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

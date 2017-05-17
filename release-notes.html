@@ -32,10 +32,23 @@
       <div class="row">
         <div class="span9" id="main">
           
+<h3><a name="4-0-0" class="anchor" href="#4-0-0">4.0.0</a></h3>
+<ul>
+<li>Automatic polling on metrics on process exit, now also supports AppDomain unloads</li>
+<li>Fix dependencies on NuGet package</li>
+<li>Implemented InfluxDB observer for pushing metrics to InfluxDB. It is released in a separate package, Okanshi.InfluxDBObserver.</li>
+<li>Add new NuGet package with support for OWIN.</li>
+<li>Added support for registering a custom timing by providing a number describing the elapsed number of milliseconds.</li>
+<li>Improved performance when using OkanshiMonitor to get monitors</li>
+<li>Ensured thread safety in metric types by using locks where needed</li>
+<li>Added new gauge, AverageGauge, for calculating average value for a specific interval</li>
+</ul>
 <h3><a name="4-0-0-beta" class="anchor" href="#4-0-0-beta">4.0.0-beta</a></h3>
 <p><strong>BREAKING CHANGES</strong></p>
 <ul>
 <li>Renames DurationTimer to LongTaskTimer</li>
+<li>BasicTimer now has both rate and count. This means the old count value (which was a rate), now is a counter</li>
+<li>Make totalTime value in BasicTimer as counter instead of a rate</li>
 </ul>
 <p><strong>Other</strong></p>
 <ul>

@@ -34,22 +34,6 @@
         <div class="span9" id="main">
           
 <h1><a name="Tutorial" class="anchor" href="#Tutorial">Tutorial</a></h1>
-<h2><a name="Starting-the-API" class="anchor" href="#Starting-the-API">Starting the API</a></h2>
-<p>After Okanshi has been added to your project, you start the monitor like this:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">var</span> api <span class="o">=</span> <span class="k">new</span> MonitorApi();
-api.Start();
-</code></pre></td></tr></table>
-<p>You should now be able to access the HTTP endpoint using <a href="http://localhost:13004"><a href="http://localhost:13004">http://localhost:13004</a></a>.
-As nothing has been monitored yet, it will return a JSON response with an empty object, like this:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">{}
-</code></pre></td>
-</tr>
-</table>
 <h2><a name="Metrics" class="anchor" href="#Metrics">Metrics</a></h2>
 <p>Okanshi has a couple of different monitor types, divided into the following categories:</p>
 <ul>
@@ -114,6 +98,23 @@ gauge.Set(<span class="n">1</span>);
 gauge.Set(<span class="n">10</span>);
 gauge.Set(<span class="n">0</span>);
 gauge.Set(<span class="n">1</span>);
+</code></pre></td></tr></table>
+<h4><a name="AverageGauge" class="anchor" href="#AverageGauge">AverageGauge</a></h4>
+<p>The <code>AverageGauge</code> monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval.</p>
+<p>Example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.AverageGauge(<span class="s">"Average queue length"</span>, TimeSpan.FromMinutes(<span class="n">1</span>)).Set(<span class="n">100</span>); <span class="c">// Average is 100</span>
+OkanshiMonitor.AverageGauge(<span class="s">"Average queue length"</span>, TimeSpan.FromMinutes(<span class="n">1</span>)).Set(<span class="n">200</span>); <span class="c">// Average is 150</span>
+<span class="c">// OR</span>
+<span class="k">var</span> gauge <span class="o">=</span> <span class="k">new</span> AverageGauge(MonitorConfig.Build(<span class="s">"Maximum number of users"</span>), TimeSpan.FromMinutes(<span class="n">1</span>));
+gauge.Set(<span class="n">100</span>);
+gauge.Set(<span class="n">200</span>);
 </code></pre></td></tr></table>
 <h4><a name="Long-Double-DecimalGauge" class="anchor" href="#Long-Double-DecimalGauge">Long/Double/DecimalGauge</a></h4>
 <p>The <code>LongGauge</code>, <code>DoubleGauge</code> and <code>DecimalGauge</code> are gauges that handles <code>long</code>, <code>double</code> and <code>decimal</code> values respectively. The value you set is the value you get. Usage of these monitors is the same.</p>
@@ -235,11 +236,14 @@ Thread.Sleep(<span class="n">500</span>);
 timer.Stop(); <span class="c">// When stopped the timing is registered</span>
 </code></pre></td></tr></table>
 <h4><a name="BasicTimer" class="anchor" href="#BasicTimer">BasicTimer</a></h4>
-<p>This is a simple timer that, within a specified interval, measures:
-<em> the execution time of a function,
-</em> tracks the minimum and maximum time of the function call,
-<em> the number of times the function was called,
-</em> and the total time of the all calls.</p>
+<p>This is a simple timer that, within a specified interval, measures:</p>
+<ul>
+<li>The execution time of a function,</li>
+<li>Tracks the minimum and maximum time of the function call</li>
+<li>The number of times the function was called</li>
+<li>The total time of the all calls in the specified step</li>
+<li>The rate of the calls (the number of calls per second)</li>
+</ul>
 <p>Example:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -255,7 +259,8 @@ OkanshiMonitor.BasicTimer(<span class="s">"Query time"</span>, TimeSpan.FromSeco
 timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">500</span>));
 timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep(<span class="n">100</span>))
 </code></pre></td></tr></table>
-<h4><a name="LongTaskTimer" class="anchor" href="#LongTaskTimer">LongTaskTimer</a></h4>
+<h4><a name="DurationTimer" class="anchor" href="#DurationTimer">DurationTimer</a></h4>
+<p>Prior to version 4, this was called LongTaskTimer.</p>
 <p>A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -284,7 +289,7 @@ timer.Record(() <span class="o">=</span><span class="o">&gt;</span> Thread.Sleep
 Thread.Sleep(<span class="n">5000</span>);
 </code></pre></td></tr></table>
 <h3><a name="Performance-counters" class="anchor" href="#Performance-counters">Performance counters</a></h3>
-<p>As of v4.0.0 it is also possible to monitor Windows performance counters.</p>
+<p>As of version 4 it is also possible to monitor Windows performance counters.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -312,16 +317,57 @@ Health checks are added like this:</p>
 </code></pre></td>
 </tr>
 </table>
-<p>The <code>Func</code> passed in just have to return a boolean, indicating pass or fail. The status of the health checks can be seen using
-<a href="http://localhost:13004/healthchecks"><a href="http://localhost:13004/healthchecks">http://localhost:13004/healthchecks</a></a>.</p>
-<p>As of version 4.0.0 health checks can also be registered as a monitor. This is done like this:</p>
+<p>The <code>Func</code> passed in just have to return a boolean, indicating pass or fail.</p>
+<p>As of version 4 health checks can also be registered as a monitor. This is done like this:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.HealthCheck(() <span class="o">=</span><span class="o">&gt;</span> Directory.GetFiles(<span class="s">"C:\\MyData"</span>).Length <span class="o">=</span><span class="o">=</span> <span class="n">0</span>, <span class="s">"NoFilesInDirectory"</span>)
 </code></pre></td></tr></table>
+<h1><a name="HTTP-Endpoint" class="anchor" href="#HTTP-Endpoint">HTTP Endpoint</a></h1>
+<p>Prior to version 4, the HTTP endpoint was include in the core package. This is no longer the case, it now exists in a separate package called Okanshi.Endpoint.</p>
+<h2><a name="Starting-the-endpoint" class="anchor" href="#Starting-the-endpoint">Starting the endpoint</a></h2>
+<p>You start the monitor like this:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">var</span> api <span class="o">=</span> <span class="k">new</span> MonitorApi();
+api.Start();
+</code></pre></td></tr></table>
+<p>You should now be able to access the HTTP endpoint using <a href="http://localhost:13004"><a href="http://localhost:13004">http://localhost:13004</a></a>.
+As nothing has been monitored yet, it will return a JSON response with an empty object, like this:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">{}
+</code></pre></td>
+</tr>
+</table>
+<p>For custom configuration of the endpoint see the API reference.</p>
+<h2><a name="Health-checks-1" class="anchor" href="#Health-checks-1">Health checks</a></h2>
+<p>To see the current status of all defined healthchecks, go to <a href="http://localhost:13004/healthchecks"><a href="http://localhost:13004/healthchecks">http://localhost:13004/healthchecks</a></a>.</p>
 <h2><a name="Assembly-dependencies" class="anchor" href="#Assembly-dependencies">Assembly dependencies</a></h2>
-<p>To see all assembly dependencies for you application just access <a href="http://localhost:13004/dependencies"><a href="http://localhost:13004/dependencies">http://localhost:13004/dependencies</a></a>. It will provide
-a list of the names and version of all dependencies.</p>
+<p>The endpoint can show all assemblies currently loaded in the AppDomain.</p>
+<p>To see all assembly dependencies for you application just access <a href="http://localhost:13004/dependencies"><a href="http://localhost:13004/dependencies">http://localhost:13004/dependencies</a></a>. It will provide a list of the names and version of all dependencies.</p>
+<h2><a name="NuGet-dependencies" class="anchor" href="#NuGet-dependencies">NuGet dependencies</a></h2>
+<p>If the package.config file is available in the current directory of the process. The endpoint can show all NuGet dependencies and their version. This information can be accessed through <a href="http://localhost:13004/packages"><a href="http://localhost:13004/packages">http://localhost:13004/packages</a></a>.</p>
+<h1><a name="Observers" class="anchor" href="#Observers">Observers</a></h1>
+<p>Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database. An observer storing metrics in-memory is included in the Okanshi package.</p>
+<p>An observer to send metrics to InfluxDB is provided through another NuGet package called, Okanshi.InfluxDBObserver.</p>
+<h2><a name="Observer-setup" class="anchor" href="#Observer-setup">Observer setup</a></h2>
+<p>Setting up an observer is easy:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">var</span> observer <span class="o">=</span> <span class="k">new</span> MemoryMetricObserver(<span class="k">new</span> MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
+</code></pre></td></tr></table>
+<p>This observer stores metrics in-memory using a poller getting data from the default monitor registry.</p>
+<h1><a name="OWIN" class="anchor" href="#OWIN">OWIN</a></h1>
+<p>Using the package Okanshi.Owin it is possible to measure the request duration grouped by path, HTTP method and optionally the response status code.</p>
+<p>To enable use the <code>AppBuilder</code> extension method, <code>UseOkanshi</code>:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">app.UseOkanshi()
+</code></pre></td></tr></table>
+<p>For configuration see the API reference.</p>
+<p>Currently the OWIN integration always uses the default registry.</p>
 
 <div class="tip" id="fs1">namespace System</div>
 <div class="tip" id="fs2">namespace System.IO</div>

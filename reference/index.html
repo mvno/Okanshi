@@ -69,6 +69,14 @@
         </tr>
         <tr>
           <td class="type-name">
+            <a href="okanshi-averagegauge.html">AverageGauge</a>
+          </td>
+          <td class="xmldoc"><p>Gauge that keeps track of the average value since last reset. Initial value is 0.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="okanshi-basiccounter.html">BasicCounter</a>
           </td>
           <td class="xmldoc"><p>A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
@@ -137,14 +145,6 @@ the previous cached value will be dropped, and new sample coming in will be trea
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-dependency.html">Dependency</a>
-          </td>
-          <td class="xmldoc"><p>Dependecy information</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="okanshi-doublecounter.html">DoubleCounter</a>
           </td>
           <td class="xmldoc"><p>A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.</p>
@@ -180,6 +180,14 @@ the previous cached value will be dropped, and new sample coming in will be trea
             <a href="okanshi-iatomic-1.html">IAtomic<'T></a>
           </td>
           <td class="xmldoc"><p>Perform atomic operations on a type</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-iclock.html">IClock</a>
+          </td>
+          <td class="xmldoc"><p>Interface for defining the clock used</p>
 
 </td>
         </tr>
@@ -264,6 +272,14 @@ The names of the monitors will be the base name passed in the config to the cons
         </tr>
         <tr>
           <td class="type-name">
+            <a href="okanshi-manualclock.html">ManualClock</a>
+          </td>
+          <td class="xmldoc"><p>Manual clock, should only be used in tests</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="okanshi-maxgauge.html">MaxGauge</a>
           </td>
           <td class="xmldoc"><p>Gauge that keeps track of the maximum value seen since the last reset. Updates should be
@@ -318,22 +334,6 @@ non-negative, the initial value is 0.</p>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-monitorapi.html">MonitorApi</a>
-          </td>
-          <td class="xmldoc"><p>Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="okanshi-monitorapioptions.html">MonitorApiOptions</a>
-          </td>
-          <td class="xmldoc"><p>Api options</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="okanshi-monitorconfig.html">MonitorConfig</a>
           </td>
           <td class="xmldoc"><p>Configuration of a monitor</p>
@@ -366,12 +366,6 @@ non-negative, the initial value is 0.</p>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-okanshimonitormessage.html">OkanshiMonitorMessage</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="okanshi-okanshimonitorregistry.html">OkanshiMonitorRegistry</a>
           </td>
           <td class="xmldoc"><p>Monitor registry used by the OkanshiMonitor. This registry allows registration of monitors
@@ -386,12 +380,6 @@ with the same name, but different types</p>
           <td class="xmldoc"><p>Timer that is started and stopped manually</p>
 
 </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="okanshi-package.html">Package</a>
-          </td>
-          <td class="xmldoc"></td>
         </tr>
         <tr>
           <td class="type-name">
@@ -420,14 +408,6 @@ returning any value.</p>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-response-1.html">Response<'T></a>
-          </td>
-          <td class="xmldoc"><p>Response object</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="okanshi-stepcounter.html">StepCounter</a>
           </td>
           <td class="xmldoc"><p>A simple counter backed by a StepLong. The value is the rate for the previous interval as defined by the step.</p>
@@ -439,6 +419,14 @@ returning any value.</p>
             <a href="okanshi-steplong.html">StepLong</a>
           </td>
           <td class="xmldoc"><p>Utility class for managing a set of AtomicLong instances mapped to a particular step interval.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-systemclock.html">SystemClock</a>
+          </td>
+          <td class="xmldoc"><p>Wrapper around the system time</p>
 
 </td>
         </tr>
@@ -470,6 +458,136 @@ returning any value.</p>
             <a href="okanshi-stopwatchextensions.html">StopwatchExtensions</a>
           </td>
           <td class="xmldoc"><p>Extenstions for the System.Diagnostics.StopWatch class</p>
+
+</td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Endpoint Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-dependency.html">Dependency</a>
+          </td>
+          <td class="xmldoc"><p>Dependecy information</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-endpointoptions.html">EndpointOptions</a>
+          </td>
+          <td class="xmldoc"><p>Api options</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-monitorendpoint.html">MonitorEndpoint</a>
+          </td>
+          <td class="xmldoc"><p>Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-package.html">Package</a>
+          </td>
+          <td class="xmldoc"><p>Pacakge information</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-response-1.html">Response<'T></a>
+          </td>
+          <td class="xmldoc"><p>Response object</p>
+
+</td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Helpers Namespace</h2>
+    <div>
+      <table class="table table-bordered module-list">
+    <thead>
+      <tr><td>Module</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="module-name">
+            <a href="okanshi-helpers-lock.html">Lock</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Observers Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-observers-influxdbobserver.html">InfluxDbObserver</a>
+          </td>
+          <td class="xmldoc"><p>Observer for posting metrics to InfluxDB.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-observers-influxdbobserveroptions.html">InfluxDbObserverOptions</a>
+          </td>
+          <td class="xmldoc"><p>Options for the InfluxDB observer</p>
+
+</td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Owin Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-owin-appbuilderextensions.html">AppBuilderExtensions</a>
+          </td>
+          <td class="xmldoc"><p>IAppBuilder extensions</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-owin-okanshimiddleware.html">OkanshiMiddleware</a>
+          </td>
+          <td class="xmldoc"><p>The Okanshi middleware</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-owin-okanshiowinoptions.html">OkanshiOwinOptions</a>
+          </td>
+          <td class="xmldoc"><p>Okanshi options</p>
 
 </td>
         </tr>

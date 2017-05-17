@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>ICounter<'T> - Okanshi</title>
+    <title>Lock - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,60 +35,55 @@
 
 
 
-<h1>ICounter<'T></h1>
+<h1>Lock</h1>
 <p>
-  <span>Namespace: Okanshi</span><br />
+  <span>Namespace: Okanshi.Helpers</span><br />
 </p>
 <div class="xmldoc">
-<p>Tracks how often some event occurs</p>
-
 </div>
-  <h3>Instance members</h3>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Instance member</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
-            Increment(arg1)
+          <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
+            lock 
           </code>
-          <div class="tip" id="102">
-            <strong>Signature:</strong> &#39;T -&gt; unit<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
+          <div class="tip" id="3">
+            <strong>Signature:</strong> &#39;a -&gt; (unit -&gt; &#39;b) -&gt; &#39;b<br />
+                          <strong>Type parameters:</strong> 'a, 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L14-14" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Helpers.fs#L5-5" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Increment the counter by the specified amount</p>
-
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
-            Increment()
+          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
+            lockWithArg lockObj arg f
           </code>
-          <div class="tip" id="103">
-            <strong>Signature:</strong> unit -&gt; unit<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
+          <div class="tip" id="4">
+            <strong>Signature:</strong> lockObj:&#39;T -&gt; arg:&#39;a -&gt; f:(&#39;a -&gt; &#39;b) -&gt; &#39;b<br />
+                          <strong>Type parameters:</strong> 'T, 'a, 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L11-11" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Helpers.fs#L7-7" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Increment the counter by one</p>
-
-
+          
         </td>
       </tr>
     </tbody>
