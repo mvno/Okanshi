@@ -77,7 +77,7 @@ namespace Okanshi.Observers
                     .Select(x => new Field(x.statisticsTag.Value, Convert.ToSingle(x.metric.Value)))
                     .ToList();
                 var fields = statisticFields.Any() ? statisticFields : new List<Field> { new Field("value", Convert.ToSingle(metricGroup.First().Value)) };
-                fields.AddRange(metricTags.Where(options.TagToFieldSelector).Select(tag => new Field(tag.Key, Convert.ToSingle(tag.Value))));
+                fields.AddRange(metricTags.Where(options.TagToFieldSelector).Select(ConvertTagToField));
                 yield return new Point {
                     Measurement = metricGroup.Key,
                     Timestamp = metricGroup.First().Timestamp.DateTime,
@@ -85,6 +85,29 @@ namespace Okanshi.Observers
                     Tags = tags
                 };
             }
+        }
+
+        private static Field ConvertTagToField(Tag tag)
+        {
+            int i;
+            if (int.TryParse(tag.Value, out i))
+            {
+                return new Field(tag.Key, i);
+            }
+
+            float f;
+            if (float.TryParse(tag.Value, out f))
+            {
+                return new Field(tag.Key, f);
+            }
+
+            bool b;
+            if (bool.TryParse(tag.Value, out b))
+            {
+                return new Field(tag.Key, b);
+            }
+
+            return new Field(tag.Key, tag.Value);
         }
 
         /// <summary>

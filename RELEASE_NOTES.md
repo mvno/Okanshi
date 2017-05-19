@@ -1,3 +1,7 @@
+### 4.0.1
+
+* Fixed bug in the InfluxDB observer, causing all tags converted to fields to only allow floats.
+
 ### 4.0.0
 
 * Automatic polling on metrics on process exit, now also supports AppDomain unloads
