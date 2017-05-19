@@ -97,8 +97,8 @@ namespace Okanshi.InfluxDBObserver.Tests {
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
                     Arg.Is<IEnumerable<Point>>(points => points.All(point => point.Tags.All(tag => tag.Key != tagName) &&
                                                                              point.Fields.Any(
-                                                                                 field => field.Key == tagName && (float)field.Value ==
-                                                                                          Convert.ToSingle(tagValue)))));
+                                                                                 field => field.Key == tagName && (int)field.Value ==
+                                                                                          Convert.ToInt32(tagValue)))));
         }
 
         [Fact]
@@ -181,8 +181,8 @@ namespace Okanshi.InfluxDBObserver.Tests {
                                                                              point.Fields.Any(
                                                                                  field => field.Key == statisticTagValue && (float)field.Value == value) &&
                                                                              point.Fields.Any(
-                                                                                 field => field.Key == tagName && (float)field.Value ==
-                                                                                          Convert.ToSingle(tagValue)))));
+                                                                                 field => field.Key == tagName && (int)field.Value ==
+                                                                                          Convert.ToInt32(tagValue)))));
         }
     }
 }
