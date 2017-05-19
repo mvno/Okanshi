@@ -143,7 +143,7 @@ namespace Okanshi.InfluxDBObserver.Tests {
         }
 
         [Fact]
-        public void Statistic_tag_is_converted_to_field() {
+        public void Statistic_tag_is_ignored() {
             const string tagName = "statistic";
             const string tagValue = "avg";
             const int value = 100;
@@ -158,6 +158,60 @@ namespace Okanshi.InfluxDBObserver.Tests {
                     Arg.Is<IEnumerable<Point>>(points => points.All(point => point.Tags.All(tag => tag.Key != tagName) &&
                                                                              point.Fields.Any(
                                                                                  field => field.Key == tagValue && (float)field.Value == value))));
+        }
+
+        [Fact]
+        public void Tags_can_be_converted_to_float() {
+            const string tagName = "tag";
+            const string tagValue = "10.2";
+            var options = new InfluxDbObserverOptions("databaseName") {
+                TagToFieldSelector = tag => tag.Key == tagName,
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, 0) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == tagName && (float)field.Value == Convert.ToSingle(tagValue)))));
+        }
+
+        [Fact]
+        public void Tags_can_be_converted_to_boolean() {
+            const string tagName = "tag";
+            const string tagValue = "true";
+            var options = new InfluxDbObserverOptions("databaseName") {
+                TagToFieldSelector = tag => tag.Key == tagName,
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, 0) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == tagName && (bool)field.Value == Convert.ToBoolean(tagValue)))));
+        }
+
+        [Fact]
+        public void Tags_can_be_converted_to_string() {
+            const string tagName = "tag";
+            const string tagValue = "a random string";
+            var options = new InfluxDbObserverOptions("databaseName") {
+                TagToFieldSelector = tag => tag.Key == tagName,
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, 0) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == tagName && (string)field.Value == tagValue))));
         }
 
         [Fact]
