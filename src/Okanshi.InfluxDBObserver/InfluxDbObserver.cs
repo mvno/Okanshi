@@ -45,7 +45,6 @@ namespace Okanshi.Observers
 
         public void Dispose() {
             poller.MetricsPolled -= OnMetricsPolled;
-            poller.Stop();
         }
 
         /// <summary>

@@ -1,3 +1,7 @@
+### 4.0.2
+
+* Fixed bug where diposing the InfluxDB observer, would cause the underlying poller to be stopped.
+
 ### 4.0.1
 
 * Fixed bug in the InfluxDB observer, causing all tags converted to fields to only allow floats.
