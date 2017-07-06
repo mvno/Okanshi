@@ -1,7 +1,7 @@
 ﻿namespace Okanshi
 
 open System
-open System.Collections.Concurrent
+open Okanshi.Helpers
 
 /// Registry to keep track for monitors
 type IMonitorRegistry =
@@ -18,16 +18,22 @@ type IMonitorRegistry =
 /// Monitor registry used by the OkanshiMonitor. This registry allows registration of monitors
 /// with the same name, but different types
 type OkanshiMonitorRegistry() =
-    let monitors = new ConcurrentDictionary<IMonitor, byte>()
+    let monitors = new System.Collections.Generic.HashSet<IMonitor>()
+    let syncRoot = new obj()
     
+    let getRegisteredMonitors'() = monitors |> Seq.toArray
+    let register' monitor = monitors.Add(monitor) |> ignore
+    let unregister' monitor = monitors.Remove(monitor) |> ignore
+    let isRegistered' monitor = monitors.Contains(monitor)
+
     /// Gets the registered monitors
-    member __.GetRegisteredMonitors() = monitors.Keys |> Seq.toArray
+    member __.GetRegisteredMonitors() = Lock.lock syncRoot getRegisteredMonitors'
     /// Register a monitor
-    member __.Register(monitor : IMonitor) = monitors.TryAdd(monitor, byte 0) |> ignore
+    member __.Register(monitor : IMonitor) = Lock.lockWithArg syncRoot monitor register'
     /// Unregister a monitor
-    member __.Unregister(monitor : IMonitor) = monitors.TryRemove(monitor) |> ignore
+    member __.Unregister(monitor : IMonitor) = Lock.lockWithArg syncRoot monitor unregister'
     /// Check if a monitor is registered
-    member __.IsRegistered(monitor : IMonitor) = monitors.ContainsKey(monitor)
+    member __.IsRegistered(monitor : IMonitor) = Lock.lockWithArg syncRoot monitor isRegistered'
 
     interface IMonitorRegistry with
         member self.GetRegisteredMonitors() = self.GetRegisteredMonitors()
