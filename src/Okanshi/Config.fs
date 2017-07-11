@@ -1,9 +1,12 @@
 ﻿namespace Okanshi
 
+open System
+
 /// A tag used to attach information to a monitor
 type Tag = { Key : string; Value : string }
 
 /// Configuration of a monitor
+[<CustomEquality; NoComparison>]
 type MonitorConfig =
     {
         /// Name of the monitor
@@ -23,6 +26,24 @@ type MonitorConfig =
     /// Adds multiple tags to the configuration
     member self.WithTags(tags : Tag seq) =
         { self with Tags = self.Tags |> Array.append (tags |> Seq.toArray) }
+
+    member self.Equals(other : MonitorConfig) =
+        if Object.ReferenceEquals(other, null) then false
+        elif Object.ReferenceEquals(other, self) then true
+        else other.GetHashCode() = self.GetHashCode()
+
+    override self.Equals(other : obj) =
+        match other with
+        | :? MonitorConfig as x -> self.Equals(x)
+        | _ -> false
+
+    override self.GetHashCode() =
+        let mutable hash = 2166136261L |> int
+        hash <- (hash * 16777619) ^^^ self.Name.GetHashCode()
+        self.Tags |> Seq.fold (fun state x -> (state * 16777619) ^^^ x.GetHashCode()) hash
+
+    interface IEquatable<MonitorConfig> with
+        member self.Equals(other) = self.Equals(other)
 
 /// A monitor
 type IMonitor =
