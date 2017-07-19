@@ -313,7 +313,7 @@ Health checks are added like this:</p>
 <p>F#:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">HealthChecks</span><span class="o">.</span><span class="i">Add</span>(<span class="s">&quot;key&quot;</span>, (<span class="k">fun</span> () <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">IO</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">Directory</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">GetFiles</span>(<span class="s">&quot;C:</span><span class="e">\\</span><span class="s">MyData&quot;</span>)<span class="o">.</span><span class="i">Length</span> <span class="o">=</span> <span class="n">0</span>))
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">HealthChecks</span><span class="o">.</span><span class="i">Add</span>(<span class="s">&quot;key&quot;</span>, (<span class="k">fun</span> () <span class="k">-&gt;</span> <span class="i">System</span><span class="o">.</span><span class="i">IO</span><span class="o">.</span><span class="i">Directory</span><span class="o">.</span><span class="i">GetFiles</span>(<span class="s">&quot;C:\\MyData&quot;</span>)<span class="o">.</span><span class="i">Length</span> <span class="o">=</span> <span class="n">0</span>))
 </code></pre></td>
 </tr>
 </table>
@@ -369,10 +369,6 @@ As nothing has been monitored yet, it will return a JSON response with an empty 
 <p>For configuration see the API reference.</p>
 <p>Currently the OWIN integration always uses the default registry.</p>
 
-<div class="tip" id="fs1">namespace System</div>
-<div class="tip" id="fs2">namespace System.IO</div>
-<div class="tip" id="fs3">type Directory =<br />&#160;&#160;static member CreateDirectory : path:string -&gt; DirectoryInfo + 1 overload<br />&#160;&#160;static member Delete : path:string -&gt; unit + 1 overload<br />&#160;&#160;static member EnumerateDirectories : path:string -&gt; IEnumerable&lt;string&gt; + 2 overloads<br />&#160;&#160;static member EnumerateFileSystemEntries : path:string -&gt; IEnumerable&lt;string&gt; + 2 overloads<br />&#160;&#160;static member EnumerateFiles : path:string -&gt; IEnumerable&lt;string&gt; + 2 overloads<br />&#160;&#160;static member Exists : path:string -&gt; bool<br />&#160;&#160;static member GetAccessControl : path:string -&gt; DirectorySecurity + 1 overload<br />&#160;&#160;static member GetCreationTime : path:string -&gt; DateTime<br />&#160;&#160;static member GetCreationTimeUtc : path:string -&gt; DateTime<br />&#160;&#160;static member GetCurrentDirectory : unit -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.IO.Directory</div>
-<div class="tip" id="fs4">System.IO.Directory.GetFiles(path: string) : string []<br />System.IO.Directory.GetFiles(path: string, searchPattern: string) : string []<br />System.IO.Directory.GetFiles(path: string, searchPattern: string, searchOption: System.IO.SearchOption) : string []</div>
 
         </div>
         <div class="span3">
