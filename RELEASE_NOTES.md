@@ -1,3 +1,7 @@
+### 4.0.3
+
+* Update InfluxDB.WriteOnly package, to fix a problem were int64 was not supported.
+
 ### 4.0.2
 
 * Fixed bug where diposing the InfluxDB observer, would cause the underlying poller to be stopped.
