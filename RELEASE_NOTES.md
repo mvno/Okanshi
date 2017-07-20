@@ -1,3 +1,7 @@
+### 4.0.4
+
+* Fix problem where locks weren't released correctly, causing deadlocks.
+
 ### 4.0.3
 
 * Update InfluxDB.WriteOnly package, to fix a problem were int64 was not supported.
