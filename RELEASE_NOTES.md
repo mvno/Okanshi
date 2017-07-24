@@ -1,3 +1,9 @@
+### 5.0.0-beta
+
+**BREAKING CHANGES**
+
+* Added GetOrAdd to Registry interface, this enables the caching of monitors to only occur in the registry. The Register have also been made obsolete.
+
 ### 4.0.4
 
 * Fix problem where locks weren't released correctly, causing deadlocks.
