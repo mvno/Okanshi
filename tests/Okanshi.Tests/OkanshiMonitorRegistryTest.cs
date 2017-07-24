@@ -104,22 +104,6 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Generating_keys_for_two_different_monitors_with_different_tags_results_in_different_keys()
-        {
-            var first = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "test12") });
-            var second = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "") });
-            first.Should().NotBe(second);
-        }
-
-        [Fact]
-        public void Generating_keys_for_two_monitors_with_same_name_and_tags_results_in_equal_keys()
-        {
-            var first = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "test12") });
-            var second = OkanshiMonitor.GetMonitorKey("test", typeof(int), new[] { new Tag("name", "test12") });
-            first.Should().Be(second);
-        }
-
-        [Fact]
         public void Get_or_add_two_monitors_of_same_type_with_same_tags_result_in_one_registration()
         {
             var monitor = new FakeMonitor();
