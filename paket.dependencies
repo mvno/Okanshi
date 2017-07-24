@@ -1,7 +1,7 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core 4.0.0.1 framework: >= net45, redirects: force
-nuget InfluxDB.WriteOnly
+nuget InfluxDB.WriteOnly >= 1.2.3
 nuget Newtonsoft.Json >= 7.0.1
 nuget Owin
 
