@@ -8,6 +8,7 @@ namespace Okanshi.Test
 		public HealthCheckTest()
 		{
 			HealthChecks.Clear();
+            DefaultMonitorRegistry.Instance.Clear();
 		}
 
 		[Fact]

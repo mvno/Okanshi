@@ -12,6 +12,7 @@ namespace Okanshi.Test
 
 	    public BasicTimerTest()
 	    {
+            DefaultMonitorRegistry.Instance.Clear();
 	        timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromSeconds(1), manualClock);
 	    }
 

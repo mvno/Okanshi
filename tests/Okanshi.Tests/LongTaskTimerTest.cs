@@ -12,6 +12,7 @@ namespace Okanshi.Test
 
 		public LongTaskTimerTest()
 		{
+            DefaultMonitorRegistry.Instance.Clear();
 			timer = new LongTaskTimer(MonitorConfig.Build("Test"));
 		}
 

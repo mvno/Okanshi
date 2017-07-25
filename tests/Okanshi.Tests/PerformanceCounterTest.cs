@@ -6,6 +6,11 @@ namespace Okanshi.Test
 {
 	public class PerformanceCounterTest
 	{
+	    public PerformanceCounterTest()
+	    {
+	        DefaultMonitorRegistry.Instance.Clear();
+	    }
+
 		[Fact]
 		public void Performance_counter_without_instance_name()
 		{
