@@ -53,15 +53,57 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
-            GetRegisteredMonitors()
+            Clear()
           </code>
           <div class="tip" id="114">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L24-24" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Clear the registry</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
+            GetOrAdd(arg1, arg2)
+          </code>
+          <div class="tip" id="115">
+            <strong>Signature:</strong> (MonitorConfig * Func&lt;MonitorConfig,IMonitor&gt;) -&gt; IMonitor<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L27-27" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get or add a new registration</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
+            GetRegisteredMonitors()
+          </code>
+          <div class="tip" id="116">
             <strong>Signature:</strong> unit -&gt; IMonitor array<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L10-10" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L11-11" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -73,16 +115,16 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
+          <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
             IsRegistered(arg1)
           </code>
-          <div class="tip" id="115">
+          <div class="tip" id="117">
             <strong>Signature:</strong> IMonitor -&gt; bool<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L16-16" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L21-21" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -94,16 +136,16 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
+          <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
             Register(arg1)
           </code>
-          <div class="tip" id="116">
+          <div class="tip" id="118">
             <strong>Signature:</strong> IMonitor -&gt; unit<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L12-12" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L15-15" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -115,16 +157,16 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
+          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
             Unregister(arg1)
           </code>
-          <div class="tip" id="117">
+          <div class="tip" id="119">
             <strong>Signature:</strong> IMonitor -&gt; unit<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L14-14" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Registry.fs#L18-18" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
