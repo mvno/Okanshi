@@ -25,5 +25,33 @@ namespace Okanshi.Test
 
 			counter.GetValue().Should().Be(amount);
 		}
+
+		[Theory]
+		[InlineData(1)]
+		[InlineData(10)]
+		[InlineData(110)]
+		public void Get_and_reset_does_not_reset_the_value(int amount)
+		{
+			var counter = new BasicCounter(MonitorConfig.Build("Test"));
+			counter.Increment(amount);
+
+		    counter.GetValueAndReset();
+
+			counter.GetValue().Should().Be(amount);
+		}
+
+		[Theory]
+		[InlineData(1)]
+		[InlineData(10)]
+		[InlineData(110)]
+		public void Get_and_reset_returns_the_value(int amount)
+		{
+			var counter = new BasicCounter(MonitorConfig.Build("Test"));
+			counter.Increment(amount);
+
+		    var value = counter.GetValueAndReset();
+
+			value.Should().Be(amount);
+		}
 	}
 }

@@ -116,7 +116,6 @@ type DoubleCounter(config : MonitorConfig) =
         member self.Config = self.Config
 
 /// A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
-/// Observers are responsible for converting to a rate and handling overflows if they occur.
 type BasicCounter(config : MonitorConfig) = 
     let value = new AtomicLong()
     
@@ -131,6 +130,9 @@ type BasicCounter(config : MonitorConfig) =
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
+    
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = value.Get()
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
