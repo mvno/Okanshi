@@ -201,6 +201,9 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         id |> markAsStarted
         OkanshiTimer.StartNew(fun _ -> id |> markAsCompleted)
 
+    /// Gets the value and resets the monitor
+    member self.GetValueAndReset() = self.GetValue()
+
     /// Manually register a timing, should only be used in special case
     member __.Register(elapsed : int64) : unit = raise (NotSupportedException("LongTaskTimer does not support manually registering timings"))
 
