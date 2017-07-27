@@ -37,6 +37,9 @@ type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Fu
 
     /// Get value
     member __.GetValue() = check'.GetValue()
+
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = check'.GetValueAndReset()
     
     /// The config
     member __.Config = config'
