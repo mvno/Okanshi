@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using FluentAssertions;
 using Xunit;
 
@@ -7,12 +6,11 @@ namespace Okanshi.Test
 {
 	public class DoubleCounterTest
 	{
-	    private DoubleCounter counter;
-	    private readonly ManualClock manualClock = new ManualClock();
+	    private readonly DoubleCounter counter;
 
 	    public DoubleCounterTest()
 	    {
-			counter = new DoubleCounter(MonitorConfig.Build("Test"), TimeSpan.FromMilliseconds(500), manualClock);
+			counter = new DoubleCounter(MonitorConfig.Build("Test"));
         }
 
         [Fact]
@@ -24,29 +22,47 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Value_is_reset_when_steps_is_crossed()
+		public void Value_is_reset_when_get_and_reset_is_called()
 		{
-			counter.GetValue();
-			manualClock.Advance(TimeSpan.FromMilliseconds(600));
+			counter.Increment();
 
-			var value = counter.GetValue();
+			counter.GetValueAndReset();
 
-			value.Should().Be(0);
+			counter.GetValue().Should().Be(0);
 		}
 
 		[Theory]
-		[InlineData(1.0, 0.5)]
-		[InlineData(2.2, 1.1)]
-		[InlineData(605.18, 302.59)]
-		public void Value_returns_previous_steps_value_per_second(double amount, double expectedValue)
+		[InlineData(1.0)]
+		[InlineData(2.2)]
+		[InlineData(605.18)]
+		public void Value_returns_the_value(double expectedValue)
 		{
-			counter.GetValue();
-			counter.Increment(amount);
-			manualClock.Advance(TimeSpan.FromMilliseconds(600));
+			counter.Increment(expectedValue);
 
             var value = counter.GetValue();
 
 			value.Should().Be(expectedValue);
 		}
+
+	    [Fact]
+	    public void Incrementing_multiple_time_increments_the_value()
+	    {
+	        counter.Increment(1);
+	        counter.Increment(1);
+
+	        var value = counter.GetValue();
+
+	        value.Should().Be(2);
+        }
+
+	    [Fact]
+	    public void Get_and_reset_returns_the_value()
+	    {
+	        counter.Increment(1);
+
+	        var value = counter.GetValueAndReset();
+
+	        value.Should().Be(1);
+        }
 	}
 }

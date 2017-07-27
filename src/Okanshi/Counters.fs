@@ -63,7 +63,7 @@ type PeakCounter(config : MonitorConfig) =
         reset'()
         result
     
-    /// Gets the peak rate within the specified interval
+    /// Gets the maximum count
     member __.GetValue() = Lock.lock syncRoot getValue'
     
     /// Increment the value by one
@@ -84,39 +84,30 @@ type PeakCounter(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
 
-/// A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.
-type DoubleCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) = 
-    let stepMilliseconds = double step.TotalMilliseconds
-    let stepsPerSecond = double 1000 / stepMilliseconds
-    let count = new StepLong(step, clock)
-    
-    let add (amount : double) = 
-        let current = count.GetCurrent()
-        
-        let rec loop() = 
-            let originalValue = current.Get()
-            let originalDouble = BitConverter.Int64BitsToDouble(originalValue)
-            let nextDouble = BitConverter.DoubleToInt64Bits(originalDouble + amount)
-            if current.CompareAndSet(nextDouble, originalValue) <> originalValue then loop()
-        loop()
+/// A simple double counter.
+type DoubleCounter(config : MonitorConfig) = 
+    let mutable count = new AtomicDouble()
 
-    new(config, step) = new DoubleCounter(config, step, new SystemClock())
+    let rec increment' amount = 
+        let originalValue = count.Get()
+        let newValue = originalValue + amount
+        if count.CompareAndSet(newValue, originalValue) <> originalValue then increment' amount
     
     /// Increment the value by the specified amount
     member __.Increment(amount : double) = 
-        if amount > 0.0 then add amount
+        if amount > 0.0 then increment' amount
     
     /// Increment the value by one
     member self.Increment() = self.Increment(1.0)
     
-    /// Gets the rate per second
-    member __.GetValue() = 
-        let datapoint = count.Poll()
-        if datapoint = Datapoint.Empty then Double.NaN
-        else (datapoint.Value |> BitConverter.Int64BitsToDouble) / stepsPerSecond
+    /// Gets the maximum count
+    member __.GetValue() = count.Get()
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Rate)
+    
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = count.GetAndSet(0.0)
     
     interface ICounter<double> with
         member self.Increment() = self.Increment()

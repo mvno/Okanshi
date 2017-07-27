@@ -58,16 +58,13 @@ type OkanshiMonitor private () =
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new PeakCounter(x))
     
-    /// Get or add a DoubleCounter, with a step size of 1 minute
-    static member DoubleCounter(name) = OkanshiMonitor.DoubleCounter(name, defaultStep, [||])
-    
-    /// Get or add a DoubleCounter with custom tags and a step size of 1 minute
-    static member DoubleCounter(name, tags : Tag array) = OkanshiMonitor.DoubleCounter(name, defaultStep, tags)
+    /// Get or add a DoubleCounter
+    static member DoubleCounter(name) = OkanshiMonitor.DoubleCounter(name, [||])
     
     /// Get or add a DoubleCounter
-    static member DoubleCounter(name : string, step, tags : Tag array) = 
+    static member DoubleCounter(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new DoubleCounter(x, step))
+        monitorRegistry.GetOrAdd(config, fun x -> new DoubleCounter(x))
     
     /// Get or add a BasicGauge
     static member BasicGauge(name : string, getValue : Func<'T>) = OkanshiMonitor.BasicGauge(name, getValue, [||])
