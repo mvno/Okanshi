@@ -13,36 +13,6 @@ type ICounter<'T> =
     /// Increment the counter by the specified amount
     abstract Increment : 'T -> unit
 
-/// A simple counter backed by a StepLong. The value is the rate for the previous interval as defined by the step.
-type StepCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) = 
-    let value = new StepLong(step, clock)
-    let stepMilliseconds = double step.TotalMilliseconds
-    let stepsPerSecond = double 1000 / stepMilliseconds
-
-    new(config, step) = new StepCounter(config, step, new SystemClock())
-    
-    /// Increment the counter by one
-    member __.Increment() = value.Increment(1L) |> ignore
-    
-    /// Increment the counter by the specified amount
-    member __.Increment(amount) = 
-        if amount > 0L then value.Increment(amount) |> ignore
-    
-    /// Gets rate of events per second
-    member __.GetValue() : double = 
-        let datapoint = value.Poll()
-        if datapoint = Datapoint.Empty then Double.NaN
-        else double datapoint.Value / stepsPerSecond
-    
-    /// Gets the monitor config
-    member __.Config = config.WithTag(DataSourceType.Rate)
-    
-    interface ICounter<int64> with
-        member self.Increment() = self.Increment()
-        member self.Increment(amount) = self.Increment(amount)
-        member self.GetValue() = self.GetValue() :> obj
-        member self.Config = self.Config
-
 /// Counter tracking the maximum count
 type PeakCounter(config : MonitorConfig) = 
     let mutable peakRate = 0L

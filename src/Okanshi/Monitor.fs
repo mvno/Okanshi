@@ -39,17 +39,6 @@ type OkanshiMonitor private () =
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new BasicCounter(x))
     
-    /// Get or add a StepCounter, with a step size of 1 minute
-    static member StepCounter(name) = OkanshiMonitor.StepCounter(name, defaultStep, [||])
-    
-    /// Get or add a StepCounter with custom tags and a step size of 1 minute
-    static member StepCounter(name, tags : Tag array) = OkanshiMonitor.StepCounter(name, defaultStep, tags)
-    
-    /// Get or add a StepCounter
-    static member StepCounter(name : string, step, tags : Tag array) = 
-        let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new StepCounter(x, step))
-    
     /// Get or add a PeakRateCounter
     static member PeakCounter(name) = OkanshiMonitor.PeakCounter(name, [||])
     
