@@ -44,7 +44,7 @@ type StepCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) =
         member self.Config = self.Config
 
 /// Counter tracking the maximum count
-type PeakRateCounter(config : MonitorConfig) = 
+type PeakCounter(config : MonitorConfig) = 
     let mutable peakRate = 0L
     let mutable current = 0L
     let syncRoot = new obj()

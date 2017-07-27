@@ -51,12 +51,12 @@ type OkanshiMonitor private () =
         monitorRegistry.GetOrAdd(config, fun x -> new StepCounter(x, step))
     
     /// Get or add a PeakRateCounter
-    static member PeakRateCounter(name) = OkanshiMonitor.PeakRateCounter(name, [||])
+    static member PeakCounter(name) = OkanshiMonitor.PeakCounter(name, [||])
     
     /// Get or add a PeakRateCounter with custom tags
-    static member PeakRateCounter(name : string, tags : Tag array) = 
+    static member PeakCounter(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new PeakRateCounter(x))
+        monitorRegistry.GetOrAdd(config, fun x -> new PeakCounter(x))
     
     /// Get or add a DoubleCounter, with a step size of 1 minute
     static member DoubleCounter(name) = OkanshiMonitor.DoubleCounter(name, defaultStep, [||])

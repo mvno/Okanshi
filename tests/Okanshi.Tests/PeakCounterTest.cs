@@ -1,16 +1,15 @@
-using System;
 using FluentAssertions;
 using Xunit;
 
 namespace Okanshi.Test
 {
-	public class PeakRateCounterTest
+	public class PeakCounterTest
 	{
-	    private readonly PeakRateCounter counter;
+	    private readonly PeakCounter counter;
 
-	    public PeakRateCounterTest()
+	    public PeakCounterTest()
 	    {
-	        counter = new PeakRateCounter(MonitorConfig.Build("Test"));
+	        counter = new PeakCounter(MonitorConfig.Build("Test"));
 	    }
 
 		[Fact]
