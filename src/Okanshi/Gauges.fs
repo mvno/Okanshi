@@ -17,6 +17,8 @@ type BasicGauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
     member __.GetValue() = getValue.Invoke()
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
+    /// Gets the value and resets the monitor
+    member self.GetValueAndReset() = self.GetValue()
 
     interface IMonitor with
         member self.GetValue() = self.GetValue() :> obj
@@ -27,14 +29,14 @@ type BasicGauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
 type MaxGauge(config : MonitorConfig) =
     let value = new AtomicLong()
 
+    let rec exchangeValue newValue =
+        let originalValue = value.Get()
+        if originalValue < newValue then
+            let result = value.CompareAndSet(newValue, originalValue)
+            if result <> originalValue then exchangeValue newValue
+
     /// Sets the value
-    member __.Set(newValue) =
-        let rec exchangeValue () =
-            let originalValue = value.Get()
-            if originalValue < newValue then
-                let result = value.CompareAndSet(newValue, originalValue)
-                if result <> originalValue then exchangeValue()
-        exchangeValue()
+    member __.Set(newValue) = exchangeValue newValue
 
     /// Gets the current value
     member __.GetValue() = value.Get()
@@ -42,6 +44,8 @@ type MaxGauge(config : MonitorConfig) =
     member __.Config = config.WithTag(DataSourceType.Gauge)
     /// Reset the gauge
     member __.Reset() = value.Set(0L)
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = value.GetAndSet(0L)
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -54,14 +58,14 @@ type MaxGauge(config : MonitorConfig) =
 type MinGauge(config : MonitorConfig) =
     let value = new AtomicLong()
 
+    let rec exchangeValue newValue =
+        let originalValue = value.Get()
+        if originalValue = 0L || originalValue > newValue then
+            let result = value.CompareAndSet(newValue, originalValue)
+            if result <> originalValue then exchangeValue newValue
+
     /// Sets the value
-    member __.Set(newValue) =
-        let rec exchangeValue () =
-            let originalValue = value.Get()
-            if originalValue = 0L || originalValue > newValue then
-                let result = value.CompareAndSet(newValue, originalValue)
-                if result <> originalValue then exchangeValue()
-        exchangeValue()
+    member __.Set(newValue) = exchangeValue newValue
 
     /// Gets the current value
     member __.GetValue() = value.Get()
@@ -69,6 +73,8 @@ type MinGauge(config : MonitorConfig) =
     member __.Config = config.WithTag(DataSourceType.Gauge)
     /// Reset the gauge
     member __.Reset() = value.Set(0L)
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = value.GetAndSet(0L)
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -88,6 +94,8 @@ type LongGauge(config : MonitorConfig) =
     member __.Config = config.WithTag(DataSourceType.Gauge)
     /// Reset the gauge
     member __.Reset() = value.Set(0L)
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = value.GetAndSet(0L)
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -107,6 +115,8 @@ type DoubleGauge(config : MonitorConfig) =
     member __.Config = config.WithTag(DataSourceType.Gauge)
     /// Reset the gauge
     member __.Reset() = value.Set(0.0)
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = value.GetAndSet(0.0)
 
     interface IGauge<double> with
         member self.Set(newValue) = self.Set(newValue)
@@ -126,6 +136,8 @@ type DecimalGauge(config : MonitorConfig) =
     member __.Config = config.WithTag(DataSourceType.Gauge)
     /// Reset the gauge
     member __.Reset() = value.Set(0m)
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = value.GetAndSet(0m)
 
     interface IGauge<decimal> with
         member self.Set(newValue) = self.Set(newValue)
@@ -134,30 +146,33 @@ type DecimalGauge(config : MonitorConfig) =
         member self.Reset() = self.Reset()
 
 /// Gauge that keeps track of the average value since last reset. Initial value is 0.
-type AverageGauge(config : MonitorConfig, step : TimeSpan, clock : IClock) =
-    let value = new StepLong(0L, step, clock)
-    let count = new StepLong(0L, step, clock)
+type AverageGauge(config : MonitorConfig) =
+    let mutable value = 0L
+    let mutable count = 0L
     let syncRoot = new obj()
 
     let rec updateAverage v =
-        clock.Freeze()
-        let count = count.Increment(1L)
-        let original = value.GetCurrent().Get()
-        value.GetCurrent().Set(((original * (count - 1L)) + v) / count)
-        clock.Unfreeze()
+        count <- count + 1L
+        value <- ((value * (count - 1L)) + v) / count
 
-    new (config, step) = AverageGauge(config, step, new SystemClock())
+    let getValue'() = value
+    let resetValue'() = value <- 0L
+    let getValueAndReset'() =
+        let result = getValue'()
+        resetValue'()
+        result
 
     /// Sets the value
-    member __.Set(newValue) =
-        lockWithArg syncRoot newValue updateAverage
+    member __.Set(newValue) = lockWithArg syncRoot newValue updateAverage
 
     /// Gets the current value
-    member __.GetValue() = value.Poll().Value
+    member __.GetValue() = Lock.lock syncRoot getValue'
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
     /// Reset the gauge
-    member __.Reset() = value.GetCurrent().Set(0L)
+    member __.Reset() = Lock.lock syncRoot resetValue'
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)

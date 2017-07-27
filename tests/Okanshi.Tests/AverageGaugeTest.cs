@@ -11,7 +11,7 @@ namespace Okanshi.Test {
 
         public AverageGaugeTest() {
             manualClock = new ManualClock();
-            gauge = new AverageGauge(MonitorConfig.Build("Test"), TimeSpan.FromMinutes(1), manualClock);
+            gauge = new AverageGauge(MonitorConfig.Build("Test"));
         }
 
         [Fact]
@@ -27,22 +27,28 @@ namespace Okanshi.Test {
         }
 
         [Fact]
-        public void After_interval_the_average_is_available() {
+        public void Value_is_the_average() {
             gauge.Set(100);
             gauge.Set(200);
-            manualClock.Advance(TimeSpan.FromMinutes(1));
 
             gauge.GetValue().Should().Be(150);
         }
 
         [Fact]
-        public void Reset_occurs_after_interval() {
-            gauge.Set(100);
-            manualClock.Advance(TimeSpan.FromMinutes(1));
-            gauge.GetValue();
-            manualClock.Advance(TimeSpan.FromMinutes(1));
+        public void Get_and_reset_sets_the_value_to_zero() {
+            gauge.Set(100L);
 
-            gauge.GetValue().Should().Be(0);
+            gauge.GetValueAndReset();
+
+            gauge.GetValue().Should().Be(0L);
+        }
+
+        [Fact]
+        public void Get_and_reset_gets_the_maximum_value() {
+            const long expected = 100L;
+            gauge.Set(expected);
+
+            gauge.GetValueAndReset().Should().Be(expected);
         }
     }
 }

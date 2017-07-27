@@ -97,12 +97,12 @@ type OkanshiMonitor private () =
         monitorRegistry.GetOrAdd(config, fun x -> new MinGauge(x))
     
     /// Get or add a AverageGauge
-    static member AverageGauge(name : string, step) = OkanshiMonitor.AverageGauge(name, step, [||])
+    static member AverageGauge(name : string) = OkanshiMonitor.AverageGauge(name, [||])
     
     /// Get or add a AverageGauge with custom tags
-    static member AverageGauge(name : string, step, tags : Tag array) = 
+    static member AverageGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new AverageGauge(x, step))
+        monitorRegistry.GetOrAdd(config, fun x -> new AverageGauge(x))
     
     /// Get or add a LongGauge
     static member LongGauge(name : string) = OkanshiMonitor.LongGauge(name, [||])
