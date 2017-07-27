@@ -43,24 +43,28 @@ type StepCounter(config : MonitorConfig, step : TimeSpan, clock : IClock) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
 
-/// Counter tracking the maximum count per step within a specified interval
-type PeakRateCounter(config : MonitorConfig, step, clock : IClock) = 
-    let peakRate = new StepLong(step, clock)
-    let current = new StepLong(step, clock)
+/// Counter tracking the maximum count
+type PeakRateCounter(config : MonitorConfig) = 
+    let mutable peakRate = 0L
+    let mutable current = 0L
     let syncRoot = new obj()
 
-    let getValue' () = peakRate.Poll().Value
+    let getValue' () = peakRate
     let increment' amount =
-        clock.Freeze()
-        let newValue = current.Increment(amount)
-        if newValue > peakRate.GetCurrent().Get() then
-            peakRate.Increment(amount) |> ignore
-        clock.Unfreeze()
+        current <- current + amount
+        if current > peakRate then peakRate <- current
 
-    new(config, step) = new PeakRateCounter(config, step, new SystemClock())
+    let reset'() =
+        peakRate <- 0L
+        current <- 0L
+
+    let getValueAndReset'() =
+        let result = getValue'()
+        reset'()
+        result
     
     /// Gets the peak rate within the specified interval
-    member __.GetValue() = lock syncRoot getValue'
+    member __.GetValue() = Lock.lock syncRoot getValue'
     
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
@@ -70,6 +74,9 @@ type PeakRateCounter(config : MonitorConfig, step, clock : IClock) =
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
+    
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
