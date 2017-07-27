@@ -8,12 +8,11 @@ namespace Okanshi.Test
 	public class BasicTimerTest
 	{
 	    private readonly BasicTimer timer;
-	    private readonly ManualClock manualClock = new ManualClock();
 
 	    public BasicTimerTest()
 	    {
             DefaultMonitorRegistry.Instance.Clear();
-	        timer = new BasicTimer(MonitorConfig.Build("Test"), TimeSpan.FromSeconds(1), manualClock);
+	        timer = new BasicTimer(MonitorConfig.Build("Test"));
 	    }
 
 		[Fact]
@@ -57,13 +56,12 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Timing_a_call_sets_count_per_second_when_step_is_crossed()
+		public void Timing_a_call_sets_count()
 		{
 			timer.GetCount();
 
 			timer.Record(() => Thread.Sleep(500));
 
-            manualClock.Advance(TimeSpan.FromSeconds(1));
 			timer.GetCount().Should().Be(1);
 		}
 
@@ -90,11 +88,10 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Timing_a_call_sets_total_time_per_second_when_step_is_crossed()
+		public void Timing_a_call_sets_total_time()
 		{
 			timer.GetTotalTime();
 			timer.Record(() => Thread.Sleep(500));
-            manualClock.Advance(TimeSpan.FromMilliseconds(1100));
 
 			var totalTime = timer.GetTotalTime();
 
@@ -102,7 +99,51 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Manual_timing_sets_count_per_second_when_step_is_crossed()
+		public void Get_and_reset_resets_count()
+		{
+			timer.GetCount();
+            timer.Record(() => Thread.Sleep(500));
+
+		    timer.GetValueAndReset();
+
+			timer.GetCount().Should().Be(0);
+		}
+
+		[Fact]
+		public void Get_and_reset_resets_max()
+		{
+			timer.GetCount();
+			timer.Record(() => Thread.Sleep(50));
+
+		    timer.GetValueAndReset();
+
+            timer.GetMax().Should().Be(0);
+		}
+
+		[Fact]
+		public void Get_and_reset_resets_min()
+		{
+			timer.GetCount();
+			timer.Record(() => Thread.Sleep(50));
+
+		    timer.GetValueAndReset();
+
+            timer.GetMin().Should().Be(0);
+		}
+
+		[Fact]
+		public void Get_and_reset_resets_total_time()
+		{
+			timer.GetTotalTime();
+			timer.Record(() => Thread.Sleep(500));
+
+		    timer.GetValueAndReset();
+
+            timer.GetTotalTime().Should().Be(0);
+		}
+
+		[Fact]
+		public void Manual_timing_sets_count()
 		{
 			timer.GetCount();
 
@@ -110,7 +151,6 @@ namespace Okanshi.Test
 			Thread.Sleep(50);
 			okanshiTimer.Stop();
 
-            manualClock.Advance(TimeSpan.FromMilliseconds(1100));
             timer.GetCount().Should().Be(1);
 		}
 
@@ -141,13 +181,12 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void Manual_timing_sets_total_time_per_second_when_step_is_crossed()
+		public void Manual_timing_sets_total_time()
 		{
 			timer.GetTotalTime();
 			var okanshiTimer = timer.Start();
 			Thread.Sleep(500);
 			okanshiTimer.Stop();
-            manualClock.Advance(TimeSpan.FromMilliseconds(1100));
 
 			var totalTime = timer.GetTotalTime();
 
@@ -175,21 +214,19 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Manual_registration_sets_count_per_second_when_step_is_crossed() {
+        public void Manual_registration_sets_count() {
             const long elapsed = 1000;
             timer.Register(elapsed);
 
-            manualClock.Advance(TimeSpan.FromMilliseconds(1100));
             timer.GetCount().Should().Be(1);
         }
 
         [Fact]
-        public void Manual_registration_sets_total_time_per_second_when_step_is_crossed() {
+        public void Manual_registration_sets_total_time() {
             const long elapsed = 1000;
 
             timer.Register(elapsed);
 
-            manualClock.Advance(TimeSpan.FromMilliseconds(1100));
             timer.GetTotalTime().Should().Be(elapsed);
         }
     }

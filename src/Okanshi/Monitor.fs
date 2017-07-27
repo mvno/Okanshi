@@ -112,15 +112,12 @@ type OkanshiMonitor private () =
         monitorRegistry.GetOrAdd(config, fun x -> new DecimalGauge(x))
     
     /// Get or add a BasicTimer, with a step size of 1 minute
-    static member BasicTimer(name) = OkanshiMonitor.BasicTimer(name, defaultStep, [||])
+    static member BasicTimer(name) = OkanshiMonitor.BasicTimer(name, [||])
     
-    /// Get or add a BasicTimer with custom tags and a step size of 1 minute
-    static member BasicTimer(name, tags : Tag array) = OkanshiMonitor.BasicTimer(name, defaultStep, tags)
-    
-    /// Get or add a BasicTimer
-    static member BasicTimer(name : string, step, tags : Tag array) = 
+    /// Get or add a BasicTimer with custom tags
+    static member BasicTimer(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new BasicTimer(x, step))
+        monitorRegistry.GetOrAdd(config, fun x -> new BasicTimer(x))
     
     /// Get or add a DurationTimer
     static member LongTaskTimer(name) = OkanshiMonitor.LongTaskTimer(name, [||])

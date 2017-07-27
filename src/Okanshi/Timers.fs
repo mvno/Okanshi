@@ -56,7 +56,7 @@ type ITimer =
     abstract Register : int64 -> unit
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
-type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock : IClock) as self = 
+type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig) as self = 
     
     [<Literal>]
     let StatisticKey = "statistic"
@@ -68,12 +68,10 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
     let syncRoot = new obj()
 
     let updateStatistics' elapsed =
-        clock.Freeze()
         count.Increment() |> ignore
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
-        clock.Unfreeze()
     
     let updateStatistics elapsed = 
         lockWithArg syncRoot elapsed updateStatistics'
@@ -87,6 +85,17 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
         let count = self.GetCount()
         if count = 0L then 0L
         else self.GetTotalTime() / count
+
+    let reset'() =
+        max.Reset()
+        min.Reset()
+        count.GetValueAndReset() |> ignore
+        total.GetValueAndReset() |> ignore
+
+    let getValueAndReset'() =
+        let result = self.GetValue()
+        reset'()
+        result
     
     do 
         registry.Register(max)
@@ -94,8 +103,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
         registry.Register(count)
         registry.Register(total)
     
-    new(config, step) = BasicTimer(config, step, new SystemClock())
-    new(config, step, clock : IClock) = BasicTimer(DefaultMonitorRegistry.Instance, config, step, clock)
+    new(config) = BasicTimer(DefaultMonitorRegistry.Instance, config)
     
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
@@ -126,6 +134,9 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig, step, clock
 
     /// Manually register a timing, should only be used in special case
     member __.Register(elapsed) = elapsed |> updateStatistics
+
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
     
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
