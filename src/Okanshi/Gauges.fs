@@ -28,6 +28,7 @@ type BasicGauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
     interface IMonitor with
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// Gauge that keeps track of the maximum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
@@ -60,6 +61,7 @@ type MaxGauge(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// Gauge that keeps track of the minimum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
@@ -92,6 +94,7 @@ type MinGauge(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// A gauge the reports a long value
 type LongGauge(config : MonitorConfig) = 
@@ -117,6 +120,7 @@ type LongGauge(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// A gauge that reports a double value
 type DoubleGauge(config : MonitorConfig) = 
@@ -142,6 +146,7 @@ type DoubleGauge(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// A gauge that reports a decimal value
 type DecimalGauge(config : MonitorConfig) = 
@@ -167,6 +172,7 @@ type DecimalGauge(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// Gauge that keeps track of the average value since last reset. Initial value is 0.
 type AverageGauge(config : MonitorConfig) = 
@@ -206,3 +212,4 @@ type AverageGauge(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj

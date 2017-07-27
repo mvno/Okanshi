@@ -53,6 +53,7 @@ type PeakCounter(config : MonitorConfig) =
         member self.Increment(amount) = self.Increment(amount)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// A simple double counter.
 type DoubleCounter(config : MonitorConfig) = 
@@ -84,6 +85,7 @@ type DoubleCounter(config : MonitorConfig) =
         member self.Increment(amount) = self.Increment(amount)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
 type BasicCounter(config : MonitorConfig) = 
@@ -109,3 +111,4 @@ type BasicCounter(config : MonitorConfig) =
         member self.Increment(amount) = self.Increment(amount)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj

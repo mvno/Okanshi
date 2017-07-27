@@ -183,6 +183,11 @@ namespace Okanshi.Test
                 throw new System.NotImplementedException();
             }
 
+            public object GetValueAndReset()
+            {
+                throw new System.NotImplementedException();
+            }
+
             public MonitorConfig Config { get; private set; }
         }
 
@@ -203,6 +208,11 @@ namespace Okanshi.Test
             }
 
             public object GetValue()
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public object GetValueAndReset()
             {
                 throw new System.NotImplementedException();
             }

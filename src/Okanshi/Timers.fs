@@ -145,6 +145,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig) as self =
         member self.Config = self.Config
         member self.Start() = self.Start()
         member self.Register(elapsed) = self.Register(elapsed)
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
 
 /// A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
 /// frequent calls that last less than the polling interval, use the BasicTimer instead.
@@ -222,3 +223,4 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         member self.Config = self.Config
         member self.Start() = self.Start()
         member self.Register(elapsed) = self.Register(elapsed)
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj

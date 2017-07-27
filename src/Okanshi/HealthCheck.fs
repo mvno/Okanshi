@@ -47,3 +47,4 @@ type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Fu
     interface IMonitor with
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj

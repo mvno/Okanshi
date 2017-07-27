@@ -46,3 +46,4 @@ type PerformanceCounterMonitor(registry : IMonitorRegistry, monitorConfig : Moni
     interface IMonitor with
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
