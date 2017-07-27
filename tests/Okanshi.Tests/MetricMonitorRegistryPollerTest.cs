@@ -48,5 +48,18 @@ namespace Okanshi.Test
 
 			_metricMonitorRegistryPoller.ShouldNotRaise("MetricsPolled");
 		}
-	}
+
+	    [Fact]
+	    public void Polling_metrics_resets_monitor()
+	    {
+			_metricMonitorRegistryPoller.MonitorEvents();
+	        var counter = new PeakCounter(MonitorConfig.Build("Test"));
+	        _monitorRegistry.GetRegisteredMonitors().Returns(new[] { counter });
+            counter.Increment();
+
+			Thread.Sleep(1100);
+
+	        counter.GetValue().Should().Be(0);
+	    }
+    }
 }
