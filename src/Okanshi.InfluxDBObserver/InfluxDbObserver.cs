@@ -62,27 +62,49 @@ namespace Okanshi.Observers
             }
         }
 
-        private IEnumerable<Point> ConvertToPoints(IEnumerable<Metric> metrics) {
+        private IEnumerable<Point> ConvertToPoints(IEnumerable<Metric> metrics)
+        {
             var groupedByName = metrics.GroupBy(options.MeasurementNameSelector);
             foreach (var metricGroup in groupedByName) {
-                var metricTags = metricGroup.First().Tags
-                    .Where(x => !options.TagsToIgnore.Contains(x.Key) && !x.Key.Equals("dataSource", StringComparison.OrdinalIgnoreCase) &&
-                                     !x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase))
-                    .ToArray();
-                var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
-                var statisticFields = metricGroup
-                    .Select(metric => new { metric, statisticsTag = metric.Tags.SingleOrDefault(tag => tag.Key.Equals("statistic")) })
-                    .Where(x => x.statisticsTag != null)
-                    .Select(x => new Field(x.statisticsTag.Value, Convert.ToSingle(x.metric.Value)))
-                    .ToList();
-                var fields = statisticFields.Any() ? statisticFields : new List<Field> { new Field("value", Convert.ToSingle(metricGroup.First().Value)) };
-                fields.AddRange(metricTags.Where(options.TagToFieldSelector).Select(ConvertTagToField));
-                yield return new Point {
-                    Measurement = metricGroup.Key,
-                    Timestamp = metricGroup.First().Timestamp.DateTime,
-                    Fields = fields,
-                    Tags = tags
-                };
+                if (metricGroup.SelectMany(x => x.Tags).Any(x => x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var metricTags = metricGroup.First().Tags
+                        .Where(x => !options.TagsToIgnore.Contains(x.Key) && !x.Key.Equals("dataSource", StringComparison.OrdinalIgnoreCase) &&
+                                    !x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase))
+                        .ToArray();
+                    var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
+                    var statisticFields = metricGroup
+                        .Select(metric => new { metric, statisticsTag = metric.Tags.SingleOrDefault(tag => tag.Key.Equals("statistic")) })
+                        .Where(x => x.statisticsTag != null)
+                        .Select(x => new Field(x.statisticsTag.Value, Convert.ToSingle(x.metric.Value)))
+                        .ToList();
+                    var fields = statisticFields.Any() ? statisticFields : new List<Field> { new Field("value", Convert.ToSingle(metricGroup.First().Value)) };
+                    fields.AddRange(metricTags.Where(options.TagToFieldSelector).Select(ConvertTagToField));
+                    yield return new Point {
+                        Measurement = metricGroup.Key,
+                        Timestamp = metricGroup.First().Timestamp.DateTime,
+                        Fields = fields,
+                        Tags = tags
+                    };
+                }
+                else
+                {
+                    foreach (var metric in metricGroup) {
+                        var metricTags = metric.Tags
+                                        .Where(x => !options.TagsToIgnore.Contains(x.Key) && !x.Key.Equals("dataSource", StringComparison.OrdinalIgnoreCase) &&
+                                                    !x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase))
+                                        .ToArray();
+                        var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
+                        var fields = new List<Field> { new Field("value", Convert.ToSingle(metric.Value)) };
+                        fields.AddRange(metricTags.Where(options.TagToFieldSelector).Select(ConvertTagToField));
+                        yield return new Point {
+                            Measurement = metricGroup.Key,
+                            Timestamp = metric.Timestamp.DateTime,
+                            Fields = fields,
+                            Tags = tags
+                        };
+                    }
+                }
             }
         }
 

@@ -238,5 +238,40 @@ namespace Okanshi.InfluxDBObserver.Tests {
                                                                                  field => field.Key == tagName && (int)field.Value ==
                                                                                           Convert.ToInt32(tagValue)))));
         }
+
+        [Fact]
+        public void Measurements_with_same_tag_keys_but_different_values_are_both_sent_to_server()
+        {
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                new InfluxDbObserverOptions("databaseName"));
+
+            observer.Update(new[]
+            {
+                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test1") }, 1),
+                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test2") }, 2)
+            });
+
+            influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IEnumerable<Point>>(points => points.Count() == 2 &&
+                                                     (float)(points.Single(x => x.Tags.Any(y => y.Value == "Test1")).Fields.Single(y => y.Key == "value").Value) ==
+                                                     1 && (float)(points.Single(x => x.Tags.Any(y => y.Value == "Test2")).Fields.Single(y => y.Key == "value")
+                                                         .Value) == 2));
+        }
+
+        [Fact]
+        public void Measurements_with_same_name_and_different_statistics_have_all_statistics_converted_to_fields()
+        {
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                new InfluxDbObserverOptions("databaseName"));
+
+            observer.Update(new[]
+            {
+                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test1"), new Tag("statistic", "max") }, 1),
+                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test1"), new Tag("statistic", "min") }, 2)
+            });
+
+            influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IEnumerable<Point>>(points => points.Count() == 1 && points.Single().Fields.All(x => x.Key == "max" || x.Key == "min")));
+        }
     }
 }
