@@ -1,7 +1,10 @@
+### 5.0.0-beta2
+
+* Fix grouping bug in InfluxDB observer, which causes not composite metrics to be sent incorrectly to Influx
+
 ### 5.0.0-beta
 
 **BREAKING CHANGES**
-
 * Added GetOrAdd to Registry interface, this enables the caching of monitors to only occur in the registry. The Register have also been made obsolete.
 
 ### 4.0.4
