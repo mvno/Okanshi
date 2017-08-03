@@ -58,6 +58,9 @@ type IMonitor =
     /// Gets the configuration of the monitor
     abstract Config : MonitorConfig
 
+    /// Gets the value and resets the monitor
+    abstract GetValueAndReset : unit -> obj
+
 /// The types used to indicate the type of a value
 [<AbstractClass; Sealed>]
 type DataSourceType private () = 

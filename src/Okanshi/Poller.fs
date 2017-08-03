@@ -39,7 +39,7 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
     let pollMetrics () =
         let metrics =
             registry.GetRegisteredMonitors()
-            |> Seq.map (fun x -> { Name = x.Config.Name; Timestamp = DateTimeOffset.UtcNow; Tags = x.Config.Tags; Value = x.GetValue() })
+            |> Seq.map (fun x -> { Name = x.Config.Name; Timestamp = DateTimeOffset.UtcNow; Tags = x.Config.Tags; Value = x.GetValueAndReset() })
             |> Seq.toArray
         metricsPolled.Trigger(self, new MetricEventArgs(metrics))
 

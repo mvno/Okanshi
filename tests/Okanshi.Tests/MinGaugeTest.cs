@@ -50,12 +50,31 @@ namespace Okanshi.Test
         [Fact]
         public void Reset_sets_the_value_to_zero()
         {
-            var gauge = new MaxGauge(MonitorConfig.Build("Test"));
+            var gauge = new MinGauge(MonitorConfig.Build("Test"));
             gauge.Set(-100L);
 
             gauge.Reset();
 
             gauge.GetValue().Should().Be(0L);
         }
+
+	    [Fact]
+	    public void Get_and_reset_sets_the_value_to_zero() {
+	        var gauge = new MinGauge(MonitorConfig.Build("Test"));
+	        gauge.Set(100L);
+
+	        gauge.GetValueAndReset();
+
+	        gauge.GetValue().Should().Be(0L);
+	    }
+
+	    [Fact]
+	    public void Get_and_reset_gets_the_maximum_value() {
+	        const long expected = 100L;
+	        var gauge = new MinGauge(MonitorConfig.Build("Test"));
+	        gauge.Set(expected);
+
+	        gauge.GetValueAndReset().Should().Be(expected);
+	    }
     }
 }

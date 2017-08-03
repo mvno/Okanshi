@@ -65,11 +65,9 @@
     <Compile Include="OkanshiMonitorRegistryTest.cs" />
     <Compile Include="OkanshiMonitorTest.cs" />
     <Compile Include="OkanshiTimerTest.cs" />
-    <Compile Include="PeakRateCounterTest.cs" />
+    <Compile Include="PeakCounterTest.cs" />
     <Compile Include="PerformanceCounterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StepCounterTest.cs" />
-    <Compile Include="StepLongTest.cs" />
     <Compile Include="SystemClockTest.cs" />
   </ItemGroup>
   <ItemGroup>

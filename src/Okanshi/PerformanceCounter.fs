@@ -39,7 +39,11 @@ type PerformanceCounterMonitor(registry : IMonitorRegistry, monitorConfig : Moni
     
     /// Gets the monitor config
     member __.Config = gauge.Config
+
+    /// Gets the value and resets the monitor
+    member __.GetValueAndReset() = gauge.GetValueAndReset()
     
     interface IMonitor with
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
+        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
