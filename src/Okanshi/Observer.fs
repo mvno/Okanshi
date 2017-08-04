@@ -57,7 +57,7 @@ type CounterToRateMetricTransformObserver(observer : IMetricObserver, heartbeat 
 
     let toRateMetric metric =
         let tags = DataSourceType.Rate :: (metric.Tags |> Seq.filter (fun x -> x <> DataSourceType.Counter) |> Seq.toList) |> Seq.toArray
-        { Name = metric.Name; Tags = tags; Timestamp = metric.Timestamp; Value = metric.Value }
+        { Name = metric.Name; Tags = tags; Timestamp = metric.Timestamp; Value = metric.Value; SubMetrics = [||] }
 
     let computeRate previous current : double =
         let currentValue = current.Value :?> double

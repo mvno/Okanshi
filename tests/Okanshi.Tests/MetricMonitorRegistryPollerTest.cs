@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using NSubstitute;
@@ -60,6 +61,63 @@ namespace Okanshi.Test
             Thread.Sleep(1100);
 
             counter.GetValue().Should().Be(0);
+        }
+
+        [Fact]
+        public void Peak_counter_is_converted_to_a_single_metric_with_no_submetrics()
+        {
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new PeakCounter(MonitorConfig.Build("Test")) });
+            var resetEvent = new ManualResetEventSlim(false);
+            var metrics = new Metric[0];
+            _metricMonitorRegistryPoller.MetricsPolled += (sender, args) =>
+            {
+                metrics = args.Metrics;
+                resetEvent.Set();
+            };
+
+            _metricMonitorRegistryPoller.PollMetrics();
+
+            resetEvent.Wait(TimeSpan.FromSeconds(1));
+            metrics.Should().HaveCount(1);
+            metrics.Single().SubMetrics.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public void Basic_gauge_is_converted_to_a_single_metric_with_no_submetrics()
+        {
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new BasicGauge<int>(MonitorConfig.Build("Test"), () => 1) });
+            var resetEvent = new ManualResetEventSlim(false);
+            var metrics = new Metric[0];
+            _metricMonitorRegistryPoller.MetricsPolled += (sender, args) =>
+            {
+                metrics = args.Metrics;
+                resetEvent.Set();
+            };
+
+            _metricMonitorRegistryPoller.PollMetrics();
+
+            resetEvent.Wait(TimeSpan.FromSeconds(1));
+            metrics.Should().HaveCount(1);
+            metrics.Single().SubMetrics.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public void Timer_is_converted_to_a_one_metric_with_four_sub_metrics()
+        {
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new BasicTimer(MonitorConfig.Build("Test")) });
+            var resetEvent = new ManualResetEventSlim(false);
+            var metrics = new Metric[0];
+            _metricMonitorRegistryPoller.MetricsPolled += (sender, args) =>
+            {
+                metrics = args.Metrics;
+                resetEvent.Set();
+            };
+
+            _metricMonitorRegistryPoller.PollMetrics();
+
+            resetEvent.Wait(TimeSpan.FromSeconds(1));
+            metrics.Should().HaveCount(1);
+            metrics.Single().SubMetrics.Should().HaveCount(4);
         }
     }
 }
