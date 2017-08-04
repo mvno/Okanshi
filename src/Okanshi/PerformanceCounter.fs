@@ -30,7 +30,7 @@ type PerformanceCounterMonitor(registry : IMonitorRegistry, monitorConfig : Moni
         new PerformanceCounter(performanceCounterConfig.Category, performanceCounterConfig.Counter, 
                                performanceCounterConfig.Instance, true)
     let gauge = new BasicGauge<_>(monitorConfig, fun () -> performanceCounter.NextValue())
-    do registry.Register(gauge)
+    
     new(monitorConfig, performanceCounterConfig) = 
         PerformanceCounterMonitor(DefaultMonitorRegistry.Instance, monitorConfig, performanceCounterConfig)
     
@@ -42,8 +42,13 @@ type PerformanceCounterMonitor(registry : IMonitorRegistry, monitorConfig : Moni
 
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = gauge.GetValueAndReset()
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface IMonitor with
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()

@@ -24,11 +24,16 @@ type BasicGauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
     
     /// Gets the value and resets the monitor
     member self.GetValueAndReset() = self.GetValue()
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface IMonitor with
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// Gauge that keeps track of the maximum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
@@ -55,13 +60,18 @@ type MaxGauge(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = value.GetAndSet(0L)
-    
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
+
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.Reset() = self.Reset()
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// Gauge that keeps track of the minimum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
@@ -88,6 +98,10 @@ type MinGauge(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = value.GetAndSet(0L)
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -95,6 +109,7 @@ type MinGauge(config : MonitorConfig) =
         member self.Config = self.Config
         member self.Reset() = self.Reset()
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// A gauge the reports a long value
 type LongGauge(config : MonitorConfig) = 
@@ -114,6 +129,10 @@ type LongGauge(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = value.GetAndSet(0L)
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -121,6 +140,7 @@ type LongGauge(config : MonitorConfig) =
         member self.Config = self.Config
         member self.Reset() = self.Reset()
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// A gauge that reports a double value
 type DoubleGauge(config : MonitorConfig) = 
@@ -140,6 +160,10 @@ type DoubleGauge(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = value.GetAndSet(0.0)
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface IGauge<double> with
         member self.Set(newValue) = self.Set(newValue)
@@ -147,6 +171,7 @@ type DoubleGauge(config : MonitorConfig) =
         member self.Config = self.Config
         member self.Reset() = self.Reset()
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// A gauge that reports a decimal value
 type DecimalGauge(config : MonitorConfig) = 
@@ -166,6 +191,10 @@ type DecimalGauge(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = value.GetAndSet(0m)
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface IGauge<decimal> with
         member self.Set(newValue) = self.Set(newValue)
@@ -173,6 +202,7 @@ type DecimalGauge(config : MonitorConfig) =
         member self.Config = self.Config
         member self.Reset() = self.Reset()
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// Gauge that keeps track of the average value since last reset. Initial value is 0.
 type AverageGauge(config : MonitorConfig) = 
@@ -206,6 +236,10 @@ type AverageGauge(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -213,3 +247,4 @@ type AverageGauge(config : MonitorConfig) =
         member self.Config = self.Config
         member self.Reset() = self.Reset()
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()

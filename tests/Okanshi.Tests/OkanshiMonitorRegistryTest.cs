@@ -188,6 +188,11 @@ namespace Okanshi.Test
                 throw new System.NotImplementedException();
             }
 
+            public IEnumerable<IMonitor> GetAllMonitors()
+            {
+                throw new System.NotImplementedException();
+            }
+
             public MonitorConfig Config { get; private set; }
         }
 
@@ -213,6 +218,11 @@ namespace Okanshi.Test
             }
 
             public object GetValueAndReset()
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public IEnumerable<IMonitor> GetAllMonitors()
             {
                 throw new System.NotImplementedException();
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -49,6 +50,14 @@ namespace Okanshi.Test {
             gauge.Set(expected);
 
             gauge.GetValueAndReset().Should().Be(expected);
+        }
+
+        [Fact]
+        public void Consists_of_a_single_monitor() {
+            var gauge = new AverageGauge(MonitorConfig.Build("Test"));
+
+            gauge.GetAllMonitors().Should().HaveCount(1);
+            gauge.GetAllMonitors().Single().Should().BeSameAs(gauge);
         }
     }
 }
