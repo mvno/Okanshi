@@ -68,7 +68,8 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Consists_of_a_single_monitor() {
+        public void Consists_of_a_single_monitor()
+        {
             var gauge = new LongGauge(MonitorConfig.Build("Test"));
 
             gauge.GetAllMonitors().Should().HaveCount(1);

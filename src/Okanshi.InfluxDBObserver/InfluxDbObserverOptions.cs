@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Okanshi.Observers {
+namespace Okanshi.Observers
+{
     /// <summary>
     /// Options for the InfluxDB observer
     /// </summary>
-    public class InfluxDbObserverOptions {
+    public class InfluxDbObserverOptions
+    {
         /// <summary>
         /// Database selector. Selects the database based on the metric.
         /// Default is the database name passed into constructor.
@@ -38,7 +40,8 @@ namespace Okanshi.Observers {
         /// Create a new instance of the options.
         /// </summary>
         /// <param name="databaseName">The default database name used</param>
-        public InfluxDbObserverOptions(string databaseName) {
+        public InfluxDbObserverOptions(string databaseName)
+        {
             DatabaseSelector = _ => databaseName;
         }
     }

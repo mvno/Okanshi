@@ -1,10 +1,12 @@
 ﻿using Owin;
 
-namespace Okanshi.Owin {
+namespace Okanshi.Owin
+{
     /// <summary>
     /// IAppBuilder extensions
     /// </summary>
-    public static class AppBuilderExtensions {
+    public static class AppBuilderExtensions
+    {
         /// <summary>
         /// Use Okanshi middleware for timining all the requests.
         /// </summary>

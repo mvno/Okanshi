@@ -131,7 +131,7 @@ namespace Okanshi.Test
         public void Get_or_add_two_monitors_of_same_type_with_different_tags_result_in_two_registrations()
         {
             var monitor = new FakeMonitor();
-            var anotherMonitor = new FakeMonitor(new[] { new Tag("Test", "Test"),  });
+            var anotherMonitor = new FakeMonitor(new[] { new Tag("Test", "Test"), });
             _okanshiMonitorRegistry.GetOrAdd(monitor.Config, _ => monitor);
 
             _okanshiMonitorRegistry.GetOrAdd(anotherMonitor.Config, _ => anotherMonitor);
@@ -152,7 +152,8 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Get_or_add_two_monitors_of_different_types_result_in_two_registrations() {
+        public void Get_or_add_two_monitors_of_different_types_result_in_two_registrations()
+        {
             var monitor = new FakeMonitor();
             var anotherMonitor = new FakeMonitor2();
 

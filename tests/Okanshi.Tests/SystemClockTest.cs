@@ -3,7 +3,8 @@ using System.Threading;
 using FluentAssertions;
 using Xunit;
 
-namespace Okanshi.Test {
+namespace Okanshi.Test
+{
     public class SystemClockTest
     {
         private readonly SystemClock systemClock;

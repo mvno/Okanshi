@@ -56,7 +56,8 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Consists_of_a_single_monitor() {
+        public void Consists_of_a_single_monitor()
+        {
             var counter = new BasicCounter(MonitorConfig.Build("Test"));
 
             counter.GetAllMonitors().Should().HaveCount(1);

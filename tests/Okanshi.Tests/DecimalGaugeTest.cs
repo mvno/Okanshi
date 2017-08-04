@@ -68,7 +68,8 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Consists_of_a_single_monitor() {
+        public void Consists_of_a_single_monitor()
+        {
             var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
 
             gauge.GetAllMonitors().Should().HaveCount(1);
