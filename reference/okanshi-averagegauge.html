@@ -53,33 +53,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
-            new(config, step)
+            new(config)
           </code>
           <div class="tip" id="29">
-            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan) -&gt; AverageGauge<br />
+            <strong>Signature:</strong> config:MonitorConfig -&gt; AverageGauge<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L149-149" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
-            new(config, step, clock)
-          </code>
-          <div class="tip" id="30">
-            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan * clock:IClock) -&gt; AverageGauge<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L137-137" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L208-208" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -98,15 +79,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+          <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
             Config
           </code>
-          <div class="tip" id="31">
+          <div class="tip" id="30">
             <strong>Signature:</strong> MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L158-158" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L232-232" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -114,6 +95,27 @@
 
 
               <p>CompiledName: <code>get_Config</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+            GetAllMonitors()
+          </code>
+          <div class="tip" id="31">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMonitor&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L242-242" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets all the monitors on the current monitor. This is the best way to handle
+sub monitors.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -127,7 +129,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L156-156" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L229-229" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -140,14 +142,34 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '33', 33)" onmouseover="showTip(event, '33', 33)">
-            Reset()
+            GetValueAndReset()
           </code>
           <div class="tip" id="33">
+            <strong>Signature:</strong> unit -&gt; int64<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L238-238" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the value and resets the monitor</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
+            Reset()
+          </code>
+          <div class="tip" id="34">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L160-160" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L235-235" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -159,15 +181,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
+          <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
             Set(newValue)
           </code>
-          <div class="tip" id="34">
+          <div class="tip" id="35">
             <strong>Signature:</strong> newValue:int64 -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L152-152" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L226-226" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

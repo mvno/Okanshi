@@ -79,8 +79,7 @@
           <td class="type-name">
             <a href="okanshi-basiccounter.html">BasicCounter</a>
           </td>
-          <td class="xmldoc"><p>A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
-Observers are responsible for converting to a rate and handling overflows if they occur.</p>
+          <td class="xmldoc"><p>A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.</p>
 
 </td>
         </tr>
@@ -97,17 +96,6 @@ Observers are responsible for converting to a rate and handling overflows if the
             <a href="okanshi-basictimer.html">BasicTimer</a>
           </td>
           <td class="xmldoc"><p>A simple timer providing the total time, count, min and max for the times that have been recorded</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="okanshi-countertoratemetrictransformobserver.html">CounterToRateMetricTransformObserver</a>
-          </td>
-          <td class="xmldoc"><p>Convert counter metrics to rate per second. The rate is calculated by comparing two samples of the given metric
-and looking at the delta. This means that two samples are required to compute the rate, and that no value will be
-sent to the wrapped observer until a second sample arrives. If the metric is not updated within the heartbeat interval
-the previous cached value will be dropped, and new sample coming in will be treated as the first sample for that metric.</p>
 
 </td>
         </tr>
@@ -147,7 +135,7 @@ the previous cached value will be dropped, and new sample coming in will be trea
           <td class="type-name">
             <a href="okanshi-doublecounter.html">DoubleCounter</a>
           </td>
-          <td class="xmldoc"><p>A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.</p>
+          <td class="xmldoc"><p>A simple double counter.</p>
 
 </td>
         </tr>
@@ -383,9 +371,9 @@ with the same name, but different types</p>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="okanshi-peakratecounter.html">PeakRateCounter</a>
+            <a href="okanshi-peakcounter.html">PeakCounter</a>
           </td>
-          <td class="xmldoc"><p>Counter tracking the maximum count per step within a specified interval</p>
+          <td class="xmldoc"><p>Counter tracking the maximum count</p>
 
 </td>
         </tr>
@@ -403,22 +391,6 @@ with the same name, but different types</p>
           </td>
           <td class="xmldoc"><p>Used to monitor Windows performance counters. Be aware that some performance counters, requires multiple readings before
 returning any value.</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="okanshi-stepcounter.html">StepCounter</a>
-          </td>
-          <td class="xmldoc"><p>A simple counter backed by a StepLong. The value is the rate for the previous interval as defined by the step.</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="okanshi-steplong.html">StepLong</a>
-          </td>
-          <td class="xmldoc"><p>Utility class for managing a set of AtomicLong instances mapped to a particular step interval.</p>
 
 </td>
         </tr>

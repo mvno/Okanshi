@@ -53,15 +53,15 @@ non-negative, the initial value is 0.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '144', 144)" onmouseover="showTip(event, '144', 144)">
+          <code onmouseout="hideTip(event, '160', 160)" onmouseover="showTip(event, '160', 160)">
             new(config)
           </code>
-          <div class="tip" id="144">
+          <div class="tip" id="160">
             <strong>Signature:</strong> config:MonitorConfig -&gt; MaxGauge<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L27-27" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -80,15 +80,15 @@ non-negative, the initial value is 0.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '145', 145)" onmouseover="showTip(event, '145', 145)">
+          <code onmouseout="hideTip(event, '161', 161)" onmouseover="showTip(event, '161', 161)">
             Config
           </code>
-          <div class="tip" id="145">
+          <div class="tip" id="161">
             <strong>Signature:</strong> MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L42-42" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L56-56" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -101,15 +101,36 @@ non-negative, the initial value is 0.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '146', 146)" onmouseover="showTip(event, '146', 146)">
+          <code onmouseout="hideTip(event, '162', 162)" onmouseover="showTip(event, '162', 162)">
+            GetAllMonitors()
+          </code>
+          <div class="tip" id="162">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMonitor&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L66-66" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets all the monitors on the current monitor. This is the best way to handle
+sub monitors.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '163', 163)" onmouseover="showTip(event, '163', 163)">
             GetValue()
           </code>
-          <div class="tip" id="146">
+          <div class="tip" id="163">
             <strong>Signature:</strong> unit -&gt; int64<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L40-40" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L53-53" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -121,15 +142,35 @@ non-negative, the initial value is 0.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '147', 147)" onmouseover="showTip(event, '147', 147)">
+          <code onmouseout="hideTip(event, '164', 164)" onmouseover="showTip(event, '164', 164)">
+            GetValueAndReset()
+          </code>
+          <div class="tip" id="164">
+            <strong>Signature:</strong> unit -&gt; int64<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L62-62" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the value and resets the monitor</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '165', 165)" onmouseover="showTip(event, '165', 165)">
             Reset()
           </code>
-          <div class="tip" id="147">
+          <div class="tip" id="165">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L44-44" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L59-59" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -141,15 +182,15 @@ non-negative, the initial value is 0.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '148', 148)" onmouseover="showTip(event, '148', 148)">
+          <code onmouseout="hideTip(event, '166', 166)" onmouseover="showTip(event, '166', 166)">
             Set(newValue)
           </code>
-          <div class="tip" id="148">
+          <div class="tip" id="166">
             <strong>Signature:</strong> newValue:int64 -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L31-31" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L50-50" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

@@ -40,7 +40,7 @@
   <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>A simple double counter backed by a StepLong but using doubles. The value is the rate per second for the previous interval as defined by the step.</p>
+<p>A simple double counter.</p>
 
 </div>
   <h3>Constructors</h3>
@@ -52,34 +52,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '73', 73)" onmouseover="showTip(event, '73', 73)">
-            new(config, step)
+          <code onmouseout="hideTip(event, '78', 78)" onmouseover="showTip(event, '78', 78)">
+            new(config)
           </code>
-          <div class="tip" id="73">
-            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan) -&gt; DoubleCounter<br />
+          <div class="tip" id="78">
+            <strong>Signature:</strong> config:MonitorConfig -&gt; DoubleCounter<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L96-96" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '74', 74)" onmouseover="showTip(event, '74', 74)">
-            new(config, step, clock)
-          </code>
-          <div class="tip" id="74">
-            <strong>Signature:</strong> (config:MonitorConfig * step:TimeSpan * clock:IClock) -&gt; DoubleCounter<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L81-81" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L64-64" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -98,15 +79,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '75', 75)" onmouseover="showTip(event, '75', 75)">
+          <code onmouseout="hideTip(event, '79', 79)" onmouseover="showTip(event, '79', 79)">
             Config
           </code>
-          <div class="tip" id="75">
+          <div class="tip" id="79">
             <strong>Signature:</strong> MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L112-112" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L83-83" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -119,19 +100,20 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '76', 76)" onmouseover="showTip(event, '76', 76)">
-            GetValue()
+          <code onmouseout="hideTip(event, '80', 80)" onmouseover="showTip(event, '80', 80)">
+            GetAllMonitors()
           </code>
-          <div class="tip" id="76">
-            <strong>Signature:</strong> unit -&gt; float<br />
+          <div class="tip" id="80">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMonitor&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L106-106" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L90-90" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the rate per second</p>
+          <p>Gets all the monitors on the current monitor. This is the best way to handle
+sub monitors.</p>
 
 
         </td>
@@ -139,15 +121,55 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '77', 77)" onmouseover="showTip(event, '77', 77)">
+          <code onmouseout="hideTip(event, '81', 81)" onmouseover="showTip(event, '81', 81)">
+            GetValue()
+          </code>
+          <div class="tip" id="81">
+            <strong>Signature:</strong> unit -&gt; float<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L80-80" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the maximum count</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '82', 82)" onmouseover="showTip(event, '82', 82)">
+            GetValueAndReset()
+          </code>
+          <div class="tip" id="82">
+            <strong>Signature:</strong> unit -&gt; float<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L86-86" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the value and resets the monitor</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '83', 83)" onmouseover="showTip(event, '83', 83)">
             Increment()
           </code>
-          <div class="tip" id="77">
+          <div class="tip" id="83">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L103-103" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L77-77" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -159,15 +181,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '78', 78)" onmouseover="showTip(event, '78', 78)">
+          <code onmouseout="hideTip(event, '84', 84)" onmouseover="showTip(event, '84', 84)">
             Increment(amount)
           </code>
-          <div class="tip" id="78">
+          <div class="tip" id="84">
             <strong>Signature:</strong> amount:double -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L99-99" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Counters.fs#L73-73" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

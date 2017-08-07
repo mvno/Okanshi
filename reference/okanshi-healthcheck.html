@@ -52,15 +52,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '84', 84)" onmouseover="showTip(event, '84', 84)">
+          <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
             new(config, check)
           </code>
-          <div class="tip" id="84">
+          <div class="tip" id="92">
             <strong>Signature:</strong> (config:MonitorConfig * check:Func&lt;bool&gt;) -&gt; HealthCheck<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L36-36" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L33-33" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -71,10 +71,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '85', 85)" onmouseover="showTip(event, '85', 85)">
+          <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
             new(registry, config, check)
           </code>
-          <div class="tip" id="85">
+          <div class="tip" id="93">
             <strong>Signature:</strong> (registry:IMonitorRegistry * config:MonitorConfig * check:Func&lt;bool&gt;) -&gt; HealthCheck<br />
                       </div>
         </td>
@@ -98,15 +98,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
+          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
             Config
           </code>
-          <div class="tip" id="86">
+          <div class="tip" id="94">
             <strong>Signature:</strong> MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L42-42" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L46-46" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -119,10 +119,51 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
+          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
+            GetAllMonitors()
+          </code>
+          <div class="tip" id="95">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMonitor&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L43-43" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets all the monitors on the current monitor. This is the best way to handle
+sub monitors.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
             GetValue()
           </code>
-          <div class="tip" id="87">
+          <div class="tip" id="96">
+            <strong>Signature:</strong> unit -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L36-36" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get value</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
+            GetValueAndReset()
+          </code>
+          <div class="tip" id="97">
             <strong>Signature:</strong> unit -&gt; bool<br />
                       </div>
         </td>
@@ -131,7 +172,7 @@
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Get value</p>
+          <p>Gets the value and resets the monitor</p>
 
 
         </td>

@@ -53,10 +53,10 @@ returning any value.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '240', 240)" onmouseover="showTip(event, '240', 240)">
+          <code onmouseout="hideTip(event, '257', 257)" onmouseover="showTip(event, '257', 257)">
             new(...)
           </code>
-          <div class="tip" id="240">
+          <div class="tip" id="257">
             <strong>Signature:</strong> (monitorConfig:MonitorConfig * performanceCounterConfig:PerformanceCounterConfig) -&gt; PerformanceCounterMonitor<br />
                       </div>
         </td>
@@ -72,10 +72,10 @@ returning any value.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '241', 241)" onmouseover="showTip(event, '241', 241)">
+          <code onmouseout="hideTip(event, '258', 258)" onmouseover="showTip(event, '258', 258)">
             new(...)
           </code>
-          <div class="tip" id="241">
+          <div class="tip" id="258">
             <strong>Signature:</strong> (registry:IMonitorRegistry * monitorConfig:MonitorConfig * performanceCounterConfig:PerformanceCounterConfig) -&gt; PerformanceCounterMonitor<br />
                       </div>
         </td>
@@ -99,10 +99,10 @@ returning any value.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '242', 242)" onmouseover="showTip(event, '242', 242)">
+          <code onmouseout="hideTip(event, '259', 259)" onmouseover="showTip(event, '259', 259)">
             Config
           </code>
-          <div class="tip" id="242">
+          <div class="tip" id="259">
             <strong>Signature:</strong> MonitorConfig<br />
                       </div>
         </td>
@@ -120,10 +120,31 @@ returning any value.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '243', 243)" onmouseover="showTip(event, '243', 243)">
+          <code onmouseout="hideTip(event, '260', 260)" onmouseover="showTip(event, '260', 260)">
+            GetAllMonitors()
+          </code>
+          <div class="tip" id="260">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMonitor&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/PerformanceCounter.fs#L48-48" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets all the monitors on the current monitor. This is the best way to handle
+sub monitors.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '261', 261)" onmouseover="showTip(event, '261', 261)">
             GetValue()
           </code>
-          <div class="tip" id="243">
+          <div class="tip" id="261">
             <strong>Signature:</strong> unit -&gt; float32<br />
                       </div>
         </td>
@@ -133,6 +154,26 @@ returning any value.</p>
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           <p>Gets the performance counter value</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '262', 262)" onmouseover="showTip(event, '262', 262)">
+            GetValueAndReset()
+          </code>
+          <div class="tip" id="262">
+            <strong>Signature:</strong> unit -&gt; float32<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/PerformanceCounter.fs#L44-44" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the value and resets the monitor</p>
 
 
         </td>
