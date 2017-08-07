@@ -97,12 +97,6 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig) as self =
         reset'()
         result
     
-    do 
-        registry.Register(max)
-        registry.Register(min)
-        registry.Register(count)
-        registry.Register(total)
-    
     new(config) = BasicTimer(DefaultMonitorRegistry.Instance, config)
     
     /// Time a System.Func call and return the value
@@ -137,6 +131,16 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig) as self =
 
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() =
+        seq {
+            yield self :> IMonitor
+            yield max :> IMonitor
+            yield min :> IMonitor
+            yield count :> IMonitor
+            yield total :> IMonitor }
     
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
@@ -146,6 +150,7 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig) as self =
         member self.Start() = self.Start()
         member self.Register(elapsed) = self.Register(elapsed)
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
 /// frequent calls that last less than the polling interval, use the BasicTimer instead.
@@ -180,10 +185,6 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         finally
             id |> markAsCompleted
     
-    do 
-        registry.Register(activeTasks)
-        registry.Register(totalDurationInSeconds)
-    
     new(config) = LongTaskTimer(DefaultMonitorRegistry.Instance, config)
     
     /// Time a System.Func call and return the value
@@ -213,6 +214,13 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     /// Gets the value and resets the monitor
     member self.GetValueAndReset() = self.GetValue()
 
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() =
+        seq {
+            yield activeTasks :> IMonitor
+            yield totalDurationInSeconds :> IMonitor }
+
     /// Manually register a timing, should only be used in special case
     member __.Register(elapsed : int64) : unit = raise (NotSupportedException("LongTaskTimer does not support manually registering timings"))
 
@@ -224,3 +232,4 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         member self.Start() = self.Start()
         member self.Register(elapsed) = self.Register(elapsed)
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()

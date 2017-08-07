@@ -1,15 +1,17 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
-
-namespace Okanshi.Test {
+namespace Okanshi.Test
+{
     public class AverageGaugeTest
     {
         private readonly ManualClock manualClock;
         private readonly AverageGauge gauge;
 
-        public AverageGaugeTest() {
+        public AverageGaugeTest()
+        {
             manualClock = new ManualClock();
             gauge = new AverageGauge(MonitorConfig.Build("Test"));
         }
@@ -27,7 +29,8 @@ namespace Okanshi.Test {
         }
 
         [Fact]
-        public void Value_is_the_average() {
+        public void Value_is_the_average()
+        {
             gauge.Set(100);
             gauge.Set(200);
 
@@ -35,7 +38,8 @@ namespace Okanshi.Test {
         }
 
         [Fact]
-        public void Get_and_reset_sets_the_value_to_zero() {
+        public void Get_and_reset_sets_the_value_to_zero()
+        {
             gauge.Set(100L);
 
             gauge.GetValueAndReset();
@@ -44,11 +48,21 @@ namespace Okanshi.Test {
         }
 
         [Fact]
-        public void Get_and_reset_gets_the_maximum_value() {
+        public void Get_and_reset_gets_the_maximum_value()
+        {
             const long expected = 100L;
             gauge.Set(expected);
 
             gauge.GetValueAndReset().Should().Be(expected);
+        }
+
+        [Fact]
+        public void Consists_of_a_single_monitor()
+        {
+            var gauge = new AverageGauge(MonitorConfig.Build("Test"));
+
+            gauge.GetAllMonitors().Should().HaveCount(1);
+            gauge.GetAllMonitors().Single().Should().BeSameAs(gauge);
         }
     }
 }

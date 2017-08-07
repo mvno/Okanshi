@@ -1,6 +1,7 @@
 ### 5.0.0-beta2
 
-* Fix grouping bug in InfluxDB observer, which causes not composite metrics to be sent incorrectly to Influx
+**BREAKING CHANGES**
+* Introduce submonitors to allowing grouping of monitors. This means that submonitors no longer should be registered in the registry, instead submonitors should be returned by ```GetAllMonitors()```. This allows more control in the obsservers to decide how to process the information. Currently the InfluxDbObserver doesn't support submonitors with submonitors.
 
 ### 5.0.0-beta
 

@@ -47,6 +47,10 @@ type PeakCounter(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
@@ -54,6 +58,7 @@ type PeakCounter(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// A simple double counter.
 type DoubleCounter(config : MonitorConfig) = 
@@ -79,6 +84,10 @@ type DoubleCounter(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = count.GetAndSet(0.0)
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface ICounter<double> with
         member self.Increment() = self.Increment()
@@ -86,6 +95,7 @@ type DoubleCounter(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
 
 /// A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
 type BasicCounter(config : MonitorConfig) = 
@@ -105,6 +115,10 @@ type BasicCounter(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = value.Get()
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
@@ -112,3 +126,4 @@ type BasicCounter(config : MonitorConfig) =
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()

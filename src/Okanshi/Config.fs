@@ -61,6 +61,10 @@ type IMonitor =
     /// Gets the value and resets the monitor
     abstract GetValueAndReset : unit -> obj
 
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    abstract GetAllMonitors : unit -> IMonitor seq
+
 /// The types used to indicate the type of a value
 [<AbstractClass; Sealed>]
 type DataSourceType private () = 

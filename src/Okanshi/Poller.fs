@@ -14,6 +14,8 @@ type Metric =
         Tags : Tag array;
         /// The value
         Value : obj
+        /// The sub metrics
+        SubMetrics : Metric array
     }
 
 type MetricEventArgs(metrics : Metric array) =
@@ -35,11 +37,25 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
     let metricsPolled = new Event<MetricEventDelegate, MetricEventArgs>()
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
-    
+
+    let rec convertMonitorToMetric (monitor : IMonitor) =
+        let submetrics =
+            monitor.GetAllMonitors()
+            |> Seq.except (seq { yield monitor })
+            |> Seq.map convertMonitorToMetric
+            |> Seq.toArray
+        {
+            Name = monitor.Config.Name
+            Timestamp = DateTimeOffset.UtcNow
+            Tags = monitor.Config.Tags
+            Value = monitor.GetValueAndReset()
+            SubMetrics = submetrics
+        }
+
     let pollMetrics () =
         let metrics =
             registry.GetRegisteredMonitors()
-            |> Seq.map (fun x -> { Name = x.Config.Name; Timestamp = DateTimeOffset.UtcNow; Tags = x.Config.Tags; Value = x.GetValueAndReset() })
+            |> Seq.map convertMonitorToMetric
             |> Seq.toArray
         metricsPolled.Trigger(self, new MetricEventArgs(metrics))
 
@@ -69,6 +85,9 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
     /// Event raised when metric have been polled.
     [<CLIEvent>]
     member __.MetricsPolled = metricsPolled.Publish
+
+    /// Force poll the monitors from the registry
+    member __.PollMetrics() = pollMetrics()
     
     /// Stop polling for new metrics
     member __.Stop() =

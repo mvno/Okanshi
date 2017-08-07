@@ -47,6 +47,16 @@ type MonitorEndpoint(options : EndpointOptions) =
     let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
+
+    let rec getSubMetrics (metrics : Metric seq) : Metric list =
+        metrics |> Seq.fold (fun state x ->
+            let state' = 
+                if x.SubMetrics |> Seq.isEmpty then state
+                else x.SubMetrics |> getSubMetrics
+            x :: state') []
+
+    let getObservations (observer : IMetricObserver) =
+        observer.GetObservations()
     
     /// Create the endpoint with default values
     new () = MonitorEndpoint(new EndpointOptions())
@@ -99,7 +109,7 @@ type MonitorEndpoint(options : EndpointOptions) =
                     else
                         { Version = "1"; Data = [] } |> sendResponse context
                 else
-                    { Version = "2"; Data = observer.GetObservations() } |> sendResponse context
+                    { Version = "2"; Data = observer |> getObservations } |> sendResponse context
         }
         Async.Start(server, cancellationToken)
 

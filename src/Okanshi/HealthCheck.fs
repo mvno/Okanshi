@@ -29,9 +29,6 @@ type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Fu
     let config' = config.WithTag(DataSourceType.HealthCheck)
 
     let check' = new BasicGauge<bool>(config', check)
-
-    do
-        registry.Register(check')
     
     new (config, check) = HealthCheck(DefaultMonitorRegistry.Instance, config, check)
 
@@ -40,6 +37,10 @@ type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Fu
 
     /// Gets the value and resets the monitor
     member __.GetValueAndReset() = check'.GetValueAndReset()
+
+    /// Gets all the monitors on the current monitor. This is the best way to handle
+    /// sub monitors.
+    member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
     /// The config
     member __.Config = config'
@@ -48,3 +49,4 @@ type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Fu
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config
         member self.GetValueAndReset() = self.GetValueAndReset() :> obj
+        member self.GetAllMonitors() = self.GetAllMonitors()
