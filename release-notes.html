@@ -32,6 +32,10 @@
       <div class="row">
         <div class="span9" id="main">
           
+<h3><a name="5-0-0-beta3" class="anchor" href="#5-0-0-beta3">5.0.0-beta3</a></h3>
+<ul>
+<li>Fix bug in the InfluxDB observer where it couldn't handle 64-bit integers correctly</li>
+</ul>
 <h3><a name="5-0-0-beta2" class="anchor" href="#5-0-0-beta2">5.0.0-beta2</a></h3>
 <p><strong>BREAKING CHANGES</strong>
 * Introduce submonitors to allowing grouping of monitors. This means that submonitors no longer should be registered in the registry, instead submonitors should be returned by <code>GetAllMonitors()</code>. This allows more control in the obsservers to decide how to process the information. Currently the InfluxDbObserver doesn't support submonitors with submonitors.</p>
