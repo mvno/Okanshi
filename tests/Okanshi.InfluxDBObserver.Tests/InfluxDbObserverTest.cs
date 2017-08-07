@@ -164,25 +164,6 @@ namespace Okanshi.InfluxDBObserver.Tests
         }
 
         [Fact]
-        public void Statistic_tag_is_ignored()
-        {
-            const string tagName = "statistic";
-            const string tagValue = "avg";
-            const int value = 100;
-            var options = new InfluxDbObserverOptions("databaseName");
-            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
-                options);
-
-            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, value, new Metric[0]) });
-
-            influxDbClient.Received(1)
-                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Is<IEnumerable<Point>>(points => points.All(point => point.Tags.All(tag => tag.Key != tagName) &&
-                                                                             point.Fields.Any(
-                                                                                 field => field.Key == tagValue && (float)field.Value == value))));
-        }
-
-        [Fact]
         public void Tags_can_be_converted_to_float()
         {
             const string tagName = "tag";
@@ -243,67 +224,23 @@ namespace Okanshi.InfluxDBObserver.Tests
         }
 
         [Fact]
-        public void Tags_are_converted_to_field_event_if_statistic_tag_also_is_present()
+        public void Submetrics_are_converted_to_fields_with_the_name_of_the_statistic()
         {
-            const string statisticTag = "statistic";
-            const string statisticTagValue = "avg";
-            const string tagName = "tagName";
-            const string tagValue = "10";
-            const int value = 100;
-            var options = new InfluxDbObserverOptions("databaseName")
-            {
-                TagToFieldSelector = tag => tag.Key == tagName,
-            };
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
-                options);
+                new InfluxDbObserverOptions("database"));
+            var submetrics = new[]
+            {
+                new Metric("name", DateTimeOffset.Now, new[] { new Tag("statistic", "max") }, 200, new Metric[0])
+            };
 
             observer.Update(new[]
-                { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(statisticTag, statisticTagValue), new Tag(tagName, tagValue), }, value, new Metric[0]) });
+                { new Metric("name", DateTimeOffset.UtcNow, Enumerable.Empty<Tag>().ToArray(), 100, submetrics) });
 
             influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Is<IEnumerable<Point>>(points => points.All(point => point.Tags.All(tag => tag.Key != statisticTag && tag.Key != tagName) &&
-                                                                             point.Fields.Any(
-                                                                                 field => field.Key == statisticTagValue && (float)field.Value == value) &&
-                                                                             point.Fields.Any(
-                                                                                 field => field.Key == tagName && (int)field.Value ==
-                                                                                          Convert.ToInt32(tagValue)))));
-        }
-
-        [Fact]
-        public void Measurements_with_same_tag_keys_but_different_values_are_both_sent_to_server()
-        {
-            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
-                new InfluxDbObserverOptions("databaseName"));
-
-            observer.Update(new[]
-            {
-                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test1") }, 1, new Metric[0]),
-                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test2") }, 2, new Metric[0])
-            });
-
-            influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IEnumerable<Point>>(points => points.Count() == 2 &&
-                                                     (float)(points.Single(x => x.Tags.Any(y => y.Value == "Test1")).Fields.Single(y => y.Key == "value")
-                                                         .Value) ==
-                                                     1 && (float)(points.Single(x => x.Tags.Any(y => y.Value == "Test2")).Fields.Single(y => y.Key == "value")
-                                                         .Value) == 2));
-        }
-
-        [Fact]
-        public void Measurements_with_same_name_and_different_statistics_have_all_statistics_converted_to_fields()
-        {
-            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
-                new InfluxDbObserverOptions("databaseName"));
-
-            observer.Update(new[]
-            {
-                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test1"), new Tag("statistic", "max") }, 1, new Metric[0]),
-                new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag("Test", "Test1"), new Tag("statistic", "min") }, 2, new Metric[0])
-            });
-
-            influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IEnumerable<Point>>(points => points.Count() == 1 && points.Single().Fields.All(x => x.Key == "max" || x.Key == "min")));
+                    Arg.Is<IEnumerable<Point>>(points => points.Count() == 1 &&
+                                                         points.Any(p => p.Fields.Any(f => f.Key == "max" && (int)f.Value == 200) &&
+                                                                         p.Fields.Any(f => f.Key == "value" && (int)f.Value == 100))));
         }
     }
 }
