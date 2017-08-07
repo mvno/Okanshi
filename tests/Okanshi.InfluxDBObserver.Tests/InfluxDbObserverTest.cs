@@ -224,6 +224,48 @@ namespace Okanshi.InfluxDBObserver.Tests
         }
 
         [Fact]
+        public void Tags_can_be_converted_to_int()
+        {
+            const int expectedValue = 10;
+            const string tagName = "tag";
+            var tagValue = expectedValue.ToString();
+            var options = new InfluxDbObserverOptions("databaseName")
+            {
+                TagToFieldSelector = tag => tag.Key == tagName,
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, 0, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == tagName && (int)field.Value == expectedValue))));
+        }
+
+        [Fact]
+        public void Tags_can_be_converted_to_long()
+        {
+            const long expectedValue = (long)int.MaxValue + 100;
+            const string tagName = "tag";
+            var tagValue = expectedValue.ToString();
+            var options = new InfluxDbObserverOptions("databaseName")
+            {
+                TagToFieldSelector = tag => tag.Key == tagName,
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, 0, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == tagName && (long)field.Value == expectedValue))));
+        }
+
+        [Fact]
         public void Submetrics_are_converted_to_fields_with_the_name_of_the_statistic()
         {
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
@@ -241,6 +283,81 @@ namespace Okanshi.InfluxDBObserver.Tests
                     Arg.Is<IEnumerable<Point>>(points => points.Count() == 1 &&
                                                          points.Any(p => p.Fields.Any(f => f.Key == "max" && (int)f.Value == 200) &&
                                                                          p.Fields.Any(f => f.Key == "value" && (int)f.Value == 100))));
+        }
+
+        [Fact]
+        public void Fields_can_be_converted_to_long() {
+            const long expectedValue = (long)int.MaxValue + 100;
+            var options = new InfluxDbObserverOptions("databaseName");
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], expectedValue, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == "value" && (long)field.Value == expectedValue))));
+        }
+
+        [Fact]
+        public void Fields_can_be_converted_to_int() {
+            const int expectedValue = 10;
+            var options = new InfluxDbObserverOptions("databaseName");
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], expectedValue, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == "value" && (int)field.Value == expectedValue))));
+        }
+
+        [Fact]
+        public void Fields_can_be_converted_to_float() {
+            const float expectedValue = 10.1f;
+            var options = new InfluxDbObserverOptions("databaseName");
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], expectedValue, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == "value" && (float)field.Value == expectedValue))));
+        }
+
+        [Fact]
+        public void Fields_can_be_converted_to_boolean() {
+            const bool expectedValue = true;
+            var options = new InfluxDbObserverOptions("databaseName");
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], expectedValue, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == "value" && (bool)field.Value == expectedValue))));
+        }
+
+        [Fact]
+        public void Fields_can_be_converted_to_string() {
+            const string expectedValue = "any string";
+            var options = new InfluxDbObserverOptions("databaseName");
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], expectedValue, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == "value" && (string)field.Value == expectedValue))));
         }
     }
 }
