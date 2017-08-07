@@ -111,6 +111,12 @@ namespace Okanshi.Observers
                 return new Field(tag.Key, i);
             }
 
+            long l;
+            if (long.TryParse(tag.Value, out l))
+            {
+                return new Field(tag.Key, l);
+            }
+
             float f;
             if (float.TryParse(tag.Value, out f))
             {
@@ -131,6 +137,10 @@ namespace Okanshi.Observers
             if (value is int)
             {
                 return new Field(key, (int)value);
+            }
+
+            if (value is long) {
+                return new Field(key, (long)value);
             }
 
             if (value is float)
