@@ -206,16 +206,16 @@ type DecimalGauge(config : MonitorConfig) =
 
 /// Gauge that keeps track of the average value since last reset. Initial value is 0.
 type AverageGauge(config : MonitorConfig) = 
-    let mutable value = 0L
+    let mutable value = 0.0
     let mutable count = 0L
     let syncRoot = new obj()
     
     let rec updateAverage v = 
         count <- count + 1L
-        value <- ((value * (count - 1L)) + v) / count
+        value <- ((value * ((count - 1L) |> float)) + v) / (count |> float)
     
     let getValue'() = value
-    let resetValue'() = value <- 0L
+    let resetValue'() = value <- 0.0
     
     let getValueAndReset'() = 
         let result = getValue'()
@@ -241,7 +241,7 @@ type AverageGauge(config : MonitorConfig) =
     /// sub monitors.
     member self.GetAllMonitors() = seq { yield self :> IMonitor }
     
-    interface IGauge<int64> with
+    interface IGauge<float> with
         member self.Set(newValue) = self.Set(newValue)
         member self.GetValue() = self.GetValue() :> obj
         member self.Config = self.Config

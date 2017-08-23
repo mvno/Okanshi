@@ -89,7 +89,7 @@ namespace Okanshi.Observers
             }
         }
 
-        private static IEnumerable<Field> ConvertSubMetricsToFields(IEnumerable<Metric> subMetrics)
+        private IEnumerable<Field> ConvertSubMetricsToFields(IEnumerable<Metric> subMetrics)
         {
             return subMetrics
                 .Select(metric => new { metric, statTag = metric.Tags.FirstOrDefault(x => x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase)) })
@@ -103,57 +103,63 @@ namespace Okanshi.Observers
                                    !x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static Field ConvertTagToField(Tag tag)
+        private Field ConvertTagToField(Tag tag)
         {
             int i;
             if (int.TryParse(tag.Value, out i))
             {
-                return new Field(tag.Key, i);
+                return ConvertToField(tag.Key, i);
             }
 
             long l;
             if (long.TryParse(tag.Value, out l))
             {
-                return new Field(tag.Key, l);
+                return ConvertToField(tag.Key, l);
             }
 
             float f;
             if (float.TryParse(tag.Value, out f))
             {
-                return new Field(tag.Key, f);
+                return ConvertToField(tag.Key, f);
             }
 
             bool b;
             if (bool.TryParse(tag.Value, out b))
             {
-                return new Field(tag.Key, b);
+                return ConvertToField(tag.Key, b);
             }
 
-            return new Field(tag.Key, tag.Value);
+            return ConvertToField(tag.Key, tag.Value);
         }
 
-        private static Field ConvertToField(string key, object value)
+        private Field ConvertToField(string key, object value)
         {
-            if (value is int)
+            var convertedValue = options.ConvertFieldType(value);
+            if (convertedValue is int)
             {
-                return new Field(key, (int)value);
+                return new Field(key, (int)convertedValue);
             }
 
-            if (value is long) {
-                return new Field(key, (long)value);
+            if (convertedValue is long) {
+                return new Field(key, (long)convertedValue);
             }
 
-            if (value is float)
+            if (convertedValue is float)
             {
-                return new Field(key, (float)value);
+                return new Field(key, (float)convertedValue);
             }
 
-            if (value is bool)
+            if (convertedValue is double)
             {
-                return new Field(key, (bool)value);
+                return new Field(key, Convert.ToSingle(convertedValue));
             }
 
-            return new Field(key, value.ToString());
+            if (convertedValue is bool)
+            {
+                return new Field(key, (bool)convertedValue);
+            }
+
+            return new Field(key, convertedValue.ToString());
         }
 
         /// <summary>

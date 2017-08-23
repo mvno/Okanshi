@@ -1,3 +1,7 @@
+### 5.0.0-beta4
+
+* Add support for override the field types in the InfluxDB observer
+
 ### 5.0.0-beta3
 
 * Fix bug in the InfluxDB observer where it couldn't handle 64-bit integers correctly
