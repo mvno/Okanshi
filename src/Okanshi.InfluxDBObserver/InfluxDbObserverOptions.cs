@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using InfluxDB.WriteOnly;
 
 namespace Okanshi.Observers
 {
@@ -44,5 +45,10 @@ namespace Okanshi.Observers
         {
             DatabaseSelector = _ => databaseName;
         }
+
+        /// <summary>
+        /// Function used to convert field types. Default is no conversion.
+        /// </summary>
+        public Func<object, object> ConvertFieldType { get; set; } = x => x;
     }
 }

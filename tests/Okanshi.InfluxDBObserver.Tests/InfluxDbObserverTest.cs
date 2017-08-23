@@ -359,5 +359,41 @@ namespace Okanshi.InfluxDBObserver.Tests
                     Arg.Is<IEnumerable<Point>>(points => points.All(
                         point => point.Fields.Any(field => field.Key == "value" && (string)field.Value == expectedValue))));
         }
+
+        [Fact]
+        public void Fields_are_converted_according_to_options() {
+            const float expectedValue = 1.0f;
+            var options = new InfluxDbObserverOptions("databaseName")
+            {
+                ConvertFieldType = x => Convert.ToSingle(x)
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], (int)expectedValue, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == "value" && (float)field.Value == expectedValue))));
+        }
+
+        [Fact]
+        public void Fields_converted_to_double_are_handled_as_float() {
+            const float expectedValue = 1.0f;
+            var options = new InfluxDbObserverOptions("databaseName")
+            {
+                ConvertFieldType = x => Convert.ToDouble(x)
+            };
+            var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
+                options);
+
+            observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], expectedValue, new Metric[0]) });
+
+            influxDbClient.Received(1)
+                .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Is<IEnumerable<Point>>(points => points.All(
+                        point => point.Fields.Any(field => field.Key == "value" && (float)field.Value == expectedValue))));
+        }
     }
 }
