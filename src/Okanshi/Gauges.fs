@@ -215,7 +215,9 @@ type AverageGauge(config : MonitorConfig) =
         value <- ((value * ((count - 1L) |> float)) + v) / (count |> float)
     
     let getValue'() = value
-    let resetValue'() = value <- 0.0
+    let resetValue'() =
+        count <- 0L
+        value <- 0.0
     
     let getValueAndReset'() = 
         let result = getValue'()

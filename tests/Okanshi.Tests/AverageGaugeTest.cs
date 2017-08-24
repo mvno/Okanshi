@@ -64,5 +64,17 @@ namespace Okanshi.Test
             gauge.GetAllMonitors().Should().HaveCount(1);
             gauge.GetAllMonitors().Single().Should().BeSameAs(gauge);
         }
+
+        [Fact]
+        public void Average_is_calculated_correctly_after_reset()
+        {
+            gauge.Set(100L);
+            gauge.GetValueAndReset();
+            gauge.Set(200L);
+
+            var result = gauge.GetValueAndReset();
+
+            result.Should().Be(200);
+        }
     }
 }

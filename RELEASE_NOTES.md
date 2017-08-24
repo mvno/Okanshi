@@ -1,3 +1,7 @@
+### 5.0.0-beta4.1
+
+* Fix bug in average gauge which made the average incorrect
+
 ### 5.0.0-beta4
 
 * Add support for override the field types in the InfluxDB observer
