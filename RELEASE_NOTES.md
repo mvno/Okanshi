@@ -1,4 +1,4 @@
-### 5.0.0-beta4.1
+### 5.0.0-beta5
 
 * Fix bug in average gauge which made the average incorrect
 
