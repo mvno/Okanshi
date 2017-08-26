@@ -1,3 +1,7 @@
+### 5.0.0-beta7
+
+* The method Register on the interface Registry has been removed
+
 ### 5.0.0-beta6
 
 * Fix bug in timer which could make the average zero in cases where the submonitors were read before the average

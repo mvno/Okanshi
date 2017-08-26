@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -23,30 +22,6 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Registering_a_monitor_adds_it_to_the_list_of_registered_monitors()
-        {
-            var monitor = new FakeMonitor();
-
-            _okanshiMonitorRegistry.Register(monitor);
-
-            _okanshiMonitorRegistry
-                .GetRegisteredMonitors().Single()
-                .Should().Be(monitor);
-        }
-
-        [Fact]
-        public void Unregistering_a_monitor_removes_it_from_the_list_of_registered_monitors()
-        {
-            var monitor = new FakeMonitor();
-            _okanshiMonitorRegistry.Register(monitor);
-
-            _okanshiMonitorRegistry.Unregister(monitor);
-
-            _okanshiMonitorRegistry.GetRegisteredMonitors()
-                .Should().BeEmpty();
-        }
-
-        [Fact]
         public void Monitor_is_not_registered_when_not_added_to_the_list_of_registered_monitors()
         {
             var monitor = new FakeMonitor();
@@ -54,53 +29,6 @@ namespace Okanshi.Test
             var isRegistered = _okanshiMonitorRegistry.IsRegistered(monitor);
 
             isRegistered.Should().BeFalse();
-        }
-
-        [Fact]
-        public void Monitor_is_registered_when_added_to_the_list_of_registered_monitors()
-        {
-            var monitor = new FakeMonitor();
-            _okanshiMonitorRegistry.Register(monitor);
-
-            var isRegistered = _okanshiMonitorRegistry.IsRegistered(monitor);
-
-            isRegistered.Should().BeTrue();
-        }
-
-        [Fact]
-        public void Registering_two_monitors_of_same_type_with_same_tags_results_in_one_registrations()
-        {
-            var monitor = new FakeMonitor();
-            var anotherMonitor = new FakeMonitor();
-            _okanshiMonitorRegistry.Register(monitor);
-
-            _okanshiMonitorRegistry.Register(anotherMonitor);
-
-            _okanshiMonitorRegistry.GetRegisteredMonitors().Should().HaveCount(1);
-        }
-
-        [Fact]
-        public void Registering_two_monitors_of_same_type_with_different_tags_results_in_two_registrations()
-        {
-            var monitor = new FakeMonitor();
-            var anotherMonitor = new FakeMonitor(new[] { new Tag("Test", "Test"), });
-            _okanshiMonitorRegistry.Register(monitor);
-
-            _okanshiMonitorRegistry.Register(anotherMonitor);
-
-            _okanshiMonitorRegistry.GetRegisteredMonitors().Should().HaveCount(2);
-        }
-
-        [Fact]
-        public void Registering_monitors_multiple_times_results_in_a_single_registration()
-        {
-            var monitor = new FakeMonitor("Firstname");
-            _okanshiMonitorRegistry.Register(monitor);
-
-            _okanshiMonitorRegistry.Register(monitor);
-
-            _okanshiMonitorRegistry.GetRegisteredMonitors()
-                .Should().HaveCount(1);
         }
 
         [Fact]
@@ -174,11 +102,6 @@ namespace Okanshi.Test
                 }
             }
 
-            public FakeMonitor(string name)
-            {
-                Config = MonitorConfig.Build(name);
-            }
-
             public object GetValue()
             {
                 throw new System.NotImplementedException();
@@ -206,11 +129,6 @@ namespace Okanshi.Test
                 {
                     Config = Config.WithTags(tags);
                 }
-            }
-
-            public FakeMonitor2(string name)
-            {
-                Config = MonitorConfig.Build(name);
             }
 
             public object GetValue()

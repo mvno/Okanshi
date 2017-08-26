@@ -22,24 +22,9 @@ namespace Okanshi.Observers
         /// <param name="options">The observer options.</param>
         public InfluxDbObserver(IMetricPoller poller, IInfluxDbClient client, InfluxDbObserverOptions options)
         {
-            if (poller == null)
-            {
-                throw new ArgumentNullException(nameof(poller));
-            }
-
-            if (client == null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            this.poller = poller;
-            this.client = client;
-            this.options = options;
+            this.poller = poller ?? throw new ArgumentNullException(nameof(poller));
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
+            this.options = options ?? throw new ArgumentNullException(nameof(options));
             poller.MetricsPolled += OnMetricsPolled;
         }
 
@@ -48,6 +33,9 @@ namespace Okanshi.Observers
             Update(args.Metrics);
         }
 
+        /// <summary>
+        /// Disposes the observer
+        /// </summary>
         public void Dispose()
         {
             poller.MetricsPolled -= OnMetricsPolled;
@@ -105,26 +93,22 @@ namespace Okanshi.Observers
 
         private Field ConvertTagToField(Tag tag)
         {
-            int i;
-            if (int.TryParse(tag.Value, out i))
+            if (int.TryParse(tag.Value, out int i))
             {
                 return ConvertToField(tag.Key, i);
             }
 
-            long l;
-            if (long.TryParse(tag.Value, out l))
+            if (long.TryParse(tag.Value, out long l))
             {
                 return ConvertToField(tag.Key, l);
             }
 
-            float f;
-            if (float.TryParse(tag.Value, out f))
+            if (float.TryParse(tag.Value, out float f))
             {
                 return ConvertToField(tag.Key, f);
             }
 
-            bool b;
-            if (bool.TryParse(tag.Value, out b))
+            if (bool.TryParse(tag.Value, out bool b))
             {
                 return ConvertToField(tag.Key, b);
             }
