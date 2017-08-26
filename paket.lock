@@ -613,7 +613,6 @@ NUGET
       Microsoft.Bcl.Build (>= 1.0.14)
     Octokit (0.24)
       Microsoft.Net.Http  - restriction: && (< net45) (< win8) (< portable-win81+wpa81)
-    SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
     modules/Octokit/Octokit.fsx (291f58cc70aba6dd871cf18e66d2d88357e4f208)
