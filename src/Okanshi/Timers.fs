@@ -56,7 +56,7 @@ type ITimer =
     abstract Register : int64 -> unit
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
-type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig) as self = 
+type BasicTimer(config : MonitorConfig) as self = 
     
     [<Literal>]
     let StatisticKey = "statistic"
@@ -96,8 +96,6 @@ type BasicTimer(registry : IMonitorRegistry, config : MonitorConfig) as self =
         let result = self.GetValue()
         reset'()
         result
-    
-    new(config) = BasicTimer(DefaultMonitorRegistry.Instance, config)
     
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
