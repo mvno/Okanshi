@@ -68,7 +68,6 @@
     <Compile Include="PeakCounterTest.cs" />
     <Compile Include="PerformanceCounterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemClockTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />

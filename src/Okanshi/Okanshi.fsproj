@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
-    <Compile Include="Clock.fs" />
     <Compile Include="Atomic.fs" />
     <Compile Include="Config.fs" />
     <Compile Include="Registry.fs" />
