@@ -1,3 +1,7 @@
+### 5.0.0-beta6
+
+* Fix bug in timer which could make the average zero in cases where the submonitors were read before the average
+
 ### 5.0.0-beta5
 
 * Fix bug in average gauge which made the average incorrect
