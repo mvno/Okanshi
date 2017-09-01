@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using InfluxDB.WriteOnly;
-using Okanshi;
 
 namespace Okanshi.Observers
 {
