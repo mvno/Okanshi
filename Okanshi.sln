@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{579B8EF3-D8DC-4688-80D6-208C836B657F}"
 	ProjectSection(SolutionItems) = preProject
@@ -25,6 +25,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Okanshi.InfluxDBObserver.Tests", "tests\Okanshi.InfluxDBObserver.Tests\Okanshi.InfluxDBObserver.Tests.csproj", "{AC130C3B-DEB5-4482-90AF-9309119F7AC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin", "samples\Owin\Owin.csproj", "{409F7523-8C10-454D-AA8B-88DFB79980D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4A8D47F7-EE11-4658-A023-8F979F706DF9}"
+	ProjectSection(SolutionItems) = preProject
+		RELEASE_NOTES.md = RELEASE_NOTES.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,5 +73,8 @@ Global
 		{60A29CDD-57E6-4DD1-A66E-8FB7DAD860B0} = {73FDD149-9954-430C-AC86-EEB6DAC18521}
 		{AC130C3B-DEB5-4482-90AF-9309119F7AC0} = {73FDD149-9954-430C-AC86-EEB6DAC18521}
 		{409F7523-8C10-454D-AA8B-88DFB79980D2} = {F72EF624-66CF-4CB1-8FCA-07653655F969}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {676792B4-0DF7-486B-AA13-DC480B912057}
 	EndGlobalSection
 EndGlobal

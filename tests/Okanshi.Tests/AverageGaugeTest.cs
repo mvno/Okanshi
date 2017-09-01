@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
@@ -7,12 +6,10 @@ namespace Okanshi.Test
 {
     public class AverageGaugeTest
     {
-        private readonly ManualClock manualClock;
         private readonly AverageGauge gauge;
 
         public AverageGaugeTest()
         {
-            manualClock = new ManualClock();
             gauge = new AverageGauge(MonitorConfig.Build("Test"));
         }
 

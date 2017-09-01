@@ -1,8 +1,6 @@
 ﻿namespace Okanshi
 
 open System
-open System.Collections.Generic
-open System.Threading
 open System.Collections.Concurrent
 
 /// Tuple representing a key used to identify a monitor
@@ -14,8 +12,6 @@ type MonitorFactory = unit -> IMonitor
 /// Static use of monitors
 [<AbstractClass; Sealed>]
 type OkanshiMonitor private () = 
-    static let registeredMonitors = new Dictionary<MonitorKey, IMonitor>()
-    static let registeredMonitorsLock = new obj()
     static let monitorRegistry = DefaultMonitorRegistry.Instance
     static let tagDictionary = new ConcurrentDictionary<Tag, byte>()
     static let defaultStep = TimeSpan.FromMinutes(float 1)

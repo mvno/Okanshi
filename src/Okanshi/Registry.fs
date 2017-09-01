@@ -10,10 +10,6 @@ type IMonitorRegistry =
     /// Gets the registered monitors
     abstract GetRegisteredMonitors : unit -> IMonitor array
     
-    /// Register a monitor
-    [<Obsolete("Use GetOrAdd instead")>]
-    abstract Register : IMonitor -> unit
-    
     /// Unregister a monitor
     abstract Unregister : IMonitor -> unit
     
@@ -65,10 +61,6 @@ type OkanshiMonitorRegistry() =
     /// Gets the registered monitors
     member __.GetRegisteredMonitors() = Lock.lock syncRoot getRegisteredMonitors'
     
-    /// Register a monitor
-    [<Obsolete("Use GetOrAdd instead")>]
-    member __.Register(monitor : IMonitor) = Lock.lockWithArg syncRoot monitor register'
-    
     /// Unregister a monitor
     member __.Unregister(monitor : IMonitor) = Lock.lockWithArg syncRoot monitor unregister'
     
@@ -84,7 +76,6 @@ type OkanshiMonitorRegistry() =
     
     interface IMonitorRegistry with
         member self.GetRegisteredMonitors() = self.GetRegisteredMonitors()
-        member self.Register(monitor) = self.Register(monitor)
         member self.Unregister(monitor) = self.Unregister(monitor)
         member self.IsRegistered(monitor) = self.IsRegistered(monitor)
         member self.Clear() = self.Clear()

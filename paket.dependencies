@@ -7,7 +7,6 @@ nuget Owin
 
 group Build
     source https://nuget.org/api/v2
-    nuget SourceLink.Fake
     nuget FSharp.Formatting
     nuget FAKE
     github fsharp/FAKE modules/Octokit/Octokit.fsx
