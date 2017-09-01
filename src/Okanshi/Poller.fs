@@ -62,7 +62,9 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
     let onExitSubscriber =
         if pollOnExit then
             let currentDomain = AppDomain.CurrentDomain
-            let pollMetrics = fun _ -> pollMetrics()
+            let pollMetrics = fun _ ->
+                Logger.Debug.Invoke("Polling metrics because of process exit or appdomain unload")
+                pollMetrics()
             if currentDomain.IsDefaultAppDomain() then
                 currentDomain.ProcessExit.Subscribe(pollMetrics)
             else
@@ -72,6 +74,7 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
     let rec poll () =
         async {
             do! Async.Sleep(int interval.TotalMilliseconds)
+            Logger.Debug.Invoke("Polling metrics...")
             pollMetrics()
             return! poll()
         }
