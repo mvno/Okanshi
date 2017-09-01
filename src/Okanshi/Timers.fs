@@ -65,6 +65,7 @@ type BasicTimer(config : MonitorConfig) as self =
     let min = new MinGauge(config.WithTag(StatisticKey, "min"))
     let count = new PeakCounter(config.WithTag(StatisticKey, "count"))
     let total = new PeakCounter(config.WithTag(StatisticKey, "totalTime"))
+    let avg = new AverageGauge(config)
     let syncRoot = new obj()
 
     let updateStatistics' elapsed =
@@ -72,6 +73,7 @@ type BasicTimer(config : MonitorConfig) as self =
         total.Increment(elapsed)
         max.Set(elapsed)
         min.Set(elapsed)
+        avg.Set(float elapsed)
     
     let updateStatistics elapsed = 
         lockWithArg syncRoot elapsed updateStatistics'
@@ -81,16 +83,14 @@ type BasicTimer(config : MonitorConfig) as self =
         elapsed |> updateStatistics
         result
 
-    let getValue' () =
-        let count = self.GetCount()
-        if count = 0L then 0L
-        else self.GetTotalTime() / count
+    let getValue' () = avg.GetValue() |> int64
 
     let reset'() =
         max.Reset()
         min.Reset()
         count.GetValueAndReset() |> ignore
         total.GetValueAndReset() |> ignore
+        avg.GetValueAndReset() |> ignore
 
     let getValueAndReset'() =
         let result = self.GetValue()
