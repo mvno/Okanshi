@@ -2,6 +2,7 @@
 
 * The method Register on the interface Registry has been removed
 * SystemClock and ManualClock has been removed, as this is no longer need after 5.0.0-beta2
+* Logging class added
 
 ### 5.0.0-beta6
 
