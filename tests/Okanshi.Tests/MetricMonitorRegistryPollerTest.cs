@@ -7,6 +7,7 @@ using Xunit;
 
 namespace Okanshi.Test
 {
+#if NET45
     public class MetricMonitorRegistryPollerTest
     {
         private readonly IMonitorRegistry _monitorRegistry;
@@ -44,6 +45,7 @@ namespace Okanshi.Test
         {
             _metricMonitorRegistryPoller.MonitorEvents();
             _metricMonitorRegistryPoller.Dispose();
+            object t = 10;
 
             Thread.Sleep(1100);
 
@@ -120,4 +122,5 @@ namespace Okanshi.Test
             metrics.Single().SubMetrics.Should().HaveCount(4);
         }
     }
+#endif
 }

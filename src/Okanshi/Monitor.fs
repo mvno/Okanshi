@@ -130,7 +130,8 @@ type OkanshiMonitor private () =
     static member HealthCheck(check, name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new HealthCheck(x, check))
-    
+
+#if NET45
     /// Get or add a performance counter monitor
     static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name)
     
@@ -138,3 +139,4 @@ type OkanshiMonitor private () =
     static member PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new PerformanceCounterMonitor(x, counterConfig))
+#endif

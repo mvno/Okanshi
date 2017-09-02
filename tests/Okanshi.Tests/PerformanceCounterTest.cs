@@ -5,6 +5,7 @@ using Xunit;
 
 namespace Okanshi.Test
 {
+#if NET45
     public class PerformanceCounterTest
     {
         public PerformanceCounterTest()
@@ -52,4 +53,5 @@ namespace Okanshi.Test
             monitor.GetAllMonitors().Single().Should().BeSameAs(monitor);
         }
     }
+#endif
 }
