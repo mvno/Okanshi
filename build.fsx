@@ -10,7 +10,6 @@ open Fake.ReleaseNotesHelper
 open System
 open System.IO
 open Fake.SemVerHelper
-open Fake.Testing
 
 // --------------------------------------------------------------------------------------
 // START TODO: Provide project-specific details below
@@ -44,7 +43,7 @@ let tags = "monitoring, microservices"
 let solutionFile  = "Okanshi.sln"
 
 // Pattern specifying assemblies to be tested using NUnit
-let testAssemblies = "tests/**/bin/Release/*Tests*.dll"
+let testProjects = "tests/**/*.Tests.??proj"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
@@ -101,12 +100,28 @@ Target "Build" (fun _ ->
     |> ignore
 )
 
+Target "Restore" (fun _ ->
+    !! "src/**/*.??proj"
+    ++ "tests/**/*.??proj"
+    |> Seq.iter (fun d ->
+        DotNetCli.Restore (fun p ->
+            { p with
+                Project = d }))
+)
+
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
 Target "RunTests" (fun _ ->
-    !! testAssemblies
-    |> xUnit2 (fun p -> p)
+    !! testProjects
+    |> Seq.map (fun x -> Path.GetDirectoryName(x))
+    |> Seq.iter(fun x ->
+        trace (sprintf "Running test for %s" x)
+        DotNetCli.Test
+            (fun p ->
+                { p with
+                    WorkingDir = x })
+    )
 )
 
 // --------------------------------------------------------------------------------------
@@ -303,6 +318,7 @@ Target "All" DoNothing
 
 "Clean"
   ==> "AssemblyInfo"
+  ==> "Restore"
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
