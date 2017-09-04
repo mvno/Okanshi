@@ -128,11 +128,16 @@ Target "RunTests" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-    Paket.Pack(fun p -> 
-        { p with
-            OutputPath = "bin"
-            Version = release.NugetVersion
-            ReleaseNotes = toLines release.Notes})
+    !! "src/**/*.??proj"
+    |> Seq.map (fun x -> Path.GetDirectoryName(x))
+    |> Seq.iter (fun x ->
+        DotNetCli.Pack
+            (fun p ->
+                { p with
+                    WorkingDir = x;
+                    OutputPath = "../../bin";
+                    AdditionalArgs = [ "--include-symbols" ] })
+    )
 )
 
 Target "PublishNuget" (fun _ ->
