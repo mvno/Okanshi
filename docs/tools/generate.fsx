@@ -82,7 +82,7 @@ let binaries =
     let conventionBased = 
         directoryInfo bin 
         |> subDirectories
-        |> Array.map (fun d -> d.FullName @@ (sprintf "%s.dll" d.Name))
+        |> Array.map (fun d -> d.FullName @@ "net45" @@ (sprintf "%s.dll" d.Name))
         |> List.ofArray
 
     conventionBased @ manuallyAdded
@@ -91,7 +91,7 @@ let libDirs =
     let conventionBasedbinDirs =
         directoryInfo bin 
         |> subDirectories
-        |> Array.map (fun d -> d.FullName)
+        |> Array.map (fun d -> d.FullName @@ "net45")
         |> List.ofArray
 
     conventionBasedbinDirs @ [bin]

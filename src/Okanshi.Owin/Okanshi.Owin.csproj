@@ -4,6 +4,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Owin" Version="1.0" />
