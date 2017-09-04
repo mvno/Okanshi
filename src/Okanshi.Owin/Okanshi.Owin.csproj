@@ -1,5 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <VersionPrefix>5.0.0</VersionPrefix>
+  </PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
