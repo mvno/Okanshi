@@ -1,25 +1,7 @@
 source https://nuget.org/api/v2
 
-nuget FSharp.Core 4.0.0.1 framework: >= net45, redirects: force
-nuget InfluxDB.WriteOnly >= 1.2.3
-nuget Newtonsoft.Json >= 7.0.1
-nuget Owin
-
 group Build
     source https://nuget.org/api/v2
     nuget FSharp.Formatting
     nuget FAKE
     github fsharp/FAKE modules/Octokit/Octokit.fsx
-
-group Test
-    source https://nuget.org/api/v2
-    nuget xunit 2.0.0 framework: >= net45
-    nuget xunit.extensions 2.0.0 framework: >= net45
-    nuget xunit.runner.console 2.0.0
-    nuget FluentAssertions 3.2.2 framework: >= net45
-    nuget NSubstitute 1.8.1.0 framework: >= net45
-
-group Sample
-source https://www.nuget.org/api/v2
-
-nuget Microsoft.AspNet.WebApi.OwinSelfHost

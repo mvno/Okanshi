@@ -10,7 +10,6 @@ open Fake.ReleaseNotesHelper
 open System
 open System.IO
 open Fake.SemVerHelper
-open Fake.Testing
 
 // --------------------------------------------------------------------------------------
 // START TODO: Provide project-specific details below
@@ -44,7 +43,7 @@ let tags = "monitoring, microservices"
 let solutionFile  = "Okanshi.sln"
 
 // Pattern specifying assemblies to be tested using NUnit
-let testAssemblies = "tests/**/bin/Release/*Tests*.dll"
+let testProjects = "tests/**/*.Tests.??proj"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
@@ -64,40 +63,12 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/mvno"
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
-// Helper active pattern for project types
-let (|Fsproj|Csproj|Vbproj|) (projFileName:string) = 
-    match projFileName with
-    | f when f.EndsWith("fsproj") -> Fsproj
-    | f when f.EndsWith("csproj") -> Csproj
-    | f when f.EndsWith("vbproj") -> Vbproj
-    | _                           -> failwith (sprintf "Project file %s not supported. Unknown project type." projFileName)
-
 // Generate assembly info files with the right version & up-to-date information
 Target "AssemblyInfo" (fun _ ->
-    let getAssemblyInfoAttributes projectName =
-        [ Attribute.Title (projectName)
-          Attribute.Product project
-          Attribute.Description summary
-          Attribute.FileVersion release.AssemblyVersion
-          Attribute.Version ((string release.SemVer.Major) + ".0.0")
-          Attribute.InformationalVersion release.AssemblyVersion ]
-
-    let getProjectDetails projectPath =
-        let projectName = System.IO.Path.GetFileNameWithoutExtension(projectPath)
-        ( projectPath, 
-          projectName,
-          System.IO.Path.GetDirectoryName(projectPath),
-          (getAssemblyInfoAttributes projectName)
-        )
-
     !! "src/**/*.??proj"
-    |> Seq.map getProjectDetails
-    |> Seq.iter (fun (projFileName, projectName, folderName, attributes) ->
-        match projFileName with
-        | Fsproj -> CreateFSharpAssemblyInfo (folderName @@ "AssemblyInfo.fs") attributes
-        | Csproj -> CreateCSharpAssemblyInfo ((folderName @@ "Properties") @@ "AssemblyInfo.cs") attributes
-        | Vbproj -> CreateVisualBasicAssemblyInfo ((folderName @@ "My Project") @@ "AssemblyInfo.vb") attributes
-        )
+    |> RegexReplaceInFilesWithEncoding @"\<VersionPrefix\>.*\</VersionPrefix>"
+                                       (sprintf "<VersionPrefix>%O</VersionPrefix>" release.SemVer)
+                                       System.Text.Encoding.UTF8
 )
 
 // Copies binaries from default VS location to expected bin folder
@@ -129,23 +100,44 @@ Target "Build" (fun _ ->
     |> ignore
 )
 
+Target "Restore" (fun _ ->
+    !! "src/**/*.??proj"
+    ++ "tests/**/*.??proj"
+    |> Seq.iter (fun d ->
+        DotNetCli.Restore (fun p ->
+            { p with
+                Project = d }))
+)
+
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
 Target "RunTests" (fun _ ->
-    !! testAssemblies
-    |> xUnit2 (fun p -> p)
+    !! testProjects
+    |> Seq.map (fun x -> Path.GetDirectoryName(x))
+    |> Seq.iter(fun x ->
+        trace (sprintf "Running test for %s" x)
+        DotNetCli.Test
+            (fun p ->
+                { p with
+                    WorkingDir = x })
+    )
 )
 
 // --------------------------------------------------------------------------------------
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-    Paket.Pack(fun p -> 
-        { p with
-            OutputPath = "bin"
-            Version = release.NugetVersion
-            ReleaseNotes = toLines release.Notes})
+    !! "src/**/*.??proj"
+    |> Seq.map (fun x -> Path.GetDirectoryName(x))
+    |> Seq.iter (fun x ->
+        DotNetCli.Pack
+            (fun p ->
+                { p with
+                    WorkingDir = x;
+                    OutputPath = "../../bin";
+                    AdditionalArgs = [ "--include-symbols" ] })
+    )
 )
 
 Target "PublishNuget" (fun _ ->
@@ -331,6 +323,7 @@ Target "All" DoNothing
 
 "Clean"
   ==> "AssemblyInfo"
+  ==> "Restore"
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"

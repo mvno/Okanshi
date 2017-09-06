@@ -1,7 +1,0 @@
-FSharp.Core
-InfluxDB.WriteOnly
-group Test
-NSubstitute
-xunit
-xunit.extensions
-FluentAssertions

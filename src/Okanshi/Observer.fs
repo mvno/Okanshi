@@ -1,17 +1,6 @@
 ﻿namespace Okanshi
 
 open System
-open System.Runtime.Caching
-
-/// Helper extensions for the System.Runtime.Caching.MemoryCache
-[<AutoOpen>]
-module MemoryCacheExtensions = 
-    type MemoryCache with
-        /// Return an option instead for null if the cache item doesn't exists
-        member cache.TryGet<'T>(key) = 
-            match cache.Get(key) with
-            | null -> None
-            | x -> Some(x :?> 'T)
 
 /// Observer that can receive updates about metrics
 type IMetricObserver = 
