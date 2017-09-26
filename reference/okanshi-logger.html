@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>EndpointOptions - Okanshi</title>
+    <title>Logger - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Telenor MVNO"/>
@@ -35,255 +35,270 @@
 
 
 
-<h1>EndpointOptions</h1>
+<h1>Logger</h1>
 <p>
-  <span>Namespace: Okanshi.Endpoint</span><br />
+  <span>Namespace: Okanshi</span><br />
 </p>
 <div class="xmldoc">
-<p>Api options</p>
+<p>Logging class</p>
 
 </div>
-  <h3>Constructors</h3>
+  <h3>Static members</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Constructor</td><td>Description</td></tr>
+      <tr><td>Static member</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '266', 266)" onmouseover="showTip(event, '266', 266)">
-            new()
+          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
+            Debug()
           </code>
-          <div class="tip" id="266">
-            <strong>Signature:</strong> unit -&gt; EndpointOptions<br />
+          <div class="tip" id="129">
+            <strong>Signature:</strong> unit -&gt; Action&lt;string&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L32-32" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L16-16" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3>Instance members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Instance member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '267', 267)" onmouseover="showTip(event, '267', 267)">
-            CollectMetricsOnProcessExit()
-          </code>
-          <div class="tip" id="267">
-            <strong>Signature:</strong> unit -&gt; bool<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L42-42" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Should metrics be collected when process is exiting. Default value is false.</p>
+          <p>Logs a debug message</p>
 
 
-              <p>CompiledName: <code>set_CollectMetricsOnProcessExit</code></p>
+              <p>CompiledName: <code>set_Debug</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '268', 268)" onmouseover="showTip(event, '268', 268)">
-            CollectMetricsOnProcessExit()
+          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
+            Debug()
           </code>
-          <div class="tip" id="268">
+          <div class="tip" id="130">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L42-42" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L16-16" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Should metrics be collected when process is exiting. Default value is false.</p>
+          <p>Logs a debug message</p>
 
 
-              <p>CompiledName: <code>get_CollectMetricsOnProcessExit</code></p>
+              <p>CompiledName: <code>get_Debug</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '269', 269)" onmouseover="showTip(event, '269', 269)">
-            EnableCors()
+          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
+            Error()
           </code>
-          <div class="tip" id="269">
-            <strong>Signature:</strong> unit -&gt; bool<br />
+          <div class="tip" id="131">
+            <strong>Signature:</strong> unit -&gt; Action&lt;string,exn&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L34-34" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L25-25" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Enable CORS request. Default value is false</p>
+          <p>Logs an error</p>
 
 
-              <p>CompiledName: <code>set_EnableCors</code></p>
+              <p>CompiledName: <code>set_Error</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '270', 270)" onmouseover="showTip(event, '270', 270)">
-            EnableCors()
+          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
+            Error()
           </code>
-          <div class="tip" id="270">
+          <div class="tip" id="132">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L34-34" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L25-25" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Enable CORS request. Default value is false</p>
+          <p>Logs an error</p>
 
 
-              <p>CompiledName: <code>get_EnableCors</code></p>
+              <p>CompiledName: <code>get_Error</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '271', 271)" onmouseover="showTip(event, '271', 271)">
-            HttpPrefix()
+          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
+            Fatal()
           </code>
-          <div class="tip" id="271">
-            <strong>Signature:</strong> unit -&gt; string<br />
+          <div class="tip" id="133">
+            <strong>Signature:</strong> unit -&gt; Action&lt;string,exn&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L36-36" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L28-28" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The HTTP prefix used as endpoint. Default value is "<a href="http://+:13004/"">http://+:13004/"</a></p>
+          <p>Logs a fatal error</p>
 
 
-              <p>CompiledName: <code>set_HttpPrefix</code></p>
+              <p>CompiledName: <code>set_Fatal</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '272', 272)" onmouseover="showTip(event, '272', 272)">
-            HttpPrefix()
+          <code onmouseout="hideTip(event, '134', 134)" onmouseover="showTip(event, '134', 134)">
+            Fatal()
           </code>
-          <div class="tip" id="272">
+          <div class="tip" id="134">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L36-36" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L28-28" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The HTTP prefix used as endpoint. Default value is "<a href="http://+:13004/"">http://+:13004/"</a></p>
+          <p>Logs a fatal error</p>
 
 
-              <p>CompiledName: <code>get_HttpPrefix</code></p>
+              <p>CompiledName: <code>get_Fatal</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '273', 273)" onmouseover="showTip(event, '273', 273)">
-            NumberOfSamplesToStore()
+          <code onmouseout="hideTip(event, '135', 135)" onmouseover="showTip(event, '135', 135)">
+            Info()
           </code>
-          <div class="tip" id="273">
-            <strong>Signature:</strong> unit -&gt; int<br />
+          <div class="tip" id="135">
+            <strong>Signature:</strong> unit -&gt; Action&lt;string&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L40-40" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L19-19" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The number of samples to store in memory. Default value is 100</p>
+          <p>Logs an information message</p>
 
 
-              <p>CompiledName: <code>set_NumberOfSamplesToStore</code></p>
+              <p>CompiledName: <code>set_Info</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '274', 274)" onmouseover="showTip(event, '274', 274)">
-            NumberOfSamplesToStore()
+          <code onmouseout="hideTip(event, '136', 136)" onmouseover="showTip(event, '136', 136)">
+            Info()
           </code>
-          <div class="tip" id="274">
+          <div class="tip" id="136">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L40-40" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L19-19" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The number of samples to store in memory. Default value is 100</p>
+          <p>Logs an information message</p>
 
 
-              <p>CompiledName: <code>get_NumberOfSamplesToStore</code></p>
+              <p>CompiledName: <code>get_Info</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '275', 275)" onmouseover="showTip(event, '275', 275)">
-            PollingInterval()
+          <code onmouseout="hideTip(event, '137', 137)" onmouseover="showTip(event, '137', 137)">
+            Trace()
           </code>
-          <div class="tip" id="275">
-            <strong>Signature:</strong> unit -&gt; TimeSpan<br />
+          <div class="tip" id="137">
+            <strong>Signature:</strong> unit -&gt; Action&lt;string&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L38-38" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L13-13" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The polling interval. Default value is 1 minute</p>
+          <p>Logs a trace message</p>
 
 
-              <p>CompiledName: <code>set_PollingInterval</code></p>
+              <p>CompiledName: <code>set_Trace</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '276', 276)" onmouseover="showTip(event, '276', 276)">
-            PollingInterval()
+          <code onmouseout="hideTip(event, '138', 138)" onmouseover="showTip(event, '138', 138)">
+            Trace()
           </code>
-          <div class="tip" id="276">
+          <div class="tip" id="138">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L38-38" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L13-13" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The polling interval. Default value is 1 minute</p>
+          <p>Logs a trace message</p>
 
 
-              <p>CompiledName: <code>get_PollingInterval</code></p>
+              <p>CompiledName: <code>get_Trace</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '139', 139)" onmouseover="showTip(event, '139', 139)">
+            Warn()
+          </code>
+          <div class="tip" id="139">
+            <strong>Signature:</strong> unit -&gt; Action&lt;string&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L22-22" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Logs a warning</p>
+
+
+              <p>CompiledName: <code>set_Warn</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '140', 140)" onmouseover="showTip(event, '140', 140)">
+            Warn()
+          </code>
+          <div class="tip" id="140">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Logging.fs#L22-22" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Logs a warning</p>
+
+
+              <p>CompiledName: <code>get_Warn</code></p>
         </td>
       </tr>
     </tbody>
