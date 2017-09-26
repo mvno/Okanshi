@@ -95,9 +95,10 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-    !! solutionFile
-    |> MSBuildRelease "" "Rebuild"
-    |> ignore
+    DotNetCli.Build
+        (fun p ->
+            { p with
+                Configuration = "Release" })
 )
 
 Target "Restore" (fun _ ->
