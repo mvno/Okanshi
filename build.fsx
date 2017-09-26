@@ -98,7 +98,8 @@ Target "Build" (fun _ ->
     DotNetCli.Build
         (fun p ->
             { p with
-                Configuration = "Release" })
+                Configuration = "Release"
+                AdditionalArgs = "--no-incremental" })
 )
 
 Target "Restore" (fun _ ->
