@@ -99,7 +99,7 @@ Target "Build" (fun _ ->
         (fun p ->
             { p with
                 Configuration = "Release"
-                AdditionalArgs = "--no-incremental" })
+                AdditionalArgs = [ "--no-incremental" ] })
 )
 
 Target "Restore" (fun _ ->
