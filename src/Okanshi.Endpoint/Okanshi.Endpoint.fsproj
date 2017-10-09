@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>5.0.0-beta7</VersionPrefix>
+    <VersionPrefix>5.0.0-beta8</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup>
