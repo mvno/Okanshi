@@ -47,17 +47,24 @@ namespace Okanshi.Observers
         /// <param name="metrics"></param>
         public void Update(Metric[] metrics)
         {
-            var groupedMetrics = metrics.GroupBy(options.DatabaseSelector).ToList();
-            Logger.Debug($"Metrics will be sent to the following databases: {string.Join(", ", groupedMetrics.Count)}");
-            foreach (var metricGroup in groupedMetrics)
+            try
             {
-                var groupedByRetention = metricGroup.GroupBy(x => options.RetentionPolicySelector(x, metricGroup.Key)).ToList();
-                Logger.Debug($"Metrics will for '{metricGroup.Key}' will be sent the following retentions polices: {string.Join(", ", groupedByRetention.Count)}");
-                foreach (var retentionGroup in groupedByRetention)
+                var groupedMetrics = metrics.GroupBy(options.DatabaseSelector).ToList();
+                Logger.Debug($"Metrics will be sent to the following databases: {string.Join(", ", groupedMetrics.Count)}");
+                foreach (var metricGroup in groupedMetrics)
                 {
-                    var points = ConvertToPoints(retentionGroup);
-                    client.WriteAsync(retentionGroup.Key, metricGroup.Key, points);
+                    var groupedByRetention = metricGroup.GroupBy(x => options.RetentionPolicySelector(x, metricGroup.Key)).ToList();
+                    Logger.Debug($"Metrics will for '{metricGroup.Key}' will be sent the following retentions polices: {string.Join(", ", groupedByRetention.Count)}");
+                    foreach (var retentionGroup in groupedByRetention)
+                    {
+                        var points = ConvertToPoints(retentionGroup);
+                        client.WriteAsync(retentionGroup.Key, metricGroup.Key, points);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Exception while sending metrics to InfluxDB", e);
             }
         }
 
