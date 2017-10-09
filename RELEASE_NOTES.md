@@ -1,3 +1,7 @@
+### 5.0.0-beta8
+
+* Log when sendings metrics to InfluxDB fails
+
 ### 5.0.0-beta7
 
 * The method Register on the interface Registry has been removed
