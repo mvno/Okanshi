@@ -4,9 +4,11 @@
 
 #r @"packages/build/FAKE/tools/FakeLib.dll"
 open Fake
+open Fake.ProcessHelper
 open Fake.Git
 open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
+open Fake.TraceHelper;
 open System
 open System.IO
 open Fake.SemVerHelper
@@ -142,12 +144,63 @@ Target "NuGet" (fun _ ->
     )
 )
 
-Target "PublishNuget" (fun _ ->
-    Paket.Push(fun p -> 
-        { p with
-            WorkingDir = "bin" })
-)
+let PushFiles setParams files =
+    let parameters : Paket.PaketPushParams = Paket.PaketPushDefaults() |> setParams
 
+    let packages = Seq.toList files
+    let url = if String.IsNullOrWhiteSpace parameters.PublishUrl then "" else " --url " + ProcessHelper.toParam parameters.PublishUrl
+    let endpoint = if String.IsNullOrWhiteSpace parameters.EndPoint then "" else " --endpoint " + ProcessHelper.toParam parameters.EndPoint
+    let key = if String.IsNullOrWhiteSpace parameters.ApiKey then "" else " --apikey " + ProcessHelper.toParam parameters.ApiKey
+
+    // use __ = Trace.traceTask "PaketPush" (String.separated ", " packages)
+
+    if parameters.DegreeOfParallelism > 0 then
+        /// Returns a sequence that yields chunks of length n.
+        /// Each chunk is returned as a list.
+        let split length (xs: seq<'T>) =
+            let rec loop xs =
+                [
+                    yield Seq.truncate length xs |> Seq.toList
+                    match Seq.length xs <= length with
+                    | false -> yield! loop (Seq.skip length xs)
+                    | true -> ()
+                ]
+            loop xs
+
+        for chunk in split parameters.DegreeOfParallelism packages do
+            let tasks =
+                chunk
+                |> Seq.toArray
+                |> Array.map (fun package -> async {
+                        let pushResult =
+                            ProcessHelper.ExecProcess (fun info ->
+                                info.FileName <- parameters.ToolPath
+                                info.WorkingDirectory <- parameters.WorkingDir
+                                info.Arguments <- sprintf "push %s%s%s%s" url endpoint key (ProcessHelper.toParam package)) parameters.TimeOut
+                        if pushResult <> 0 then failwithf "Error during pushing %s." package })
+
+            Async.Parallel tasks
+            |> Async.RunSynchronously
+            |> ignore
+
+    else
+        for package in packages do
+            let pushResult =
+                ProcessHelper.ExecProcess (fun info ->
+                    info.FileName <- parameters.ToolPath
+                    info.WorkingDirectory <- parameters.WorkingDir
+                    info.Arguments <- sprintf "push %s%s%s%s" url endpoint key (ProcessHelper.toParam package)) parameters.TimeOut
+            if pushResult <> 0 then failwithf "Error during pushing %s." package
+
+
+Target "PublishNuget" (fun _ ->
+    !! "bin/*.nupkg"
+    |> Seq.filter (fun x -> x.Contains(".symbols.nupkg") |> not)
+    |> Seq.map (fun x -> Path.GetFileName(x))
+    |> Seq.iter (fun x ->
+        PushFiles (fun p -> { p with WorkingDir = "bin" }) [x]
+    )
+)
 
 // --------------------------------------------------------------------------------------
 // Generate the documentation

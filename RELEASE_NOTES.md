@@ -1,3 +1,7 @@
+### 5.0.0-beta9
+
+* Fix bug in exception handling in InfluxDBObserver
+
 ### 5.0.0-beta8
 
 * Log when sendings metrics to InfluxDB fails
