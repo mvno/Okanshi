@@ -58,7 +58,11 @@ namespace Okanshi.Observers
                     foreach (var retentionGroup in groupedByRetention)
                     {
                         var points = ConvertToPoints(retentionGroup);
-                        client.WriteAsync(retentionGroup.Key, metricGroup.Key, points);
+                        client.WriteAsync(retentionGroup.Key, metricGroup.Key, points).ContinueWith(t => {
+                            if (t.IsFaulted) {
+                                Logger.Error("Exception while sending metrics to InfluxDB", t.Exception);
+                            }
+                        });
                     }
                 }
             }
