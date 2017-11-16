@@ -1,3 +1,7 @@
+### 5.0.0
+
+All fixes in the beta releases, see below
+
 ### 5.0.0-beta9
 
 * Fix bug in exception handling in InfluxDBObserver
