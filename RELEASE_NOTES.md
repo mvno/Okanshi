@@ -1,3 +1,7 @@
+### 6.0.0 (Unreleased)
+
+* Add PollMetrics to IMetricPoller interface, this was not added to the interface by mistake
+
 ### 5.0.0
 
 All fixes in the beta releases, see below

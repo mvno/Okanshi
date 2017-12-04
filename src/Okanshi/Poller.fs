@@ -31,6 +31,8 @@ type IMetricPoller =
     abstract MetricsPolled : IEvent<MetricEventDelegate, MetricEventArgs>
     /// Stop polling for new metrics
     abstract Stop : unit -> unit
+    /// Force a poll of metrics
+    abstract PollMetrics : unit -> unit
 
 /// Poller for fetching metrics from a monitor registry
 type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan, pollOnExit : bool) as self =
@@ -105,3 +107,4 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
         member self.MetricsPolled = self.MetricsPolled
         member self.Stop() = self.Stop()
         member self.Dispose() = self.Dispose()
+        member self.PollMetrics() = self.PollMetrics()
