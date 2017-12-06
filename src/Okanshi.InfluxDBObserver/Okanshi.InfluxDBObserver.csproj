@@ -6,7 +6,7 @@
     <ProjectReference Include="..\Okanshi\Okanshi.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="InfluxDB.WriteOnly" Version="2.1.0" />
+    <PackageReference Include="InfluxDB.WriteOnly" Version="3.0.0-beta" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
