@@ -3,5 +3,5 @@ source https://nuget.org/api/v2
 group Build
     source https://nuget.org/api/v2
     nuget FSharp.Formatting
-    nuget FAKE
+    nuget FAKE prerelease
     github fsharp/FAKE modules/Octokit/Octokit.fsx

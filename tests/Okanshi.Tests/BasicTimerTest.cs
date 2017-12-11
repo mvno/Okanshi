@@ -244,20 +244,5 @@ namespace Okanshi.Test
             monitors.Should().Contain(x => x.Config.Tags.Any(t => t.Key == "statistic" && t.Value == "count"));
             monitors.Should().Contain(x => x.Config.Tags.Any(t => t.Key == "statistic" && t.Value == "totalTime"));
         }
-
-        [Fact]
-        public void dsadsa()
-        {
-            timer.Record(() => Thread.Sleep(100));
-
-            var monitors = timer.GetAllMonitors().ToList();
-            var peakCounters = monitors.OfType<PeakCounter>();
-            foreach (var counter in peakCounters)
-            {
-                counter.GetValueAndReset();
-            }
-
-            timer.GetValueAndReset().Should().BeInRange(70, 130);
-        }
     }
 }
