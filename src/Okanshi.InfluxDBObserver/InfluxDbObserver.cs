@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using InfluxDB.WriteOnly;
 
 namespace Okanshi.Observers
@@ -25,12 +26,7 @@ namespace Okanshi.Observers
             this.poller = poller ?? throw new ArgumentNullException(nameof(poller));
             this.client = client ?? throw new ArgumentNullException(nameof(client));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
-            poller.MetricsPolled += OnMetricsPolled;
-        }
-
-        private void OnMetricsPolled(object sender, MetricEventArgs args)
-        {
-            Update(args.Metrics);
+            poller.RegisterObserver(Update);
         }
 
         /// <summary>
@@ -38,14 +34,14 @@ namespace Okanshi.Observers
         /// </summary>
         public void Dispose()
         {
-            poller.MetricsPolled -= OnMetricsPolled;
+            poller.UnregisterObserver(Update);
         }
 
         /// <summary>
         /// Method used to write metrics to InfluxDB. This method are not meant to be used externally.
         /// </summary>
         /// <param name="metrics"></param>
-        public void Update(Metric[] metrics)
+        public async Task Update(IEnumerable<Metric> metrics)
         {
             try
             {
@@ -58,7 +54,7 @@ namespace Okanshi.Observers
                     foreach (var retentionGroup in groupedByRetention)
                     {
                         var points = ConvertToPoints(retentionGroup);
-                        client.WriteAsync(retentionGroup.Key, metricGroup.Key, points).ContinueWith(t => {
+                        await client.WriteAsync(retentionGroup.Key, metricGroup.Key, points).ContinueWith(t => {
                             if (t.IsFaulted) {
                                 Logger.Error("Exception while sending metrics to InfluxDB", t.Exception);
                             }
@@ -162,7 +158,7 @@ namespace Okanshi.Observers
         /// <summary>
         /// Get observations. This is not supported in this observer.
         /// </summary>
-        public Metric[][] GetObservations()
+        public IEnumerable<IEnumerable<Metric>> GetObservations()
         {
             throw new NotSupportedException("This observer doesn't support getting observations");
         }
