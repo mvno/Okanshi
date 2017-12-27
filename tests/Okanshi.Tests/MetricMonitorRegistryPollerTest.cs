@@ -29,7 +29,7 @@ namespace Okanshi.Test
                 return Task.FromResult<object>(null);
             });
 
-            Thread.Sleep(1100);
+            Thread.Sleep(1500);
 
             called.Should().BeTrue();
         }
@@ -166,7 +166,7 @@ namespace Okanshi.Test
             var task = _metricMonitorRegistryPoller.PollMetrics();
 
             task.Wait(TimeSpan.FromMilliseconds(500)).Should().BeFalse();
-            task.Wait(TimeSpan.FromSeconds(2)).Should().BeTrue();
+            task.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
         }
     }
 }
