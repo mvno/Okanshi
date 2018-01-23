@@ -52,11 +52,30 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '180', 180)" onmouseover="showTip(event, '180', 180)">
+          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
             new(registry, interval)
           </code>
-          <div class="tip" id="180">
+          <div class="tip" id="177">
             <strong>Signature:</strong> (registry:IMonitorRegistry * interval:TimeSpan) -&gt; MetricMonitorRegistryPoller<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L87-87" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
+            new(registry)
+          </code>
+          <div class="tip" id="178">
+            <strong>Signature:</strong> registry:IMonitorRegistry -&gt; MetricMonitorRegistryPoller<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -71,34 +90,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '181', 181)" onmouseover="showTip(event, '181', 181)">
-            new(registry)
-          </code>
-          <div class="tip" id="181">
-            <strong>Signature:</strong> registry:IMonitorRegistry -&gt; MetricMonitorRegistryPoller<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L85-85" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '182', 182)" onmouseover="showTip(event, '182', 182)">
+          <code onmouseout="hideTip(event, '179', 179)" onmouseover="showTip(event, '179', 179)">
             new(registry, interval, pollOnExit)
           </code>
-          <div class="tip" id="182">
+          <div class="tip" id="179">
             <strong>Signature:</strong> (registry:IMonitorRegistry * interval:TimeSpan * pollOnExit:bool) -&gt; MetricMonitorRegistryPoller<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L36-36" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L35-35" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -117,35 +117,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '183', 183)" onmouseover="showTip(event, '183', 183)">
-            add_MetricsPolled(arg1)
-          </code>
-          <div class="tip" id="183">
-            <strong>Signature:</strong> MetricEventDelegate -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L90-90" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Event raised when metric have been polled.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '184', 184)" onmouseover="showTip(event, '184', 184)">
+          <code onmouseout="hideTip(event, '180', 180)" onmouseover="showTip(event, '180', 180)">
             Dispose()
           </code>
-          <div class="tip" id="184">
+          <div class="tip" id="180">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L101-101" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L98-98" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -157,36 +137,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '185', 185)" onmouseover="showTip(event, '185', 185)">
-            MetricsPolled
+          <code onmouseout="hideTip(event, '181', 181)" onmouseover="showTip(event, '181', 181)">
+            PollMetrics()
           </code>
-          <div class="tip" id="185">
-            <strong>Signature:</strong> IEvent&lt;MetricEventDelegate,MetricEventArgs&gt;<br />
+          <div class="tip" id="181">
+            <strong>Signature:</strong> unit -&gt; Task<br />
                       </div>
         </td>
         <td class="xmldoc">
             <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L90-90" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Event raised when metric have been polled.</p>
-
-
-              <p>CompiledName: <code>get_MetricsPolled</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '186', 186)" onmouseover="showTip(event, '186', 186)">
-            PollMetrics()
-          </code>
-          <div class="tip" id="186">
-            <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L93-93" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -198,19 +157,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '187', 187)" onmouseover="showTip(event, '187', 187)">
-            remove_MetricsPolled(arg1)
+          <code onmouseout="hideTip(event, '182', 182)" onmouseover="showTip(event, '182', 182)">
+            RegisterObserver(observer)
           </code>
-          <div class="tip" id="187">
-            <strong>Signature:</strong> MetricEventDelegate -&gt; unit<br />
+          <div class="tip" id="182">
+            <strong>Signature:</strong> observer:Func&lt;seq&lt;Metric&gt;,Task&gt; -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L90-90" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L101-101" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Event raised when metric have been polled.</p>
+          <p>Register an observer</p>
 
 
         </td>
@@ -218,19 +177,39 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '188', 188)" onmouseover="showTip(event, '188', 188)">
+          <code onmouseout="hideTip(event, '183', 183)" onmouseover="showTip(event, '183', 183)">
             Stop()
           </code>
-          <div class="tip" id="188">
+          <div class="tip" id="183">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L96-96" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L93-93" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           <p>Stop polling for new metrics</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '184', 184)" onmouseover="showTip(event, '184', 184)">
+            UnregisterObserver(observer)
+          </code>
+          <div class="tip" id="184">
+            <strong>Signature:</strong> observer:Func&lt;seq&lt;Metric&gt;,Task&gt; -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/Poller.fs#L104-104" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Unregister an observer</p>
 
 
         </td>
