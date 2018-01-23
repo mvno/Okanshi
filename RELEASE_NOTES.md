@@ -1,5 +1,4 @@
-### 6.0.0 (Unreleased)
-
+### 6.0.0-alpha
 * Add PollMetrics to IMetricPoller interface, this was not added to the interface by mistake
 * Support for waiting for polling and observer sending to complete, this is done by returning Task from observer actions and the pollers PollMetrics method.
 
