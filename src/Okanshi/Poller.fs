@@ -2,6 +2,7 @@
 
 open System
 open System.Threading
+open System.Threading.Tasks
 
 /// The metric type
 type Metric =
@@ -18,27 +19,23 @@ type Metric =
         SubMetrics : Metric array
     }
 
-type MetricEventArgs(metrics : Metric array) =
-    inherit EventArgs()
-    member __.Metrics = metrics
-type MetricEventDelegate = delegate of sender : obj * args : MetricEventArgs -> unit
-
 /// A poller that can be used to fetch the current values for a list of metrics
 type IMetricPoller =
     inherit IDisposable
-    /// Event raised when metric have been polled.
-    [<CLIEvent>]
-    abstract MetricsPolled : IEvent<MetricEventDelegate, MetricEventArgs>
     /// Stop polling for new metrics
     abstract Stop : unit -> unit
     /// Force a poll of metrics
-    abstract PollMetrics : unit -> unit
+    abstract PollMetrics : unit -> Task
+    /// Register an observer
+    abstract RegisterObserver : Func<Metric seq, Task> -> unit
+    /// Unregister an observer
+    abstract UnregisterObserver : Func<Metric seq, Task> -> unit
 
 /// Poller for fetching metrics from a monitor registry
 type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan, pollOnExit : bool) as self =
-    let metricsPolled = new Event<MetricEventDelegate, MetricEventArgs>()
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
+    let observers = new Collections.Generic.List<Func<Metric seq, Task>>()
 
     let rec convertMonitorToMetric (monitor : IMonitor) =
         let submetrics =
@@ -59,14 +56,16 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
             registry.GetRegisteredMonitors()
             |> Seq.map convertMonitorToMetric
             |> Seq.toArray
-        metricsPolled.Trigger(self, new MetricEventArgs(metrics))
+        observers
+        |> Seq.map (fun x -> x.Invoke(metrics) |> Async.AwaitTask)
+        |> Async.Parallel
 
     let onExitSubscriber =
         if pollOnExit then
             let currentDomain = AppDomain.CurrentDomain
             let pollMetrics = fun _ ->
                 Logger.Debug.Invoke("Polling metrics because of process exit or appdomain unload")
-                pollMetrics()
+                pollMetrics() |> Async.RunSynchronously |> ignore
             if currentDomain.IsDefaultAppDomain() then
                 currentDomain.ProcessExit.Subscribe(pollMetrics)
             else
@@ -77,7 +76,7 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
         async {
             do! Async.Sleep(int interval.TotalMilliseconds)
             Logger.Debug.Invoke("Polling metrics...")
-            pollMetrics()
+            pollMetrics() |> Async.RunSynchronously |> ignore
             return! poll()
         }
 
@@ -87,12 +86,8 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
     new (registry) = new MetricMonitorRegistryPoller(registry, TimeSpan.FromMinutes(float 1))
     new (registry, interval) = new MetricMonitorRegistryPoller(registry, interval, false)
 
-    /// Event raised when metric have been polled.
-    [<CLIEvent>]
-    member __.MetricsPolled = metricsPolled.Publish
-
     /// Force poll the monitors from the registry
-    member __.PollMetrics() = pollMetrics()
+    member __.PollMetrics() = Task.Run(fun () -> pollMetrics() |> Async.RunSynchronously |> ignore)
     
     /// Stop polling for new metrics
     member __.Stop() =
@@ -102,9 +97,15 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
     /// Disposes the poller, stopping metrics collection
     member self.Dispose() = self.Stop()
 
+    /// Register an observer
+    member __.RegisterObserver(observer: Func<Metric seq, Task>) = observers.Add(observer)
+
+    /// Unregister an observer
+    member __.UnregisterObserver(observer: Func<Metric seq, Task>) = observers.Remove(observer) |> ignore
+
     interface IMetricPoller with
-        [<CLIEvent>]
-        member self.MetricsPolled = self.MetricsPolled
         member self.Stop() = self.Stop()
         member self.Dispose() = self.Dispose()
         member self.PollMetrics() = self.PollMetrics()
+        member self.RegisterObserver(x) = self.RegisterObserver(x)
+        member self.UnregisterObserver(x) = self.UnregisterObserver(x)
