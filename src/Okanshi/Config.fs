@@ -49,21 +49,33 @@ type MonitorConfig =
     interface IEquatable<MonitorConfig> with
         member self.Equals(other) = self.Equals(other)
 
+type IMeasurement =
+    abstract member Name : string
+    abstract member Value : obj
+
+/// A measurement from a monitor
+type Measurement<'a>(name : string, value: 'a) =
+    /// The name
+    member __.Name = name
+    
+    /// The value
+    member __.Value = value
+
+    interface IMeasurement with
+        member self.Name = self.Name
+        member self.Value = self.Value :> obj
+
 /// A monitor
 type IMonitor = 
     
-    /// Gets the value of the monitor
-    abstract GetValue : unit -> obj
+    /// Gets the values of the monitor
+    abstract GetValues : unit -> IMeasurement seq
     
     /// Gets the configuration of the monitor
     abstract Config : MonitorConfig
 
-    /// Gets the value and resets the monitor
-    abstract GetValueAndReset : unit -> obj
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    abstract GetAllMonitors : unit -> IMonitor seq
+    /// Gets the values and resets the monitor
+    abstract GetValuesAndReset : unit -> IMeasurement seq
 
 /// The types used to indicate the type of a value
 [<AbstractClass; Sealed>]
