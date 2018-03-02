@@ -60,7 +60,7 @@ namespace Okanshi.Test
             _metricMonitorRegistryPoller.Dispose();
             object t = 10;
 
-            Thread.Sleep(1100);
+            Thread.Sleep(1700);
 
             called.Should().BeFalse();
         }
@@ -72,7 +72,7 @@ namespace Okanshi.Test
             _monitorRegistry.GetRegisteredMonitors().Returns(new[] { counter });
             counter.Increment();
 
-            Thread.Sleep(1100);
+            Thread.Sleep(1700);
 
             counter.GetValues().First().Value.Should().Be(0);
         }

@@ -44,7 +44,7 @@ namespace Okanshi.Test
         [Fact]
         public void Recording_a_task_increments_the_number_of_active_tasks()
         {
-            var task = Task.Run(() => timer.Record(() => Thread.Sleep(1000)));
+            var task = Task.Run(() => timer.Record(() => Thread.Sleep(2000)));
             Thread.Sleep(100);
 
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
@@ -61,7 +61,7 @@ namespace Okanshi.Test
 
             var duration = timer.GetDurationInSeconds();
 
-            duration.Value.Should().BeApproximately(0.5, 0.1);
+            duration.Value.Should().BeApproximately(0.5, 0.3);
             task.Wait();
         }
 
@@ -103,7 +103,7 @@ namespace Okanshi.Test
 
             var duration = timer.GetDurationInSeconds();
 
-            duration.Value.Should().BeApproximately(0.5, 0.1);
+            duration.Value.Should().BeApproximately(0.5, 0.3);
             task.Wait();
         }
 
