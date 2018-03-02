@@ -19,7 +19,11 @@ type PeakCounter(config : MonitorConfig) =
     let mutable current = 0L
     let syncRoot = new obj()
 
-    let getValue' () = peakRate
+    let getValue' () =
+        seq {
+            yield Measurement("value", peakRate)
+        }
+
     let increment' amount =
         current <- current + amount
         if current > peakRate then peakRate <- current
@@ -29,12 +33,12 @@ type PeakCounter(config : MonitorConfig) =
         current <- 0L
 
     let getValueAndReset'() =
-        let result = getValue'()
+        let result = getValue'() |> Seq.toList
         reset'()
-        result
+        result |> List.toSeq
     
     /// Gets the maximum count
-    member __.GetValue() = Lock.lock syncRoot getValue'
+    member __.GetValues() = Lock.lock syncRoot getValue'
     
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
@@ -46,19 +50,14 @@ type PeakCounter(config : MonitorConfig) =
     member __.Config = config.WithTag(DataSourceType.Counter)
     
     /// Gets the value and resets the monitor
-    member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    member self.GetAllMonitors() = seq { yield self :> IMonitor }
+    member __.GetValuesAndReset() = Lock.lock syncRoot getValueAndReset'
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
         member self.Increment(amount) = self.Increment(amount)
-        member self.GetValue() = self.GetValue() :> obj
+        member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
-        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
-        member self.GetAllMonitors() = self.GetAllMonitors()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A simple double counter.
 type DoubleCounter(config : MonitorConfig) = 
@@ -77,25 +76,20 @@ type DoubleCounter(config : MonitorConfig) =
     member self.Increment() = self.Increment(1.0)
     
     /// Gets the maximum count
-    member __.GetValue() = count.Get()
+    member __.GetValues() = seq { yield Measurement("value", count.Get()) }
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Rate)
     
     /// Gets the value and resets the monitor
-    member __.GetValueAndReset() = count.GetAndSet(0.0)
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    member self.GetAllMonitors() = seq { yield self :> IMonitor }
+    member __.GetValuesAndReset() = seq { yield Measurement("value", count.GetAndSet(0.0)) }
     
     interface ICounter<double> with
         member self.Increment() = self.Increment()
         member self.Increment(amount) = self.Increment(amount)
-        member self.GetValue() = self.GetValue() :> obj
+        member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
-        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
-        member self.GetAllMonitors() = self.GetAllMonitors()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
 type BasicCounter(config : MonitorConfig) = 
@@ -108,22 +102,17 @@ type BasicCounter(config : MonitorConfig) =
     member __.Increment(amount) = value.Increment(amount) |> ignore
     
     /// Gets the value
-    member __.GetValue() = value.Get()
+    member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
     
     /// Gets the value and resets the monitor
-    member __.GetValueAndReset() = value.Get()
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    member self.GetAllMonitors() = seq { yield self :> IMonitor }
+    member self.GetValuesAndReset() = self.GetValues()
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
         member self.Increment(amount) = self.Increment(amount)
-        member self.GetValue() = self.GetValue() :> obj
+        member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
-        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
-        member self.GetAllMonitors() = self.GetAllMonitors()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast

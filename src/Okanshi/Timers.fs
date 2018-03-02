@@ -83,17 +83,24 @@ type BasicTimer(config : MonitorConfig) as self =
         elapsed |> updateStatistics
         result
 
-    let getValue' () = avg.GetValue() |> int64
+    let getValues' () =
+        seq {
+            yield! avg.GetValues() |> Seq.cast
+            yield! total.GetValues() |> Seq.cast
+            yield! count.GetValues() |> Seq.cast
+            yield! max.GetValues() |> Seq.cast
+            yield! min.GetValues() |> Seq.cast
+        }
 
     let reset'() =
         max.Reset()
         min.Reset()
-        count.GetValueAndReset() |> ignore
-        total.GetValueAndReset() |> ignore
-        avg.GetValueAndReset() |> ignore
+        count.GetValuesAndReset() |> ignore
+        total.GetValuesAndReset() |> ignore
+        avg.GetValuesAndReset() |> ignore
 
-    let getValueAndReset'() =
-        let result = self.GetValue()
+    let getValuesAndReset'() =
+        let result = self.GetValues()
         reset'()
         result
     
@@ -104,19 +111,19 @@ type BasicTimer(config : MonitorConfig) as self =
     member __.Record(f : Action) = record (fun () -> f.Invoke())
     
     /// Gets the rate of calls timed within the specified step
-    member __.GetCount() = lock syncRoot count.GetValue
+    member __.GetCount() = lock syncRoot (fun() -> count.GetValues() |> Seq.head)
     
     /// Gets the average calls time within the specified step
-    member self.GetValue() : int64 = lock syncRoot getValue'
+    member __.GetValues() = lock syncRoot getValues'
     
     /// Get the maximum value of all calls
-    member __.GetMax() = lock syncRoot max.GetValue
+    member __.GetMax() = lock syncRoot (fun () -> max.GetValues() |> Seq.head)
     
     /// Get the manimum value of all calls
-    member __.GetMin() = lock syncRoot min.GetValue
+    member __.GetMin() = lock syncRoot (fun () -> min.GetValues() |> Seq.head)
     
     /// Gets the the total time for all calls within the specified step
-    member __.GetTotalTime() = lock syncRoot total.GetValue
+    member __.GetTotalTime() = lock syncRoot (fun () -> total.GetValues() |> Seq.head)
     
     /// Gets the monitor config
     member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
@@ -128,27 +135,16 @@ type BasicTimer(config : MonitorConfig) as self =
     member __.Register(elapsed) = elapsed |> updateStatistics
 
     /// Gets the value and resets the monitor
-    member __.GetValueAndReset() = Lock.lock syncRoot getValueAndReset'
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    member self.GetAllMonitors() =
-        seq {
-            yield self :> IMonitor
-            yield max :> IMonitor
-            yield min :> IMonitor
-            yield count :> IMonitor
-            yield total :> IMonitor }
+    member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
     
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
         member self.Record(f : Action) = self.Record(f)
-        member self.GetValue() = self.GetValue() :> obj
+        member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
         member self.Start() = self.Start()
         member self.Register(elapsed) = self.Register(elapsed)
-        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
-        member self.GetAllMonitors() = self.GetAllMonitors()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
 /// frequent calls that last less than the polling interval, use the BasicTimer instead.
@@ -192,13 +188,13 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     member __.Record(f : Action) = record (fun () -> f.Invoke())
     
     /// Get the number of running tasks
-    member __.GetNumberOfActiveTasks() = activeTasks.GetValue()
+    member __.GetNumberOfActiveTasks() = activeTasks.GetValues() |> Seq.head
     
     /// Get the duration in seconds. Duration is the sum of all active tasks duration.
-    member __.GetDurationInSeconds() = totalDurationInSeconds.GetValue()
+    member __.GetDurationInSeconds() = totalDurationInSeconds.GetValues() |> Seq.head
     
     /// Get the duration in seconds. Duration is the sum of all active tasks duration.
-    member self.GetValue() = self.GetDurationInSeconds()
+    member self.GetValues() = seq { yield Measurement("value", self.GetDurationInSeconds()) }
     
     /// Gets the monitor config
     member __.Config = totalDurationInSeconds.Config
@@ -210,14 +206,7 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         OkanshiTimer.StartNew(fun _ -> id |> markAsCompleted)
 
     /// Gets the value and resets the monitor
-    member self.GetValueAndReset() = self.GetValue()
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    member self.GetAllMonitors() =
-        seq {
-            yield activeTasks :> IMonitor
-            yield totalDurationInSeconds :> IMonitor }
+    member self.GetValuesAndReset() = self.GetValues()
 
     /// Manually register a timing, should only be used in special case
     member __.Register(elapsed : int64) : unit = raise (NotSupportedException("LongTaskTimer does not support manually registering timings"))
@@ -225,9 +214,8 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
         member self.Record(f : Action) = self.Record(f)
-        member self.GetValue() = self.GetValue() :> obj
+        member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
         member self.Start() = self.Start()
         member self.Register(elapsed) = self.Register(elapsed)
-        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
-        member self.GetAllMonitors() = self.GetAllMonitors()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
