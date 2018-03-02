@@ -114,5 +114,14 @@ namespace Okanshi.Test
 
             action.ShouldThrow<NotSupportedException>();
         }
+
+        [Fact]
+        public void Average_value_is_called_value()
+        {
+            var values = timer.GetValues();
+
+            values.Should().Contain(x => x.Name == "duration");
+            values.Should().Contain(x => x.Name == "activeTasks");
+        }
     }
 }

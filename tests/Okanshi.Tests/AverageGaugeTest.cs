@@ -64,5 +64,11 @@ namespace Okanshi.Test
 
             result.First().Value.Should().Be(200);
         }
+
+        [Fact]
+        public void Average_value_is_called_value()
+        {
+            gauge.GetValues().Single().Name.Should().Be("value");
+        }
     }
 }

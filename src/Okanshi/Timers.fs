@@ -86,7 +86,7 @@ type BasicTimer(config : MonitorConfig) as self =
     let getValues' () =
         seq {
             yield! avg.GetValues() |> Seq.map (fun x -> Measurement("value", x.Value)) |> Seq.cast<IMeasurement>
-            yield! total.GetValues() |> Seq.map (fun x -> Measurement("total", x.Value)) |> Seq.cast<IMeasurement>
+            yield! total.GetValues() |> Seq.map (fun x -> Measurement("totalTime", x.Value)) |> Seq.cast<IMeasurement>
             yield! count.GetValues() |> Seq.map (fun x -> Measurement("count", x.Value)) |> Seq.cast<IMeasurement>
             yield! max.GetValues() |> Seq.map (fun x -> Measurement("max", x.Value)) |> Seq.cast<IMeasurement>
             yield! min.GetValues() |> Seq.map (fun x -> Measurement("min", x.Value)) |> Seq.cast<IMeasurement>
@@ -196,7 +196,7 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     /// Get the duration in seconds. Duration is the sum of all active tasks duration.
     member self.GetValues() =
         seq {
-            yield Measurement("value", self.GetDurationInSeconds().Value)
+            yield Measurement("duration", self.GetDurationInSeconds().Value)
             yield Measurement("activeTasks", self.GetDurationInSeconds().Value)
         }
     

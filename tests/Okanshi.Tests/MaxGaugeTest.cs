@@ -76,5 +76,12 @@ namespace Okanshi.Test
 
             gauge.GetValuesAndReset().First().Value.Should().Be(expected);
         }
+
+        [Fact]
+        public void Value_is_called_value()
+        {
+            var gauge = new MaxGauge(MonitorConfig.Build("Test"));
+            gauge.GetValues().Single().Name.Should().Be("value");
+        }
     }
 }

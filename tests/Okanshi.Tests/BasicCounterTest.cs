@@ -54,5 +54,12 @@ namespace Okanshi.Test
 
             value.First().Value.Should().Be(amount);
         }
+
+        [Fact]
+        public void Value_is_called_value()
+        {
+            var counter = new BasicCounter(MonitorConfig.Build("Test"));
+            counter.GetValues().Single().Name.Should().Be("value");
+        }
     }
 }

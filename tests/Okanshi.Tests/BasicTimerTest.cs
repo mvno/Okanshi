@@ -232,5 +232,16 @@ namespace Okanshi.Test
 
             timer.GetTotalTime().Value.Should().Be(elapsed);
         }
+
+        [Fact]
+        public void Values_are_correct() {
+            var values = timer.GetValues();
+
+            values.Should().Contain(x => x.Name == "value");
+            values.Should().Contain(x => x.Name == "max");
+            values.Should().Contain(x => x.Name == "min");
+            values.Should().Contain(x => x.Name == "count");
+            values.Should().Contain(x => x.Name == "totalTime");
+        }
     }
 }

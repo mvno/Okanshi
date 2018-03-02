@@ -65,5 +65,11 @@ namespace Okanshi.Test
 
             value.First().Value.Should().Be(1);
         }
+
+        [Fact]
+        public void Value_is_called_value()
+        {
+            counter.GetValues().Single().Name.Should().Be("value");
+        }
     }
 }

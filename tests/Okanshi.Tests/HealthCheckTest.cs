@@ -93,5 +93,12 @@ namespace Okanshi.Test
 
             count.Should().Be(numberOfTimes);
         }
+
+        [Fact]
+        public void Value_is_called_value()
+        {
+            var healthCheck = new HealthCheck(MonitorConfig.Build("Test"), () => true);
+            healthCheck.GetValues().Single().Name.Should().Be("value");
+        }
     }
 }

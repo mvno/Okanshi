@@ -47,5 +47,12 @@ namespace Okanshi.Test
 
             gauge.GetValuesAndReset().First().Value.Should().Be(expectedValue);
         }
+
+        [Fact]
+        public void Value_is_called_value()
+        {
+            var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => 1);
+            gauge.GetValues().Single().Name.Should().Be("value");
+        }
     }
 }
