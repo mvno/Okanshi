@@ -30,7 +30,7 @@ type IMetricPoller =
     abstract UnregisterObserver : Func<Metric seq, Task> -> unit
 
 /// Poller for fetching metrics from a monitor registry
-type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan, pollOnExit : bool) as self =
+type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan, pollOnExit : bool) =
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
     let observers = new Collections.Generic.List<Func<Metric seq, Task>>()
