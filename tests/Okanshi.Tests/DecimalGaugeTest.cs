@@ -19,7 +19,7 @@ namespace Okanshi.Test
         {
             var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
 
-            gauge.GetValue().Should().Be(0);
+            gauge.GetValues().First().Value.Should().Be(0);
         }
 
         [Theory]
@@ -32,7 +32,7 @@ namespace Okanshi.Test
 
             gauge.Set(new decimal(expectedValue));
 
-            gauge.GetValue().Should().Be(new decimal(expectedValue));
+            gauge.GetValues().First().Value.Should().Be(new decimal(expectedValue));
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Okanshi.Test
 
             gauge.Reset();
 
-            gauge.GetValue().Should().Be(0m);
+            gauge.GetValues().First().Value.Should().Be(0m);
         }
 
         [Fact]
@@ -52,9 +52,9 @@ namespace Okanshi.Test
             var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
             gauge.Set(100L);
 
-            gauge.GetValueAndReset();
+            gauge.GetValuesAndReset().ToList();
 
-            gauge.GetValue().Should().Be(0L);
+            gauge.GetValues().First().Value.Should().Be(0L);
         }
 
         [Fact]
@@ -64,16 +64,7 @@ namespace Okanshi.Test
             var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
             gauge.Set(expected);
 
-            gauge.GetValueAndReset().Should().Be(expected);
-        }
-
-        [Fact]
-        public void Consists_of_a_single_monitor()
-        {
-            var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
-
-            gauge.GetAllMonitors().Should().HaveCount(1);
-            gauge.GetAllMonitors().Single().Should().BeSameAs(gauge);
+            gauge.GetValuesAndReset().First().Value.Should().Be(expected);
         }
     }
 }

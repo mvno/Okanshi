@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -21,7 +22,7 @@ namespace Okanshi.Test
         {
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
 
-            numberOfActiveTasks.Should().Be(0);
+            numberOfActiveTasks.Value.Should().Be(0);
         }
 
         [Fact]
@@ -29,15 +30,15 @@ namespace Okanshi.Test
         {
             var duration = timer.GetDurationInSeconds();
 
-            duration.Should().Be(0);
+            duration.Value.Should().Be(0);
         }
 
         [Fact]
         public void Intial_value_is_zero()
         {
-            var value = timer.GetValue();
+            var value = timer.GetValues();
 
-            value.Should().Be(0);
+            value.First().Value.Should().Be(0);
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace Okanshi.Test
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
 
             task.Wait();
-            numberOfActiveTasks.Should().Be(1);
+            numberOfActiveTasks.Value.Should().Be(1);
         }
 
         [Fact]
@@ -60,7 +61,7 @@ namespace Okanshi.Test
 
             var duration = timer.GetDurationInSeconds();
 
-            duration.Should().BeApproximately(0.5, 0.1);
+            duration.Value.Should().BeApproximately(0.5, 0.1);
             task.Wait();
         }
 
@@ -86,7 +87,7 @@ namespace Okanshi.Test
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
 
             task.Wait();
-            numberOfActiveTasks.Should().Be(1);
+            numberOfActiveTasks.Value.Should().Be(1);
         }
 
         [Fact]
@@ -102,7 +103,7 @@ namespace Okanshi.Test
 
             var duration = timer.GetDurationInSeconds();
 
-            duration.Should().BeApproximately(0.5, 0.1);
+            duration.Value.Should().BeApproximately(0.5, 0.1);
             task.Wait();
         }
 

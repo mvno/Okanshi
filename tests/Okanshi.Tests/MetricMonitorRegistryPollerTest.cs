@@ -74,7 +74,7 @@ namespace Okanshi.Test
 
             Thread.Sleep(1100);
 
-            counter.GetValue().Should().Be(0);
+            counter.GetValues().First().Value.Should().Be(0);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace Okanshi.Test
 
             resetEvent.Wait(TimeSpan.FromSeconds(1));
             metrics.Should().HaveCount(1);
-            metrics.Single().SubMetrics.Should().HaveCount(0);
+            metrics.Single().Values.Should().HaveCount(1);
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace Okanshi.Test
 
             resetEvent.Wait(TimeSpan.FromSeconds(1));
             metrics.Should().HaveCount(1);
-            metrics.Single().SubMetrics.Should().HaveCount(0);
+            metrics.Single().Values.Should().HaveCount(1);
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace Okanshi.Test
 
             resetEvent.Wait(TimeSpan.FromSeconds(1));
             metrics.Should().HaveCount(1);
-            metrics.Single().SubMetrics.Should().HaveCount(4);
+            metrics.Single().Values.Should().HaveCount(5);
         }
 
         [Fact]

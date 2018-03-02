@@ -70,7 +70,7 @@ namespace Okanshi.Test
         {
             var healthCheck = new HealthCheck(MonitorConfig.Build("Test"), () => expectedValue);
 
-            healthCheck.GetValue().Should().Be(expectedValue);
+            healthCheck.GetValues().First().Value.Should().Be(expectedValue);
         }
 
         [Theory]
@@ -88,19 +88,10 @@ namespace Okanshi.Test
 
             for (var i = 0; i < numberOfTimes; i++)
             {
-                healthCheck.GetValue();
+                healthCheck.GetValues().ToList();
             }
 
             count.Should().Be(numberOfTimes);
-        }
-
-        [Fact]
-        public void Health_check_consists_of_a_single_monitor()
-        {
-            var healthCheck = new HealthCheck(MonitorConfig.Build("Test"), () => true);
-
-            healthCheck.GetAllMonitors().Should().HaveCount(1);
-            healthCheck.GetAllMonitors().Single().Should().BeSameAs(healthCheck);
         }
     }
 }

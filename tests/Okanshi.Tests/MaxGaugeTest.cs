@@ -19,7 +19,7 @@ namespace Okanshi.Test
         {
             var gauge = new MaxGauge(MonitorConfig.Build("Test"));
 
-            gauge.GetValue().Should().Be(0);
+            gauge.GetValues().First().Value.Should().Be(0);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace Okanshi.Test
 
             gauge.Set(expectedValue);
 
-            gauge.GetValue().Should().Be(expectedValue);
+            gauge.GetValues().First().Value.Should().Be(expectedValue);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Okanshi.Test
 
             gauge.Set(100);
 
-            gauge.GetValue().Should().Be(maximumValue);
+            gauge.GetValues().First().Value.Should().Be(maximumValue);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Okanshi.Test
 
             gauge.Reset();
 
-            gauge.GetValue().Should().Be(0L);
+            gauge.GetValues().First().Value.Should().Be(0L);
         }
 
         [Fact]
@@ -62,9 +62,9 @@ namespace Okanshi.Test
             var gauge = new MaxGauge(MonitorConfig.Build("Test"));
             gauge.Set(100L);
 
-            gauge.GetValueAndReset();
+            gauge.GetValuesAndReset();
 
-            gauge.GetValue().Should().Be(0L);
+            gauge.GetValues().First().Value.Should().Be(0L);
         }
 
         [Fact]
@@ -74,16 +74,7 @@ namespace Okanshi.Test
             var gauge = new MaxGauge(MonitorConfig.Build("Test"));
             gauge.Set(expected);
 
-            gauge.GetValueAndReset().Should().Be(expected);
-        }
-
-        [Fact]
-        public void Consists_of_a_single_monitor()
-        {
-            var gauge = new MaxGauge(MonitorConfig.Build("Test"));
-
-            gauge.GetAllMonitors().Should().HaveCount(1);
-            gauge.GetAllMonitors().Single().Should().BeSameAs(gauge);
+            gauge.GetValuesAndReset().First().Value.Should().Be(expected);
         }
     }
 }

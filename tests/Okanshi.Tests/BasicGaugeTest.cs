@@ -22,7 +22,7 @@ namespace Okanshi.Test
         {
             var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
 
-            gauge.GetValue().Should().Be(expectedValue);
+            gauge.GetValues().First().Value.Should().Be(expectedValue);
         }
 
         [Theory]
@@ -33,7 +33,7 @@ namespace Okanshi.Test
         {
             var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
 
-            gauge.GetValueAndReset().Should().Be(expectedValue);
+            gauge.GetValuesAndReset().First().Value.Should().Be(expectedValue);
         }
 
         [Theory]
@@ -43,18 +43,9 @@ namespace Okanshi.Test
         public void After_get_and_reset_the_value_is_still_gotten_from_func(int expectedValue)
         {
             var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
-            gauge.GetValueAndReset();
+            gauge.GetValuesAndReset();
 
-            gauge.GetValueAndReset().Should().Be(expectedValue);
-        }
-
-        [Fact]
-        public void Consists_of_a_single_monitor()
-        {
-            var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => 1);
-
-            gauge.GetAllMonitors().Should().HaveCount(1);
-            gauge.GetAllMonitors().Single().Should().BeSameAs(gauge);
+            gauge.GetValuesAndReset().First().Value.Should().Be(expectedValue);
         }
     }
 }
