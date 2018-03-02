@@ -48,13 +48,6 @@ type MonitorEndpoint(options : EndpointOptions) =
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
 
-    let rec getSubMetrics (metrics : Metric seq) : Metric list =
-        metrics |> Seq.fold (fun state x ->
-            let state' = 
-                if x.SubMetrics |> Seq.isEmpty then state
-                else x.SubMetrics |> getSubMetrics
-            x :: state') []
-
     let getObservations (observer : IMetricObserver) =
         observer.GetObservations()
     

@@ -21,7 +21,7 @@ namespace Okanshi.Test
         {
             var max = timer.GetMax();
 
-            max.Should().Be(0);
+            max.Value.Should().Be(0);
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Okanshi.Test
         {
             var min = timer.GetMin();
 
-            min.Should().Be(0);
+            min.Value.Should().Be(0);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Okanshi.Test
         {
             var count = timer.GetCount();
 
-            count.Should().Be(0);
+            count.Value.Should().Be(0);
         }
 
         [Fact]
@@ -45,15 +45,15 @@ namespace Okanshi.Test
         {
             var totalTime = timer.GetTotalTime();
 
-            totalTime.Should().Be(0);
+            totalTime.Value.Should().Be(0);
         }
 
         [Fact]
         public void Initial_value_is_zero()
         {
-            var value = timer.GetValue();
+            var value = timer.GetValues();
 
-            value.Should().Be(0);
+            value.First().Value.Should().Be(0.0);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Okanshi.Test
 
             timer.Record(() => Thread.Sleep(500));
 
-            timer.GetCount().Should().Be(1);
+            timer.GetCount().Value.Should().Be(1);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Okanshi.Test
 
             var max = timer.GetMax();
 
-            max.Should().BeInRange(40, 70);
+            max.Value.Should().BeInRange(40, 70);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Okanshi.Test
 
             var min = timer.GetMin();
 
-            min.Should().BeInRange(40, 70);
+            min.Value.Should().BeInRange(40, 70);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace Okanshi.Test
 
             var totalTime = timer.GetTotalTime();
 
-            totalTime.Should().BeInRange(480, 520);
+            totalTime.Value.Should().BeInRange(480, 520);
         }
 
         [Fact]
@@ -105,9 +105,9 @@ namespace Okanshi.Test
             timer.GetCount();
             timer.Record(() => Thread.Sleep(500));
 
-            timer.GetValueAndReset();
+            timer.GetValuesAndReset().ToList();
 
-            timer.GetCount().Should().Be(0);
+            timer.GetCount().Value.Should().Be(0);
         }
 
         [Fact]
@@ -116,9 +116,9 @@ namespace Okanshi.Test
             timer.GetCount();
             timer.Record(() => Thread.Sleep(50));
 
-            timer.GetValueAndReset();
+            timer.GetValuesAndReset();
 
-            timer.GetMax().Should().Be(0);
+            timer.GetMax().Value.Should().Be(0);
         }
 
         [Fact]
@@ -127,9 +127,9 @@ namespace Okanshi.Test
             timer.GetCount();
             timer.Record(() => Thread.Sleep(50));
 
-            timer.GetValueAndReset();
+            timer.GetValuesAndReset();
 
-            timer.GetMin().Should().Be(0);
+            timer.GetMin().Value.Should().Be(0);
         }
 
         [Fact]
@@ -138,9 +138,9 @@ namespace Okanshi.Test
             timer.GetTotalTime();
             timer.Record(() => Thread.Sleep(500));
 
-            timer.GetValueAndReset();
+            timer.GetValuesAndReset();
 
-            timer.GetTotalTime().Should().Be(0);
+            timer.GetTotalTime().Value.Should().Be(0);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace Okanshi.Test
             Thread.Sleep(50);
             okanshiTimer.Stop();
 
-            timer.GetCount().Should().Be(1);
+            timer.GetCount().Value.Should().Be(1);
         }
 
         [Fact]
@@ -165,7 +165,7 @@ namespace Okanshi.Test
 
             var max = timer.GetMax();
 
-            max.Should().BeInRange(40, 70);
+            max.Value.Should().BeInRange(40, 70);
         }
 
         [Fact]
@@ -178,7 +178,7 @@ namespace Okanshi.Test
 
             var min = timer.GetMin();
 
-            min.Should().BeInRange(40, 70);
+            min.Value.Should().BeInRange(40, 70);
         }
 
         [Fact]
@@ -191,7 +191,7 @@ namespace Okanshi.Test
 
             var totalTime = timer.GetTotalTime();
 
-            totalTime.Should().BeInRange(480, 520);
+            totalTime.Value.Should().BeInRange(480, 520);
         }
 
         [Fact]
@@ -201,7 +201,7 @@ namespace Okanshi.Test
 
             timer.Register(elapsed);
 
-            timer.GetMax().Should().Be(elapsed);
+            timer.GetMax().Value.Should().Be(elapsed);
         }
 
         [Fact]
@@ -211,7 +211,7 @@ namespace Okanshi.Test
 
             timer.Register(elapsed);
 
-            timer.GetMin().Should().Be(elapsed);
+            timer.GetMin().Value.Should().Be(elapsed);
         }
 
         [Fact]
@@ -220,7 +220,7 @@ namespace Okanshi.Test
             const long elapsed = 1000;
             timer.Register(elapsed);
 
-            timer.GetCount().Should().Be(1);
+            timer.GetCount().Value.Should().Be(1);
         }
 
         [Fact]
@@ -230,34 +230,18 @@ namespace Okanshi.Test
 
             timer.Register(elapsed);
 
-            timer.GetTotalTime().Should().Be(elapsed);
+            timer.GetTotalTime().Value.Should().Be(elapsed);
         }
 
         [Fact]
-        public void Consists_of_five_monitors()
-        {
-            var monitors = timer.GetAllMonitors().ToList();
-            monitors.Should().HaveCount(5);
-            monitors.Should().Contain(x => ReferenceEquals(x, timer));
-            monitors.Should().Contain(x => x.Config.Tags.Any(t => t.Key == "statistic" && t.Value == "max"));
-            monitors.Should().Contain(x => x.Config.Tags.Any(t => t.Key == "statistic" && t.Value == "min"));
-            monitors.Should().Contain(x => x.Config.Tags.Any(t => t.Key == "statistic" && t.Value == "count"));
-            monitors.Should().Contain(x => x.Config.Tags.Any(t => t.Key == "statistic" && t.Value == "totalTime"));
-        }
+        public void Values_are_correct() {
+            var values = timer.GetValues();
 
-        [Fact]
-        public void dsadsa()
-        {
-            timer.Record(() => Thread.Sleep(100));
-
-            var monitors = timer.GetAllMonitors().ToList();
-            var peakCounters = monitors.OfType<PeakCounter>();
-            foreach (var counter in peakCounters)
-            {
-                counter.GetValueAndReset();
-            }
-
-            timer.GetValueAndReset().Should().BeInRange(70, 130);
+            values.Should().Contain(x => x.Name == "value");
+            values.Should().Contain(x => x.Name == "max");
+            values.Should().Contain(x => x.Name == "min");
+            values.Should().Contain(x => x.Name == "count");
+            values.Should().Contain(x => x.Name == "totalTime");
         }
     }
 }

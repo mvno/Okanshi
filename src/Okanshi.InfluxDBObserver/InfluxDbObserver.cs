@@ -74,9 +74,8 @@ namespace Okanshi.Observers
             {
                 var metricTags = FilterTags(metric.Tags).ToArray();
                 var tags = metricTags.Where(x => !options.TagToFieldSelector(x)).Select(t => new InfluxDB.WriteOnly.Tag(t.Key, t.Value));
-                var fields = Enumerable.Repeat(ConvertToField("value", metric.Value), 1)
-                    .Concat(metricTags.Where(options.TagToFieldSelector).Select(ConvertTagToField))
-                    .Concat(ConvertSubMetricsToFields(metric.SubMetrics));
+                var fields = metric.Values.Select(x => ConvertToField(x.Name, x.Value))
+                    .Concat(metricTags.Where(options.TagToFieldSelector).Select(ConvertTagToField));
                 yield return new Point {
                     Measurement = options.MeasurementNameSelector(metric),
                     Timestamp = metric.Timestamp.DateTime,
@@ -84,14 +83,6 @@ namespace Okanshi.Observers
                     Tags = tags
                 };
             }
-        }
-
-        private IEnumerable<Field> ConvertSubMetricsToFields(IEnumerable<Metric> subMetrics)
-        {
-            return subMetrics
-                .Select(metric => new { metric, statTag = metric.Tags.FirstOrDefault(x => x.Key.Equals("statistic", StringComparison.OrdinalIgnoreCase)) })
-                .Where(t => t.statTag != null)
-                .Select(t => ConvertToField(t.statTag.Value, t.metric.Value));
         }
 
         private IEnumerable<Tag> FilterTags(IEnumerable<Tag> tags)

@@ -22,7 +22,7 @@ namespace Okanshi.Test
         [Fact]
         public void Initial_value_is_zero()
         {
-            gauge.GetValue().Should().Be(0);
+            gauge.GetValues().First().Value.Should().Be(0);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Okanshi.Test
             gauge.Set(100);
             gauge.Set(200);
 
-            gauge.GetValue().Should().Be(150);
+            gauge.GetValues().First().Value.Should().Be(150);
         }
 
         [Fact]
@@ -39,9 +39,9 @@ namespace Okanshi.Test
         {
             gauge.Set(100L);
 
-            gauge.GetValueAndReset();
+            gauge.GetValuesAndReset();
 
-            gauge.GetValue().Should().Be(0L);
+            gauge.GetValues().First().Value.Should().Be(0L);
         }
 
         [Fact]
@@ -50,28 +50,25 @@ namespace Okanshi.Test
             const long expected = 100L;
             gauge.Set(expected);
 
-            gauge.GetValueAndReset().Should().Be(expected);
-        }
-
-        [Fact]
-        public void Consists_of_a_single_monitor()
-        {
-            var gauge = new AverageGauge(MonitorConfig.Build("Test"));
-
-            gauge.GetAllMonitors().Should().HaveCount(1);
-            gauge.GetAllMonitors().Single().Should().BeSameAs(gauge);
+            gauge.GetValuesAndReset().First().Value.Should().Be(expected);
         }
 
         [Fact]
         public void Average_is_calculated_correctly_after_reset()
         {
             gauge.Set(100L);
-            gauge.GetValueAndReset();
+            gauge.GetValuesAndReset();
             gauge.Set(200L);
 
-            var result = gauge.GetValueAndReset();
+            var result = gauge.GetValuesAndReset();
 
-            result.Should().Be(200);
+            result.First().Value.Should().Be(200);
+        }
+
+        [Fact]
+        public void Average_value_is_called_value()
+        {
+            gauge.GetValues().Single().Name.Should().Be("value");
         }
     }
 }

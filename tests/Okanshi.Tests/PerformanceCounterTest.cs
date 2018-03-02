@@ -52,6 +52,14 @@ namespace Okanshi.Test
             monitor.GetAllMonitors().Should().HaveCount(1);
             monitor.GetAllMonitors().Single().Should().BeSameAs(monitor);
         }
+
+        [Fact]
+        public void Value_is_called_value()
+        {
+            var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
+                PerformanceCounterConfig.Build("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName));
+            monitor.GetValues().Single().Name.Should().Be("value");
+        }
     }
 #endif
 }

@@ -33,20 +33,15 @@ type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Fu
     new (config, check) = HealthCheck(DefaultMonitorRegistry.Instance, config, check)
 
     /// Get value
-    member __.GetValue() = check'.GetValue()
+    member __.GetValues() = check'.GetValues()
 
     /// Gets the value and resets the monitor
-    member __.GetValueAndReset() = check'.GetValueAndReset()
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    member self.GetAllMonitors() = seq { yield self :> IMonitor }
+    member __.GetValuesAndReset() = check'.GetValuesAndReset()
     
     /// The config
     member __.Config = config'
 
     interface IMonitor with
-        member self.GetValue() = self.GetValue() :> obj
+        member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
-        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
-        member self.GetAllMonitors() = self.GetAllMonitors()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast

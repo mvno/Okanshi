@@ -102,17 +102,12 @@ namespace Okanshi.Test
                 }
             }
 
-            public object GetValue()
+            public IEnumerable<IMeasurement> GetValues()
             {
                 throw new System.NotImplementedException();
             }
 
-            public object GetValueAndReset()
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public IEnumerable<IMonitor> GetAllMonitors()
+            public IEnumerable<IMeasurement> GetValuesAndReset()
             {
                 throw new System.NotImplementedException();
             }
@@ -131,17 +126,12 @@ namespace Okanshi.Test
                 }
             }
 
-            public object GetValue()
+            public IEnumerable<IMeasurement> GetValues()
             {
                 throw new System.NotImplementedException();
             }
 
-            public object GetValueAndReset()
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public IEnumerable<IMonitor> GetAllMonitors()
+            public IEnumerable<IMeasurement> GetValuesAndReset()
             {
                 throw new System.NotImplementedException();
             }

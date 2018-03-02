@@ -35,20 +35,15 @@ type PerformanceCounterMonitor(registry : IMonitorRegistry, monitorConfig : Moni
         PerformanceCounterMonitor(DefaultMonitorRegistry.Instance, monitorConfig, performanceCounterConfig)
     
     /// Gets the performance counter value
-    member __.GetValue() = gauge.GetValue()
+    member __.GetValues() = gauge.GetValues()
     
     /// Gets the monitor config
     member __.Config = gauge.Config
 
     /// Gets the value and resets the monitor
-    member __.GetValueAndReset() = gauge.GetValueAndReset()
-
-    /// Gets all the monitors on the current monitor. This is the best way to handle
-    /// sub monitors.
-    member self.GetAllMonitors() = seq { yield self :> IMonitor }
+    member __.GetValuesAndReset() = gauge.GetValuesAndReset()
     
     interface IMonitor with
-        member self.GetValue() = self.GetValue() :> obj
+        member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
-        member self.GetValueAndReset() = self.GetValueAndReset() :> obj
-        member self.GetAllMonitors() = self.GetAllMonitors()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast

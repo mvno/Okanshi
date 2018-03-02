@@ -14,9 +14,7 @@ type Metric =
         /// The metric tags
         Tags : Tag array;
         /// The value
-        Value : obj
-        /// The sub metrics
-        SubMetrics : Metric array
+        Values : IMeasurement seq
     }
 
 /// A poller that can be used to fetch the current values for a list of metrics
@@ -32,23 +30,17 @@ type IMetricPoller =
     abstract UnregisterObserver : Func<Metric seq, Task> -> unit
 
 /// Poller for fetching metrics from a monitor registry
-type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan, pollOnExit : bool) as self =
+type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpan, pollOnExit : bool) =
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
     let observers = new Collections.Generic.List<Func<Metric seq, Task>>()
 
-    let rec convertMonitorToMetric (monitor : IMonitor) =
-        let submetrics =
-            monitor.GetAllMonitors()
-            |> Seq.except (seq { yield monitor })
-            |> Seq.map convertMonitorToMetric
-            |> Seq.toArray
+    let convertMonitorToMetric (monitor : IMonitor) =
         {
             Name = monitor.Config.Name
             Timestamp = DateTimeOffset.UtcNow
             Tags = monitor.Config.Tags
-            Value = monitor.GetValueAndReset()
-            SubMetrics = submetrics
+            Values = monitor.GetValuesAndReset()
         }
 
     let pollMetrics () =

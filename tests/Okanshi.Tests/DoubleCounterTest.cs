@@ -17,9 +17,9 @@ namespace Okanshi.Test
         [Fact]
         public void Initial_value_is_zero()
         {
-            var value = counter.GetValue();
+            var value = counter.GetValues();
 
-            value.Should().Be(0);
+            value.First().Value.Should().Be(0);
         }
 
         [Fact]
@@ -27,9 +27,9 @@ namespace Okanshi.Test
         {
             counter.Increment();
 
-            counter.GetValueAndReset();
+            counter.GetValuesAndReset().ToList();
 
-            counter.GetValue().Should().Be(0);
+            counter.GetValues().First().Value.Should().Be(0);
         }
 
         [Theory]
@@ -40,9 +40,9 @@ namespace Okanshi.Test
         {
             counter.Increment(expectedValue);
 
-            var value = counter.GetValue();
+            var value = counter.GetValues();
 
-            value.Should().Be(expectedValue);
+            value.First().Value.Should().Be(expectedValue);
         }
 
         [Fact]
@@ -51,9 +51,9 @@ namespace Okanshi.Test
             counter.Increment(1);
             counter.Increment(1);
 
-            var value = counter.GetValue();
+            var value = counter.GetValues();
 
-            value.Should().Be(2);
+            value.First().Value.Should().Be(2);
         }
 
         [Fact]
@@ -61,16 +61,15 @@ namespace Okanshi.Test
         {
             counter.Increment(1);
 
-            var value = counter.GetValueAndReset();
+            var value = counter.GetValuesAndReset();
 
-            value.Should().Be(1);
+            value.First().Value.Should().Be(1);
         }
 
         [Fact]
-        public void Consists_of_a_single_monitor()
+        public void Value_is_called_value()
         {
-            counter.GetAllMonitors().Should().HaveCount(1);
-            counter.GetAllMonitors().Single().Should().BeSameAs(counter);
+            counter.GetValues().Single().Name.Should().Be("value");
         }
     }
 }
