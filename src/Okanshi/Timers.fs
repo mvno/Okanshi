@@ -49,12 +49,6 @@ type OkanshiTimer(onStop : Action<int64>, stopwatchFactory: Func<IStopwatch>) =
 
     new(onStop) = OkanshiTimer(onStop, fun () -> SystemStopwatch() :> IStopwatch)
     
-    /// Create a start a new timer
-    static member StartNew(onStop) = 
-        let s = new OkanshiTimer(onStop)
-        s.Start()
-        s
-    
     /// Start the timer
     member __.Start() = 
         if stopwatch.IsNone then invalidOp "Timer cannot be used multiple times"
@@ -138,10 +132,17 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
     new(config: MonitorConfig) = BasicTimer(config, fun () -> SystemStopwatch() :> IStopwatch)
     
     /// Time a System.Func call and return the value
-    member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
+    member __.Record(f : Func<'T>) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let (result, elapsed) = stopwatch.Time(f)
+        elapsed |> updateStatistics
+        result
     
     /// Time a System.Action call
-    member __.Record(f : Action) = record (fun () -> f.Invoke())
+    member __.Record(f : Action) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let elapsed = stopwatch.Time(f)
+        elapsed |> updateStatistics
     
     /// Gets the rate of calls timed within the specified step
     member __.GetCount() = lock syncRoot (fun() -> count.GetValues() |> Seq.head)
@@ -162,7 +163,8 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
     member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
     
     /// Start a manually controlled timinig
-    member __.Start() = OkanshiTimer.StartNew(fun x -> updateStatistics x)
+    member __.Start() =
+        OkanshiTimer((fun x -> updateStatistics x), (fun () -> stopwatchFactory.Invoke()))
 
     /// Manually register a timing, should only be used in special case
     member __.Register(elapsed) = elapsed |> updateStatistics
@@ -187,7 +189,7 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
 /// * Number of active tasks
 /// The names of the monitors will be the base name passed in the config to the constructor, suffixed by
 /// .duration and .activetasks respectively.
-type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) = 
+type LongTaskTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) = 
     let nextTaskId = new AtomicLong()
     let tasks = new System.Collections.Concurrent.ConcurrentDictionary<int64, int64>()
     let activeTasks = 
@@ -212,7 +214,7 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
         finally
             id |> markAsCompleted
     
-    new(config) = LongTaskTimer(DefaultMonitorRegistry.Instance, config)
+    new(config) = LongTaskTimer(config)
     
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
@@ -240,7 +242,7 @@ type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) =
     member __.Start() = 
         let id = getNextId()
         id |> markAsStarted
-        OkanshiTimer.StartNew(fun _ -> id |> markAsCompleted)
+        OkanshiTimer((fun _ -> id |> markAsCompleted), (fun () -> stopwatchFactory.Invoke()))
 
     /// Gets the value and resets the monitor
     member self.GetValuesAndReset() = self.GetValues()
