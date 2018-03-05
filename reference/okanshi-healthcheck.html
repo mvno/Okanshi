@@ -52,10 +52,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '90', 90)" onmouseover="showTip(event, '90', 90)">
+          <code onmouseout="hideTip(event, '83', 83)" onmouseover="showTip(event, '83', 83)">
             new(config, check)
           </code>
-          <div class="tip" id="90">
+          <div class="tip" id="83">
             <strong>Signature:</strong> (config:MonitorConfig * check:Func&lt;bool&gt;) -&gt; HealthCheck<br />
                       </div>
         </td>
@@ -71,10 +71,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
+          <code onmouseout="hideTip(event, '84', 84)" onmouseover="showTip(event, '84', 84)">
             new(registry, config, check)
           </code>
-          <div class="tip" id="91">
+          <div class="tip" id="84">
             <strong>Signature:</strong> (registry:IMonitorRegistry * config:MonitorConfig * check:Func&lt;bool&gt;) -&gt; HealthCheck<br />
                       </div>
         </td>
@@ -98,15 +98,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
+          <code onmouseout="hideTip(event, '85', 85)" onmouseover="showTip(event, '85', 85)">
             Config
           </code>
-          <div class="tip" id="92">
+          <div class="tip" id="85">
             <strong>Signature:</strong> MonitorConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L46-46" class="github-link">
+            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -119,32 +119,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
-            GetAllMonitors()
+          <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
+            GetValues()
           </code>
-          <div class="tip" id="93">
-            <strong>Signature:</strong> unit -&gt; seq&lt;IMonitor&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/mvno/Okanshi/tree/master/src/Okanshi/HealthCheck.fs#L43-43" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Gets all the monitors on the current monitor. This is the best way to handle
-sub monitors.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
-            GetValue()
-          </code>
-          <div class="tip" id="94">
-            <strong>Signature:</strong> unit -&gt; bool<br />
+          <div class="tip" id="86">
+            <strong>Signature:</strong> unit -&gt; seq&lt;Measurement&lt;bool&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -160,11 +139,11 @@ sub monitors.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
-            GetValueAndReset()
+          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
+            GetValuesAndReset()
           </code>
-          <div class="tip" id="95">
-            <strong>Signature:</strong> unit -&gt; bool<br />
+          <div class="tip" id="87">
+            <strong>Signature:</strong> unit -&gt; seq&lt;Measurement&lt;bool&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
