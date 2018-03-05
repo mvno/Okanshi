@@ -4,20 +4,50 @@ open System
 open System.Diagnostics
 open Okanshi.Helpers
 
-/// Extenstions for the System.Diagnostics.StopWatch class
-[<AutoOpen>]
-module StopwatchExtensions = 
-    type Stopwatch with
-        /// Time a function and return the result and elapsed milliseconds as a tuple
-        static member Time f = 
-            let stopwatch = Stopwatch.StartNew()
-            let result = f()
-            stopwatch.Stop()
-            (result, stopwatch.ElapsedMilliseconds)
+type IStopwatch =
+    abstract ElapsedMilliseconds : int64
+    abstract IsRunning : bool
+    abstract Start : unit -> unit
+    abstract Stop : unit -> unit
+    abstract Time : Func<'T> -> ('T * int64)
+    abstract Time : Action -> int64
+
+type SystemStopwatch() =
+    let stopwatch = new Stopwatch()
+
+    let time' f =
+        stopwatch.Start()
+        let result = f()
+        stopwatch.Stop()
+        (result, stopwatch.ElapsedMilliseconds)
+
+    member __.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds
+    
+    member __.IsRunning = stopwatch.IsRunning
+
+    member __.Start() = stopwatch.Start()
+    
+    member __.Stop() = stopwatch.Stop()
+    
+    member __.Time(f: Func<'T>) = time' (fun () -> f.Invoke())
+
+    member __.Time(f: Action) =
+        let (_, elapsed) = time' (fun () -> f.Invoke())
+        elapsed
+
+    interface IStopwatch with
+        member self.ElapsedMilliseconds = self.ElapsedMilliseconds
+        member self.IsRunning = self.IsRunning
+        member self.Start() = self.Start()
+        member self.Stop() = self.Stop()
+        member self.Time(f: Func<'T>) : ('T * int64) = self.Time(f)
+        member self.Time(f: Action) = self.Time(f)
 
 /// Timer that is started and stopped manually
-type OkanshiTimer(onStop : Action<int64>) = 
-    let mutable stopwatch = Some <| new Stopwatch()
+type OkanshiTimer(onStop : Action<int64>, stopwatchFactory: Func<IStopwatch>) = 
+    let mutable stopwatch = Some <| stopwatchFactory.Invoke()
+
+    new(onStop) = OkanshiTimer(onStop, fun () -> SystemStopwatch() :> IStopwatch)
     
     /// Create a start a new timer
     static member StartNew(onStop) = 
@@ -56,7 +86,7 @@ type ITimer =
     abstract Register : int64 -> unit
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
-type BasicTimer(config : MonitorConfig) as self = 
+type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
     
     [<Literal>]
     let StatisticKey = "statistic"
@@ -79,7 +109,8 @@ type BasicTimer(config : MonitorConfig) as self =
         lockWithArg syncRoot elapsed updateStatistics'
     
     let record f = 
-        let (result, elapsed) = Stopwatch.Time(fun () -> f())
+        let stopwatch = stopwatchFactory.Invoke()
+        let (result, elapsed) = stopwatch.Time(fun () -> f())
         elapsed |> updateStatistics
         result
 
@@ -103,6 +134,8 @@ type BasicTimer(config : MonitorConfig) as self =
         let result = self.GetValues() |> Seq.toList
         reset'()
         result |> List.toSeq
+
+    new(config: MonitorConfig) = BasicTimer(config, fun () -> SystemStopwatch() :> IStopwatch)
     
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
