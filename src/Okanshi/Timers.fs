@@ -231,8 +231,8 @@ type LongTaskTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) 
     /// Get the duration in seconds. Duration is the sum of all active tasks duration.
     member self.GetValues() =
         seq {
-            yield Measurement("duration", self.GetDurationInSeconds().Value)
-            yield Measurement("activeTasks", self.GetDurationInSeconds().Value)
+            yield Measurement("duration", self.GetDurationInSeconds().Value) :> IMeasurement
+            yield Measurement("activeTasks", self.GetNumberOfActiveTasks().Value) :> IMeasurement
         }
     
     /// Gets the monitor config
