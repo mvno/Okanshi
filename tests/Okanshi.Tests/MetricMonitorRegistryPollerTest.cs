@@ -92,7 +92,7 @@ namespace Okanshi.Test
 
             _metricMonitorRegistryPoller.PollMetrics();
 
-            resetEvent.Wait(TimeSpan.FromSeconds(1));
+            resetEvent.Wait(TimeSpan.FromSeconds(1.5));
             metrics.Should().HaveCount(1);
             metrics.Single().Values.Should().HaveCount(1);
         }

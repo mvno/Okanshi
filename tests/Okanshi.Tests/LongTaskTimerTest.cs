@@ -83,7 +83,7 @@ namespace Okanshi.Test
                 Thread.Sleep(2000);
                 okanshiTimer.Stop();
             });
-            Thread.Sleep(100);
+            Thread.Sleep(500);
 
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
 
