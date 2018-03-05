@@ -3,17 +3,19 @@ using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using Xunit;
+using NSubstitute;
 
 namespace Okanshi.Test
 {
     public class BasicTimerTest
     {
+        private readonly IStopwatch stopwatch = Substitute.For<IStopwatch>();
         private readonly BasicTimer timer;
 
         public BasicTimerTest()
         {
             DefaultMonitorRegistry.Instance.Clear();
-            timer = new BasicTimer(MonitorConfig.Build("Test"));
+            timer = new BasicTimer(MonitorConfig.Build("Test"), () => stopwatch);
         }
 
         [Fact]
@@ -61,7 +63,7 @@ namespace Okanshi.Test
         {
             timer.GetCount();
 
-            timer.Record(() => Thread.Sleep(500));
+            timer.Record(() => { });
 
             timer.GetCount().Value.Should().Be(1);
         }
@@ -70,40 +72,43 @@ namespace Okanshi.Test
         public void Timing_a_call_sets_max()
         {
             timer.GetCount();
-            timer.Record(() => Thread.Sleep(50));
+            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            timer.Record(() => { });
 
             var max = timer.GetMax();
 
-            max.Value.Should().BeInRange(40, 70);
+            max.Value.Should().Be(50);
         }
 
         [Fact]
         public void Timing_a_call_sets_min()
         {
             timer.GetCount();
-            timer.Record(() => Thread.Sleep(50));
+            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            timer.Record(() => { });
 
             var min = timer.GetMin();
 
-            min.Value.Should().BeInRange(40, 70);
+            min.Value.Should().Be(50);
         }
 
         [Fact]
         public void Timing_a_call_sets_total_time()
         {
             timer.GetTotalTime();
-            timer.Record(() => Thread.Sleep(500));
+            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            timer.Record(() => { });
 
             var totalTime = timer.GetTotalTime();
 
-            totalTime.Value.Should().BeInRange(480, 520);
+            totalTime.Value.Should().Be(50);
         }
 
         [Fact]
         public void Get_and_reset_resets_count()
         {
             timer.GetCount();
-            timer.Record(() => Thread.Sleep(500));
+            timer.Record(() => { });
 
             timer.GetValuesAndReset().ToList();
 
@@ -114,7 +119,7 @@ namespace Okanshi.Test
         public void Get_and_reset_resets_max()
         {
             timer.GetCount();
-            timer.Record(() => Thread.Sleep(50));
+            timer.Record(() => { });
 
             timer.GetValuesAndReset();
 
@@ -125,7 +130,7 @@ namespace Okanshi.Test
         public void Get_and_reset_resets_min()
         {
             timer.GetCount();
-            timer.Record(() => Thread.Sleep(50));
+            timer.Record(() => { });
 
             timer.GetValuesAndReset();
 
@@ -136,7 +141,7 @@ namespace Okanshi.Test
         public void Get_and_reset_resets_total_time()
         {
             timer.GetTotalTime();
-            timer.Record(() => Thread.Sleep(500));
+            timer.Record(() => { });
 
             timer.GetValuesAndReset();
 
@@ -147,9 +152,8 @@ namespace Okanshi.Test
         public void Manual_timing_sets_count()
         {
             timer.GetCount();
-
             var okanshiTimer = timer.Start();
-            Thread.Sleep(50);
+            stopwatch.IsRunning.Returns(true);
             okanshiTimer.Stop();
 
             timer.GetCount().Value.Should().Be(1);
@@ -160,12 +164,13 @@ namespace Okanshi.Test
         {
             timer.GetCount();
             var okanshiTimer = timer.Start();
-            Thread.Sleep(50);
+            stopwatch.IsRunning.Returns(true);
+            stopwatch.ElapsedMilliseconds.Returns(50);
             okanshiTimer.Stop();
 
             var max = timer.GetMax();
 
-            max.Value.Should().BeInRange(40, 70);
+            max.Value.Should().Be(50);
         }
 
         [Fact]
@@ -173,12 +178,13 @@ namespace Okanshi.Test
         {
             timer.GetCount();
             var okanshiTimer = timer.Start();
-            Thread.Sleep(50);
+            stopwatch.IsRunning.Returns(true);
+            stopwatch.ElapsedMilliseconds.Returns(50);
             okanshiTimer.Stop();
 
             var min = timer.GetMin();
 
-            min.Value.Should().BeInRange(40, 70);
+            min.Value.Should().Be(50);
         }
 
         [Fact]
@@ -186,12 +192,13 @@ namespace Okanshi.Test
         {
             timer.GetTotalTime();
             var okanshiTimer = timer.Start();
-            Thread.Sleep(500);
+            stopwatch.IsRunning.Returns(true);
+            stopwatch.ElapsedMilliseconds.Returns(50);
             okanshiTimer.Stop();
 
             var totalTime = timer.GetTotalTime();
 
-            totalTime.Value.Should().BeInRange(480, 520);
+            totalTime.Value.Should().Be(50);
         }
 
         [Fact]

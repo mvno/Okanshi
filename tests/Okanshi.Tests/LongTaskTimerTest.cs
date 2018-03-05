@@ -4,17 +4,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
+using NSubstitute;
 
 namespace Okanshi.Test
 {
     public class LongTaskTimerTest
     {
+        private readonly IStopwatch stopwatch = Substitute.For<IStopwatch>();
         private readonly LongTaskTimer timer;
 
         public LongTaskTimerTest()
         {
             DefaultMonitorRegistry.Instance.Clear();
-            timer = new LongTaskTimer(MonitorConfig.Build("Test"));
+            timer = new LongTaskTimer(MonitorConfig.Build("Test"), () => stopwatch);
         }
 
         [Fact]
@@ -49,20 +51,18 @@ namespace Okanshi.Test
 
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
 
-            task.Wait();
             numberOfActiveTasks.Value.Should().Be(1);
         }
 
         [Fact]
         public void Recording_a_task_updates_the_duration()
         {
-            var task = Task.Run(() => timer.Record(() => Thread.Sleep(1000)));
+            var task = Task.Run(() => timer.Record(() => Thread.Sleep(2000)));
             Thread.Sleep(500);
 
             var duration = timer.GetDurationInSeconds();
 
-            duration.Value.Should().BeApproximately(0.5, 0.3);
-            task.Wait();
+            duration.Value.Should().BeApproximately(0.5, 0.5);
         }
 
         [Fact]
@@ -79,14 +79,14 @@ namespace Okanshi.Test
             var task = Task.Run(() =>
             {
                 var okanshiTimer = timer.Start();
-                Thread.Sleep(1000);
+                stopwatch.IsRunning.Returns(true);
+                Thread.Sleep(2000);
                 okanshiTimer.Stop();
             });
             Thread.Sleep(100);
 
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
 
-            task.Wait();
             numberOfActiveTasks.Value.Should().Be(1);
         }
 
@@ -96,15 +96,15 @@ namespace Okanshi.Test
             var task = Task.Run(() =>
             {
                 var okanshiTimer = timer.Start();
-                Thread.Sleep(1000);
+                stopwatch.IsRunning.Returns(true);
+                Thread.Sleep(2000);
                 okanshiTimer.Stop();
             });
             Thread.Sleep(500);
 
             var duration = timer.GetDurationInSeconds();
 
-            duration.Value.Should().BeApproximately(0.5, 0.3);
-            task.Wait();
+            duration.Value.Should().BeApproximately(0.5, 0.5);
         }
 
         [Fact]
