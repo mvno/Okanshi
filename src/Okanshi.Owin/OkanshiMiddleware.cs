@@ -28,7 +28,8 @@ namespace Okanshi.Owin
         public async Task Invoke(IDictionary<string, object> environment)
         {
             long elapsed = 0;
-            var timer = OkanshiTimer.StartNew(x => elapsed = x);
+            var timer = new OkanshiTimer(x => elapsed = x, () => new SystemStopwatch());
+            timer.Start();
             await next.Invoke(environment);
             timer.Stop();
             var tags = EmptyTagList;
