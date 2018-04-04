@@ -12,7 +12,7 @@ type IStopwatch =
     abstract Time : Func<'T> -> ('T * int64)
     abstract Time : Action -> int64
 
-type SystemStopwatch() =
+type SystemStopwatch internal() =
     let stopwatch = new Stopwatch()
 
     let time' f =
