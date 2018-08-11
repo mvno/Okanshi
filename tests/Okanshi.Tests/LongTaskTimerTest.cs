@@ -40,16 +40,22 @@ namespace Okanshi.Test
         {
             var value = timer.GetValues();
 
-            value.First().Value.Should().Be(0);
+            value.First().Value.Should().Be(0.0);
         }
 
         [Fact]
         public void Recording_a_task_increments_the_number_of_active_tasks()
         {
-            var task = Task.Run(() => timer.Record(() => Thread.Sleep(2000)));
-            Thread.Sleep(1000);
+            var taskRunning = new ManualResetEventSlim(false);
+            var testDone = new ManualResetEventSlim(false);
+            var task = Task.Run(() => timer.Record(() => {
+                taskRunning.Set();
+                testDone.Wait(TimeSpan.FromSeconds(1));
+            }));
+            taskRunning.Wait(TimeSpan.FromSeconds(1));
 
             var numberOfActiveTasks = timer.GetNumberOfActiveTasks();
+            testDone.Set();
 
             numberOfActiveTasks.Value.Should().Be(1);
         }
