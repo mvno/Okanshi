@@ -8,7 +8,7 @@ type IMetricObserver =
     inherit IDisposable
     
     /// Update the observer with the specified metrics
-    abstract Update : Metric seq -> Task
+    abstract Update : metrics : Metric seq -> Task
     
     /// Get the observations observed
     abstract GetObservations : unit -> Metric seq seq
