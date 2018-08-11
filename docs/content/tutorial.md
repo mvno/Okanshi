@@ -279,7 +279,7 @@ Observer setup
 Setting up an observer is easy:
 
     [lang=csharp]
-    var observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
+    var observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, pollingInterval, collectMetricsOnProcessExit), numberOfSamplesToStore)
 
 This observer stores metrics in-memory using a poller getting data from the default monitor registry.
 
