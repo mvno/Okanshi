@@ -115,14 +115,6 @@ type OkanshiMonitor private () =
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new BasicTimer(x))
     
-    /// Get or add a DurationTimer
-    static member LongTaskTimer(name) = OkanshiMonitor.LongTaskTimer(name, [||])
-    
-    /// Get or add a DurationTimer with custom tags
-    static member LongTaskTimer(name : string, tags : Tag array) = 
-        let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new LongTaskTimer(x))
-    
     /// Get or add a HealthCheck
     static member HealthCheck(check, name) = OkanshiMonitor.HealthCheck(check, name)
     
