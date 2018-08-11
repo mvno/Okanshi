@@ -5,15 +5,15 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("Okanshi")>]
 [<assembly: AssemblyProductAttribute("Okanshi")>]
 [<assembly: AssemblyDescriptionAttribute("In-process monitoring solution")>]
-[<assembly: AssemblyFileVersionAttribute("5.0.0")>]
-[<assembly: AssemblyVersionAttribute("5.0.0")>]
-[<assembly: AssemblyInformationalVersionAttribute("5.0.0")>]
+[<assembly: AssemblyFileVersionAttribute("6.0.0")>]
+[<assembly: AssemblyVersionAttribute("6.0.0")>]
+[<assembly: AssemblyInformationalVersionAttribute("6.0.0")>]
 do ()
 
 module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "Okanshi"
     let [<Literal>] AssemblyProduct = "Okanshi"
     let [<Literal>] AssemblyDescription = "In-process monitoring solution"
-    let [<Literal>] AssemblyFileVersion = "5.0.0"
-    let [<Literal>] AssemblyVersion = "5.0.0"
-    let [<Literal>] AssemblyInformationalVersion = "5.0.0"
+    let [<Literal>] AssemblyFileVersion = "6.0.0"
+    let [<Literal>] AssemblyVersion = "6.0.0"
+    let [<Literal>] AssemblyInformationalVersion = "6.0.0"
