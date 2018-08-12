@@ -9,9 +9,15 @@ type IMetricObserver =
     
     /// Update the observer with the specified metrics
     abstract Update : metrics : Metric seq -> Task
-    
+
+
+/// Observer that can receive updates about metrics and return its accumulated values to someone else
+type IProcessingMetricObserver =
+    inherit IMetricObserver
+
     /// Get the observations observed
     abstract GetObservations : unit -> Metric seq seq
+
 
 /// Metric observer storing the specified number of observations in memory
 type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) as self = 
@@ -39,5 +45,7 @@ type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) as sel
     
     interface IMetricObserver with
         member self.Update(metrics) = self.Update(metrics)
-        member self.GetObservations() = self.GetObservations()
         member self.Dispose() = self.Dispose()
+    
+    interface IProcessingMetricObserver with
+        member self.GetObservations() = self.GetObservations()

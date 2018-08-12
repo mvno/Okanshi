@@ -48,7 +48,7 @@ type MonitorEndpoint(options : EndpointOptions) =
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
 
-    let getObservations (observer : IMetricObserver) =
+    let getObservations (observer : IProcessingMetricObserver) =
         observer.GetObservations()
     
     /// Create the endpoint with default values

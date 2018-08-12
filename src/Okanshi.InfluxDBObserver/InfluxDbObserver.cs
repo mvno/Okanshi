@@ -9,8 +9,8 @@ namespace Okanshi.Observers
     /// <summary>
     /// Observer for posting metrics to InfluxDB.
     /// </summary>
-    public class InfluxDbObserver : IMetricObserver
-    {
+    public class InfluxDbObserver : IProcessingMetricObserver
+	{
         private readonly IMetricPoller poller;
         private readonly IInfluxDbClient client;
         private readonly InfluxDbObserverOptions options;
