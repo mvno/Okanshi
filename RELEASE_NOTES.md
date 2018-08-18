@@ -1,3 +1,9 @@
+### 6.0.0
+
+**BREAKING CHANGES**
+
+* LongTaskTimer has been removed
+
 ### 6.0.0-alpha2
 
 **BREAKING CHANGES**

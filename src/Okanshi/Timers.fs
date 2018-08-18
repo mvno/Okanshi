@@ -4,26 +4,50 @@ open System
 open System.Diagnostics
 open Okanshi.Helpers
 
-/// Extenstions for the System.Diagnostics.StopWatch class
-[<AutoOpen>]
-module StopwatchExtensions = 
-    type Stopwatch with
-        /// Time a function and return the result and elapsed milliseconds as a tuple
-        static member Time f = 
-            let stopwatch = Stopwatch.StartNew()
-            let result = f()
-            stopwatch.Stop()
-            (result, stopwatch.ElapsedMilliseconds)
+type IStopwatch =
+    abstract ElapsedMilliseconds : int64
+    abstract IsRunning : bool
+    abstract Start : unit -> unit
+    abstract Stop : unit -> unit
+    abstract Time : Func<'T> -> ('T * int64)
+    abstract Time : Action -> int64
+
+type SystemStopwatch internal() =
+    let stopwatch = new Stopwatch()
+
+    let time' f =
+        stopwatch.Start()
+        let result = f()
+        stopwatch.Stop()
+        (result, stopwatch.ElapsedMilliseconds)
+
+    member __.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds
+    
+    member __.IsRunning = stopwatch.IsRunning
+
+    member __.Start() = stopwatch.Start()
+    
+    member __.Stop() = stopwatch.Stop()
+    
+    member __.Time(f: Func<'T>) = time' (fun () -> f.Invoke())
+
+    member __.Time(f: Action) =
+        let (_, elapsed) = time' (fun () -> f.Invoke())
+        elapsed
+
+    interface IStopwatch with
+        member self.ElapsedMilliseconds = self.ElapsedMilliseconds
+        member self.IsRunning = self.IsRunning
+        member self.Start() = self.Start()
+        member self.Stop() = self.Stop()
+        member self.Time(f: Func<'T>) : ('T * int64) = self.Time(f)
+        member self.Time(f: Action) = self.Time(f)
 
 /// Timer that is started and stopped manually
-type OkanshiTimer(onStop : Action<int64>) = 
-    let mutable stopwatch = Some <| new Stopwatch()
-    
-    /// Create a start a new timer
-    static member StartNew(onStop) = 
-        let s = new OkanshiTimer(onStop)
-        s.Start()
-        s
+type OkanshiTimer(onStop : Action<int64>, stopwatchFactory: Func<IStopwatch>) = 
+    let mutable stopwatch = Some <| stopwatchFactory.Invoke()
+
+    new(onStop) = OkanshiTimer(onStop, fun () -> SystemStopwatch() :> IStopwatch)
     
     /// Start the timer
     member __.Start() = 
@@ -56,7 +80,7 @@ type ITimer =
     abstract Register : int64 -> unit
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
-type BasicTimer(config : MonitorConfig) as self = 
+type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
     
     [<Literal>]
     let StatisticKey = "statistic"
@@ -79,7 +103,8 @@ type BasicTimer(config : MonitorConfig) as self =
         lockWithArg syncRoot elapsed updateStatistics'
     
     let record f = 
-        let (result, elapsed) = Stopwatch.Time(fun () -> f())
+        let stopwatch = stopwatchFactory.Invoke()
+        let (result, elapsed) = stopwatch.Time(fun () -> f())
         elapsed |> updateStatistics
         result
 
@@ -103,12 +128,21 @@ type BasicTimer(config : MonitorConfig) as self =
         let result = self.GetValues() |> Seq.toList
         reset'()
         result |> List.toSeq
+
+    new(config: MonitorConfig) = BasicTimer(config, fun () -> SystemStopwatch() :> IStopwatch)
     
     /// Time a System.Func call and return the value
-    member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
+    member __.Record(f : Func<'T>) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let (result, elapsed) = stopwatch.Time(f)
+        elapsed |> updateStatistics
+        result
     
     /// Time a System.Action call
-    member __.Record(f : Action) = record (fun () -> f.Invoke())
+    member __.Record(f : Action) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let elapsed = stopwatch.Time(f)
+        elapsed |> updateStatistics
     
     /// Gets the rate of calls timed within the specified step
     member __.GetCount() = lock syncRoot (fun() -> count.GetValues() |> Seq.head)
@@ -129,7 +163,8 @@ type BasicTimer(config : MonitorConfig) as self =
     member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
     
     /// Start a manually controlled timinig
-    member __.Start() = OkanshiTimer.StartNew(fun x -> updateStatistics x)
+    member __.Start() =
+        OkanshiTimer((fun x -> updateStatistics x), (fun () -> stopwatchFactory.Invoke()))
 
     /// Manually register a timing, should only be used in special case
     member __.Register(elapsed) = elapsed |> updateStatistics
@@ -137,84 +172,6 @@ type BasicTimer(config : MonitorConfig) as self =
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
     
-    interface ITimer with
-        member self.Record(f : Func<'T>) = self.Record(f)
-        member self.Record(f : Action) = self.Record(f)
-        member self.GetValues() = self.GetValues() |> Seq.cast
-        member self.Config = self.Config
-        member self.Start() = self.Start()
-        member self.Register(elapsed) = self.Register(elapsed)
-        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
-
-/// A monitor for tracking a longer operation that might last for many minutes or hours. For tracking
-/// frequent calls that last less than the polling interval, use the BasicTimer instead.
-/// This timer can track multiple operations, each started by calling the Record method.
-/// This monitor will create two gauges:
-/// * A duration which reports the current duration in seconds. The duration is the sum of all active tasks
-/// * Number of active tasks
-/// The names of the monitors will be the base name passed in the config to the constructor, suffixed by
-/// .duration and .activetasks respectively.
-type LongTaskTimer(registry : IMonitorRegistry, config : MonitorConfig) = 
-    let nextTaskId = new AtomicLong()
-    let tasks = new System.Collections.Concurrent.ConcurrentDictionary<int64, int64>()
-    let activeTasks = 
-        new BasicGauge<int>({ config with Name = sprintf "%s.activetasks" config.Name }, fun () -> tasks.Count)
-    
-    let getDurationInSeconds() = 
-        let now = DateTime.UtcNow.Ticks
-        let durationInTicks = tasks.Values |> Seq.sumBy (fun x -> now - x)
-        TimeSpan.FromTicks(durationInTicks).TotalSeconds
-    
-    let totalDurationInSeconds = 
-        new BasicGauge<float>({ config with Name = sprintf "%s.duration" config.Name }, fun () -> getDurationInSeconds())
-    let getNextId() = nextTaskId.Increment()
-    let markAsStarted id = tasks.TryAdd(id, DateTime.UtcNow.Ticks) |> ignore
-    let markAsCompleted id = tasks.TryRemove(id) |> ignore
-    
-    let record (f : unit -> 'a) = 
-        let id = getNextId()
-        id |> markAsStarted
-        try 
-            f()
-        finally
-            id |> markAsCompleted
-    
-    new(config) = LongTaskTimer(DefaultMonitorRegistry.Instance, config)
-    
-    /// Time a System.Func call and return the value
-    member __.Record(f : Func<'T>) = record (fun () -> f.Invoke())
-    
-    /// Time a System.Action call
-    member __.Record(f : Action) = record (fun () -> f.Invoke())
-    
-    /// Get the number of running tasks
-    member __.GetNumberOfActiveTasks() = activeTasks.GetValues() |> Seq.head
-    
-    /// Get the duration in seconds. Duration is the sum of all active tasks duration.
-    member __.GetDurationInSeconds() = totalDurationInSeconds.GetValues() |> Seq.head
-    
-    /// Get the duration in seconds. Duration is the sum of all active tasks duration.
-    member self.GetValues() =
-        seq {
-            yield Measurement("duration", self.GetDurationInSeconds().Value)
-            yield Measurement("activeTasks", self.GetDurationInSeconds().Value)
-        }
-    
-    /// Gets the monitor config
-    member __.Config = totalDurationInSeconds.Config
-    
-    /// Start a manually controlled timinig
-    member __.Start() = 
-        let id = getNextId()
-        id |> markAsStarted
-        OkanshiTimer.StartNew(fun _ -> id |> markAsCompleted)
-
-    /// Gets the value and resets the monitor
-    member self.GetValuesAndReset() = self.GetValues()
-
-    /// Manually register a timing, should only be used in special case
-    member __.Register(elapsed : int64) : unit = raise (NotSupportedException("LongTaskTimer does not support manually registering timings"))
-
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
         member self.Record(f : Action) = self.Record(f)
