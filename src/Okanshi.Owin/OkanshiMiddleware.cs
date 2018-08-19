@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
@@ -12,25 +13,20 @@ namespace Okanshi.Owin
         private readonly AppFunc next;
         private readonly OkanshiOwinOptions options;
 
-        /// <summary>
-        /// Create a new instance.
-        /// </summary>
         public OkanshiMiddleware(AppFunc next, OkanshiOwinOptions options)
         {
             this.next = next;
             this.options = options;
         }
 
-        /// <summary>
-        /// Invoke the middleware.
-        /// </summary>
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            long elapsed = 0;
-            var timer = new OkanshiTimer(x => elapsed = x);
-            timer.Start();
+            var timer = Stopwatch.StartNew();
+
             await next.Invoke(environment);
+
             timer.Stop();
+
             var tags = new List<Tag>();
             if (options.AddStatusCodeTag)
             {
@@ -45,7 +41,7 @@ namespace Okanshi.Owin
             tags.Add(new Tag("path", environment["owin.RequestPath"].ToString()));
             tags.Add(new Tag("method", environment["owin.RequestMethod"].ToString()));
             var basicTimer = OkanshiMonitor.BasicTimer(options.MetricName, tags.ToArray());
-            basicTimer.Register(elapsed);
+            basicTimer.Register(timer.ElapsedMilliseconds);
         }
     }
 }
