@@ -23,27 +23,6 @@ open Fake.SemVerHelper
 //  - to run tests and to publish documentation on GitHub gh-pages
 //  - for documentation, you also need to edit info in "docs/tools/generate.fsx"
 
-// The name of the project
-// (used by attributes in AssemblyInfo, name of a NuGet package and directory in 'src')
-let project = "Okanshi"
-
-// Short summary of the project
-// (used as description in AssemblyInfo and as a short summary for NuGet package)
-let summary = "In-process monitoring solution"
-
-// Longer description of the project
-// (used as a description for NuGet package; line breaks are automatically cleaned up)
-let description = "Monitor individual services in-process and collect data somewhere else"
-
-// List of author names (for NuGet package)
-let authors = [ "Telenor MVNO" ]
-
-// Tags for your project (for NuGet package)
-let tags = "monitoring, microservices"
-
-// File system information 
-let solutionFile  = "Okanshi.sln"
-
 // Pattern specifying assemblies to be tested using NUnit
 let testProjects = "tests/**/*.Tests.??proj"
 
@@ -54,9 +33,6 @@ let gitHome = "https://github.com/" + gitOwner
 
 // The name of the project on GitHub
 let gitName = "Okanshi"
-
-// The url for the raw files hosted
-let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/mvno"
 
 // --------------------------------------------------------------------------------------
 // END TODO: The rest of the file includes standard build steps

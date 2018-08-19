@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>6.0.0</VersionPrefix>
+    <PackageId>Okanshi.InfluxDBObserver</PackageId>
+    <Authors>Kim Christensen</Authors>
+    <Company>Telenor MVNO</Company>
+    <Description>InfluxDB observer for Okanshi</Description>
+    <PackageTags>monitoring;microservices;influxdb</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Okanshi\Okanshi.fsproj" />
