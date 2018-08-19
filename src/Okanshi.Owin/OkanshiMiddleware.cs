@@ -11,7 +11,6 @@ namespace Okanshi.Owin
     {
         private readonly AppFunc next;
         private readonly OkanshiOwinOptions options;
-        private static readonly List<Tag> EmptyTagList = new List<Tag>();
 
         /// <summary>
         /// Create a new instance.
@@ -31,7 +30,7 @@ namespace Okanshi.Owin
             var timer = OkanshiTimer.StartNew(x => elapsed = x);
             await next.Invoke(environment);
             timer.Stop();
-            var tags = EmptyTagList;
+            var tags = new List<Tag>();
             if (options.AddStatusCodeTag)
             {
                 object responseCode;
