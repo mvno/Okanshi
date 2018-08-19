@@ -1,6 +1,29 @@
 Okanshi
 =======
 
+Okanshi is a library providing in-process monitoring of an application, it was originally created by Telenor MVNO to help transitioning to a microservice architecture. It has matured over several years, and is now used in production in several large-scale software products across different companies.
+
+The monitoring and information retrieval has good standard implementations, and the framework is highly configurable, allowing for custom implementation. An example is the monitoring information, that can be accessed using the provided HTTP endpoint (JSON output) or by custom code.
+
+Okanshi is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronous, and won't impact the application performane that much. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed. 
+
+
+Samples & documentation
+-----------------------
+
+The library comes with comprehensible documentation. 
+
+ * [Tutorial](http://mvno.github.io/Okanshi/tutorial.html) contains a further explanation of this library.
+
+ * [API Reference](http://mvno.github.io/Okanshi/reference/index.html) contains automatically generated documentation for all types, modules
+   and functions in the library.
+
+ * [Release notes and upgrade information](https://github.com/mvno/Okanshi/blob/master/RELEASE_NOTES.md) contains information about versions and how to upgrade.
+
+
+Nuget
+------
+
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
@@ -12,25 +35,8 @@ Okanshi
   <div class="span1"></div>
 </div>
 
-Documentation
--------------
 
-Okanshi is a library providing in-process monitoring of an application, it is create by Telenor MVNO to help transitioning to a microservice architecture.
 
-The monitoring information can be accessed using the provided HTTP endpoint (JSON output) or by another custom implemented way.
-
-It is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronous, and won't impact the application performane that much. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed. 
-
-Samples & documentation
------------------------
-
-The library comes with comprehensible documentation. 
-
- * [Tutorial](http://mvno.github.io/Okanshi/tutorial.html) contains a further explanation of this library.
-
- * [API Reference](http://mvno.github.io/Okanshi/reference/index.html) contains automatically generated documentation for all types, modules
-   and functions in the library.
- 
 Contributing and copyright
 --------------------------
 
