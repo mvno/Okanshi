@@ -18,6 +18,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Okanshi.Tests", "tests\Okan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Okanshi.InfluxDBObserver.Tests", "tests\Okanshi.InfluxDBObserver.Tests\Okanshi.InfluxDBObserver.Tests.csproj", "{83006FC6-D631-4AC8-969F-8EB5107D31E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{1239C1ED-EC54-4054-8A8E-F3F9BC96D818}"
+	ProjectSection(SolutionItems) = preProject
+		docs\content\index.md = docs\content\index.md
+		docs\content\tutorial.md = docs\content\tutorial.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

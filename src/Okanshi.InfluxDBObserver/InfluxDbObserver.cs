@@ -10,7 +10,7 @@ namespace Okanshi.Observers
     /// Observer for posting metrics to InfluxDB.
     /// </summary>
     public class InfluxDbObserver : IMetricObserver
-    {
+	{
         private readonly IMetricPoller poller;
         private readonly IInfluxDbClient client;
         private readonly InfluxDbObserverOptions options;
@@ -144,14 +144,6 @@ namespace Okanshi.Observers
             }
 
             return new Field(key, convertedValue.ToString());
-        }
-
-        /// <summary>
-        /// Get observations. This is not supported in this observer.
-        /// </summary>
-        public IEnumerable<IEnumerable<Metric>> GetObservations()
-        {
-            throw new NotSupportedException("This observer doesn't support getting observations");
         }
     }
 }
