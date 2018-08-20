@@ -85,9 +85,9 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Basic_gauge_is_converted_to_a_metric_a_single_value()
+        public void Gauge_is_converted_to_a_metric_a_single_value()
         {
-            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new BasicGauge<int>(MonitorConfig.Build("Test"), () => 1) });
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Gauge<int>(MonitorConfig.Build("Test"), () => 1) });
             var resetEvent = new ManualResetEventSlim(false);
             var metrics = Enumerable.Empty<Metric>();
             _metricMonitorRegistryPoller.RegisterObserver(x =>

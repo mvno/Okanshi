@@ -51,13 +51,13 @@ type OkanshiMonitor private () =
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new DoubleCounter(x))
     
-    /// Get or add a BasicGauge
-    static member BasicGauge(name : string, getValue : Func<'T>) = OkanshiMonitor.BasicGauge(name, getValue, [||])
+    /// Get or add a Gauge
+    static member Gauge(name : string, getValue : Func<'T>) = OkanshiMonitor.Gauge(name, getValue, [||])
     
-    /// Get or add a BasicGauge with custom tags
-    static member BasicGauge<'T>(name : string, getValue : Func<'T>, tags : Tag array) = 
+    /// Get or add a Gauge with custom tags
+    static member Gauge<'T>(name : string, getValue : Func<'T>, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new BasicGauge<'T>(x, getValue))
+        monitorRegistry.GetOrAdd(config, fun x -> new Gauge<'T>(x, getValue))
     
     /// Get or add a MaxGauge 
     static member MaxGauge(name : string) = OkanshiMonitor.MaxGauge(name, [||])
