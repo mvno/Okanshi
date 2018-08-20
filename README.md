@@ -13,7 +13,7 @@ Samples & documentation
 
 The library comes with comprehensible documentation. 
 
- * [Tutorial](http://mvno.github.io/Okanshi/tutorial.html) contains a further explanation of this library.
+ * [Tutorial](documentation) contains a further explanation of this library.
 
  * [API Reference](http://mvno.github.io/Okanshi/reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library.
