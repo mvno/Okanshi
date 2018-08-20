@@ -107,13 +107,13 @@ type OkanshiMonitor private () =
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new DecimalGauge(x))
     
-    /// Get or add a BasicTimer, with a step size of 1 minute
-    static member BasicTimer(name) = OkanshiMonitor.BasicTimer(name, [||])
+    /// Get or add a Timer, with a step size of 1 minute
+    static member Timer(name) = OkanshiMonitor.Timer(name, [||])
     
-    /// Get or add a BasicTimer with custom tags
-    static member BasicTimer(name : string, tags : Tag array) = 
+    /// Get or add a Timer with custom tags
+    static member Timer(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new BasicTimer(x))
+        monitorRegistry.GetOrAdd(config, fun x -> new Timer(x))
     
     /// Get or add a HealthCheck
     static member HealthCheck(check, name) = OkanshiMonitor.HealthCheck(check, name, [||])

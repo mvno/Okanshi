@@ -80,15 +80,15 @@ type ITimer =
     abstract Register : int64 -> unit
 
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
-type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
+type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
     
     [<Literal>]
     let StatisticKey = "statistic"
     
     let max = new MaxGauge(config.WithTag(StatisticKey, "max"))
     let min = new MinGauge(config.WithTag(StatisticKey, "min"))
-    let count = new PeakCounter(config.WithTag(StatisticKey, "count"))
-    let total = new PeakCounter(config.WithTag(StatisticKey, "totalTime"))
+    let count = new Counter(config.WithTag(StatisticKey, "count"))
+    let total = new Counter(config.WithTag(StatisticKey, "totalTime"))
     let avg = new AverageGauge(config)
     let syncRoot = new obj()
 
@@ -123,7 +123,7 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
         reset'()
         result |> List.toSeq
 
-    new(config: MonitorConfig) = BasicTimer(config, fun () -> SystemStopwatch() :> IStopwatch)
+    new(config: MonitorConfig) = Timer(config, fun () -> SystemStopwatch() :> IStopwatch)
     
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) =
