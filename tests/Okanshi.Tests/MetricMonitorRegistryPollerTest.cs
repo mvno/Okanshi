@@ -65,9 +65,9 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Peak_counter_is_converted_to_a_single_metric_with_no_submetrics()
+        public void Counter_is_converted_to_a_single_metric_with_no_submetrics()
         {
-            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new PeakCounter(MonitorConfig.Build("Test")) });
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Counter(MonitorConfig.Build("Test")) });
             var resetEvent = new ManualResetEventSlim(false);
             var metrics = Enumerable.Empty<Metric>();
             _metricMonitorRegistryPoller.RegisterObserver(x =>

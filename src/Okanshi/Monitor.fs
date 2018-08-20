@@ -27,21 +27,21 @@ type OkanshiMonitor private () =
             tagDictionary.Clear()
             value |> Seq.iter (fun x -> tagDictionary.TryAdd(x, byte 0) |> ignore)
     
-    /// Get or add a BasicCounter
-    static member BasicCounter(name : string) = OkanshiMonitor.BasicCounter(name, [||])
+    /// Get or add a CumulativeCounter
+    static member CumulativeCounter(name : string) = OkanshiMonitor.CumulativeCounter(name, [||])
     
-    /// Get or add a BasicCounter with custom tags
-    static member BasicCounter(name : string, tags : Tag array) = 
+    /// Get or add a CumulativeCounter with custom tags
+    static member CumulativeCounter(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new BasicCounter(x))
+        monitorRegistry.GetOrAdd(config, fun x -> new CumulativeCounter(x))
     
     /// Get or add a PeakRateCounter
-    static member PeakCounter(name) = OkanshiMonitor.PeakCounter(name, [||])
+    static member Counter(name) = OkanshiMonitor.Counter(name, [||])
     
     /// Get or add a PeakRateCounter with custom tags
-    static member PeakCounter(name : string, tags : Tag array) = 
+    static member Counter(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new PeakCounter(x))
+        monitorRegistry.GetOrAdd(config, fun x -> new Counter(x))
     
     /// Get or add a DoubleCounter
     static member DoubleCounter(name) = OkanshiMonitor.DoubleCounter(name, [||])

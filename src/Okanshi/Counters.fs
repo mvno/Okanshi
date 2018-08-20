@@ -13,8 +13,8 @@ type ICounter<'T> =
     /// Increment the counter by the specified amount
     abstract Increment : 'T -> unit
 
-/// Counter tracking the maximum count
-type PeakCounter(config : MonitorConfig) = 
+/// Tracking the count between polls
+type Counter(config : MonitorConfig) = 
     let mutable peakRate = 0L
     let mutable current = 0L
     let syncRoot = new obj()
@@ -91,8 +91,8 @@ type DoubleCounter(config : MonitorConfig) =
         member self.Config = self.Config
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
-/// A simple counter backed by an AtomicLong. The value is the total count for the life of the counter.
-type BasicCounter(config : MonitorConfig) = 
+/// A counter not reset between polls.
+type CumulativeCounter(config : MonitorConfig) = 
     let value = new AtomicLong()
     
     /// Increment the value by one

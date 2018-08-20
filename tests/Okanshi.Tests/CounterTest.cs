@@ -4,13 +4,13 @@ using Xunit;
 
 namespace Okanshi.Test
 {
-    public class PeakCounterTest
+    public class CounterTest
     {
-        private readonly PeakCounter counter;
+        private readonly Counter counter;
 
-        public PeakCounterTest()
+        public CounterTest()
         {
-            counter = new PeakCounter(MonitorConfig.Build("Test"));
+            counter = new Counter(MonitorConfig.Build("Test"));
         }
 
         [Fact]
