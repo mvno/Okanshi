@@ -1,7 +1,7 @@
 ﻿namespace Okanshi
 
 open System
-open System.Collections.Concurrent
+open System.Collections.Generic
 
 /// Tuple representing a key used to identify a monitor
 type MonitorKey = string * Type * string
@@ -13,7 +13,7 @@ type MonitorFactory = unit -> IMonitor
 [<AbstractClass; Sealed>]
 type OkanshiMonitor private () = 
     static let monitorRegistry = DefaultMonitorRegistry.Instance
-    static let tagDictionary = new ConcurrentDictionary<Tag, byte>()
+    static let tagDictionary = new Dictionary<Tag, byte>()
     static let defaultStep = TimeSpan.FromMinutes(float 1)
     
     /// Gets the default step size
@@ -25,7 +25,7 @@ type OkanshiMonitor private () =
         /// Sets the default tags added to all monitors created
         and set (value : Tag array) = 
             tagDictionary.Clear()
-            value |> Seq.iter (fun x -> tagDictionary.TryAdd(x, byte 0) |> ignore)
+            value |> Seq.iter (fun x -> tagDictionary.Add(x, byte 0))
     
     /// Get or add a BasicCounter
     static member BasicCounter(name : string) = OkanshiMonitor.BasicCounter(name, [||])
