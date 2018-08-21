@@ -26,7 +26,7 @@ Samples & documentation
 
 The library comes with comprehensible documentation. 
 
- * [Tutorial](tutorial.html) contains a further explanation of this library.
+ * [Tutorial](https://github.com/mvno/Okanshi/tree/master/documentation) contains a further explanation of this library.
 
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library.

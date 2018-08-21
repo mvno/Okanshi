@@ -22,10 +22,11 @@ The `BasicGauge` is a monitor that takes a `Func<T>`. Each time the value is pol
 
 Example:
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.BasicGauge("Number of users", () => _numberOfUsers);
     // OR
     var gauge = new BasicGauge(MonitorConfig.Build("Number of users"), () => _numberOfUsers);
+```
 
 #### Max/MinGauge ####
 
@@ -34,7 +35,7 @@ The `MinGauge` is a monitor that tracks the current minimum value. The initial v
 
 Example:
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.MaxGauge("Maximum number of users").Set(1); // New maximum is 1
     OkanshiMonitor.MaxGauge("Maximum number of users").Set(10); // New maximum is 10
     OkanshiMonitor.MaxGauge("Maximum number of users").Set(0); // Maximum is still 10
@@ -54,6 +55,7 @@ Example:
     gauge.Set(10);
     gauge.Set(0);
     gauge.Set(1);
+```
 
 #### AverageGauge ####
 
@@ -61,19 +63,20 @@ The `AverageGauge` monitors the average value over a time interval. This can be 
 
 Example:
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.AverageGauge("Average queue length", TimeSpan.FromMinutes(1)).Set(100); // Average is 100
     OkanshiMonitor.AverageGauge("Average queue length", TimeSpan.FromMinutes(1)).Set(200); // Average is 150
     // OR
     var gauge = new AverageGauge(MonitorConfig.Build("Maximum number of users"), TimeSpan.FromMinutes(1));
     gauge.Set(100);
     gauge.Set(200);
+```
 
 #### Long/Double/DecimalGauge ####
 
 The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`, `double` and `decimal` values respectively. The value you set is the value you get. Usage of these monitors is the same.
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.LongGauge("Maximum number of users").Set(1); // New value is 1
     OkanshiMonitor.LongGauge("Maximum number of users").Set(10); // New value is 10
     OkanshiMonitor.LongGauge("Maximum number of users").Set(0); // New value is 0
@@ -82,6 +85,7 @@ The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`
     gauge.Set(1);
     gauge.Set(10);
     gauge.Set(0);
+```
 
 ### Counters ###
 
@@ -92,7 +96,7 @@ Counters are monitors that you can increment as needed. They are thread-safe by 
 A `StepCounter` is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events per second, based on the previous interval. The value of a `StepCounter` is a long.
 A `DoubleCounter` works the same way as a `StepCounter`, the only difference is the value, which is a double.
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(1)).Increment();
     OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(1)).Increment();
     Thread.Sleep(2000); // After 2 seconds the value is 1
@@ -105,12 +109,13 @@ A `DoubleCounter` works the same way as a `StepCounter`, the only difference is 
     Thread.Sleep(2000);
     counter.Increment();
     Thread.Sleep(2000);
+```
 
 #### PeakRateCounter ####
 
 A `PeakRateCounter` is a counter defined by an interval. After each interval the counter is reset. The value of this counter gives you the number of events possible per second, based on the previous interval. 
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.PeakRateCounter("Name", TimeSpan.FromSeconds(1)).Increment();
     OkanshiMonitor.PeakRateCounter("Name", TimeSpan.FromSeconds(1)).Increment();
     Thread.Sleep(1000); // After 1 second the value is 2
@@ -123,12 +128,13 @@ A `PeakRateCounter` is a counter defined by an interval. After each interval the
     Thread.Sleep(1000);
     counter.Increment();
     Thread.Sleep(1000);
+```
 
 #### BasicCounter ####
 
 Is a counter that is never reset. Other than that, it works exactly like all other counters.
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.BasicCounter("Name").Increment();
     OkanshiMonitor.BasicCounter("Name").Increment();
     Thread.Sleep(1000); // After 1 second the value is 2
@@ -141,6 +147,7 @@ Is a counter that is never reset. Other than that, it works exactly like all oth
     Thread.Sleep(1000);
     counter.Increment();
     Thread.Sleep(1000);
+```
 
 ### Timers ###
 
@@ -149,10 +156,11 @@ Timers measures the time it takes to execute a function.
 All timers also support "manual" timing, that are stopped manually instead of passing a Func<T> or Action.
 Example:
 
-    [lang=csharp]
+```csharp
     var timer = OkanshiMonitor.BasicTimer("Query time", TimeSpan.FromSeconds(1)).Start()
     Thread.Sleep(500);
     timer.Stop(); // When stopped the timing is registered
+```
 
 #### BasicTimer ####
 
@@ -166,13 +174,14 @@ This is a simple timer that, within a specified interval, measures:
 
 Example:
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.BasicTimer("Query time", TimeSpan.FromSeconds(1)).Record(() => Thread.Sleep(500)); // Min is 500, Max is 500, Count is 1, TotalTime is 500
     OkanshiMonitor.BasicTimer("Query time", TimeSpan.FromSeconds(1)).Record(() => Thread.Sleep(100)); // Min is 100, Max is 500, Count is 2, TotalTime is 600
     // OR
     var timer = new BasicTimer(MonitorConfig.Build("Query time", TimeSpan.FromSeconds(1)));
     timer.Record(() => Thread.Sleep(500));
     timer.Record(() => Thread.Sleep(100))
+```
 
 #### DurationTimer ####
 
@@ -180,7 +189,7 @@ Prior to version 4, this was called LongTaskTimer.
 
 A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.LongTaskTimer("Query time")).Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 1
     // On another thread
     OkanshiMonitor.LongTaskTimer("Query time").Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 2
@@ -193,17 +202,19 @@ A monitor for tracking long running operations that might last for many minutes 
     timer.Record(() => Thread.Sleep(100000));
     timer.Record(() => Thread.Sleep(100000));
     Thread.Sleep(5000);
+```
 
 ### Performance counters
 
 As of version 4 it is also possible to monitor Windows performance counters.
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.PerformanceCounter(PerformanceCounterConfig.Build("Memory", "Available Bytes"), "AvailableBytes");
 
     // OR
 
     var performanceCounterMonitor = new PerformanceCounterMonitor(MonitorConfig.Build("Available Bytes"), PerformanceCounterConfig.Build("Memory", "Available Bytes"));
+```
 
 Health checks
 -------------
@@ -213,20 +224,23 @@ Health checks are added like this:
 
 C#:
 
-    [lang=csharp]
+```csharp
     HealthChecks.Add("key", () => Directory.GetFiles("C:\\MyData").Length == 0);
+```
 
 F#:
 
-    [lang=fsharp]
+```fsharp
     HealthChecks.Add("key", (fun () -> System.IO.Directory.GetFiles("C:\\MyData").Length = 0))
+```
 
 The `Func` passed in just have to return a boolean, indicating pass or fail.
 
 As of version 4 health checks can also be registered as a monitor. This is done like this:
 
-    [lang=csharp]
+```csharp
     OkanshiMonitor.HealthCheck(() => Directory.GetFiles("C:\\MyData").Length == 0, "NoFilesInDirectory")
+```
 
 HTTP Endpoint
 =============
@@ -238,9 +252,10 @@ Starting the endpoint
 
 You start the monitor like this:
 
-    [lang=csharp]
+```csharp
     var api = new MonitorApi();
     api.Start();
+```
 
 You should now be able to access the HTTP endpoint using [http://localhost:13004](http://localhost:13004).
 As nothing has been monitored yet, it will return a JSON response with an empty object, like this:
@@ -278,55 +293,11 @@ Observer setup
 
 Setting up an observer is easy:
 
-    [lang=csharp]
-    var observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, pollingInterval, collectMetricsOnProcessExit), numberOfSamplesToStore)
+    var observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
+```csharp
+```
 
 This observer stores metrics in-memory using a poller getting data from the default monitor registry.
-
-you can create your own observers easily as shown in the following example that not only prints to the screen but does some processing first
-
-    [lang=csharp]
-    class MyObserver : IMetricObserver
-    {
-        public MyObserver(IMetricPoller poller)
-        {
-            poller.RegisterObserver(Update);
-        }
-
-        public async Task Update(IEnumerable<Metric> metrics)
-        {
-            var msg = JsonConvert.SerializeToJson(metrics);
-            Console.WriteLine($"sending info to MyLegacySystem<tm> '{msg}'");
-        }
-
-        public void Dispose()
-        { }
-    }
-
-To set up this particular observer we can use the following code. It sets up some business logic that is timed.
-
-    [lang=csharp]
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var poller = new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, interval: TimeSpan.FromSeconds(2));
-            var observer = new MyObserver(poller);
-
-            BusinessLogic();
-        }
-
-        private static void BusinessLogic()
-        {
-            while (true)
-            {
-                OkanshiMonitor.BasicTimer("send").Record(() =>
-                {
-                    Thread.Sleep(TimeSpan.FromMilliseconds(200));  // simulate business stuff...
-                });
-            }
-        }
-    }
 
 OWIN
 ====
@@ -335,8 +306,9 @@ Using the package Okanshi.Owin it is possible to measure the request duration gr
 
 To enable use the `AppBuilder` extension method, `UseOkanshi`:
 
-    [lang=csharp]
+```csharp
     app.UseOkanshi()
+```
 
 For configuration see the API reference.
 
