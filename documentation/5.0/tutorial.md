@@ -253,8 +253,8 @@ Starting the endpoint
 You start the monitor like this:
 
 ```csharp
-    var api = new MonitorApi();
-    api.Start();
+    var endpoint = new MonitorEndpoint();
+    endpoint.Start();
 ```
 
 You should now be able to access the HTTP endpoint using [http://localhost:13004](http://localhost:13004).
