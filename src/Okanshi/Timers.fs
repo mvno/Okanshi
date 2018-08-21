@@ -102,12 +102,6 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
     let updateStatistics elapsed = 
         lockWithArg syncRoot elapsed updateStatistics'
     
-    let record f = 
-        let stopwatch = stopwatchFactory.Invoke()
-        let (result, elapsed) = stopwatch.Time(fun () -> f())
-        elapsed |> updateStatistics
-        result
-
     let getValues' () =
         seq {
             yield! avg.GetValues() |> Seq.map (fun x -> Measurement("value", x.Value)) |> Seq.cast<IMeasurement>
