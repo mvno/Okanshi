@@ -29,7 +29,9 @@ type MonitorConfig =
     member self.WithTag(tag) = { self with Tags = self.Tags |> Array.append [| tag |] }
     
     /// Adds multiple tags to the configuration
-    member self.WithTags(tags : Tag seq) = { self with Tags = self.Tags |> Array.append (tags |> Seq.toArray) }
+    member self.WithTags(tags : Tag seq) =
+        if tags |> Seq.isEmpty then self
+        else { self with Tags = self.Tags |> Array.append (tags |> Seq.toArray) }
     
     member self.Equals(other : MonitorConfig) = 
         if Object.ReferenceEquals(other, null) then false
