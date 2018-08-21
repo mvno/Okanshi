@@ -116,7 +116,7 @@ type OkanshiMonitor private () =
         monitorRegistry.GetOrAdd(config, fun x -> new BasicTimer(x))
     
     /// Get or add a HealthCheck
-    static member HealthCheck(check, name) = OkanshiMonitor.HealthCheck(check, name)
+    static member HealthCheck(check, name) = OkanshiMonitor.HealthCheck(check, name, [||])
     
     /// Get or add a HealthCheck with custom tags
     static member HealthCheck(check, name : string, tags : Tag array) = 
