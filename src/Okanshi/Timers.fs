@@ -183,3 +183,110 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         member self.RegisterElapsed(elapsed : Stopwatch) = self.RegisterElapsed(elapsed)
         member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
+
+/// Apdex (Application Performance Index) is an open standard developed by an alliance of companies that defines a standardized method to report, benchmark, and track application performance.
+/// Apdex operates with three thresholds estimating end user satisfaction: satisfied, tolerating and frustrating.
+/// 
+/// Satisfied: Response time less than or equal to T seconds.
+/// Tolerating: Response time between T seconds and 4T seconds.
+/// Frustrating: Response time greater than 4 T seconds.
+/// 
+/// The Apdex score between 0 and 1 is calculated using the following:
+/// 
+/// ( Satisfied + (Tolerating/2) ) / Total number of requests
+///
+/// see http://www.apdex.org/overview.html 
+type ApDexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, toleratableThreshold: TimeSpan) as self = 
+  [<Literal>]
+    let StatisticKey = "statistic"
+    
+    let timer = new BasicTimer(config.WithTag(StatisticKey, ""), stopwatchFactory)
+    let mutable satisfiedTimingCount = 0
+    let mutable tolerableTimingCount = 0
+    let syncRoot = new obj()
+
+    let updateStatistics' elapsed =
+        let threshold = int64(toleratableThreshold.TotalMilliseconds)
+        satisfiedTimingCount <- if elapsed < threshold 
+                                    then satisfiedTimingCount+1 
+                                    else satisfiedTimingCount
+        tolerableTimingCount <- if elapsed >= threshold && elapsed < threshold * int64(4)
+                                    then tolerableTimingCount+1 
+                                    else tolerableTimingCount
+        elapsed |> timer.Register 
+    
+    let updateStatistics elapsed = 
+        lockWithArg syncRoot elapsed updateStatistics'
+    
+    let calcApdex'() =  
+        let index = (float(satisfiedTimingCount) + (float(tolerableTimingCount)/2.0)) / float(timer.GetCount().Value)
+        let rounded = System.Math.Round(index, 2, MidpointRounding.AwayFromZero)
+        rounded
+
+    let getValues' () =
+        seq {
+            yield! timer.GetValues() 
+            yield! [| new Measurement<float>("apdex", calcApdex'()) :> IMeasurement |]
+        }
+
+    let reset'() =
+        timer.GetValuesAndReset() |> ignore
+        satisfiedTimingCount <- 0
+        tolerableTimingCount <- 0
+
+    let getValuesAndReset'() =
+        let result = self.GetValues() |> Seq.toList
+        reset'()
+        result |> List.toSeq
+
+    /// Time a System.Func call and return the value
+    member __.Record(f : Func<'T>) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let (result, elapsed) = stopwatch.Time(f)
+        elapsed |> updateStatistics
+        result
+    
+    /// Time a System.Action call
+    member __.Record(f : Action) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let elapsed = stopwatch.Time(f)
+        elapsed |> updateStatistics
+    
+    /// Gets the rate of calls timed within the specified step
+    member __.GetCount() = lock syncRoot (fun() -> timer.GetCount())
+    
+    /// Gets the average calls time within the specified step
+    member __.GetValues() = lock syncRoot getValues'
+    
+    /// Get the maximum value of all calls
+    member __.GetMax() = lock syncRoot (fun () -> timer.GetMax())
+    
+    /// Get the manimum value of all calls
+    member __.GetMin() = lock syncRoot (fun () -> timer.GetMin())
+    
+    /// Gets the the total time for all calls within the specified step
+    member __.GetTotalTime() = lock syncRoot (fun () -> timer.GetTotalTime())
+    
+    member __.GetApDex() = lock syncRoot calcApdex'
+
+    /// Gets the monitor config
+    member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
+    
+    /// Start a manually controlled timinig
+    member __.Start() =
+        OkanshiTimer((fun x -> updateStatistics x), (fun () -> stopwatchFactory.Invoke()))
+
+    /// Manually register a timing, should only be used in special case
+    member __.Register(elapsed) = elapsed |> updateStatistics
+
+    /// Gets the value and resets the monitor
+    member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
+
+    interface ITimer with
+        member self.Record(f : Func<'T>) = self.Record(f)
+        member self.Record(f : Action) = self.Record(f)
+        member self.GetValues() = self.GetValues() |> Seq.cast
+        member self.Config = self.Config
+        member self.Start() = self.Start()
+        member self.Register(elapsed) = self.Register(elapsed)
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
