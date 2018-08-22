@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using FluentAssertions;
@@ -231,13 +232,45 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Manual_registration_sets_total_time()
+        public void Manual_registration_with_long_sets_total_time()
         {
             const long elapsed = 1000;
 
             timer.Register(elapsed);
 
             timer.GetTotalTime().Value.Should().Be(elapsed);
+        }
+
+        [Fact]
+        public void Manual_registration_with_timespan_sets_total_time()
+        {
+            timer.Register(TimeSpan.FromSeconds(1));
+
+            timer.GetTotalTime().Value.Should().Be(1000);
+        }
+
+
+        [Fact]
+        public void Manual_registration_with_stopwatch_sets_total_time()
+        {
+            var sw = Stopwatch.StartNew();
+            Thread.Sleep(50);
+            sw.Stop();
+
+            timer.Register(sw);
+
+            timer.GetTotalTime().Value.Should().Be(sw.ElapsedMilliseconds);
+        }
+
+        [Fact]
+        public void Manual_registrations_accumulate_total_time()
+        {
+            const long elapsed = 1000;
+
+            timer.Register(elapsed);
+            timer.Register(elapsed);
+
+            timer.GetTotalTime().Value.Should().Be(2 * elapsed);
         }
 
         [Fact]

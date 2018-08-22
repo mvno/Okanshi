@@ -79,6 +79,12 @@ type ITimer =
     /// Manually register a timing, should only be used in special case
     abstract Register : int64 -> unit
 
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    abstract Register : Stopwatch -> unit
+
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    abstract Register : TimeSpan -> unit
+
 /// A simple timer providing the total time, count, min and max for the times that have been recorded
 type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
     
@@ -161,7 +167,13 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         OkanshiTimer((fun x -> updateStatistics x), (fun () -> stopwatchFactory.Invoke()))
 
     /// Manually register a timing, should only be used in special case
-    member __.Register(elapsed) = elapsed |> updateStatistics
+    member __.Register(elapsed : int64) = elapsed |> updateStatistics
+
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    member __.Register(stopwatch : Stopwatch) = self.Register(stopwatch.ElapsedMilliseconds)
+
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    member __.Register(elapsed : TimeSpan) = self.Register(int64(elapsed.TotalMilliseconds))
 
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
@@ -172,5 +184,7 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
         member self.Start() = self.Start()
-        member self.Register(elapsed) = self.Register(elapsed)
+        member self.Register(elapsed : int64) = self.Register(elapsed)
+        member self.Register(elapsed : Stopwatch) = self.Register(elapsed)
+        member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
