@@ -139,19 +139,19 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
         elapsed |> updateStatistics
     
     /// Gets the rate of calls timed within the specified step
-    member __.GetCount() = lock syncRoot (fun() -> count.GetValues() |> Seq.head)
+    member __.GetCount() = lock syncRoot (fun() -> count.GetValueAs(""))
     
     /// Gets the average calls time within the specified step
     member __.GetValues() = lock syncRoot getValues'
     
     /// Get the maximum value of all calls
-    member __.GetMax() = lock syncRoot (fun () -> max.GetValues() |> Seq.head)
+    member __.GetMax() = lock syncRoot (fun () -> max.GetValueAs(""))
     
     /// Get the manimum value of all calls
-    member __.GetMin() = lock syncRoot (fun () -> min.GetValues() |> Seq.head)
+    member __.GetMin() = lock syncRoot (fun () -> min.GetValueAs(""))
     
     /// Gets the the total time for all calls within the specified step
-    member __.GetTotalTime() = lock syncRoot (fun () -> total.GetValues() |> Seq.head)
+    member __.GetTotalTime() = lock syncRoot (fun () -> total.GetValueAs(""))
     
     /// Gets the monitor config
     member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
