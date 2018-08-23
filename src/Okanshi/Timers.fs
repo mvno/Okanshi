@@ -103,13 +103,13 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
         lockWithArg syncRoot elapsed updateStatistics'
     
     let getValues' () =
-        seq {
-            yield avg.GetValueAs("value") :> IMeasurement
-            yield total.GetValueAs("totalTime") :> IMeasurement
-            yield count.GetValueAs("count") :> IMeasurement
-            yield max.GetValueAs("max") :> IMeasurement
-            yield min.GetValueAs("min") :> IMeasurement
-        }
+        [|
+            avg.GetValueAs("value") :> IMeasurement;
+            total.GetValueAs("totalTime") :> IMeasurement;
+            count.GetValueAs("count") :> IMeasurement; 
+            max.GetValueAs("max") :> IMeasurement;
+            min.GetValueAs("min") :> IMeasurement;
+        |]
 
     let reset'() =
         max.Reset()
