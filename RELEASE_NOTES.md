@@ -2,7 +2,8 @@
 
 **BREAKING CHANGES**
 
-* LongTaskTimer has been removed
+* `LongTaskTimer` has been removed
+* `OkanshiMonitor.HealthCheck()` has been removed. Replace use with a `Gauge`
 
 ### 6.0.0-alpha2
 
