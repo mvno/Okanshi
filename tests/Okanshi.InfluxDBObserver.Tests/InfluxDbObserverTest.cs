@@ -42,7 +42,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 new InfluxDbObserverOptions(databaseName));
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), databaseName, Arg.Is<IEnumerable<Point>>(x => x.All(y => y.Measurement == "name")));
         }
@@ -59,7 +59,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.DidNotReceive().WriteAsync(Arg.Any<string>(), incorrectDatabase, Arg.Any<IEnumerable<Point>>());
             await influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), expectedDatabase, Arg.Is<IEnumerable<Point>>(x => x.All(y => y.Measurement == "name")));
@@ -71,7 +71,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 new InfluxDbObserverOptions("databaseName"));
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1).WriteAsync("autogen", Arg.Any<string>(), Arg.Is<IEnumerable<Point>>(x => x.All(y => y.Measurement == "name")));
         }
@@ -87,7 +87,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.DidNotReceive().WriteAsync("autogen", Arg.Any<string>(), Arg.Any<IEnumerable<Point>>());
             await influxDbClient.Received(1).WriteAsync(expectedRetentionPolicy, Arg.Any<string>(),
@@ -106,7 +106,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag> { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -127,7 +127,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, "100"), }, new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag> { new Tag(tagName, "100"), }, new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -141,7 +141,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 new InfluxDbObserverOptions(databaseName));
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Is<IEnumerable<Point>>(x => x.All(y => y.Measurement == "name")));
         }
@@ -157,7 +157,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1).WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IEnumerable<Point>>(x => x.All(y => y.Measurement == expectedMeasurementName)));
@@ -175,7 +175,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag> { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -195,7 +195,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag> { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -215,7 +215,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag> { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -236,7 +236,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag> { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -257,7 +257,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new[] { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag> { new Tag(tagName, tagValue), }, new[] { new Measurement<int>("value", 0) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -272,7 +272,7 @@ namespace Okanshi.InfluxDBObserver.Tests
                 new InfluxDbObserverOptions("database"));
 
             await observer.Update(new[]
-                { new Metric("name", DateTimeOffset.UtcNow, Enumerable.Empty<Tag>().ToArray(), new[] { new Measurement<int>("value", 100), new Measurement<int>("max", 200) }) });
+                { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", 100), new Measurement<int>("max", 200) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -288,7 +288,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<long>("value", expectedValue) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<long>("value", expectedValue) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -303,7 +303,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", expectedValue) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", expectedValue) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -318,7 +318,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<float>("value", expectedValue) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<float>("value", expectedValue) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -333,7 +333,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<bool>("value", expectedValue) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<bool>("value", expectedValue) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -348,7 +348,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<string>("value", expectedValue) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<string>("value", expectedValue) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -366,7 +366,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<int>("value", (int)expectedValue) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<int>("value", (int)expectedValue) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),
@@ -384,7 +384,7 @@ namespace Okanshi.InfluxDBObserver.Tests
             var observer = new InfluxDbObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance), influxDbClient,
                 options);
 
-            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new Tag[0], new[] { new Measurement<float>("value", expectedValue) }) });
+            await observer.Update(new[] { new Metric("name", DateTimeOffset.UtcNow, new List<Tag>(), new[] { new Measurement<float>("value", expectedValue) }) });
 
             await influxDbClient.Received(1)
                 .WriteAsync(Arg.Any<string>(), Arg.Any<string>(),

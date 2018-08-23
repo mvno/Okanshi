@@ -1,6 +1,7 @@
 ﻿namespace Okanshi
 
 open System
+open System.Collections.Generic
 
 /// A tag used to attach information to a monitor
 type Tag = 
@@ -13,12 +14,12 @@ type MonitorConfig =
     { /// Name of the monitor
       Name : string
       /// Monitor tags
-      Tags : Tag array }
+      Tags : List<Tag> }
     
     /// Builder method of the configuration
     static member Build(name) = 
         { Name = name
-          Tags = [||] }
+          Tags = new List<Tag>() }
     
     /// Adds a tag specified by the key and value
     member self.WithTag(key, value) = 
@@ -26,12 +27,14 @@ type MonitorConfig =
                        Value = value })
     
     /// Adds a tag
-    member self.WithTag(tag) = { self with Tags = self.Tags |> Array.append [| tag |] }
+    member self.WithTag(tag) =
+        self.Tags.Add(tag)
+        self
     
     /// Adds multiple tags to the configuration
     member self.WithTags(tags : Tag seq) =
-        if tags |> Seq.isEmpty then self
-        else { self with Tags = self.Tags |> Array.append (tags |> Seq.toArray) }
+        self.Tags.AddRange(tags)
+        self
     
     member self.Equals(other : MonitorConfig) = 
         if Object.ReferenceEquals(other, null) then false
