@@ -29,7 +29,7 @@ namespace Okanshi.Test
         {
             counter.Increment(amount);
 
-            counter.GetValues().First().Value.Should().Be(amount);
+            counter.GetValueAs("").Value.Should().Be(amount);
         }
 
         [Theory]
@@ -61,7 +61,7 @@ namespace Okanshi.Test
 
             counter.Increment(-1);
 
-            counter.GetValues().First().Value.Should().Be(1);
+            counter.GetValueAs("").Value.Should().Be(1);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Okanshi.Test
             counter.Increment(-1);
             counter.Increment();
 
-            counter.GetValues().First().Value.Should().Be(1);
+            counter.GetValueAs("").Value.Should().Be(1);
         }
 
         [Fact]

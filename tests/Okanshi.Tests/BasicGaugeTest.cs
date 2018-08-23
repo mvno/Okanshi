@@ -22,7 +22,7 @@ namespace Okanshi.Test
         {
             var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
 
-            gauge.GetValues().First().Value.Should().Be(expectedValue);
+            gauge.GetValueAs("").Value.Should().Be(expectedValue);
         }
 
         [Theory]
