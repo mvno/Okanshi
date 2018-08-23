@@ -13,19 +13,19 @@ type MonitorFactory = unit -> IMonitor
 [<AbstractClass; Sealed>]
 type OkanshiMonitor private () = 
     static let monitorRegistry = DefaultMonitorRegistry.Instance
-    static let tagDictionary = new Dictionary<Tag, byte>()
+    static let defaultTags = new HashSet<Tag>();
     static let defaultStep = TimeSpan.FromMinutes(float 1)
     
     /// Gets the default step size
     static member DefaultStep = defaultStep
     
     /// Gets the default tags added to all monitors created
-    static member DefaultTags 
-        with get () = tagDictionary.Keys |> Seq.toArray
+    static member DefaultTags
+        with get () = defaultTags :> seq<Tag>
         /// Sets the default tags added to all monitors created
-        and set (value : Tag array) = 
-            tagDictionary.Clear()
-            value |> Seq.iter (fun x -> tagDictionary.Add(x, byte 0))
+        and set (value : Tag seq) = 
+            defaultTags.Clear()
+            value |> Seq.iter (fun x -> defaultTags.Add(x) |> ignore)
     
     /// Get or add a BasicCounter
     static member BasicCounter(name : string) = OkanshiMonitor.BasicCounter(name, [||])
