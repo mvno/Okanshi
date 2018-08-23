@@ -236,11 +236,8 @@ F#:
 
 The `Func` passed in just have to return a boolean, indicating pass or fail.
 
-As of version 4 health checks can also be registered as a monitor. This is done like this:
+As of version 6 health checks can no longer be registered as a monitor.
 
-```csharp
-    OkanshiMonitor.HealthCheck(() => Directory.GetFiles("C:\\MyData").Length == 0, "NoFilesInDirectory")
-```
 
 HTTP Endpoint
 =============
@@ -266,6 +263,8 @@ For custom configuration of the endpoint see the API reference.
 
 Health checks
 -------------
+Notice that at application startup, the enpoint contains *no data* the first minute. This is because no data have been gathered yet. You can control that period by tweaking the poller interval.
+
 
 To see the current status of all defined healthchecks, go to [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
 

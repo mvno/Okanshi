@@ -115,14 +115,6 @@ type OkanshiMonitor private () =
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new BasicTimer(x))
     
-    /// Get or add a HealthCheck
-    static member HealthCheck(check, name) = OkanshiMonitor.HealthCheck(check, name, [||])
-    
-    /// Get or add a HealthCheck with custom tags
-    static member HealthCheck(check, name : string, tags : Tag array) = 
-        let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new HealthCheck(x, check))
-
 #if NET45
     /// Get or add a performance counter monitor
     static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name)
