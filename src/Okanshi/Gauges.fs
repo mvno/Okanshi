@@ -18,6 +18,9 @@ type BasicGauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
     
     /// Gets the current value
     member __.GetValues() = seq { yield Measurement("value", getValue.Invoke()) }
+
+    /// Gets the current value
+    member __.GetValueAs(name : string) = Measurement(name, getValue.Invoke())
     
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
@@ -46,6 +49,9 @@ type MaxGauge(config : MonitorConfig) =
     
     /// Gets the current value
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+
+    /// Gets the current value
+    member __.GetValueAs(name : string) = Measurement(name, value.Get()) 
     
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
@@ -81,6 +87,9 @@ type MinGauge(config : MonitorConfig) =
     
     /// Gets the current value
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+
+    /// Gets the current value
+    member __.GetValueAs(name : string) = Measurement(name, value.Get()) 
     
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
@@ -108,6 +117,9 @@ type LongGauge(config : MonitorConfig) =
     /// Gets the current value
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
+    /// Gets the current value
+    member __.GetValueAs(name : string) = Measurement(name, value.Get())
+    
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
     
@@ -133,6 +145,9 @@ type DoubleGauge(config : MonitorConfig) =
     
     /// Gets the current value
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+
+    /// Gets the current value
+    member __.GetValueAs(name : string) = Measurement(name, value.Get())
     
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
@@ -161,6 +176,9 @@ type DecimalGauge(config : MonitorConfig) =
     
     /// Gets the current value
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+
+    /// Gets the current value
+    member __.GetValueAs(name : string) = Measurement(name, value.Get())
     
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)
@@ -203,6 +221,8 @@ type AverageGauge(config : MonitorConfig) =
     
     /// Gets the current value
     member __.GetValues() = Lock.lock syncRoot (fun () -> getValue'() |> List.toSeq)
+
+    member __.GetValueAs(name : string) = Lock.lock syncRoot (fun () -> Measurement(name, value))
     
     /// Gets the monitor configuration
     member __.Config = config.WithTag(DataSourceType.Gauge)

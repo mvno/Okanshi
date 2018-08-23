@@ -104,11 +104,11 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
     
     let getValues' () =
         seq {
-            yield! avg.GetValues() |> Seq.map (fun x -> Measurement("value", x.Value)) |> Seq.cast<IMeasurement>
-            yield! total.GetValues() |> Seq.map (fun x -> Measurement("totalTime", x.Value)) |> Seq.cast<IMeasurement>
-            yield! count.GetValues() |> Seq.map (fun x -> Measurement("count", x.Value)) |> Seq.cast<IMeasurement>
-            yield! max.GetValues() |> Seq.map (fun x -> Measurement("max", x.Value)) |> Seq.cast<IMeasurement>
-            yield! min.GetValues() |> Seq.map (fun x -> Measurement("min", x.Value)) |> Seq.cast<IMeasurement>
+            yield avg.GetValueAs("value") :> IMeasurement
+            yield total.GetValueAs("totalTime") :> IMeasurement
+            yield count.GetValueAs("count") :> IMeasurement
+            yield max.GetValueAs("max") :> IMeasurement
+            yield min.GetValueAs("min") :> IMeasurement
         }
 
     let reset'() =
