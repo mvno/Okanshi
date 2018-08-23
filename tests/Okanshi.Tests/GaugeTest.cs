@@ -4,12 +4,12 @@ using Xunit;
 
 namespace Okanshi.Test
 {
-    public class BasicGaugeTest
+    public class GaugeTest
     {
         [Fact]
         public void Gauge_tag_is_added_to_configuration()
         {
-            var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => 0);
+            var gauge = new Gauge<int>(MonitorConfig.Build("Test"), () => 0);
 
             gauge.Config.Tags.Should().Contain(DataSourceType.Gauge);
         }
@@ -20,7 +20,7 @@ namespace Okanshi.Test
         [InlineData(167)]
         public void Value_is_gotten_through_passed_in_func(int expectedValue)
         {
-            var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
+            var gauge = new Gauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
 
             gauge.GetValues().First().Value.Should().Be(expectedValue);
         }
@@ -31,7 +31,7 @@ namespace Okanshi.Test
         [InlineData(167)]
         public void Value_is_gotten_through_passed_in_func_when_using_get_and_reset(int expectedValue)
         {
-            var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
+            var gauge = new Gauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
 
             gauge.GetValuesAndReset().First().Value.Should().Be(expectedValue);
         }
@@ -42,7 +42,7 @@ namespace Okanshi.Test
         [InlineData(167)]
         public void After_get_and_reset_the_value_is_still_gotten_from_func(int expectedValue)
         {
-            var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
+            var gauge = new Gauge<int>(MonitorConfig.Build("Test"), () => expectedValue);
             gauge.GetValuesAndReset();
 
             gauge.GetValuesAndReset().First().Value.Should().Be(expectedValue);
@@ -51,7 +51,7 @@ namespace Okanshi.Test
         [Fact]
         public void Value_is_called_value()
         {
-            var gauge = new BasicGauge<int>(MonitorConfig.Build("Test"), () => 1);
+            var gauge = new Gauge<int>(MonitorConfig.Build("Test"), () => 1);
             gauge.GetValues().Single().Name.Should().Be("value");
         }
     }

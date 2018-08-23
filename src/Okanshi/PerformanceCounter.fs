@@ -29,7 +29,7 @@ type PerformanceCounterMonitor(registry : IMonitorRegistry, monitorConfig : Moni
     let performanceCounter = 
         new PerformanceCounter(performanceCounterConfig.Category, performanceCounterConfig.Counter, 
                                performanceCounterConfig.Instance, true)
-    let gauge = new BasicGauge<_>(monitorConfig, fun () -> performanceCounter.NextValue())
+    let gauge = new Gauge<_>(monitorConfig, fun () -> performanceCounter.NextValue())
     
     new(monitorConfig, performanceCounterConfig) = 
         PerformanceCounterMonitor(DefaultMonitorRegistry.Instance, monitorConfig, performanceCounterConfig)

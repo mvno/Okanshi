@@ -65,9 +65,9 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Peak_counter_is_converted_to_a_single_metric_with_no_submetrics()
+        public void Counter_is_converted_to_a_single_metric_with_no_submetrics()
         {
-            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new PeakCounter(MonitorConfig.Build("Test")) });
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Counter(MonitorConfig.Build("Test")) });
             var resetEvent = new ManualResetEventSlim(false);
             var metrics = Enumerable.Empty<Metric>();
             _metricMonitorRegistryPoller.RegisterObserver(x =>
@@ -85,9 +85,9 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Basic_gauge_is_converted_to_a_metric_a_single_value()
+        public void Gauge_is_converted_to_a_metric_a_single_value()
         {
-            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new BasicGauge<int>(MonitorConfig.Build("Test"), () => 1) });
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Gauge<int>(MonitorConfig.Build("Test"), () => 1) });
             var resetEvent = new ManualResetEventSlim(false);
             var metrics = Enumerable.Empty<Metric>();
             _metricMonitorRegistryPoller.RegisterObserver(x =>
@@ -107,7 +107,7 @@ namespace Okanshi.Test
         [Fact]
         public void Timer_is_converted_to_a_metric_with_four_values()
         {
-            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new BasicTimer(MonitorConfig.Build("Test")) });
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Timer(MonitorConfig.Build("Test")) });
             var resetEvent = new ManualResetEventSlim(false);
             var metrics = Enumerable.Empty<Metric>();
             _metricMonitorRegistryPoller.RegisterObserver(x =>
@@ -127,7 +127,7 @@ namespace Okanshi.Test
         [Fact]
         public void After_unregistering_observer_it_is_not_called()
         {
-            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new BasicTimer(MonitorConfig.Build("Test")) });
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Timer(MonitorConfig.Build("Test")) });
             var resetEvent = new ManualResetEventSlim(false);
             Func<IEnumerable<Metric>, Task> observer = _ =>
                 {
@@ -145,7 +145,7 @@ namespace Okanshi.Test
         [Fact]
         public void Polling_metrics_Task_with_slow_observer_waits_for_the_observer_to_finish()
         {
-            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new BasicTimer(MonitorConfig.Build("Test")) });
+            _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Timer(MonitorConfig.Build("Test")) });
             var resetEvent = new ManualResetEventSlim(false);
             Func<IEnumerable<Metric>, Task> observer = _ => Task.Delay(TimeSpan.FromSeconds(2));
             _metricMonitorRegistryPoller.RegisterObserver(observer);

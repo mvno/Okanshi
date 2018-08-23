@@ -16,16 +16,16 @@ All monitors can be instantiated directly or, declared and used through the stat
 
 Gauges are monitors that returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.
 
-#### BasicGauge ####
+#### Gauge ####
 
-The `BasicGauge` is a monitor that takes a `Func<T>`. Each time the value is polled from the gauge, the `Func<T>` is called and the value returned is the current value.
+The `Gauge` is a monitor that takes a `Func<T>`. Each time the value is polled from the gauge, the `Func<T>` is called and the value returned is the current value.
 
 Example:
 
 ```csharp
-    OkanshiMonitor.BasicGauge("Number of users", () => _numberOfUsers);
+    OkanshiMonitor.Gauge("Number of users", () => _numberOfUsers);
     // OR
-    var gauge = new BasicGauge(MonitorConfig.Build("Number of users"), () => _numberOfUsers);
+    var gauge = new Gauge(MonitorConfig.Build("Number of users"), () => _numberOfUsers);
 ```
 
 #### Max/MinGauge ####
@@ -59,15 +59,15 @@ Example:
 
 #### AverageGauge ####
 
-The `AverageGauge` monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval.
+The `AverageGauge` monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval. The interval is controlled by the poller.
 
 Example:
 
 ```csharp
-    OkanshiMonitor.AverageGauge("Average queue length", TimeSpan.FromMinutes(1)).Set(100); // Average is 100
-    OkanshiMonitor.AverageGauge("Average queue length", TimeSpan.FromMinutes(1)).Set(200); // Average is 150
+    OkanshiMonitor.AverageGauge("Average queue length").Set(100); // Average is 100
+    OkanshiMonitor.AverageGauge("Average queue length").Set(200); // Average is 150
     // OR
-    var gauge = new AverageGauge(MonitorConfig.Build("Maximum number of users"), TimeSpan.FromMinutes(1));
+    var gauge = new AverageGauge(MonitorConfig.Build("Maximum number of users"));
     gauge.Set(100);
     gauge.Set(200);
 ```
@@ -91,62 +91,57 @@ The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`
 
 Counters are monitors that you can increment as needed. They are thread-safe by default.
 
-#### Step/DoubleCounter ####
+#### Counter ####
 
-A `StepCounter` is a counter defined by an interval, after each interval the counter is reset. The value of this counter gives you the number of events per second, based on the previous interval. The value of a `StepCounter` is a long.
-A `DoubleCounter` works the same way as a `StepCounter`, the only difference is the value, which is a double.
+A `Counter` counts the number of events between polling. The value is a ```int``` and can be incremented using a ```int```.
 
 ```csharp
-    OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(1)).Increment();
-    OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(1)).Increment();
-    Thread.Sleep(2000); // After 2 seconds the value is 1
-    OkanshiMonitor.StepCounter("Name", TimeSpan.FromSeconds(2)).Increment();
-    Thread.Sleep(2000); // After another 2 seconds the value is 0.5
+    OkanshiMonitor.Counter("Name").Increment();
+    OkanshiMonitor.Counter("Name").Increment(); // The value is 2
+    OkanshiMonitor.Counter("Name").GetValuesAndReset();
+    OkanshiMonitor.Counter("Name").Increment(); // The value is 1
     // OR
-    var counter = new StepCounter(MonitorConfig.Build("Name"), TimeSpan.FromSeconds(1));
+    var counter = new Counter(MonitorConfig.Build("Name"));
     counter.Increment();
     counter.Increment();
-    Thread.Sleep(2000);
+    counter.GetValuesAndReset();
     counter.Increment();
-    Thread.Sleep(2000);
 ```
 
-#### PeakRateCounter ####
+#### DoubleCounter ####
 
-A `PeakRateCounter` is a counter defined by an interval. After each interval the counter is reset. The value of this counter gives you the number of events possible per second, based on the previous interval. 
+A `DoubleCounter` counts the number of events between polling. The value is a ```double``` and can be incremented using a ```double```.
 
 ```csharp
-    OkanshiMonitor.PeakRateCounter("Name", TimeSpan.FromSeconds(1)).Increment();
-    OkanshiMonitor.PeakRateCounter("Name", TimeSpan.FromSeconds(1)).Increment();
-    Thread.Sleep(1000); // After 1 second the value is 2
-    OkanshiMonitor.PeakRateCounter("Name", TimeSpan.FromSeconds(1)).Increment();
-    Thread.Sleep(1000); // After another second the value is 1
+    OkanshiMonitor.DoubleCounter("Name").Increment();
+    OkanshiMonitor.DoubleCounter("Name").Increment();  // The value is 2.0
+    OkanshiMonitor.DoubleCounter("Name").GetValuesAndReset();
+    OkanshiMonitor.DoubleCounter("Name").Increment(); // The value is 1.0
     // OR
-    var counter = new PeakRateCounter(MonitorConfig.Build("Name"), TimeSpan.FromSeconds(1));
+    var counter = new DoubleCounter(MonitorConfig.Build("Name"), TimeSpan.FromSeconds(1));
     counter.Increment();
     counter.Increment();
-    Thread.Sleep(1000);
+    counter.GetValuesAndReset();
     counter.Increment();
-    Thread.Sleep(1000);
 ```
 
-#### BasicCounter ####
+#### CumulativeCounter ####
 
-Is a counter that is never reset. Other than that, it works exactly like all other counters.
+Is a counter that is never reset at runtime, but retained during the lifetime of the process. Other than that, it works exactly like all other counters. . The value is a ```int``` and can be incremented using a ```int```.
+
+This counter make sense to use then you don't want to take the polling interval into account, and instead post-process the data.
 
 ```csharp
-    OkanshiMonitor.BasicCounter("Name").Increment();
-    OkanshiMonitor.BasicCounter("Name").Increment();
-    Thread.Sleep(1000); // After 1 second the value is 2
-    OkanshiMonitor.BasicCounter("Name").Increment();
-    Thread.Sleep(1000); // After another second the value is 3
+    OkanshiMonitor.CumulativeCounter("Name").Increment();
+    OkanshiMonitor.CumulativeCounter("Name").Increment(); // The value is 2
+    OkanshiMonitor.CumulativeCounter("Name").GetValuesAndReset();
+    OkanshiMonitor.CumulativeCounter("Name").Increment(); // The value is 1
     // OR
-    var counter = new BasicCounter(MonitorConfig.Build("Name"));
+    var counter = new CumulativeCounter(MonitorConfig.Build("Name"));
     counter.Increment();
     counter.Increment();
-    Thread.Sleep(1000);
+    counter.GetValuesAndReset();
     counter.Increment();
-    Thread.Sleep(1000);
 ```
 
 ### Timers ###
@@ -157,12 +152,12 @@ All timers also support "manual" timing, that are stopped manually instead of pa
 Example:
 
 ```csharp
-    var timer = OkanshiMonitor.BasicTimer("Query time", TimeSpan.FromSeconds(1)).Start()
+    var timer = OkanshiMonitor.Timer("Query time", TimeSpan.FromSeconds(1)).Start()
     Thread.Sleep(500);
     timer.Stop(); // When stopped the timing is registered
 ```
 
-#### BasicTimer ####
+#### Timer ####
 
 This is a simple timer that, within a specified interval, measures:
 
@@ -175,33 +170,12 @@ This is a simple timer that, within a specified interval, measures:
 Example:
 
 ```csharp
-    OkanshiMonitor.BasicTimer("Query time", TimeSpan.FromSeconds(1)).Record(() => Thread.Sleep(500)); // Min is 500, Max is 500, Count is 1, TotalTime is 500
-    OkanshiMonitor.BasicTimer("Query time", TimeSpan.FromSeconds(1)).Record(() => Thread.Sleep(100)); // Min is 100, Max is 500, Count is 2, TotalTime is 600
+    OkanshiMonitor.Timer("Query time", TimeSpan.FromSeconds(1)).Record(() => Thread.Sleep(500)); // Min is 500, Max is 500, Count is 1, TotalTime is 500
+    OkanshiMonitor.Timer("Query time", TimeSpan.FromSeconds(1)).Record(() => Thread.Sleep(100)); // Min is 100, Max is 500, Count is 2, TotalTime is 600
     // OR
-    var timer = new BasicTimer(MonitorConfig.Build("Query time", TimeSpan.FromSeconds(1)));
+    var timer = new Timer(MonitorConfig.Build("Query time", TimeSpan.FromSeconds(1)));
     timer.Record(() => Thread.Sleep(500));
     timer.Record(() => Thread.Sleep(100))
-```
-
-#### DurationTimer ####
-
-Prior to version 4, this was called LongTaskTimer.
-
-A monitor for tracking long running operations that might last for many minutes or hours. It is possible to monitor multiple operations running simultanously. It tracks the number of operations currently running, and their current total execution time. The current total execution time is the sum of the current execution time of all the running operations .
-
-```csharp
-    OkanshiMonitor.LongTaskTimer("Query time")).Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 1
-    // On another thread
-    OkanshiMonitor.LongTaskTimer("Query time").Record(() => Thread.Sleep(100000)); // Duration is around 0 and number of active operations is 2
-    Thread.Sleep(5000);
-    // Duration is known around 5 seconds and number of active tasks is still 2
-    
-    // OR
-    
-    var timer = new LongTaskTimer(MonitorConfig.Build("Query time"));
-    timer.Record(() => Thread.Sleep(100000));
-    timer.Record(() => Thread.Sleep(100000));
-    Thread.Sleep(5000);
 ```
 
 ### Performance counters
@@ -337,7 +311,7 @@ To set up this particular observer we can use the following code. It sets up som
         {
             while (true)
             {
-                OkanshiMonitor.BasicTimer("send").Record(() =>
+                OkanshiMonitor.Timer("send").Record(() =>
                 {
                     Thread.Sleep(TimeSpan.FromMilliseconds(200));  // simulate business stuff...
                 });

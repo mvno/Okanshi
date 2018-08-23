@@ -4,12 +4,12 @@ using Xunit;
 
 namespace Okanshi.Test
 {
-    public class BasicCounterTest
+    public class CumulativeCounterTest
     {
         [Fact]
         public void Initial_value_is_zero()
         {
-            var counter = new BasicCounter(MonitorConfig.Build("Test"));
+            var counter = new CumulativeCounter(MonitorConfig.Build("Test"));
 
             counter.GetValues().First().Value.Should().Be(0);
         }
@@ -20,7 +20,7 @@ namespace Okanshi.Test
         [InlineData(110)]
         public void Incrementing_the_counters_works_as_expected(int amount)
         {
-            var counter = new BasicCounter(MonitorConfig.Build("Test"));
+            var counter = new CumulativeCounter(MonitorConfig.Build("Test"));
 
             counter.Increment(amount);
 
@@ -33,7 +33,7 @@ namespace Okanshi.Test
         [InlineData(110)]
         public void Get_and_reset_does_not_reset_the_value(int amount)
         {
-            var counter = new BasicCounter(MonitorConfig.Build("Test"));
+            var counter = new CumulativeCounter(MonitorConfig.Build("Test"));
             counter.Increment(amount);
 
             counter.GetValuesAndReset();
@@ -47,7 +47,7 @@ namespace Okanshi.Test
         [InlineData(110)]
         public void Get_and_reset_returns_the_value(int amount)
         {
-            var counter = new BasicCounter(MonitorConfig.Build("Test"));
+            var counter = new CumulativeCounter(MonitorConfig.Build("Test"));
             counter.Increment(amount);
 
             var value = counter.GetValuesAndReset();
@@ -58,7 +58,7 @@ namespace Okanshi.Test
         [Fact]
         public void Value_is_called_value()
         {
-            var counter = new BasicCounter(MonitorConfig.Build("Test"));
+            var counter = new CumulativeCounter(MonitorConfig.Build("Test"));
             counter.GetValues().Single().Name.Should().Be("value");
         }
     }
