@@ -2,7 +2,8 @@
 
 **BREAKING CHANGES**
 
-* LongTaskTimer has been removed
+* `OkanshiMonitor.HealthCheck()` has been removed. Replace use with a `Gauge`
+* `LongTaskTimer` has been removed
 * BasicCounter has been renamed to CumulativeCounter to better explain what it does
 * PeakRateCounter has been renamed to Counter, as it was hard to figure out what PeakRateCounter meant
 * BasicTimer has been renamed to Timer, as it was hard to figure out what BasicTimer meant

@@ -20,8 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Okanshi.InfluxDBObserver.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{1239C1ED-EC54-4054-8A8E-F3F9BC96D818}"
 	ProjectSection(SolutionItems) = preProject
-		docs\content\index.md = docs\content\index.md
-		docs\content\tutorial.md = docs\content\tutorial.md
+		README.md = README.md
+		RELEASE_NOTES.md = RELEASE_NOTES.md
+		documentation\tutorial.md = documentation\tutorial.md
 	EndProjectSection
 EndProject
 Global
