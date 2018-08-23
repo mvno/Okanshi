@@ -14,7 +14,7 @@ type IGauge<'T> =
     abstract Reset : unit -> unit
 
 /// A gauge implemenation that invokes a func to get the current value
-type BasicGauge<'T>(config : MonitorConfig, getValue : Func<'T>) = 
+type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>) = 
     
     /// Gets the current value
     member __.GetValues() = seq { yield Measurement("value", getValue.Invoke()) }

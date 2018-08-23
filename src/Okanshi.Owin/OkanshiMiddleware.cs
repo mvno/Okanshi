@@ -40,8 +40,8 @@ namespace Okanshi.Owin
 
             tags.Add(new Tag("path", environment["owin.RequestPath"].ToString()));
             tags.Add(new Tag("method", environment["owin.RequestMethod"].ToString()));
-            var basicTimer = OkanshiMonitor.BasicTimer(options.MetricName, tags.ToArray());
-            basicTimer.Register(timer.ElapsedMilliseconds);
+            var okanshiTimer = OkanshiMonitor.Timer(options.MetricName, tags.ToArray());
+            okanshiTimer.Register(timer.ElapsedMilliseconds);
         }
     }
 }

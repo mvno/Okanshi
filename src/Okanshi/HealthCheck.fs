@@ -28,7 +28,7 @@ type HealthChecks private () =
 type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Func<bool>) =
     let config' = config.WithTag(DataSourceType.HealthCheck)
 
-    let check' = new BasicGauge<bool>(config', check)
+    let check' = new Gauge<bool>(config', check)
     
     new (config, check) = HealthCheck(DefaultMonitorRegistry.Instance, config, check)
 

@@ -132,11 +132,3 @@ type AtomicDecimal(initialValue) =
         member self.Increment() = self.Increment()
         member self.Increment(amount) = self.Increment(amount)
 
-/// Utility class used to describe step intervals
-[<System.Diagnostics.DebuggerDisplay("Timestamp = {Timestamp}; Value = {Value}")>]
-type Datapoint = 
-    { Timestamp : Nullable<DateTime>
-      Value : int64 }
-    static member Empty = 
-        { Timestamp = new System.Nullable<_>()
-          Value = -1L }

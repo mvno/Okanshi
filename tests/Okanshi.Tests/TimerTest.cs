@@ -7,15 +7,15 @@ using NSubstitute;
 
 namespace Okanshi.Test
 {
-    public class BasicTimerTest
+    public class TimerTest
     {
         private readonly IStopwatch stopwatch = Substitute.For<IStopwatch>();
-        private readonly BasicTimer timer;
+        private readonly Timer timer;
 
-        public BasicTimerTest()
+        public TimerTest()
         {
             DefaultMonitorRegistry.Instance.Clear();
-            timer = new BasicTimer(MonitorConfig.Build("Test"), () => stopwatch);
+            timer = new Timer(MonitorConfig.Build("Test"), () => stopwatch);
         }
 
         [Fact]
