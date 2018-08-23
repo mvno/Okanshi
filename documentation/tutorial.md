@@ -216,6 +216,8 @@ As of version 4 health checks can also be registered as a monitor. This is done 
     OkanshiMonitor.HealthCheck(() => Directory.GetFiles("C:\\MyData").Length == 0, "NoFilesInDirectory")
 ```
 
+The difference is that health checks registered as a monitor are processed by observers, but they are not accessible using HTTP endpoint described below.
+
 HTTP Endpoint
 =============
 
