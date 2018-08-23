@@ -103,13 +103,13 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
         lockWithArg syncRoot elapsed updateStatistics'
     
     let getValues' () =
-        seq {
-            yield! avg.GetValues() |> Seq.map (fun x -> Measurement("value", x.Value)) |> Seq.cast<IMeasurement>
-            yield! total.GetValues() |> Seq.map (fun x -> Measurement("totalTime", x.Value)) |> Seq.cast<IMeasurement>
-            yield! count.GetValues() |> Seq.map (fun x -> Measurement("count", x.Value)) |> Seq.cast<IMeasurement>
-            yield! max.GetValues() |> Seq.map (fun x -> Measurement("max", x.Value)) |> Seq.cast<IMeasurement>
-            yield! min.GetValues() |> Seq.map (fun x -> Measurement("min", x.Value)) |> Seq.cast<IMeasurement>
-        }
+        [|
+            avg.GetValueAs("value") :> IMeasurement;
+            total.GetValueAs("totalTime") :> IMeasurement;
+            count.GetValueAs("count") :> IMeasurement; 
+            max.GetValueAs("max") :> IMeasurement;
+            min.GetValueAs("min") :> IMeasurement;
+        |]
 
     let reset'() =
         max.Reset()
@@ -139,19 +139,19 @@ type BasicTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as 
         elapsed |> updateStatistics
     
     /// Gets the rate of calls timed within the specified step
-    member __.GetCount() = lock syncRoot (fun() -> count.GetValues() |> Seq.head)
+    member __.GetCount() = lock syncRoot (fun() -> count.GetValueAs(""))
     
     /// Gets the average calls time within the specified step
     member __.GetValues() = lock syncRoot getValues'
     
     /// Get the maximum value of all calls
-    member __.GetMax() = lock syncRoot (fun () -> max.GetValues() |> Seq.head)
+    member __.GetMax() = lock syncRoot (fun () -> max.GetValueAs(""))
     
     /// Get the manimum value of all calls
-    member __.GetMin() = lock syncRoot (fun () -> min.GetValues() |> Seq.head)
+    member __.GetMin() = lock syncRoot (fun () -> min.GetValueAs(""))
     
     /// Gets the the total time for all calls within the specified step
-    member __.GetTotalTime() = lock syncRoot (fun () -> total.GetValues() |> Seq.head)
+    member __.GetTotalTime() = lock syncRoot (fun () -> total.GetValueAs(""))
     
     /// Gets the monitor config
     member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)

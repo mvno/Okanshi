@@ -40,6 +40,9 @@ type PeakCounter(config : MonitorConfig) =
     /// Gets the maximum count
     member __.GetValues() = Lock.lock syncRoot getValue'
     
+    /// Gets the maximum count
+    member __.GetValueAs(name : string) = Lock.lock syncRoot (fun () -> Measurement(name, peakRate))
+
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
     
@@ -75,9 +78,12 @@ type DoubleCounter(config : MonitorConfig) =
     /// Increment the value by one
     member self.Increment() = self.Increment(1.0)
     
-    /// Gets the maximum count
+    /// Gets the count
     member __.GetValues() = seq { yield Measurement("value", count.Get()) }
-    
+   
+    /// Gets the count
+    member __.GetValueAs(name : string) = Measurement(name, count.Get())
+
     /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Rate)
     
@@ -104,7 +110,10 @@ type BasicCounter(config : MonitorConfig) =
     /// Gets the value
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
-    /// Gets the configuration
+    /// Gets the value
+    member __.GetValueAs(name : string) = Measurement(name, value.Get())
+
+   /// Gets the configuration
     member __.Config = config.WithTag(DataSourceType.Counter)
     
     /// Gets the value and resets the monitor

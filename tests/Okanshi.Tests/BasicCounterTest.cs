@@ -11,7 +11,7 @@ namespace Okanshi.Test
         {
             var counter = new BasicCounter(MonitorConfig.Build("Test"));
 
-            counter.GetValues().First().Value.Should().Be(0);
+            counter.GetValueAs("").Value.Should().Be(0);
         }
 
         [Theory]
@@ -24,7 +24,7 @@ namespace Okanshi.Test
 
             counter.Increment(amount);
 
-            counter.GetValues().First().Value.Should().Be(amount);
+            counter.GetValueAs("").Value.Should().Be(amount);
         }
 
         [Theory]
@@ -38,7 +38,7 @@ namespace Okanshi.Test
 
             counter.GetValuesAndReset();
 
-            counter.GetValues().First().Value.Should().Be(amount);
+            counter.GetValueAs("").Value.Should().Be(amount);
         }
 
         [Theory]

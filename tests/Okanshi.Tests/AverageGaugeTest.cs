@@ -22,7 +22,7 @@ namespace Okanshi.Test
         [Fact]
         public void Initial_value_is_zero()
         {
-            gauge.GetValues().First().Value.Should().Be(0);
+            gauge.GetValueAs("").Value.Should().Be(0);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Okanshi.Test
             gauge.Set(100);
             gauge.Set(200);
 
-            gauge.GetValues().First().Value.Should().Be(150);
+            gauge.GetValueAs("").Value.Should().Be(150);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Okanshi.Test
 
             gauge.GetValuesAndReset();
 
-            gauge.GetValues().First().Value.Should().Be(0L);
+            gauge.GetValueAs("").Value.Should().Be(0L);
         }
 
         [Fact]
