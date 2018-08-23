@@ -1,8 +1,7 @@
-Tutorial
-========================
+# Tutorial
 
-Metrics
--------
+
+## Metrics
 
 Okanshi has a couple of different monitor types, divided into the following categories:
 
@@ -216,8 +215,7 @@ As of version 4 it is also possible to monitor Windows performance counters.
     var performanceCounterMonitor = new PerformanceCounterMonitor(MonitorConfig.Build("Available Bytes"), PerformanceCounterConfig.Build("Memory", "Available Bytes"));
 ```
 
-Health checks
--------------
+## Health checks
 
 You can also add different health checks to you application. For example the number of files in a directory or something else making sense in you case.
 Health checks are added like this:
@@ -239,13 +237,13 @@ The `Func` passed in just have to return a boolean, indicating pass or fail.
 As of version 6 health checks can no longer be registered as a monitor.
 
 
-HTTP Endpoint
-=============
+
+
+## HTTP Endpoint
 
 Prior to version 4, the HTTP endpoint was include in the core package. This is no longer the case, it now exists in a separate package called Okanshi.Endpoint.
 
-Starting the endpoint
----------------------
+### Starting the endpoint
 
 You start the monitor like this:
 
@@ -261,34 +259,31 @@ As nothing has been monitored yet, it will return a JSON response with an empty 
 
 For custom configuration of the endpoint see the API reference.
 
-Health checks
--------------
 Notice that at application startup, the enpoint contains *no data* the first minute. This is because no data have been gathered yet. You can control that period by tweaking the poller interval.
 
+### Health checks
 
 To see the current status of all defined healthchecks, go to [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
 
-Assembly dependencies
----------------------
+### Assembly dependencies
 
 The endpoint can show all assemblies currently loaded in the AppDomain.
 
 To see all assembly dependencies for you application just access [http://localhost:13004/dependencies](http://localhost:13004/dependencies). It will provide a list of the names and version of all dependencies.
 
-NuGet dependencies
-------------------
+### NuGet dependencies
 
 If the package.config file is available in the current directory of the process. The endpoint can show all NuGet dependencies and their version. This information can be accessed through [http://localhost:13004/packages](http://localhost:13004/packages).
 
-Observers
-=========
+
+
+## Observers
 
 Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database. An observer storing metrics in-memory is included in the Okanshi package.
 
 An observer to send metrics to InfluxDB is provided through another NuGet package called, Okanshi.InfluxDBObserver.
 
-Observer setup
---------------
+### Observer setup
 
 Setting up an observer is easy:
 
@@ -345,8 +340,7 @@ To set up this particular observer we can use the following code. It sets up som
     }
 ```
 
-OWIN
-====
+## OWIN
 
 Using the package Okanshi.Owin it is possible to measure the request duration grouped by path, HTTP method and optionally the response status code.
 
