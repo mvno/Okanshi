@@ -59,7 +59,7 @@ Example:
 
 #### AverageGauge ####
 
-The `AverageGauge` monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval.
+The `AverageGauge` monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval. The interval is controlled by the poller.
 
 Example:
 
@@ -93,15 +93,15 @@ Counters are monitors that you can increment as needed. They are thread-safe by 
 
 #### Counter ####
 
-A `Counter` counts the number of events between polling.
+A `Counter` counts the number of events between polling. The value is a ```int``` and can be incremented using a ```int```.
 
 ```csharp
-    OkanshiMonitor.PeakRateCounter("Name").Increment();
-    OkanshiMonitor.PeakRateCounter("Name").Increment(); // The value is 2
-    OkanshiMonitor.PeakRateCounter("Name").counter.GetValuesAndReset();
-    OkanshiMonitor.PeakRateCounter("Name").Increment(); // The value is 1
+    OkanshiMonitor.Counter("Name").Increment();
+    OkanshiMonitor.Counter("Name").Increment(); // The value is 2
+    OkanshiMonitor.Counter("Name").GetValuesAndReset();
+    OkanshiMonitor.Counter("Name").Increment(); // The value is 1
     // OR
-    var counter = new PeakRateCounter(MonitorConfig.Build("Name"));
+    var counter = new Counter(MonitorConfig.Build("Name"));
     counter.Increment();
     counter.Increment();
     counter.GetValuesAndReset();
@@ -110,7 +110,7 @@ A `Counter` counts the number of events between polling.
 
 #### DoubleCounter ####
 
-A `DoubleCounter` works the same way as a `Counter`, except the value is a `double` instead of an `int`
+A `DoubleCounter` counts the number of events between polling. The value is a ```double``` and can be incremented using a ```double```.
 
 ```csharp
     OkanshiMonitor.DoubleCounter("Name").Increment();
@@ -127,7 +127,9 @@ A `DoubleCounter` works the same way as a `Counter`, except the value is a `doub
 
 #### CumulativeCounter ####
 
-Is a counter that is never reset. Other than that, it works exactly like all other counters.
+Is a counter that is never reset at runtime, but retained during the lifetime of the process. Other than that, it works exactly like all other counters. . The value is a ```int``` and can be incremented using a ```int```.
+
+This counter make sense to use then you don't want to take the polling interval into account, and instead post-process the data.
 
 ```csharp
     OkanshiMonitor.CumulativeCounter("Name").Increment();
