@@ -1,7 +1,7 @@
 ### 6.0.0
 
 **BREAKING CHANGES**
-
+* `Timer.Register(long)` has been removed. Replace use with `Timer.Register(StopWatch)` or `Timer.Register(TimeSpan)`
 * `OkanshiMonitor.HealthCheck()` has been removed. Replace use with a `Gauge`
 * `LongTaskTimer` has been removed
 * BasicCounter has been renamed to CumulativeCounter to better explain what it does

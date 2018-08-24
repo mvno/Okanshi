@@ -41,7 +41,7 @@ namespace Okanshi.Owin
             tags.Add(new Tag("path", environment["owin.RequestPath"].ToString()));
             tags.Add(new Tag("method", environment["owin.RequestMethod"].ToString()));
             var okanshiTimer = OkanshiMonitor.Timer(options.MetricName, tags.ToArray());
-            okanshiTimer.Register(timer.ElapsedMilliseconds);
+            okanshiTimer.RegisterElapsed(timer);
         }
     }
 }

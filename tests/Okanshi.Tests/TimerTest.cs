@@ -206,8 +206,8 @@ namespace Okanshi.Test
         public void Manual_registration_updates_sets_max()
         {
             const long elapsed = 1000;
-
-            timer.Register(elapsed);
+            
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetMax().Value.Should().Be(elapsed);
         }
@@ -217,7 +217,7 @@ namespace Okanshi.Test
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetMin().Value.Should().Be(elapsed);
         }
@@ -226,7 +226,8 @@ namespace Okanshi.Test
         public void Manual_registration_sets_count()
         {
             const long elapsed = 1000;
-            timer.Register(elapsed);
+
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetCount().Value.Should().Be(1);
         }
@@ -236,7 +237,7 @@ namespace Okanshi.Test
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetTotalTime().Value.Should().Be(elapsed);
         }
@@ -267,8 +268,8 @@ namespace Okanshi.Test
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
-            timer.Register(elapsed);
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetTotalTime().Value.Should().Be(2 * elapsed);
         }
