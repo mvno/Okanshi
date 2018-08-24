@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using Xunit;
 
@@ -75,8 +76,8 @@ namespace Okanshi.Test
         [Fact]
         public void Configs_with_same_name_and_tags_are_equal()
         {
-            var config1 = new MonitorConfig("Test", new[] { new Tag("tag", "value") });
-            var config2 = new MonitorConfig("Test", new[] { new Tag("tag", "value") });
+            var config1 = new MonitorConfig("Test", new List<Tag>() { new Tag("tag", "value") });
+            var config2 = new MonitorConfig("Test", new List<Tag>() { new Tag("tag", "value") });
 
             config1.Should().Be(config2);
         }
@@ -84,8 +85,8 @@ namespace Okanshi.Test
         [Fact]
         public void Configs_with_same_name_and_tags_should_have_same_hash_code()
         {
-            var config1 = new MonitorConfig("Test", new[] { new Tag("tag", "value") });
-            var config2 = new MonitorConfig("Test", new[] { new Tag("tag", "value") });
+            var config1 = new MonitorConfig("Test", new List<Tag>() { new Tag("tag", "value") });
+            var config2 = new MonitorConfig("Test", new List<Tag>() { new Tag("tag", "value") });
 
             config1.GetHashCode().Should().Be(config2.GetHashCode());
         }

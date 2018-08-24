@@ -1,7 +1,7 @@
 ﻿namespace Okanshi
 
 open System
-open System.Collections.Concurrent
+open System.Collections.Generic
 
 /// Tuple representing a key used to identify a monitor
 type MonitorKey = string * Type * string
@@ -13,19 +13,19 @@ type MonitorFactory = unit -> IMonitor
 [<AbstractClass; Sealed>]
 type OkanshiMonitor private () = 
     static let monitorRegistry = DefaultMonitorRegistry.Instance
-    static let tagDictionary = new ConcurrentDictionary<Tag, byte>()
+    static let defaultTags = new HashSet<Tag>();
     static let defaultStep = TimeSpan.FromMinutes(float 1)
     
     /// Gets the default step size
     static member DefaultStep = defaultStep
     
     /// Gets the default tags added to all monitors created
-    static member DefaultTags 
-        with get () = tagDictionary.Keys |> Seq.toArray
+    static member DefaultTags
+        with get () = defaultTags :> seq<Tag>
         /// Sets the default tags added to all monitors created
-        and set (value : Tag array) = 
-            tagDictionary.Clear()
-            value |> Seq.iter (fun x -> tagDictionary.TryAdd(x, byte 0) |> ignore)
+        and set (value : Tag seq) = 
+            defaultTags.Clear()
+            value |> Seq.iter (fun x -> defaultTags.Add(x) |> ignore)
     
     /// Get or add a CumulativeCounter
     static member CumulativeCounter(name : string) = OkanshiMonitor.CumulativeCounter(name, [||])

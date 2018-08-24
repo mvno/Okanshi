@@ -3,6 +3,7 @@
 open System
 open System.Threading
 open System.Threading.Tasks
+open System.Collections.Generic
 
 /// The metric type
 type Metric =
@@ -12,7 +13,7 @@ type Metric =
         /// The timestamp where the metric was observed
         Timestamp : DateTimeOffset;
         /// The metric tags
-        Tags : Tag array;
+        Tags : List<Tag>;
         /// The value
         Values : IMeasurement seq
     }
