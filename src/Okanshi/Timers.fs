@@ -76,10 +76,16 @@ type ITimer =
     /// Start a manually controlled timinig
     abstract Start : unit -> OkanshiTimer
 
-    /// Manually register a timing, should only be used in special case
-    abstract Register : int64 -> unit
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use.
+    ///
+    /// You should stop the stopwatch before passing so you do not incur the overhead of Okanshi. But it is not a requirement. 
+    /// The stopwatch is not stopped by Okanshi.
+    abstract RegisterElapsed : Stopwatch -> unit
 
-/// A simple timer providing the total time, count, min and max for the times that have been recorded
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    abstract Register : TimeSpan -> unit
+
+/// A timer providing the "total time", "count", "min" and "max" for the recordings
 type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
     
     [<Literal>]
@@ -160,8 +166,14 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
     member __.Start() =
         OkanshiTimer((fun x -> updateStatistics x), (fun () -> stopwatchFactory.Invoke()))
 
-    /// Manually register a timing, should only be used in special case
-    member __.Register(elapsed) = elapsed |> updateStatistics
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use.
+    ///
+    /// You should stop the stopwatch before passing so you do not incur the overhead of Okanshi. But it is not a requirement. 
+    /// The stopwatch is not stopped by Okanshi.
+    member __.RegisterElapsed(stopwatch : Stopwatch) = stopwatch.ElapsedMilliseconds |> updateStatistics
+
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    member __.Register(elapsed : TimeSpan) = int64(elapsed.TotalMilliseconds) |> updateStatistics
 
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
@@ -172,5 +184,6 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
         member self.Start() = self.Start()
-        member self.Register(elapsed) = self.Register(elapsed)
+        member self.RegisterElapsed(elapsed : Stopwatch) = self.RegisterElapsed(elapsed)
+        member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast

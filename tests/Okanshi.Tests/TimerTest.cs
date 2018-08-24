@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using FluentAssertions;
@@ -205,8 +206,8 @@ namespace Okanshi.Test
         public void Manual_registration_updates_sets_max()
         {
             const long elapsed = 1000;
-
-            timer.Register(elapsed);
+            
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetMax().Value.Should().Be(elapsed);
         }
@@ -216,7 +217,7 @@ namespace Okanshi.Test
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetMin().Value.Should().Be(elapsed);
         }
@@ -225,19 +226,52 @@ namespace Okanshi.Test
         public void Manual_registration_sets_count()
         {
             const long elapsed = 1000;
-            timer.Register(elapsed);
+
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetCount().Value.Should().Be(1);
         }
 
         [Fact]
-        public void Manual_registration_sets_total_time()
+        public void Manual_registration_with_long_sets_total_time()
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetTotalTime().Value.Should().Be(elapsed);
+        }
+
+        [Fact]
+        public void Manual_registration_with_timespan_sets_total_time()
+        {
+            timer.Register(TimeSpan.FromSeconds(1));
+
+            timer.GetTotalTime().Value.Should().Be(1000);
+        }
+
+
+        [Fact]
+        public void Manual_registration_with_stopwatch_sets_total_time()
+        {
+            var sw = Stopwatch.StartNew();
+            Thread.Sleep(50);
+            sw.Stop();
+
+            timer.RegisterElapsed(sw);
+
+            timer.GetTotalTime().Value.Should().Be(sw.ElapsedMilliseconds);
+        }
+
+        [Fact]
+        public void Manual_registrations_accumulate_total_time()
+        {
+            const long elapsed = 1000;
+
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
+
+            timer.GetTotalTime().Value.Should().Be(2 * elapsed);
         }
 
         [Fact]
