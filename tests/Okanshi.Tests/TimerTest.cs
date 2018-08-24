@@ -257,7 +257,7 @@ namespace Okanshi.Test
             Thread.Sleep(50);
             sw.Stop();
 
-            timer.Register(sw);
+            timer.RegisterElapsed(sw);
 
             timer.GetTotalTime().Value.Should().Be(sw.ElapsedMilliseconds);
         }

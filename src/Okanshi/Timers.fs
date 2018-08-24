@@ -79,8 +79,11 @@ type ITimer =
     /// Manually register a timing, should only be used in special case
     abstract Register : int64 -> unit
 
-    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
-    abstract Register : Stopwatch -> unit
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use.
+    ///
+    /// You should stop the stopwatch before passing so you do not incur the overhead of Okanshi. But it is not a requirement. 
+    /// The stopwatch is not stopped by Okanshi.
+    abstract RegisterElapsed : Stopwatch -> unit
 
     /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
     abstract Register : TimeSpan -> unit
@@ -169,8 +172,11 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
     /// Manually register a timing, should only be used in special case
     member __.Register(elapsed : int64) = elapsed |> updateStatistics
 
-    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
-    member __.Register(stopwatch : Stopwatch) = self.Register(stopwatch.ElapsedMilliseconds)
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use.
+    ///
+    /// You should stop the stopwatch before passing so you do not incur the overhead of Okanshi. But it is not a requirement. 
+    /// The stopwatch is not stopped by Okanshi.
+    member __.RegisterElapsed(stopwatch : Stopwatch) = self.Register(stopwatch.ElapsedMilliseconds)
 
     /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
     member __.Register(elapsed : TimeSpan) = self.Register(int64(elapsed.TotalMilliseconds))
@@ -185,6 +191,6 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         member self.Config = self.Config
         member self.Start() = self.Start()
         member self.Register(elapsed : int64) = self.Register(elapsed)
-        member self.Register(elapsed : Stopwatch) = self.Register(elapsed)
+        member self.RegisterElapsed(elapsed : Stopwatch) = self.RegisterElapsed(elapsed)
         member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
