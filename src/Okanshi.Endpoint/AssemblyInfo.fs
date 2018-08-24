@@ -2,7 +2,7 @@
 namespace System
 open System.Reflection
 
-[<assembly: AssemblyTitleAttribute("Okanshi")>]
+[<assembly: AssemblyTitleAttribute("Okanshi.Endpoint")>]
 [<assembly: AssemblyProductAttribute("Okanshi")>]
 [<assembly: AssemblyDescriptionAttribute("In-process monitoring library")>]
 [<assembly: AssemblyVersionAttribute("6.0.0")>]
@@ -11,7 +11,7 @@ open System.Reflection
 do ()
 
 module internal AssemblyVersionInformation =
-    let [<Literal>] AssemblyTitle = "Okanshi"
+    let [<Literal>] AssemblyTitle = "Okanshi.Endpoint"
     let [<Literal>] AssemblyProduct = "Okanshi"
     let [<Literal>] AssemblyDescription = "In-process monitoring library"
     let [<Literal>] AssemblyVersion = "6.0.0"

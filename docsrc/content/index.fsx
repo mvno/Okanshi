@@ -1,5 +1,13 @@
+(*** hide ***)
+// This block of code is omitted in the generated HTML documentation. Use 
+// it to define helpers that you do not want to show in the documentation.
+#I "../../bin"
+
+(**
 Okanshi
 ======================
+
+Documentation
 
 <div class="row">
   <div class="span1"></div>
@@ -12,24 +20,32 @@ Okanshi
   <div class="span1"></div>
 </div>
 
-Documentation
--------------
+Example
+-------
 
-Okanshi is a library providing in-process monitoring of an application, it is create by Telenor MVNO to help transitioning to a microservice architecture.
+This example demonstrates using a function defined in this sample library.
 
-The monitoring information can be accessed using the provided HTTP endpoint (JSON output) or by another custom implemented way.
+*)
+#r "Okanshi.dll"
+open Okanshi
 
-It is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronous, and won't impact the application performance that much. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed. 
+printfn "hello = %i" <| Library.hello 0
+
+(**
+Some more info
 
 Samples & documentation
 -----------------------
 
 The library comes with comprehensible documentation. 
+It can include tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
+The API reference is automatically generated from Markdown comments in the library implementation.
 
- * [Tutorial](https://github.com/mvno/Okanshi/tree/master/documentation) contains a further explanation of this library.
+ * [Tutorial](tutorial.html) contains a further explanation of this sample library.
 
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
-   and functions in the library.
+   and functions in the library. This includes additional brief samples on using most of the
+   functions.
  
 Contributing and copyright
 --------------------------
@@ -43,8 +59,9 @@ The library is available under Public Domain license, which allows modification 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
-  [content]: https://github.com/mvno/Okanshi/tree/master/docs/content
-  [gh]: https://github.com/mvno/Okanshi
-  [issues]: https://github.com/mvno/Okanshi/issues
-  [readme]: https://github.com/mvno/Okanshi/blob/master/README.md
-  [license]: https://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+  [content]: https://github.com/fsprojects/Okanshi/tree/master/docs/content
+  [gh]: https://github.com/fsprojects/Okanshi
+  [issues]: https://github.com/fsprojects/Okanshi/issues
+  [readme]: https://github.com/fsprojects/Okanshi/blob/master/README.md
+  [license]: https://github.com/fsprojects/Okanshi/blob/master/LICENSE.txt
+*)
