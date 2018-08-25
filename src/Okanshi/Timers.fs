@@ -196,8 +196,8 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
 /// ( Satisfied + (Tolerating/2) ) / Total number of requests
 ///
 /// see http://www.apdex.org/overview.html 
-type ApDexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, toleratableThreshold: TimeSpan) as self = 
-  [<Literal>]
+type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, toleratableThreshold: TimeSpan) as self = 
+    [<Literal>]
     let StatisticKey = "statistic"
     
     let timer = new BasicTimer(config.WithTag(StatisticKey, ""), stopwatchFactory)

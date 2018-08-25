@@ -7,15 +7,15 @@ using NSubstitute;
 
 namespace Okanshi.Test
 {
-    public class ApDexTest
+    public class ApdexTest
     {
         private readonly IStopwatch stopwatch = Substitute.For<IStopwatch>();
-        private readonly ApDexTimer timer;
+        private readonly ApdexTimer timer;
 
-        public ApDexTest()
+        public ApdexTest()
         {
             DefaultMonitorRegistry.Instance.Clear();
-            timer = new ApDexTimer(MonitorConfig.Build("Test"), () => stopwatch, TimeSpan.FromSeconds(1));
+            timer = new ApdexTimer(MonitorConfig.Build("Test"), () => stopwatch, TimeSpan.FromSeconds(1));
         }
 
         [Fact]
