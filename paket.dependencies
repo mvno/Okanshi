@@ -3,12 +3,6 @@ framework: auto-detect
 source https://nuget.org/api/v2
 
 nuget FSharp.Core
-nuget Argu
-
-nuget Expecto
-nuget Expecto.BenchmarkDotNet
-nuget Expecto.FsCheck
-nuget Expecto.VisualStudio.TestAdapter version_in_path: true
 
 clitool dotnet-fake
 

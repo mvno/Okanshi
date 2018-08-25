@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>6.0.0</VersionPrefix>
     <PackageId>Okanshi</PackageId>
@@ -7,12 +8,10 @@
     <Description>In-process monitoring solution. Monitor individual services in-process and collect data somewhere else</Description>
     <PackageTags>monitoring;microservices</PackageTags>
   </PropertyGroup>
-
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Helpers.fs" />
     <Compile Include="Logging.fs" />
@@ -32,5 +31,5 @@
     <Compile Include="Observer.fs" />
     <Compile Include="Monitor.fs" />
   </ItemGroup>
-
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
