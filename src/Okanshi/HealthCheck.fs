@@ -23,25 +23,3 @@ type HealthChecks private () =
         let dict = new Dictionary<string, bool>()
         healthChecks.ToArray() |> Seq.iter (fun kvp -> dict.Add(kvp.Key, kvp.Value.Invoke()))
         dict
-
-/// Health check monitor
-type HealthCheck(registry : IMonitorRegistry, config : MonitorConfig, check : Func<bool>) =
-    let config' = config.WithTag(DataSourceType.HealthCheck)
-
-    let check' = new Gauge<bool>(config', check)
-    
-    new (config, check) = HealthCheck(DefaultMonitorRegistry.Instance, config, check)
-
-    /// Get value
-    member __.GetValues() = check'.GetValues()
-
-    /// Gets the value and resets the monitor
-    member __.GetValuesAndReset() = check'.GetValuesAndReset()
-    
-    /// The config
-    member __.Config = config'
-
-    interface IMonitor with
-        member self.GetValues() = self.GetValues() |> Seq.cast
-        member self.Config = self.Config
-        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
