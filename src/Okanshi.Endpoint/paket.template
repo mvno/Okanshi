@@ -1,0 +1,34 @@
+type file
+id Okanshi.Endpoint
+title
+    Okanshi.Endpoint
+owners
+    Kim Christensen
+authors 
+    Kim Christensen
+projectUrl
+    https://github.com/mvno/Okanshi
+iconUrl
+    https://raw.githubusercontent.com/mvno/Okanshi/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+language
+    F#
+copyright
+    Copyright 2017
+tags
+    monitoring telemetry metrics http
+summary
+    JSON endpoint for Okanshi
+description
+    JSON endpoint for Okanshi
+
+files
+	../../bin/Okanshi.Endpoint ==> lib
+
+dependencies
+    Okanshi ~> CURRENT:[1]
+    FSharp.Core >= LOCKEDVERSION
+    Newtonsoft.Json >= LOCKEDVERSION

@@ -1,0 +1,34 @@
+type file
+id Okanshi.InfluxDBObserver
+title
+    Okanshi.InfluxDBObserver
+owners
+    Kim Christensen
+authors
+    Kim Christensen
+projectUrl
+    https://github.com/mvno/Okanshi
+iconUrl
+    https://raw.githubusercontent.com/mvno/Okanshi/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+language
+    F#
+copyright
+    Copyright 2017
+tags
+    monitoring telemetry metrics influxdb
+summary
+    Observer for Okanshi pushing data to InfluxDB
+description
+    Observer for Okanshi pushing data to InfluxDB
+
+files
+	../../bin/Okanshi.InfluxDBObserver ==> lib
+
+dependencies
+    FSharp.Core >= LOCKEDVERSION
+    Okanshi ~> CURRENT:[1]
+    InfluxDB.WriteOnly ~> LOCKED:[1]

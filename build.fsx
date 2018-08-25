@@ -118,8 +118,8 @@ Target.create "AssemblyInfo" (fun _ ->
 Target.create "CopyBinaries" (fun _ ->
     !! "src/**/*.??proj"
     -- "src/**/*.shproj"
-    |>  Seq.map (fun f -> ((Path.getDirectory f) </> "bin" </> configuration, "bin" </> (Path.GetFileNameWithoutExtension f)))
-    |>  Seq.iter (fun (fromDir, toDir) -> Shell.copyDir toDir fromDir (fun _ -> true))
+    |>  Seq.map (fun f -> ((Path.getDirectory f) </> "bin" </> configuration, "bin" </> (Path.GetFileNameWithoutExtension f), Path.GetFileNameWithoutExtension f))
+    |>  Seq.iter (fun (fromDir, toDir, project) -> Shell.copyDir toDir fromDir (fun x -> x.EndsWith(project + ".dll") || x.EndsWith(project + ".xml")))
 )
 
 // --------------------------------------------------------------------------------------
