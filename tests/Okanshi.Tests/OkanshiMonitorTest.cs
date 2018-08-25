@@ -1,9 +1,30 @@
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
 namespace Okanshi.Test
 {
-    public class OkanshiMonitorTest
+	/// <summary>
+	/// Messing with default tags should be run in a different context than other tests dealing with tags
+	/// in order for tests to be executable in parallel
+	/// </summary>
+	public class OkanshiMonitorDefaultTagsTest
+	{
+		[Fact]
+		public void When_setting_duplicate_tags_Then_accept_input_but_remove_duplicates()
+		{
+			var duplicateTag = new Tag("a", "b");
+
+			OkanshiMonitor.DefaultTags = 
+				OkanshiMonitor.DefaultTags
+				.Union(new[] {duplicateTag, duplicateTag})
+				.ToArray();
+
+			OkanshiMonitor.DefaultTags.Should().BeEquivalentTo(new[] {duplicateTag});
+		}
+	}
+
+	public class OkanshiMonitorTest
     {
         [Fact]
         public void Asking_for_monitor_with_same_names_always_return_same_monitor()
