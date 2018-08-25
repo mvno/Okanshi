@@ -72,7 +72,7 @@ namespace Okanshi.Test
         public void Timing_a_call_sets_max()
         {
             timer.GetCount();
-            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            stopwatch.Time(Arg.Any<Action>()).Returns(TimeSpan.FromMilliseconds(50));
             timer.Record(() => { });
 
             var max = timer.GetMax();
@@ -84,7 +84,7 @@ namespace Okanshi.Test
         public void Timing_a_call_sets_min()
         {
             timer.GetCount();
-            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            stopwatch.Time(Arg.Any<Action>()).Returns(TimeSpan.FromMilliseconds(50));
             timer.Record(() => { });
 
             var min = timer.GetMin();
@@ -96,7 +96,7 @@ namespace Okanshi.Test
         public void Timing_a_call_sets_total_time()
         {
             timer.GetTotalTime();
-            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            stopwatch.Time(Arg.Any<Action>()).Returns(TimeSpan.FromMilliseconds(50));
             timer.Record(() => { });
 
             var totalTime = timer.GetTotalTime();
@@ -165,7 +165,7 @@ namespace Okanshi.Test
             timer.GetCount();
             var okanshiTimer = timer.Start();
             stopwatch.IsRunning.Returns(true);
-            stopwatch.ElapsedMilliseconds.Returns(50);
+            stopwatch.Elapsed.Returns(TimeSpan.FromMilliseconds(50));
             okanshiTimer.Stop();
 
             var max = timer.GetMax();
@@ -179,7 +179,7 @@ namespace Okanshi.Test
             timer.GetCount();
             var okanshiTimer = timer.Start();
             stopwatch.IsRunning.Returns(true);
-            stopwatch.ElapsedMilliseconds.Returns(50);
+            stopwatch.Elapsed.Returns(TimeSpan.FromMilliseconds(50));
             okanshiTimer.Stop();
 
             var min = timer.GetMin();
@@ -193,7 +193,7 @@ namespace Okanshi.Test
             timer.GetTotalTime();
             var okanshiTimer = timer.Start();
             stopwatch.IsRunning.Returns(true);
-            stopwatch.ElapsedMilliseconds.Returns(50);
+            stopwatch.Elapsed.Returns(TimeSpan.FromMilliseconds(50));
             okanshiTimer.Stop();
 
             var totalTime = timer.GetTotalTime();
@@ -206,9 +206,9 @@ namespace Okanshi.Test
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
+	        timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
-            timer.GetMax().Value.Should().Be(elapsed);
+			timer.GetMax().Value.Should().Be(elapsed);
         }
 
         [Fact]
@@ -216,7 +216,7 @@ namespace Okanshi.Test
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
+            timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetMin().Value.Should().Be(elapsed);
         }
@@ -225,9 +225,9 @@ namespace Okanshi.Test
         public void Manual_registration_sets_count()
         {
             const long elapsed = 1000;
-            timer.Register(elapsed);
+	        timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
-            timer.GetCount().Value.Should().Be(1);
+			timer.GetCount().Value.Should().Be(1);
         }
 
         [Fact]
@@ -235,15 +235,15 @@ namespace Okanshi.Test
         {
             const long elapsed = 1000;
 
-            timer.Register(elapsed);
+	        timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
-            timer.GetTotalTime().Value.Should().Be(elapsed);
+			timer.GetTotalTime().Value.Should().Be(elapsed);
         }
 
         [Fact]
         public void AppdexCalc_satisfied_one_call()
         {
-            timer.Register(900);
+            timer.Register(TimeSpan.FromMilliseconds(900));
 
             timer.GetApDex().Should().Be(1.0);
         }
@@ -251,10 +251,10 @@ namespace Okanshi.Test
         [Fact]
         public void AppdexCalc_satisfied_many_calls()
         {
-            timer.Register(500);
-            timer.Register(600);
-            timer.Register(700);
-            timer.Register(900);
+            timer.Register(TimeSpan.FromMilliseconds(500));
+            timer.Register(TimeSpan.FromMilliseconds(600));
+            timer.Register(TimeSpan.FromMilliseconds(700));
+            timer.Register(TimeSpan.FromMilliseconds(900));
 
             timer.GetApDex().Should().Be(1.0);
         }
@@ -262,7 +262,7 @@ namespace Okanshi.Test
         [Fact]
         public void AppdexCalc_tolerable_one_call()
         {
-            timer.Register(1200);
+            timer.Register(TimeSpan.FromMilliseconds(1200));
 
             timer.GetApDex().Should().Be(0.5);
         }
@@ -270,10 +270,10 @@ namespace Okanshi.Test
         [Fact]
         public void AppdexCalc_tolerable_many_calls()
         {
-            timer.Register(1500);
-            timer.Register(2600);
-            timer.Register(3700);
-            timer.Register(3900);
+            timer.Register(TimeSpan.FromMilliseconds(1500));
+            timer.Register(TimeSpan.FromMilliseconds(2600));
+            timer.Register(TimeSpan.FromMilliseconds(3700));
+            timer.Register(TimeSpan.FromMilliseconds(3900));
 
             timer.GetApDex().Should().Be(0.5);
         }
@@ -281,7 +281,7 @@ namespace Okanshi.Test
         [Fact]
         public void AppdexCalc_frustrated_one_call()
         {
-            timer.Register(4000);
+            timer.Register(TimeSpan.FromMilliseconds(4000));
 
             timer.GetApDex().Should().Be(0);
         }
@@ -289,10 +289,10 @@ namespace Okanshi.Test
         [Fact]
         public void AppdexCalc_frustrated_many_calls()
         {
-            timer.Register(4500);
-            timer.Register(5600);
-            timer.Register(6700);
-            timer.Register(7900);
+            timer.Register(TimeSpan.FromMilliseconds(4500));
+            timer.Register(TimeSpan.FromMilliseconds(5600));
+            timer.Register(TimeSpan.FromMilliseconds(6700));
+            timer.Register(TimeSpan.FromMilliseconds(7900));
 
             timer.GetApDex().Should().Be(0);
         }
@@ -300,9 +300,9 @@ namespace Okanshi.Test
         [Fact]
         public void AppdexCalc_one_of_each_kind()
         {
-            timer.Register(900);
-            timer.Register(2000);
-            timer.Register(4000);
+            timer.Register(TimeSpan.FromMilliseconds(900));
+            timer.Register(TimeSpan.FromMilliseconds(2000));
+            timer.Register(TimeSpan.FromMilliseconds(4000));
 
             timer.GetApDex().Should().Be(0.5);
         }
@@ -310,10 +310,10 @@ namespace Okanshi.Test
         [Fact]
         public void AppdexCalc_rounded_to_2_decimals()
         {
-            timer.Register(900);
-            timer.Register(900);
-            timer.Register(2000);
-            timer.Register(4000);
+            timer.Register(TimeSpan.FromMilliseconds(900));
+            timer.Register(TimeSpan.FromMilliseconds(900));
+            timer.Register(TimeSpan.FromMilliseconds(2000));
+            timer.Register(TimeSpan.FromMilliseconds(4000));
 
             timer.GetApDex().Should().Be(0.63);
         }

@@ -5,12 +5,12 @@ open System.Diagnostics
 open Okanshi.Helpers
 
 type IStopwatch =
-    abstract ElapsedMilliseconds : int64
+    abstract Elapsed : TimeSpan
     abstract IsRunning : bool
     abstract Start : unit -> unit
     abstract Stop : unit -> unit
-    abstract Time : Func<'T> -> ('T * int64)
-    abstract Time : Action -> int64
+    abstract Time : Func<'T> -> ('T * TimeSpan)
+    abstract Time : Action -> TimeSpan
 
 type SystemStopwatch internal() =
     let stopwatch = new Stopwatch()
@@ -19,10 +19,10 @@ type SystemStopwatch internal() =
         stopwatch.Start()
         let result = f()
         stopwatch.Stop()
-        (result, stopwatch.ElapsedMilliseconds)
+        (result, stopwatch.Elapsed)
 
-    member __.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds
-    
+    member __.Elapsed = stopwatch.Elapsed
+
     member __.IsRunning = stopwatch.IsRunning
 
     member __.Start() = stopwatch.Start()
@@ -36,15 +36,15 @@ type SystemStopwatch internal() =
         elapsed
 
     interface IStopwatch with
-        member self.ElapsedMilliseconds = self.ElapsedMilliseconds
+        member self.Elapsed = self.Elapsed
         member self.IsRunning = self.IsRunning
         member self.Start() = self.Start()
         member self.Stop() = self.Stop()
-        member self.Time(f: Func<'T>) : ('T * int64) = self.Time(f)
+        member self.Time(f: Func<'T>) : ('T * TimeSpan) = self.Time(f)
         member self.Time(f: Action) = self.Time(f)
 
 /// Timer that is started and stopped manually
-type OkanshiTimer(onStop : Action<int64>, stopwatchFactory: Func<IStopwatch>) = 
+type OkanshiTimer(onStop : Action<TimeSpan>, stopwatchFactory: Func<IStopwatch>) = 
     let mutable stopwatch = Some <| stopwatchFactory.Invoke()
 
     new(onStop) = OkanshiTimer(onStop, fun () -> SystemStopwatch() :> IStopwatch)
@@ -60,7 +60,7 @@ type OkanshiTimer(onStop : Action<int64>, stopwatchFactory: Func<IStopwatch>) =
         if stopwatch.IsNone then invalidOp "Timer cannot be used multiple times"
         if not stopwatch.Value.IsRunning then invalidOp "Timer not started"
         stopwatch.Value.Stop()
-        onStop.Invoke(stopwatch.Value.ElapsedMilliseconds)
+        onStop.Invoke(stopwatch.Value.Elapsed)
         stopwatch <- None
 
 /// Times System.Action and Systen.Func calls
@@ -94,12 +94,13 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
     let avg = new AverageGauge(config)
     let syncRoot = new obj()
 
-    let updateStatistics' elapsed =
+    let updateStatistics' (elapsed : TimeSpan) =
+        let elapsedMillis = int64(elapsed.TotalMilliseconds)
         count.Increment() |> ignore
-        total.Increment(elapsed)
-        max.Set(elapsed)
-        min.Set(elapsed)
-        avg.Set(float elapsed)
+        total.Increment(elapsedMillis)
+        max.Set(elapsedMillis)
+        min.Set(elapsedMillis)
+        avg.Set(float elapsedMillis)
     
     let updateStatistics elapsed = 
         lockWithArg syncRoot elapsed updateStatistics'
@@ -166,10 +167,10 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
     ///
     /// You should stop the stopwatch before passing so you do not incur the overhead of Okanshi. But it is not a requirement. 
     /// The stopwatch is not stopped by Okanshi.
-    member __.RegisterElapsed(stopwatch : Stopwatch) = stopwatch.ElapsedMilliseconds |> updateStatistics
+    member __.RegisterElapsed(stopwatch : Stopwatch) = updateStatistics stopwatch.Elapsed 
 
     /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
-    member __.Register(elapsed : TimeSpan) = int64(elapsed.TotalMilliseconds) |> updateStatistics
+    member __.Register(elapsed : TimeSpan) = updateStatistics elapsed
 
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
@@ -200,17 +201,18 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     [<Literal>]
     let StatisticKey = "statistic"
     
-    let timer = new BasicTimer(config.WithTag(StatisticKey, ""), stopwatchFactory)
+    let timer = new Timer(config.WithTag(StatisticKey, ""), stopwatchFactory)
     let mutable satisfiedTimingCount = 0
     let mutable tolerableTimingCount = 0
     let syncRoot = new obj()
 
-    let updateStatistics' elapsed =
-        let threshold = int64(toleratableThreshold.TotalMilliseconds)
-        satisfiedTimingCount <- if elapsed < threshold 
+    let updateStatistics' (elapsed : TimeSpan) =
+        let threshold = toleratableThreshold.TotalMilliseconds
+        let elapsedMillis = elapsed.TotalMilliseconds
+        satisfiedTimingCount <- if elapsedMillis < threshold 
                                     then satisfiedTimingCount+1 
                                     else satisfiedTimingCount
-        tolerableTimingCount <- if elapsed >= threshold && elapsed < threshold * int64(4)
+        tolerableTimingCount <- if elapsedMillis >= threshold && elapsedMillis < threshold * 4.0
                                     then tolerableTimingCount+1 
                                     else tolerableTimingCount
         elapsed |> timer.Register 
@@ -267,17 +269,24 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     /// Gets the the total time for all calls within the specified step
     member __.GetTotalTime() = lock syncRoot (fun () -> timer.GetTotalTime())
     
+    /// Calculate the apdex score
     member __.GetApDex() = lock syncRoot calcApdex'
 
     /// Gets the monitor config
-    member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
+    member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Apdex)
     
     /// Start a manually controlled timinig
     member __.Start() =
         OkanshiTimer((fun x -> updateStatistics x), (fun () -> stopwatchFactory.Invoke()))
 
-    /// Manually register a timing, should only be used in special case
-    member __.Register(elapsed) = elapsed |> updateStatistics
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use.
+    ///
+    /// You should stop the stopwatch before passing so you do not incur the overhead of Okanshi. But it is not a requirement. 
+    /// The stopwatch is not stopped by Okanshi.
+    member __.RegisterElapsed(stopwatch : Stopwatch) = updateStatistics stopwatch.Elapsed
+
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    member __.Register(elapsed : TimeSpan) =  updateStatistics elapsed
 
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
@@ -288,5 +297,6 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
         member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
         member self.Start() = self.Start()
-        member self.Register(elapsed) = self.Register(elapsed)
+        member self.RegisterElapsed(elapsed : Stopwatch) = self.RegisterElapsed(elapsed)
+        member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast

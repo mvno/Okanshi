@@ -63,14 +63,14 @@ namespace Okanshi.Test
         [Fact]
         public void Timer_calls_the_callback_with_elapsed_milliseconds()
         {
-            var elapsedMilliseconds = 0L;
-            var timer = new OkanshiTimer(x => elapsedMilliseconds = x);
+            var elapsed = TimeSpan.Zero;
+            var timer = new OkanshiTimer(x => elapsed = x);
 
             timer.Start();
             Thread.Sleep(500);
             timer.Stop();
 
-            elapsedMilliseconds.Should().BeInRange(400, 700);
+            elapsed.TotalMilliseconds.Should().BeInRange(400, 700);
         }
     }
 }
