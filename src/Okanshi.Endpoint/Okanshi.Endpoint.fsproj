@@ -18,8 +18,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Okanshi\Okanshi.fsproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
