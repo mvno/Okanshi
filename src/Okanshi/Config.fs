@@ -107,8 +107,3 @@ type DataSourceType private () =
     static member Rate = 
         { Key = Key
           Value = "rate" }
-    
-    /// A health check value
-    static member HealthCheck = 
-        { Key = Key
-          Value = "healthCheck" }
