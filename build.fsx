@@ -156,7 +156,9 @@ Target.create "Build" (fun _ ->
 Target.create "RunTests" (fun _ ->
     DirectoryInfo("tests").GetDirectories()
     |> Seq.map (fun x -> x.FullName)
-    |> Seq.iter(fun x -> DotNet.test id x)
+    |> Seq.iter(fun x -> DotNet.test (fun p ->
+        {p with
+            Configuration = buildConfiguration }) x)
 )
 
 // --------------------------------------------------------------------------------------
@@ -299,6 +301,17 @@ Target.create "Docs" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Release Scripts
 
+Target.create "ReleaseDocs" (fun _ ->
+    let tempDocsDir = "temp/gh-pages"
+    Shell.cleanDir tempDocsDir
+    Git.Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+
+    Shell.copyRecursive "docs" tempDocsDir true |> Trace.tracefn "%A"
+    Git.Staging.stageAll tempDocsDir
+    Git.Commit.exec tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
+    Git.Branches.push tempDocsDir
+)
+
 //#load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 //open Octokit
 
@@ -360,6 +373,7 @@ Target.create "All" ignore
   ==> "GenerateDocs"
   ==> "NuGet"
   ==> "All"
+  =?> ("ReleaseDocs", BuildServer.buildServer = BuildServer.LocalBuild)
 
 "RunTests" ?=> "CleanDocs"
 
@@ -369,6 +383,9 @@ Target.create "All" ignore
   ==> "GenerateDocs"
 
 "Clean"
+  ==> "Release"
+
+"ReleaseDocs"
   ==> "Release"
 
 "BuildPackage"
