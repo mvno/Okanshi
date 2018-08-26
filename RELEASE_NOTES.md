@@ -11,7 +11,7 @@
 * Basicgauge has been renamed to Gauge, as it was hard to figure out what BasicGauge meant
 * DataPoint has been deleted as it was no longer used internally
 * DataSourceType has been removed, instead descriptive names should be used
-* The tag statitics has been removed from the Timer, this has been replaced by value names
+* The tag statistic has been removed from the Timer, this has been replaced by value names
 
 ### 6.0.0-alpha2
 
