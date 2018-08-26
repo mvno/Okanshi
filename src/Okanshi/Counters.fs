@@ -47,7 +47,7 @@ type Counter(config : MonitorConfig) =
     member __.Increment(amount) = lockWithArg syncRoot amount increment'
     
     /// Gets the configuration
-    member __.Config = config.WithTag(DataSourceType.Counter)
+    member __.Config = config
     
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = Lock.lock syncRoot getValueAndReset'
@@ -79,7 +79,7 @@ type DoubleCounter(config : MonitorConfig) =
     member __.GetValues() = seq { yield Measurement("value", count.Get()) }
     
     /// Gets the configuration
-    member __.Config = config.WithTag(DataSourceType.Rate)
+    member __.Config = config
     
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = seq { yield Measurement("value", count.GetAndSet(0.0)) }
@@ -105,7 +105,7 @@ type CumulativeCounter(config : MonitorConfig) =
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
     /// Gets the configuration
-    member __.Config = config.WithTag(DataSourceType.Counter)
+    member __.Config = config
     
     /// Gets the value and resets the monitor
     member self.GetValuesAndReset() = self.GetValues()

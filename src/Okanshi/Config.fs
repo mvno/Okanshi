@@ -81,29 +81,3 @@ type IMonitor =
 
     /// Gets the values and resets the monitor
     abstract GetValuesAndReset : unit -> IMeasurement seq
-
-/// The types used to indicate the type of a value
-[<AbstractClass; Sealed>]
-type DataSourceType private () = 
-    
-    [<Literal>]
-    static let Key = "dataSource"
-    
-    /// A gauge is a metric that can be sampled without modification
-    ///
-    /// Examples of metrics could be number of connections, disk usage, etc.
-    static member Gauge = 
-        { Key = Key
-          Value = "gauge" }
-    
-    /// A counter is for numeric values that get incremented when some event occurs.
-    ///
-    /// Most counters will be sampled and converted to a rate of change per second.
-    static member Counter = 
-        { Key = Key
-          Value = "counter" }
-    
-    /// A rate is for numeric values that represents a rate per second.
-    static member Rate = 
-        { Key = Key
-          Value = "rate" }

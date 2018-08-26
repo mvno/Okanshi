@@ -48,7 +48,7 @@ type MaxGauge(config : MonitorConfig) =
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
     /// Gets the monitor configuration
-    member __.Config = config.WithTag(DataSourceType.Gauge)
+    member __.Config = config
     
     /// Reset the gauge
     member __.Reset() = value.Set(0L)
@@ -83,7 +83,7 @@ type MinGauge(config : MonitorConfig) =
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
     /// Gets the monitor configuration
-    member __.Config = config.WithTag(DataSourceType.Gauge)
+    member __.Config = config
     
     /// Reset the gauge
     member __.Reset() = value.Set(0L)
@@ -109,7 +109,7 @@ type LongGauge(config : MonitorConfig) =
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
     /// Gets the monitor configuration
-    member __.Config = config.WithTag(DataSourceType.Gauge)
+    member __.Config = config
     
     /// Reset the gauge
     member __.Reset() = value.Set(0L)
@@ -135,7 +135,7 @@ type DoubleGauge(config : MonitorConfig) =
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
     /// Gets the monitor configuration
-    member __.Config = config.WithTag(DataSourceType.Gauge)
+    member __.Config = config
     
     /// Reset the gauge
     member __.Reset() = value.Set(0.0)
@@ -163,7 +163,7 @@ type DecimalGauge(config : MonitorConfig) =
     member __.GetValues() = seq { yield Measurement("value", value.Get()) }
     
     /// Gets the monitor configuration
-    member __.Config = config.WithTag(DataSourceType.Gauge)
+    member __.Config = config
     
     /// Reset the gauge
     member __.Reset() = value.Set(0m)
@@ -205,7 +205,7 @@ type AverageGauge(config : MonitorConfig) =
     member __.GetValues() = Lock.lock syncRoot (fun () -> getValue'() |> List.toSeq)
     
     /// Gets the monitor configuration
-    member __.Config = config.WithTag(DataSourceType.Gauge)
+    member __.Config = config
     
     /// Reset the gauge
     member __.Reset() = Lock.lock syncRoot resetValue'

@@ -1,6 +1,7 @@
 ### 6.0.0
 
 **BREAKING CHANGES**
+
 * `Timer.Register(long)` has been removed. Replace use with `Timer.Register(StopWatch)` or `Timer.Register(TimeSpan)`
 * `OkanshiMonitor.HealthCheck()` has been removed. Replace use with a `Gauge`
 * `LongTaskTimer` has been removed
@@ -9,6 +10,8 @@
 * BasicTimer has been renamed to Timer, as it was hard to figure out what BasicTimer meant
 * Basicgauge has been renamed to Gauge, as it was hard to figure out what BasicGauge meant
 * DataPoint has been deleted as it was no longer used internally
+* DataSourceType has been removed, instead descriptive names should be used
+* The tag statitics has been removed from the Timer, this has been replaced by value names
 
 ### 6.0.0-alpha2
 

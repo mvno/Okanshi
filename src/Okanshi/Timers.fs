@@ -87,14 +87,10 @@ type ITimer =
 
 /// A timer providing the "total time", "count", "min" and "max" for the recordings
 type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
-    
-    [<Literal>]
-    let StatisticKey = "statistic"
-    
-    let max = new MaxGauge(config.WithTag(StatisticKey, "max"))
-    let min = new MinGauge(config.WithTag(StatisticKey, "min"))
-    let count = new Counter(config.WithTag(StatisticKey, "count"))
-    let total = new Counter(config.WithTag(StatisticKey, "totalTime"))
+    let max = new MaxGauge(config)
+    let min = new MinGauge(config)
+    let count = new Counter(config)
+    let total = new Counter(config)
     let avg = new AverageGauge(config)
     let syncRoot = new obj()
 
@@ -160,7 +156,7 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
     member __.GetTotalTime() = lock syncRoot (fun () -> total.GetValues() |> Seq.head)
     
     /// Gets the monitor config
-    member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Rate)
+    member __.Config = config
     
     /// Start a manually controlled timinig
     member __.Start() =
