@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/g9glkc76m1cala6b/branch/master?svg=true)](https://ci.appveyor.com/project/Mvno/okanshi/branch/master) [![Nuget Badge](https://img.shields.io/nuget/v/Okanshi.svg)](https://www.nuget.org/packages/Okanshi/) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/Okanshi.svg)](https://www.nuget.org/packages/Okanshi/)
+
 Okanshi
 =======
 
