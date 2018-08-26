@@ -1,7 +1,6 @@
 image: Visual Studio 2017
 init:
   - git config --global core.autocrlf input
-  - choco install SourceLink
 build_script:
   - cmd: build.cmd
 test: off

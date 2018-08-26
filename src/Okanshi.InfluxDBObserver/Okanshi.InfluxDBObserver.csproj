@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>6.0.0</VersionPrefix>
     <PackageId>Okanshi.InfluxDBObserver</PackageId>
@@ -10,11 +11,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Okanshi\Okanshi.fsproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="InfluxDB.WriteOnly" Version="3.0.1-beta" />
-  </ItemGroup>
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

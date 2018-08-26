@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Namespaces - Okanshi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Kim Christensen"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/Okanshi/content/style.css" />
+    <script type="text/javascript" src="/Okanshi/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/mvno/Okanshi">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/Okanshi/index.html">Okanshi</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+<h1>Okanshi</h1>
+
+
+  <h2>Okanshi Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-atomicdecimal.html">AtomicDecimal</a>
+          </td>
+          <td class="xmldoc">
+          <p>Performs atomic operations on a decimal</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-atomicdouble.html">AtomicDouble</a>
+          </td>
+          <td class="xmldoc">
+          <p>Performs atomic operations on a double</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-atomiclong.html">AtomicLong</a>
+          </td>
+          <td class="xmldoc">
+          <p>Performs atomic operations on a long</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-averagegauge.html">AverageGauge</a>
+          </td>
+          <td class="xmldoc">
+          <p>Gauge that keeps track of the average value since last reset. Initial value is 0.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-counter.html">Counter</a>
+          </td>
+          <td class="xmldoc">
+          <p>Tracking the count between polls</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-cumulativecounter.html">CumulativeCounter</a>
+          </td>
+          <td class="xmldoc">
+          <p>A counter not reset between polls.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-datasourcetype.html">DataSourceType</a>
+          </td>
+          <td class="xmldoc">
+          <p>The types used to indicate the type of a value</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-decimalgauge.html">DecimalGauge</a>
+          </td>
+          <td class="xmldoc">
+          <p>A gauge that reports a decimal value</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-defaultmonitorregistry.html">DefaultMonitorRegistry</a>
+          </td>
+          <td class="xmldoc">
+          <p>The default monitor registry handled as a singleton. Currently this is a OkanshiMonitorRegistry.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-doublecounter.html">DoubleCounter</a>
+          </td>
+          <td class="xmldoc">
+          <p>A simple double counter.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-doublegauge.html">DoubleGauge</a>
+          </td>
+          <td class="xmldoc">
+          <p>A gauge that reports a double value</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-gauge-1.html">Gauge<'T></a>
+          </td>
+          <td class="xmldoc">
+          <p>A gauge implemenation that invokes a func to get the current value</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-healthchecks.html">HealthChecks</a>
+          </td>
+          <td class="xmldoc">
+          <p>Handles healthchecks</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-iatomic-1.html">IAtomic<'T></a>
+          </td>
+          <td class="xmldoc">
+          <p>Perform atomic operations on a type</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-icounter-1.html">ICounter<'T></a>
+          </td>
+          <td class="xmldoc">
+          <p>Tracks how often some event occurs</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-igauge-1.html">IGauge<'T></a>
+          </td>
+          <td class="xmldoc">
+          <p>Monitor type that provides the current value, fx. the percentage of disk space used</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imeasurement.html">IMeasurement</a>
+          </td>
+          <td class="xmldoc">
+          
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imetricobserver.html">IMetricObserver</a>
+          </td>
+          <td class="xmldoc">
+          <p>Observer that can receive updates about metrics</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imetricpoller.html">IMetricPoller</a>
+          </td>
+          <td class="xmldoc">
+          <p>A poller that can be used to fetch the current values for a list of metrics</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imonitor.html">IMonitor</a>
+          </td>
+          <td class="xmldoc">
+          <p>A monitor</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imonitorregistry.html">IMonitorRegistry</a>
+          </td>
+          <td class="xmldoc">
+          <p>Registry to keep track for monitors</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-iprocessingmetricobserver.html">IProcessingMetricObserver</a>
+          </td>
+          <td class="xmldoc">
+          <p>Observer that can receive updates about metrics and return its accumulated values to someone else</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-istopwatch.html">IStopwatch</a>
+          </td>
+          <td class="xmldoc">
+          
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-itimer.html">ITimer</a>
+          </td>
+          <td class="xmldoc">
+          <p>Times System.Action and Systen.Func calls</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-logger.html">Logger</a>
+          </td>
+          <td class="xmldoc">
+          <p>Logging class</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-longgauge.html">LongGauge</a>
+          </td>
+          <td class="xmldoc">
+          <p>A gauge the reports a long value</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-maxgauge.html">MaxGauge</a>
+          </td>
+          <td class="xmldoc">
+          <p>Gauge that keeps track of the maximum value seen since the last reset. Updates should be
+non-negative, the initial value is 0.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-measurement-1.html">Measurement<'a></a>
+          </td>
+          <td class="xmldoc">
+          <p>A measurement from a monitor</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-memorymetricobserver.html">MemoryMetricObserver</a>
+          </td>
+          <td class="xmldoc">
+          <p>Metric observer storing the specified number of observations in memory</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-metric.html">Metric</a>
+          </td>
+          <td class="xmldoc">
+          <p>The metric type</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-metricmonitorregistrypoller.html">MetricMonitorRegistryPoller</a>
+          </td>
+          <td class="xmldoc">
+          <p>Poller for fetching metrics from a monitor registry</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-mingauge.html">MinGauge</a>
+          </td>
+          <td class="xmldoc">
+          <p>Gauge that keeps track of the minimum value seen since the last reset. Updates should be
+non-negative, the initial value is 0.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-monitorconfig.html">MonitorConfig</a>
+          </td>
+          <td class="xmldoc">
+          <p>Configuration of a monitor</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-monitorfactory.html">MonitorFactory</a>
+          </td>
+          <td class="xmldoc">
+          <p>Type representing a monitor factory</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-monitorkey.html">MonitorKey</a>
+          </td>
+          <td class="xmldoc">
+          <p>Tuple representing a key used to identify a monitor</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-okanshimonitor.html">OkanshiMonitor</a>
+          </td>
+          <td class="xmldoc">
+          <p>Static use of monitors</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-okanshimonitorregistry.html">OkanshiMonitorRegistry</a>
+          </td>
+          <td class="xmldoc">
+          <p>Monitor registry used by the OkanshiMonitor. This registry allows registration of monitors
+with the same name, but different types</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-okanshitimer.html">OkanshiTimer</a>
+          </td>
+          <td class="xmldoc">
+          <p>Timer that is started and stopped manually</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-performancecounterconfig.html">PerformanceCounterConfig</a>
+          </td>
+          <td class="xmldoc">
+          <p>Performance counter configuration</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-performancecountermonitor.html">PerformanceCounterMonitor</a>
+          </td>
+          <td class="xmldoc">
+          <p>Used to monitor Windows performance counters. Be aware that some performance counters, requires multiple readings before
+returning any value.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-systemstopwatch.html">SystemStopwatch</a>
+          </td>
+          <td class="xmldoc">
+          
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-tag.html">Tag</a>
+          </td>
+          <td class="xmldoc">
+          <p>A tag used to attach information to a monitor</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-timer.html">Timer</a>
+          </td>
+          <td class="xmldoc">
+          <p>A timer providing the "total time", "count", "min" and "max" for the recordings</p>
+
+
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Endpoint Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-dependency.html">Dependency</a>
+          </td>
+          <td class="xmldoc">
+          <p>Dependecy information</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-endpointoptions.html">EndpointOptions</a>
+          </td>
+          <td class="xmldoc">
+          <p>Api options</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-monitorendpoint.html">MonitorEndpoint</a>
+          </td>
+          <td class="xmldoc">
+          <p>Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-package.html">Package</a>
+          </td>
+          <td class="xmldoc">
+          <p>Pacakge information</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-endpoint-response-1.html">Response<'T></a>
+          </td>
+          <td class="xmldoc">
+          <p>Response object</p>
+
+
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Helpers Namespace</h2>
+    <div>
+      <table class="table table-bordered module-list">
+    <thead>
+      <tr><td>Module</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="module-name">
+            <a href="okanshi-helpers-lock.html">Lock</a>
+          </td>
+          <td class="xmldoc">
+          
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Observers Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-observers-influxdbobserveroptions.html">InfluxDbObserverOptions</a>
+          </td>
+          <td class="xmldoc">
+          <p>Options for the InfluxDB observer</p>
+
+
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.Owin Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-owin-okanshimiddleware.html">OkanshiMiddleware</a>
+          </td>
+          <td class="xmldoc">
+          <p>The Okanshi middleware</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-owin-okanshiowinoptions.html">OkanshiOwinOptions</a>
+          </td>
+          <td class="xmldoc">
+          <p>Okanshi options</p>
+
+
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+
+        </div>
+        <div class="span3">
+          <img src="/Okanshi/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">Okanshi</li>
+            <li><a href="/Okanshi/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/Okanshi">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/mvno/Okanshi">Source Code on GitHub</a></li>
+            <li><a href="/Okanshi/license.html">License</a></li>
+            <li><a href="/Okanshi/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/Okanshi/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/Okanshi/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/mvno/Okanshi"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

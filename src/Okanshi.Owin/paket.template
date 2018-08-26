@@ -1,0 +1,34 @@
+type file
+id Okanshi.Owin
+title
+    Okanshi.Owin
+owners
+    Kim Christensen
+authors
+    Kim Christensen
+projectUrl
+    https://github.com/mvno/Okanshi
+iconUrl
+    https://raw.githubusercontent.com/mvno/Okanshi/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+language
+    F#
+copyright
+    Copyright 2017
+tags
+    monitoring telemetry metrics owin
+summary
+    Okanshi support for OWIN
+description
+    Okanshi support for OWIN
+
+files
+	../../bin/Okanshi.Owin ==> lib
+
+dependencies
+    FSharp.Core >= LOCKEDVERSION
+    Owin ~> LOCKED:[1]
+    Okanshi ~> CURRENT:[1]

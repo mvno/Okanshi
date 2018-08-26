@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>release-notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="In-process monitoring library"/>
+    <meta name="author" content="Kim Christensen"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/Okanshi/content/style.css" />
+    <script type="text/javascript" src="/Okanshi/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/mvno/Okanshi">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/Okanshi/index.html">Okanshi</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h3><a name="6-0-0" class="anchor" href="#6-0-0">6.0.0</a></h3>
+<p><strong>BREAKING CHANGES</strong>
+<em> <code>Timer.Register(long)</code> has been removed. Replace use with <code>Timer.Register(StopWatch)</code> or <code>Timer.Register(TimeSpan)</code>
+</em> <code>OkanshiMonitor.HealthCheck()</code> has been removed. Replace use with a <code>Gauge</code>
+<em> <code>LongTaskTimer</code> has been removed
+</em> BasicCounter has been renamed to CumulativeCounter to better explain what it does
+<em> PeakRateCounter has been renamed to Counter, as it was hard to figure out what PeakRateCounter meant
+</em> BasicTimer has been renamed to Timer, as it was hard to figure out what BasicTimer meant
+<em> Basicgauge has been renamed to Gauge, as it was hard to figure out what BasicGauge meant
+</em> DataPoint has been deleted as it was no longer used internally</p>
+<h3><a name="6-0-0-alpha2" class="anchor" href="#6-0-0-alpha2">6.0.0-alpha2</a></h3>
+<p><strong>BREAKING CHANGES</strong></p>
+<ul>
+<li>Drop support for submonitors, instead return multiple values. This fixes a race condition caused by treating submonitors as individual monitors.</li>
+</ul>
+<h3><a name="6-0-0-alpha" class="anchor" href="#6-0-0-alpha">6.0.0-alpha</a></h3>
+<ul>
+<li>Add PollMetrics to IMetricPoller interface, this was not added to the interface by mistake</li>
+<li>Support for waiting for polling and observer sending to complete, this is done by returning Task from observer actions and the pollers PollMetrics method.</li>
+</ul>
+<h3><a name="5-0-0" class="anchor" href="#5-0-0">5.0.0</a></h3>
+<p>All fixes in the beta releases, see below</p>
+<h3><a name="5-0-0-beta9" class="anchor" href="#5-0-0-beta9">5.0.0-beta9</a></h3>
+<ul>
+<li>Fix bug in exception handling in InfluxDBObserver</li>
+</ul>
+<h3><a name="5-0-0-beta8" class="anchor" href="#5-0-0-beta8">5.0.0-beta8</a></h3>
+<ul>
+<li>Log when sendings metrics to InfluxDB fails</li>
+</ul>
+<h3><a name="5-0-0-beta7" class="anchor" href="#5-0-0-beta7">5.0.0-beta7</a></h3>
+<ul>
+<li>The method Register on the interface Registry has been removed</li>
+<li>SystemClock and ManualClock has been removed, as this is no longer need after 5.0.0-beta2</li>
+<li>Logging class added</li>
+</ul>
+<h3><a name="5-0-0-beta6" class="anchor" href="#5-0-0-beta6">5.0.0-beta6</a></h3>
+<ul>
+<li>Fix bug in timer which could make the average zero in cases where the submonitors were read before the average</li>
+</ul>
+<h3><a name="5-0-0-beta5" class="anchor" href="#5-0-0-beta5">5.0.0-beta5</a></h3>
+<ul>
+<li>Fix bug in average gauge which made the average incorrect</li>
+</ul>
+<h3><a name="5-0-0-beta4" class="anchor" href="#5-0-0-beta4">5.0.0-beta4</a></h3>
+<ul>
+<li>Add support for override the field types in the InfluxDB observer</li>
+</ul>
+<h3><a name="5-0-0-beta3" class="anchor" href="#5-0-0-beta3">5.0.0-beta3</a></h3>
+<ul>
+<li>Fix bug in the InfluxDB observer where it couldn't handle 64-bit integers correctly</li>
+</ul>
+<h3><a name="5-0-0-beta2" class="anchor" href="#5-0-0-beta2">5.0.0-beta2</a></h3>
+<p><strong>BREAKING CHANGES</strong>
+* Introduce submonitors to allowing grouping of monitors. This means that submonitors no longer should be registered in the registry, instead submonitors should be returned by <code>GetAllMonitors()</code>. This allows more control in the obsservers to decide how to process the information. Currently the InfluxDbObserver doesn't support submonitors with submonitors.</p>
+<h3><a name="5-0-0-beta" class="anchor" href="#5-0-0-beta">5.0.0-beta</a></h3>
+<p><strong>BREAKING CHANGES</strong>
+* Added GetOrAdd to Registry interface, this enables the caching of monitors to only occur in the registry. The Register have also been made obsolete.</p>
+<h3><a name="4-0-4" class="anchor" href="#4-0-4">4.0.4</a></h3>
+<ul>
+<li>Fix problem where locks weren't released correctly, causing deadlocks.</li>
+</ul>
+<h3><a name="4-0-3" class="anchor" href="#4-0-3">4.0.3</a></h3>
+<ul>
+<li>Update InfluxDB.WriteOnly package, to fix a problem were int64 was not supported.</li>
+</ul>
+<h3><a name="4-0-2" class="anchor" href="#4-0-2">4.0.2</a></h3>
+<ul>
+<li>Fixed bug where diposing the InfluxDB observer, would cause the underlying poller to be stopped.</li>
+</ul>
+<h3><a name="4-0-1" class="anchor" href="#4-0-1">4.0.1</a></h3>
+<ul>
+<li>Fixed bug in the InfluxDB observer, causing all tags converted to fields to only allow floats.</li>
+</ul>
+<h3><a name="4-0-0" class="anchor" href="#4-0-0">4.0.0</a></h3>
+<ul>
+<li>Automatic polling on metrics on process exit, now also supports AppDomain unloads</li>
+<li>Fix dependencies on NuGet package</li>
+<li>Implemented InfluxDB observer for pushing metrics to InfluxDB. It is released in a separate package, Okanshi.InfluxDBObserver.</li>
+<li>Add new NuGet package with support for OWIN.</li>
+<li>Added support for registering a custom timing by providing a number describing the elapsed number of milliseconds.</li>
+<li>Improved performance when using OkanshiMonitor to get monitors</li>
+<li>Ensured thread safety in metric types by using locks where needed</li>
+<li>Added new gauge, AverageGauge, for calculating average value for a specific interval</li>
+</ul>
+<h3><a name="4-0-0-beta" class="anchor" href="#4-0-0-beta">4.0.0-beta</a></h3>
+<p><strong>BREAKING CHANGES</strong></p>
+<ul>
+<li>Renames DurationTimer to LongTaskTimer</li>
+<li>BasicTimer now has both rate and count. This means the old count value (which was a rate), now is a counter</li>
+<li>Make totalTime value in BasicTimer as counter instead of a rate</li>
+</ul>
+<p><strong>Other</strong></p>
+<ul>
+<li>Fix bug when multiple tags where used</li>
+<li>Add support for using HealthChecks as a monitor</li>
+<li>Support for monitoring Windows performance counters</li>
+<li>Support for automatically poll of metrics when process is about to exit, the default behaviour is not to poll</li>
+<li>Support for manual timing of operations, using the Start() method on the existing timers, which returns an object that when stopped registers timing to the timer.</li>
+<li>Improved performance of timers and counters using time windows by ~75%</li>
+<li>Fix bug where the PeakRateCounter would not respect maximum value when decremented</li>
+<li>Added Reset method to gauges as resetting gauges was described in the documentation, but not possible</li>
+</ul>
+<h3><a name="3-1-0" class="anchor" href="#3-1-0">3.1.0</a></h3>
+<p>Allow setting custom tags on metrics generated through OkanshiMonitor.
+For example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">OkanshiMonitor.BasicTimer(<span class="s">"Test"</span>, <span class="k">new</span>[] { <span class="k">new</span> Tag(<span class="s">"CustomerTag"</span>, <span class="s">"CustomValue"</span>) });
+</code></pre></td></tr></table>
+<p><strong>Fixed bugs</strong></p>
+<ul>
+<li>OkanshiMonitor.DurationTimer now correctly returns a DurationTimer</li>
+<li>DurationTimer now also registers the "total duration in seconds" gauge</li>
+</ul>
+<h3><a name="3-0-0" class="anchor" href="#3-0-0">3.0.0</a></h3>
+<ul>
+<li>No longer ILMerge dependencies</li>
+<li>BREAKING: Total rewrite of the metrics structure to make it easy to control and customize</li>
+</ul>
+<h3><a name="2-1-0" class="anchor" href="#2-1-0">2.1.0</a></h3>
+<ul>
+<li>Added endpoint (/packages) which lists the nuget packages used at compile time for this application using the content of the packages.config file, if it is found in the application directory.</li>
+</ul>
+<h3><a name="2-0-0" class="anchor" href="#2-0-0">2.0.0</a></h3>
+<ul>
+<li>
+Add version information to response from API
+<ul>
+<li>This is done to allow extending the response in future releases</li>
+</ul>
+</li>
+<li>ILMerge dependencies into Okanshi assembly</li>
+</ul>
+<h3><a name="1-0-1" class="anchor" href="#1-0-1">1.0.1</a></h3>
+<ul>
+<li>Fix bug where CSharp.Monitor would not be usable in conjuction with the API</li>
+</ul>
+<h3><a name="1-0-0" class="anchor" href="#1-0-0">1.0.0</a></h3>
+<ul>
+<li>Intial project release</li>
+</ul>
+
+
+        </div>
+        <div class="span3">
+          <img src="/Okanshi/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">Okanshi</li>
+            <li><a href="/Okanshi/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/Okanshi">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/mvno/Okanshi">Source Code on GitHub</a></li>
+            <li><a href="/Okanshi/license.html">License</a></li>
+            <li><a href="/Okanshi/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/Okanshi/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/Okanshi/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/mvno/Okanshi"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

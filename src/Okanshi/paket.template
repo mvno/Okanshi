@@ -1,0 +1,32 @@
+type file
+id Okanshi
+title
+    Okanshi
+owners
+    Kim Christensen
+authors 
+    Kim Christensen
+projectUrl
+    https://github.com/mvno/Okanshi
+iconUrl
+    https://raw.githubusercontent.com/mvno/Okanshi/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+language
+    F#
+copyright
+    Copyright 2017
+tags
+    monitoring telemetry metrics
+summary
+    In-process monitoring library
+description
+    In-process monitoring library. Monitor individual services in-process and collect data somewhere else.
+
+files
+	../../bin/Okanshi ==> lib
+
+dependencies
+    FSharp.Core >= LOCKEDVERSION
