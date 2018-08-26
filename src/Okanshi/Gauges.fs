@@ -20,7 +20,7 @@ type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
     member __.GetValues() = seq { yield Measurement("value", getValue.Invoke()) }
     
     /// Gets the monitor configuration
-    member __.Config = config.WithTag(DataSourceType.Gauge)
+    member __.Config = config
     
     /// Gets the value and resets the monitor
     member self.GetValuesAndReset() = self.GetValues()
