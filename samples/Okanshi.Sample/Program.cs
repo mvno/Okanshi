@@ -37,10 +37,10 @@ namespace Okanshi.Sample
                 int result;
                 if (!Int32.TryParse(value, out result)) {
                     Console.WriteLine("Invalid number, try again...");
-                    OkanshiMonitor.Counter("InvalidNumbers").Increment();
+                    OkanshiMonitor.Counter("Numbers", new[] { new Tag("state", "Valid") }).Increment();
                     continue;
                 }
-                OkanshiMonitor.Counter("ValidNumbers").Increment();
+                OkanshiMonitor.Counter("Numbers", new[] { new Tag("state", "Invalid") }).Increment();
                 OkanshiMonitor.AverageGauge("AverageNumber").Set(result);
                 OkanshiMonitor.MinGauge("MinimumNumber").Set(result);
                 OkanshiMonitor.MaxGauge("MaximumNumber").Set(result);
