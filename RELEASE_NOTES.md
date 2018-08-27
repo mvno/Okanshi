@@ -12,6 +12,7 @@
 * DataPoint has been deleted as it was no longer used internally
 * DataSourceType has been removed, instead descriptive names should be used
 * The tag statistic has been removed from the Timer, this has been replaced by value names
+* `OkanshiMonitor.DefaultTags` has been change to an `ISet<Tag>` to make it clear how duplicates are handled
 
 ### 6.0.0-alpha2
 

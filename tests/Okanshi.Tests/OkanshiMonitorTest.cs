@@ -38,5 +38,16 @@ namespace Okanshi.Test
                 .Should()
                 .NotBeSameAs(OkanshiMonitor.Timer("Test", new[] { new Tag("tag2", "value") }));
         }
+
+        [Fact]
+        public void Adding_identical_tags_to_default_tags_results_in_only_a_single_entry()
+        {
+            var tag = new Tag("key", "value");
+            OkanshiMonitor.DefaultTags.Add(tag);
+            OkanshiMonitor.DefaultTags.Add(tag);
+
+            OkanshiMonitor.DefaultTags.Should().HaveCount(1);
+            OkanshiMonitor.DefaultTags.Should().BeEquivalentTo(new[] { tag });
+        }
     }
 }

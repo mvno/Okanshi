@@ -13,7 +13,7 @@ type MonitorFactory = unit -> IMonitor
 [<AbstractClass; Sealed>]
 type OkanshiMonitor private () = 
     static let monitorRegistry = DefaultMonitorRegistry.Instance
-    static let defaultTags = new HashSet<Tag>();
+    static let mutable defaultTags = new HashSet<Tag>() :> ISet<Tag>;
     static let defaultStep = TimeSpan.FromMinutes(float 1)
     
     /// Gets the default step size
@@ -21,11 +21,10 @@ type OkanshiMonitor private () =
     
     /// Gets the default tags added to all monitors created
     static member DefaultTags
-        with get () = defaultTags :> seq<Tag>
+        with get () = defaultTags
         /// Sets the default tags added to all monitors created
-        and set (value : Tag seq) = 
-            defaultTags.Clear()
-            value |> Seq.iter (fun x -> defaultTags.Add(x) |> ignore)
+        and set (value: ISet<Tag>) =
+            defaultTags <- value
     
     /// Get or add a CumulativeCounter
     static member CumulativeCounter(name : string) = OkanshiMonitor.CumulativeCounter(name, [||])
