@@ -7,14 +7,6 @@ namespace Okanshi.Test
     public class MaxGaugeTest
     {
         [Fact]
-        public void Gauge_tag_is_added_to_configuration()
-        {
-            var gauge = new MaxGauge(MonitorConfig.Build("Test"));
-
-            gauge.Config.Tags.Should().Contain(DataSourceType.Gauge);
-        }
-
-        [Fact]
         public void Initial_value_is_zero()
         {
             var gauge = new MaxGauge(MonitorConfig.Build("Test"));

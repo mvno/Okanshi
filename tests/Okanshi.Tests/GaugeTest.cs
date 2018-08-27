@@ -6,14 +6,6 @@ namespace Okanshi.Test
 {
     public class GaugeTest
     {
-        [Fact]
-        public void Gauge_tag_is_added_to_configuration()
-        {
-            var gauge = new Gauge<int>(MonitorConfig.Build("Test"), () => 0);
-
-            gauge.Config.Tags.Should().Contain(DataSourceType.Gauge);
-        }
-
         [Theory]
         [InlineData(1)]
         [InlineData(10)]

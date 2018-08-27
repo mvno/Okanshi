@@ -14,12 +14,6 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Gauge_tag_is_added_to_configuration()
-        {
-            gauge.Config.Tags.Should().Contain(DataSourceType.Gauge);
-        }
-
-        [Fact]
         public void Initial_value_is_zero()
         {
             gauge.GetValues().First().Value.Should().Be(0);

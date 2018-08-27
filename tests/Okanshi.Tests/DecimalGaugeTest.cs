@@ -7,14 +7,6 @@ namespace Okanshi.Test
     public class DecimalGaugeTest
     {
         [Fact]
-        public void Gauge_tag_is_added_to_configuration()
-        {
-            var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
-
-            gauge.Config.Tags.Should().Contain(DataSourceType.Gauge);
-        }
-
-        [Fact]
         public void Initial_value_is_zero()
         {
             var gauge = new DecimalGauge(MonitorConfig.Build("Test"));
