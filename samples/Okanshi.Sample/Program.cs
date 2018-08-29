@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 
 namespace Okanshi.Sample
 {
+    // The point for this sample is to showcase the different kinds for monitors,
+    // and how they could be used.
     public class Program
     {
         public static readonly AutoResetEvent closing = new AutoResetEvent(false);

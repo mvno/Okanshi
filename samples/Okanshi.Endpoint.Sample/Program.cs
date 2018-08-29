@@ -6,6 +6,7 @@ namespace Okanshi.Endpoint.Sample
 {
     class Program
     {
+        // The point of this sample to is to showcase the use of the HTTP endpoint
         static void Main(string[] args)
         {
             // Get the default registry instance. This is the registry used when adding metrics
