@@ -15,6 +15,8 @@ Samples & documentation
 
 The library comes with comprehensible documentation. 
 
+ * [Samples](samples) contains some different samples showcasing different parts of Okanshi.
+
  * [Tutorial](documentation) contains a further explanation of this library.
 
  * [API Reference](http://mvno.github.io/Okanshi/reference/index.html) contains automatically generated documentation for all types, modules
