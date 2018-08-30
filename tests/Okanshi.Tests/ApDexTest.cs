@@ -238,6 +238,11 @@ namespace Okanshi.Test
 	        timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
 			timer.GetTotalTime().Value.Should().Be(elapsed);
+
+        [Fact]
+        public void AppdexCalc_zero_calls()
+        {
+            timer.GetApDex().Should().Be(0);
         }
 
         [Fact]

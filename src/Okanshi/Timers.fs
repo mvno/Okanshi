@@ -220,10 +220,13 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     let updateStatistics elapsed = 
         lockWithArg syncRoot elapsed updateStatistics'
     
-    let calcApdex'() =  
-        let index = (float(satisfiedTimingCount) + (float(tolerableTimingCount)/2.0)) / float(timer.GetCount().Value)
-        let rounded = System.Math.Round(index, 2, MidpointRounding.AwayFromZero)
-        rounded
+    let calcApdex'() : float =  
+        match timer.GetCount().Value with
+        | 0L -> 0.0
+        | _ -> 
+            let index = (float(satisfiedTimingCount) + (float(tolerableTimingCount)/2.0)) / float(timer.GetCount().Value)
+            let rounded = System.Math.Round(index, 2, MidpointRounding.AwayFromZero)
+            rounded
 
     let getValues' () =
         seq {
