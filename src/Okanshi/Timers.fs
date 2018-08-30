@@ -197,6 +197,9 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
 /// ( Satisfied + (Tolerating/2) ) / Total number of requests
 ///
 /// see http://www.apdex.org/overview.html 
+/// 
+/// The apdex uses a timer internally for its bookkeeping, and returns all data from it. Thus you can do both apdex calculations 
+/// and keep track of the actual time spent beyond the (im)precision of the Apdex score
 type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, toleratableThreshold: TimeSpan) as self = 
     [<Literal>]
     let StatisticKey = "statistic"
