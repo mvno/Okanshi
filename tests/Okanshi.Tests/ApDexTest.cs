@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using FluentAssertions;
@@ -8,15 +7,15 @@ using NSubstitute;
 
 namespace Okanshi.Test
 {
-    public class TimerTest
+    public class ApdexTest
     {
         private readonly IStopwatch stopwatch = Substitute.For<IStopwatch>();
-        private readonly Timer timer;
+        private readonly ApdexTimer timer;
 
-        public TimerTest()
+        public ApdexTest()
         {
             DefaultMonitorRegistry.Instance.Clear();
-            timer = new Timer(MonitorConfig.Build("Test"), () => stopwatch);
+            timer = new ApdexTimer(MonitorConfig.Build("Test"), () => stopwatch, TimeSpan.FromSeconds(1));
         }
 
         [Fact]
@@ -206,7 +205,7 @@ namespace Okanshi.Test
         public void Manual_registration_updates_sets_max()
         {
             const long elapsed = 1000;
-            
+
             timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetMax().Value.Should().Be(elapsed);
@@ -226,14 +225,13 @@ namespace Okanshi.Test
         public void Manual_registration_sets_count()
         {
             const long elapsed = 1000;
-
             timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetCount().Value.Should().Be(1);
         }
 
         [Fact]
-        public void Manual_registration_with_long_sets_total_time()
+        public void Manual_registration_sets_total_time()
         {
             const long elapsed = 1000;
 
@@ -243,42 +241,94 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Manual_registration_with_timespan_sets_total_time()
+        public void AppdexCalc_zero_calls()
         {
-            timer.Register(TimeSpan.FromSeconds(1));
-
-            timer.GetTotalTime().Value.Should().Be(1000);
-        }
-
-
-        [Fact]
-        public void Manual_registration_with_stopwatch_sets_total_time()
-        {
-            var sw = Stopwatch.StartNew();
-            Thread.Sleep(50);
-            sw.Stop();
-
-            timer.RegisterElapsed(sw);
-
-            timer.GetTotalTime().Value.Should().Be(sw.ElapsedMilliseconds);
+            timer.GetApDex().Should().Be(0);
         }
 
         [Fact]
-        public void Manual_registrations_accumulate_total_time()
+        public void AppdexCalc_satisfied_one_call()
         {
-            const long elapsed = 1000;
+            timer.Register(TimeSpan.FromMilliseconds(900));
 
-            timer.Register(TimeSpan.FromMilliseconds(elapsed));
-            timer.Register(TimeSpan.FromMilliseconds(elapsed));
+            timer.GetApDex().Should().Be(1.0);
+        }
 
-            timer.GetTotalTime().Value.Should().Be(2 * elapsed);
+        [Fact]
+        public void AppdexCalc_satisfied_many_calls()
+        {
+            timer.Register(TimeSpan.FromMilliseconds(500));
+            timer.Register(TimeSpan.FromMilliseconds(600));
+            timer.Register(TimeSpan.FromMilliseconds(700));
+            timer.Register(TimeSpan.FromMilliseconds(900));
+
+            timer.GetApDex().Should().Be(1.0);
+        }
+
+        [Fact]
+        public void AppdexCalc_tolerable_one_call()
+        {
+            timer.Register(TimeSpan.FromMilliseconds(1200));
+
+            timer.GetApDex().Should().Be(0.5);
+        }
+
+        [Fact]
+        public void AppdexCalc_tolerable_many_calls()
+        {
+            timer.Register(TimeSpan.FromMilliseconds(1500));
+            timer.Register(TimeSpan.FromMilliseconds(2600));
+            timer.Register(TimeSpan.FromMilliseconds(3700));
+            timer.Register(TimeSpan.FromMilliseconds(3900));
+
+            timer.GetApDex().Should().Be(0.5);
+        }
+
+        [Fact]
+        public void AppdexCalc_frustrated_one_call()
+        {
+            timer.Register(TimeSpan.FromMilliseconds(4000));
+
+            timer.GetApDex().Should().Be(0);
+        }
+
+        [Fact]
+        public void AppdexCalc_frustrated_many_calls()
+        {
+            timer.Register(TimeSpan.FromMilliseconds(4500));
+            timer.Register(TimeSpan.FromMilliseconds(5600));
+            timer.Register(TimeSpan.FromMilliseconds(6700));
+            timer.Register(TimeSpan.FromMilliseconds(7900));
+
+            timer.GetApDex().Should().Be(0);
+        }
+
+        [Fact]
+        public void AppdexCalc_one_of_each_kind()
+        {
+            timer.Register(TimeSpan.FromMilliseconds(900));
+            timer.Register(TimeSpan.FromMilliseconds(2000));
+            timer.Register(TimeSpan.FromMilliseconds(4000));
+
+            timer.GetApDex().Should().Be(0.5);
+        }
+
+        [Fact]
+        public void AppdexCalc_rounded_to_2_decimals()
+        {
+            timer.Register(TimeSpan.FromMilliseconds(900));
+            timer.Register(TimeSpan.FromMilliseconds(900));
+            timer.Register(TimeSpan.FromMilliseconds(2000));
+            timer.Register(TimeSpan.FromMilliseconds(4000));
+
+            timer.GetApDex().Should().Be(0.63);
         }
 
         [Fact]
         public void Values_are_correct()
         {
             var values = timer.GetValues().Select(x => x.Name);
-            values.Should().BeEquivalentTo("value", "max", "min", "count", "totalTime");
+            values.Should().BeEquivalentTo("value", "max", "min", "count", "totalTime", "apdex");
         }
     }
 }
