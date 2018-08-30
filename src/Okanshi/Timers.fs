@@ -228,7 +228,7 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
             let rounded = System.Math.Round(index, 2, MidpointRounding.AwayFromZero)
             rounded
 
-    let getValues' () =
+    let getValues'() =
         seq {
             yield! timer.GetValues() 
             yield! [| new Measurement<float>("apdex", calcApdex'()) :> IMeasurement |]
