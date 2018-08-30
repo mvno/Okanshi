@@ -273,7 +273,7 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     member __.GetApDex() = lock syncRoot calcApdex'
 
     /// Gets the monitor config
-    member __.Config = config.WithTag(StatisticKey, "avg").WithTag(DataSourceType.Apdex)
+    member __.Config = config
     
     /// Start a manually controlled timinig
     member __.Start() =
