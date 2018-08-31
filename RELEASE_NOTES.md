@@ -13,6 +13,7 @@
 * DataSourceType has been removed, instead descriptive names should be used
 * The tag statistic has been removed from the Timer, this has been replaced by value names
 * `OkanshiMonitor.DefaultTags` has been change to an `ISet<Tag>` to make it clear how duplicates are handled
+* InfluxDB.WriteOnly dependency has been updated to version 3.1.0
 
 ### 6.0.0-alpha2
 
