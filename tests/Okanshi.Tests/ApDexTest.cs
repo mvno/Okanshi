@@ -51,14 +51,6 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Initial_value_is_zero()
-        {
-            var value = timer.GetValues();
-
-            value.First().Value.Should().Be(0.0);
-        }
-
-        [Fact]
         public void Timing_a_call_sets_count()
         {
             timer.GetCount();
@@ -243,7 +235,10 @@ namespace Okanshi.Test
         [Fact]
         public void Values_are_correct()
         {
+			timer.Register(TimeSpan.Zero);
+
             var values = timer.GetValues().Select(x => x.Name);
+
             values.Should().BeEquivalentTo("value", "max", "min", "count", "totalTime", "apdex");
         }
     }
@@ -268,7 +263,29 @@ namespace Okanshi.Test
 		[Fact]
 		public void AppdexCalc_zero_calls()
 		{
-			timer.GetApDex().Should().Be(1);
+			timer.GetApDex().Should().Be(-1);
+		}
+
+		[Fact]
+		public void Getvalues_when_0_calls()
+		{
+			timer.GetValues().ShouldBeEquivalentTo(new IMeasurement[0]);
+		}
+
+		[Fact]
+		public void Getvalues_when_1_call()
+		{
+			timer.Record(() => { });
+
+			timer.GetValues().Count(x => x.Name == "apdex").Should().Be(1);
+		}
+
+		[Fact]
+		public void Getvalues_when_1_fcall()
+		{
+			timer.Record(() => { return 1;});
+
+			timer.GetValues().Count(x => x.Name == "apdex").Should().Be(1);
 		}
 
 		[Fact]
@@ -366,13 +383,6 @@ namespace Okanshi.Test
 
 			i.Should().Be(1);
 			timer.GetApDex().Should().Be(1);
-		}
-
-		[Fact]
-		public void Values_are_correct()
-		{
-			var values = timer.GetValues().Select(x => x.Name);
-			values.Should().BeEquivalentTo("value", "max", "min", "count", "totalTime", "apdex");
 		}
 	}
 }

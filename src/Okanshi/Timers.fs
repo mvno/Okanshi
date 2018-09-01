@@ -227,17 +227,19 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     
     let calcApdex'() : float =  
         match timer.GetCount().Value with
-        | 0L -> 1.0
+        | 0L -> -1.0
         | _ -> 
             let index = (float(satisfiedTimings) + (float(tolerableTimings)/2.0)) / float(timer.GetCount().Value)
             let rounded = System.Math.Round(index, 2, MidpointRounding.AwayFromZero)
             rounded
 
     let getValues'() =
-        seq {
-            yield! timer.GetValues() 
-            yield! [| new Measurement<float>("apdex", calcApdex'()) :> IMeasurement |]
-        }
+        if timer.GetCount().Value = 0L 
+        then [||] :> seq<IMeasurement>
+        else seq {
+                yield! timer.GetValues() 
+                yield! [| new Measurement<float>("apdex", calcApdex'()) :> IMeasurement |]
+            }
 
     let reset'() =
         timer.GetValuesAndReset() |> ignore
