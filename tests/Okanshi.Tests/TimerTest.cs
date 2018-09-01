@@ -73,7 +73,7 @@ namespace Okanshi.Test
         public void Timing_a_call_sets_max()
         {
             timer.GetCount();
-            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            stopwatch.Time(Arg.Any<Action>()).Returns(TimeSpan.FromMilliseconds(50));
             timer.Record(() => { });
 
             var max = timer.GetMax();
@@ -85,7 +85,7 @@ namespace Okanshi.Test
         public void Timing_a_call_sets_min()
         {
             timer.GetCount();
-            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            stopwatch.Time(Arg.Any<Action>()).Returns(TimeSpan.FromMilliseconds(50));
             timer.Record(() => { });
 
             var min = timer.GetMin();
@@ -97,7 +97,7 @@ namespace Okanshi.Test
         public void Timing_a_call_sets_total_time()
         {
             timer.GetTotalTime();
-            stopwatch.Time(Arg.Any<Action>()).Returns(50);
+            stopwatch.Time(Arg.Any<Action>()).Returns(TimeSpan.FromMilliseconds(50));
             timer.Record(() => { });
 
             var totalTime = timer.GetTotalTime();
@@ -166,7 +166,7 @@ namespace Okanshi.Test
             timer.GetCount();
             var okanshiTimer = timer.Start();
             stopwatch.IsRunning.Returns(true);
-            stopwatch.ElapsedMilliseconds.Returns(50);
+            stopwatch.Elapsed.Returns(TimeSpan.FromMilliseconds(50));
             okanshiTimer.Stop();
 
             var max = timer.GetMax();
@@ -180,7 +180,7 @@ namespace Okanshi.Test
             timer.GetCount();
             var okanshiTimer = timer.Start();
             stopwatch.IsRunning.Returns(true);
-            stopwatch.ElapsedMilliseconds.Returns(50);
+            stopwatch.Elapsed.Returns(TimeSpan.FromMilliseconds(50));
             okanshiTimer.Stop();
 
             var min = timer.GetMin();
@@ -194,7 +194,7 @@ namespace Okanshi.Test
             timer.GetTotalTime();
             var okanshiTimer = timer.Start();
             stopwatch.IsRunning.Returns(true);
-            stopwatch.ElapsedMilliseconds.Returns(50);
+            stopwatch.Elapsed.Returns(TimeSpan.FromMilliseconds(50));
             okanshiTimer.Stop();
 
             var totalTime = timer.GetTotalTime();
