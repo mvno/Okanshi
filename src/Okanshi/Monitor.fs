@@ -113,6 +113,19 @@ type OkanshiMonitor private () =
     static member Timer(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new Timer(x))
+
+    /// Get or add a ApdexTimer, with a step size of 1 minute
+    static member ApdexTimer(name : string, toleratableThreshold : TimeSpan) = OkanshiMonitor.ApdexTimer(name, toleratableThreshold, [||])
+    
+    /// Get or add a ApdexTimer with custom tags
+    static member ApdexTimer(name : string, toleratableThreshold : TimeSpan, tags : Tag array) = 
+        let config = MonitorConfig.Build(name)
+                        .WithTags(OkanshiMonitor.DefaultTags)
+                        .WithTags(tags)
+                        .WithTags([| {Key = ApdexConstants.ThresholdKey; Value = toleratableThreshold.TotalMilliseconds.ToString()} |])
+
+        monitorRegistry.GetOrAdd(config, fun x -> new ApdexTimer(x, toleratableThreshold))
+    
     
 #if NET45
     /// Get or add a performance counter monitor

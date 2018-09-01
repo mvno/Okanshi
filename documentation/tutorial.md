@@ -204,6 +204,28 @@ Example:
     timer.Record(() => Thread.Sleep(100))
 ```
 
+
+#### 1.3.2 Apdex timer
+
+Apdex (Application Performance Index) is an open standard developed by an alliance of companies that defines a standardized method to report, benchmark, and track application performance.
+Apdex operates with three thresholds estimating end user satisfaction: satisfied, tolerating and frustrating.
+
+* Satisfied: Response time less than or equal to T seconds.
+* Tolerating: Response time between T seconds and 4T seconds.
+* Frustrating: Response time greater than 4 T seconds.
+
+The Apdex score between 0 and 1 is calculated using the following:
+
+     Satisfied + (Tolerating/2) 
+     ---------------------------
+     Total number of requests
+
+see http://www.apdex.org/overview.html for more details.
+
+The apdex uses a timer internally for its bookkeeping, and returns all data from it. 
+Thus you can do both Apdex calculations, and keep track of the actual time spent beyond the (im)precision of the Apdex score.
+
+
 ### 1.4. Performance counters
 
 As of version 4 it is also possible to monitor Windows performance counters.
