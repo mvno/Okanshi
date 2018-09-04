@@ -22,6 +22,16 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
+		public void ctor_fails_when_threshold_tag_is_present()
+		{
+			var forbiddenTag = new Tag(ApdexConstants.ThresholdKey, "");
+			var config = MonitorConfig.Build("test").WithTag(forbiddenTag);
+
+			Action act = () => new ApdexTimer(config, TimeSpan.FromHours(2));
+			act.ShouldThrow<ArgumentException>();
+		}
+
+		[Fact]
 		public void AppdexCalc_zero_calls()
 		{
 			timer.GetApDex().Should().Be(-1);

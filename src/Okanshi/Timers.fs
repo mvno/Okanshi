@@ -256,8 +256,9 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
         x.Tags.Exists(fun x -> x.Key.Equals(ApdexConstants.ThresholdKey, StringComparison.Ordinal))
 
     do 
-        if not (containsThresholdKey config) then 
-            config.Tags.Add({Key = ApdexConstants.ThresholdKey; Value = toleratableThreshold.TotalMilliseconds.ToString()})
+        if (containsThresholdKey config) then 
+            raise (ArgumentException("You cannot supply a tag names '"+ApdexConstants.ThresholdKey+"'"))
+        config.Tags.Add({Key = ApdexConstants.ThresholdKey; Value = toleratableThreshold.TotalMilliseconds.ToString()})
 
     new(config: MonitorConfig, toleratableThreshold: TimeSpan) = ApdexTimer(config, (fun () -> SystemStopwatch() :> IStopwatch), toleratableThreshold)
 
