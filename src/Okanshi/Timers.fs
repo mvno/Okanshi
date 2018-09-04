@@ -185,10 +185,11 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
-
-module ApdexConstants =
-    [<Literal>]
-    let ThresholdKey = "threshold"
+[<AbstractClass; Sealed>]
+[<NoEquality>]
+[<NoComparison>]
+type ApdexConstants =
+    static member ThresholdKey = "threshold"
 
 /// Apdex (Application Performance Index) is an open standard developed by an alliance of companies that defines a standardized method to report, benchmark, and track application performance.
 /// Apdex operates with three thresholds estimating end user satisfaction: satisfied, tolerating and frustrating.
