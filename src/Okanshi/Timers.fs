@@ -210,6 +210,8 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     let timer = new Timer(config, stopwatchFactory)
     let mutable satisfiedTimings = 0
     let mutable tolerableTimings = 0
+    let mutable lastScore : float = 1.0
+
     let syncRoot = new obj()
 
     let updateStatistics' (elapsed : TimeSpan) =
@@ -228,19 +230,19 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     
     let calcApdex'() : float =  
         match timer.GetCount().Value with
-        | 0L -> -1.0
+        | 0L -> lastScore
         | _ -> 
             let index = (float(satisfiedTimings) + (float(tolerableTimings)/2.0)) / float(timer.GetCount().Value)
             let rounded = System.Math.Round(index, 2, MidpointRounding.AwayFromZero)
+            lastScore <- rounded
             rounded
 
     let getValues'() =
-        if timer.GetCount().Value = 0L 
-        then [||] :> seq<IMeasurement>
-        else seq {
-                yield! timer.GetValues() 
-                yield! [| new Measurement<float>("apdex", calcApdex'()) :> IMeasurement |]
-            }
+        seq {
+            yield! timer.GetValues() 
+            yield! [| new Measurement<float>("apdex", calcApdex'()) :> IMeasurement |]
+        }
+
 
     let reset'() =
         timer.GetValuesAndReset() |> ignore
@@ -291,7 +293,7 @@ type ApdexTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, tol
     member __.GetTotalTime() = lock syncRoot (fun () -> timer.GetTotalTime())
     
     /// Calculate the apdex score
-    member __.GetApDex() = lock syncRoot calcApdex'
+    member __.GetApdex() = lock syncRoot calcApdex'
 
     /// Gets the monitor config
     member __.Config = config

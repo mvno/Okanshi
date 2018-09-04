@@ -32,31 +32,19 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void AppdexCalc_zero_calls()
+		public void AppdexCalc_zero_registrations_return_all_ok()
 		{
-			timer.GetApDex().Should().Be(-1);
-		}
-
-		[Fact]
-		public void Getvalues_when_0_calls()
-		{
-			timer.GetValues().ShouldBeEquivalentTo(new IMeasurement[0]);
-		}
-
-		[Fact]
-		public void Getvalues_when_1_call()
-		{
-			timer.Record(() => { });
-
+			timer.GetApdex().Should().Be(1);
 			timer.GetValues().Count(x => x.Name == "apdex").Should().Be(1);
 		}
 
 		[Fact]
-		public void Getvalues_when_1_fcall()
+		public void AppdexCalc_zero_registrations_return_all_ok_several_times()
 		{
-			timer.Record(() => { return 1;});
-
-			timer.GetValues().Count(x => x.Name == "apdex").Should().Be(1);
+			timer.GetApdex().Should().Be(1);
+			timer.GetApdex().Should().Be(1);
+			timer.GetApdex().Should().Be(1);
+			timer.GetApdex().Should().Be(1);
 		}
 
 		[Fact]
@@ -135,6 +123,23 @@ namespace Okanshi.Test
 			timer.Register(TimeSpan.FromMilliseconds(4000));
 
 			timer.GetApDex().Should().Be(0.63);
+
+		[Fact]
+		public void GetApdex_when_no_registrations_are_made_the_previous_score_is_returned()
+		{
+			// zero registrations
+			timer.GetApdex().Should().Be(1);
+			timer.GetApdex().Should().Be(1);
+
+			// one registration changes the score
+			timer.Register(TimeSpan.FromMilliseconds(4000));
+			timer.GetApdex().Should().Be(0);
+			timer.GetApdex().Should().Be(0);
+
+			// another registration changes the score
+			timer.Register(TimeSpan.FromMilliseconds(900));
+			timer.GetApdex().Should().Be(0.5);
+			timer.GetApdex().Should().Be(0.5);
 		}
 
 		[Fact]
