@@ -48,81 +48,82 @@ namespace Okanshi.Test
 		}
 
 		[Fact]
-		public void AppdexCalc_satisfied_one_call()
+		public void GetApdex_when_1_satisfied_one_call_returns_1()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(900));
 
-			timer.GetApDex().Should().Be(1.0);
+			timer.GetApdex().Should().Be(1.0);
 		}
 
 		[Fact]
-		public void AppdexCalc_satisfied_many_calls()
+		public void GetApdex_when_several_satisfied_calls_returns_1()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(500));
 			timer.Register(TimeSpan.FromMilliseconds(600));
 			timer.Register(TimeSpan.FromMilliseconds(700));
 			timer.Register(TimeSpan.FromMilliseconds(900));
 
-			timer.GetApDex().Should().Be(1.0);
+			timer.GetApdex().Should().Be(1.0);
 		}
 
 		[Fact]
-		public void AppdexCalc_tolerable_one_call()
+		public void GetApdex_when_tolerable_one_call_returns_half()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(1200));
 
-			timer.GetApDex().Should().Be(0.5);
+			timer.GetApdex().Should().Be(0.5);
 		}
 
 		[Fact]
-		public void AppdexCalc_tolerable_many_calls()
+		public void GetApdex_when_tolerable_many_call_returns_half()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(1500));
 			timer.Register(TimeSpan.FromMilliseconds(2600));
 			timer.Register(TimeSpan.FromMilliseconds(3700));
 			timer.Register(TimeSpan.FromMilliseconds(3900));
 
-			timer.GetApDex().Should().Be(0.5);
+			timer.GetApdex().Should().Be(0.5);
 		}
 
 		[Fact]
-		public void AppdexCalc_frustrated_one_call()
+		public void GetApdex_when_frustrating_one_call_returns_zero()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(4000));
 
-			timer.GetApDex().Should().Be(0);
+			timer.GetApdex().Should().Be(0);
 		}
 
 		[Fact]
-		public void AppdexCalc_frustrated_many_calls()
+		public void GetApdex_when_frustrating_many_call_returns_zero()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(4500));
 			timer.Register(TimeSpan.FromMilliseconds(5600));
 			timer.Register(TimeSpan.FromMilliseconds(6700));
 			timer.Register(TimeSpan.FromMilliseconds(7900));
 
-			timer.GetApDex().Should().Be(0);
+			timer.GetApdex().Should().Be(0);
 		}
 
 		[Fact]
-		public void AppdexCalc_one_of_each_kind()
+		public void GetApdex_one_of_each_kind_returns_half()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(900));
 			timer.Register(TimeSpan.FromMilliseconds(2000));
 			timer.Register(TimeSpan.FromMilliseconds(4000));
 
-			timer.GetApDex().Should().Be(0.5);
+			timer.GetApdex().Should().Be(0.5);
 		}
 
 		[Fact]
-		public void AppdexCalc_rounded_to_2_decimals()
+		public void GetApdex_rounded_to_2_decimals()
 		{
 			timer.Register(TimeSpan.FromMilliseconds(900));
 			timer.Register(TimeSpan.FromMilliseconds(900));
 			timer.Register(TimeSpan.FromMilliseconds(2000));
 			timer.Register(TimeSpan.FromMilliseconds(4000));
 
-			timer.GetApDex().Should().Be(0.63);
+			timer.GetApdex().Should().Be(0.63);
+		}
 
 		[Fact]
 		public void GetApdex_when_no_registrations_are_made_the_previous_score_is_returned()
@@ -148,7 +149,7 @@ namespace Okanshi.Test
 			var i = timer.Record(() => 1);
 
 			i.Should().Be(1);
-			timer.GetApDex().Should().Be(1);
+			timer.GetApdex().Should().Be(1);
 		}
 
 		[Fact]
@@ -158,7 +159,7 @@ namespace Okanshi.Test
 			timer.Record(() => i = 1);
 
 			i.Should().Be(1);
-			timer.GetApDex().Should().Be(1);
+			timer.GetApdex().Should().Be(1);
 		}
 	}
 }
