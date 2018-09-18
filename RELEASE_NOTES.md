@@ -1,19 +1,21 @@
-### 6.0.0
+### 6.0.0 (not-yet-released)
+
+The v6.0.0 release has done a major overhaul in the naming of monitors to make it simpler for new users of the API. 
 
 **BREAKING CHANGES**
 
 * `Timer.Register(long)` has been removed. Replace use with `Timer.Register(StopWatch)` or `Timer.Register(TimeSpan)`
 * `OkanshiMonitor.HealthCheck()` has been removed. Replace use with a `Gauge`
 * `LongTaskTimer` has been removed
-* BasicCounter has been renamed to CumulativeCounter to better explain what it does
-* PeakRateCounter has been renamed to Counter, as it was hard to figure out what PeakRateCounter meant
-* BasicTimer has been renamed to Timer, as it was hard to figure out what BasicTimer meant
-* Basicgauge has been renamed to Gauge, as it was hard to figure out what BasicGauge meant
-* DataPoint has been deleted as it was no longer used internally
-* DataSourceType has been removed, instead descriptive names should be used
+* `BasicCounter` has been renamed to `CumulativeCounter` to better explain what it does
+* `PeakRateCounter` has been renamed to `Counter`, as it was hard to figure out what PeakRateCounter meant
+* `BasicTimer` has been renamed to `Timer`, as it was hard to figure out what BasicTimer meant
+* `BasiGauge` has been renamed to `Gauge`, as it was hard to figure out what BasicGauge meant
+* `DataPoint` has been deleted as it was no longer used internally
+* `DataSourceType` has been removed, instead descriptive names should be used
 * The tag statistic has been removed from the Timer, this has been replaced by value names
 * `OkanshiMonitor.DefaultTags` has been change to an `ISet<Tag>` to make it clear how duplicates are handled
-* InfluxDB.WriteOnly dependency has been updated to version 3.1.0
+* `InfluxDB.WriteOnly` dependency has been updated to version 3.1.0
 
 ### 6.0.0-alpha2
 
