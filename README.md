@@ -6,9 +6,9 @@
 
 Okanshi is a high performance low overhead library for measuring, collecting and transporting in-process application metrics. It also provide a convenient health check mechanism that works out of the box.
 
-To use Okanshi, you must insert into your code, various Okanshi monitors (stopwatches, counters, ...). Okanshi will then collect and transport them to an external service such as InfluxDB, Splunk, or ElasticSearch where reporting, alarms etc. can be set up. The transportation is plugable, so you can integrate with what you want. If you prefer, you can even change the transportation to be self-hosting within your application changing the metric data from a "push" to a "pull" transport.
+In order to use Okanshi, you must insert into your code, various Okanshi monitors (stopwatches, counters, ...). Okanshi will then collect and transport them to an external service such as InfluxDB, Splunk, or ElasticSearch. In those applications reporting, alarms and searching is done. Like most other things in Okanshi, the transportation is plugable, so you can integrate with what you want. If you prefer, you can even change the transportation to be self-hosting within your application - changing the transport model from *push* to *pull*.
 
-Each measurement must be named. In addition to names, and you can associate one or more tags detailing e.g. "server name", "the application name", "test/production".
+Measurements are assigned names and you can associate one or more tags detailing the context of the measurement such as server, application, test/production.
 
 
 **Maturity**
