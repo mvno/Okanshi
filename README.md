@@ -2,20 +2,38 @@
 
 
 
-Okanshi
-=======
+# Okanshi
 
-Okanshi is a library providing in-process monitoring of an application, it was originally created by [Telenor](https://www.telenor.dk/) MVNO, now CBB IT DevOps, to help transitioning to a microservice architecture. It has matured over several years, and is now used in production in several large-scale software products across different companies.
+Okanshi is a high performance low overhead library for measuring, collecting and transporting in-process application metrics. It also provide a convenient health check mechanism that works out of the box.
 
-The monitoring and information retrieval has good standard implementations, and the framework is highly configurable, allowing for custom implementation. An example is the monitoring information, that can be accessed using the provided HTTP endpoint (JSON output) or by custom code.
+To use Okanshi, you must insert into your code, various Okanshi monitors (stopwatches, counters, ...). Okanshi will then collect and transport them to an external service such as InfluxDB, Splunk, or ElasticSearch where reporting, alarms etc. can be set up. The transportation is plugable, so you can integrate with what you want. If you prefer, you can even change the transportation to be self-hosting within your application changing the metric data from a "push" to a "pull" transport.
 
-Okanshi is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronous, and won't impact the application performane that much. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed.
-
-Okanshi supports [.NET Standard 2.0](https://www.microsoft.com/net) and >[.NET 4.5](https://www.microsoft.com/net) and above.
+Each measurement must be named. In addition to names, and you can associate one or more tags detailing e.g. "server name", "the application name", "test/production".
 
 
-Samples & documentation
------------------------
+**Maturity**
+
+Okanshi is mature. It has matured over several years, and is now used in production in several large-scale software products across different companies. It was originally conceived by Kim Christensen at [Telenor](https://www.telenor.dk/) "MVNO", now known as "CBB IT DevOps", to help transitioning to a micro service architecture. 
+
+**Configurability**
+
+The monitoring and information metric transportation has good default implementations, and the framework is highly configurable tailoring your needs. 
+
+**Performance**
+
+Okanshi is designed to be as unobtrusive as possible, to achieve this the all statistics are calculated asynchronously, and performance impact is very low. The memory footprint is also minimized as statistics are calculated on-the-fly, meaning the individual measurements aren't kept in memory longer than absolutely needed.
+
+
+**Platforms**
+
+Okanshi supports a number of platforms
+ * [.NET Standard 2.0](https://www.microsoft.com/net) 
+ * [.NET 4.5](https://www.microsoft.com/net) and above.
+
+and works well with C# and F# alike.
+
+
+## Samples & documentation
 
 The library comes with comprehensible documentation. 
 
@@ -29,24 +47,15 @@ The library comes with comprehensible documentation.
  * [Release notes and upgrade information](https://github.com/mvno/Okanshi/blob/master/RELEASE_NOTES.md) contains information about versions and how to upgrade.
 
 
-Nuget
-------
+## Nuget
 
-<div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
-      The Okanshi library can be <a href="https://nuget.org/packages/Okanshi">installed from NuGet</a>:
-      <pre>PM> Install-Package Okanshi</pre>
-    </div>
-  </div>
-  <div class="span1"></div>
-</div>
+The Okanshi library can be [installed from NuGet](https://nuget.org/packages/Okanshi)
+
+```PM> Install-Package Okanshi```
 
 
 
-Contributing and copyright
---------------------------
+## Contributing and copyright
 
 The project is hosted on [GitHub][gh] where you can [report issues][issues], fork 
 the project and submit pull requests. If you're adding a new public API, please also 
