@@ -10,7 +10,7 @@ The v6.0.0 release has done a major overhaul in the naming of monitors to make i
 * `BasicCounter` has been renamed to `CumulativeCounter` to better explain what it does
 * `PeakRateCounter` has been renamed to `Counter`, as it was hard to figure out what PeakRateCounter meant
 * `BasicTimer` has been renamed to `Timer`, as it was hard to figure out what BasicTimer meant
-* `BasiGauge` has been renamed to `Gauge`, as it was hard to figure out what BasicGauge meant
+* `BasicGauge` has been renamed to `Gauge`, as it was hard to figure out what BasicGauge meant
 * `DataPoint` has been deleted as it was no longer used internally
 * `DataSourceType` has been removed, instead descriptive names should be used
 * The tag statistic has been removed from the Timer, this has been replaced by value names
