@@ -5,7 +5,7 @@
     <title>InfluxDbObserverOptions - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
-    <meta name="author" content="Telenor MVNO"/>
+    <meta name="author" content="Kim Christensen"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
     <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
@@ -16,7 +16,7 @@
     <script type="text/javascript" src="/Okanshi/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <![endif]-->
   </head>
   <body>
@@ -24,7 +24,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="http://github.com/mvno/Okanshi">github page</a></li>
+          <li><a href="https://github.com/mvno/Okanshi">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/Okanshi/index.html">Okanshi</a></h3>
       </div>
@@ -37,8 +37,9 @@
 
 <h1>InfluxDbObserverOptions</h1>
 <p>
-  <span>Namespace: Okanshi.Observers</span><br />
-</p>
+
+    <span>Namespace: Okanshi.Observers</span><br />
+    </p>
 <div class="xmldoc">
 <p>Options for the InfluxDB observer</p>
 
@@ -52,15 +53,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '274', 274)" onmouseover="showTip(event, '274', 274)">
+          <code onmouseout="hideTip(event, '260', 260)" onmouseover="showTip(event, '260', 260)">
             new(databaseName)
           </code>
-          <div class="tip" id="274">
+          <div class="tip" id="260">
             <strong>Signature:</strong> databaseName:string -&gt; unit<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-          <p>Create a new instance of the options.</p>
+                    <p>Create a new instance of the options.</p>
 
 
         </td>
@@ -76,15 +77,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '275', 275)" onmouseover="showTip(event, '275', 275)">
+          <code onmouseout="hideTip(event, '261', 261)" onmouseover="showTip(event, '261', 261)">
             ConvertFieldType()
           </code>
-          <div class="tip" id="275">
+          <div class="tip" id="261">
             <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-          <p>Function used to convert field types. Default is no conversion.</p>
+                    <p>Function used to convert field types. Default is no conversion.</p>
 
 
         </td>
@@ -92,15 +93,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '276', 276)" onmouseover="showTip(event, '276', 276)">
+          <code onmouseout="hideTip(event, '262', 262)" onmouseover="showTip(event, '262', 262)">
             DatabaseSelector()
           </code>
-          <div class="tip" id="276">
+          <div class="tip" id="262">
             <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-          <p>Database selector. Selects the database based on the metric.
+                    <p>Database selector. Selects the database based on the metric.
 Default is the database name passed into constructor.</p>
 
 
@@ -109,15 +110,15 @@ Default is the database name passed into constructor.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '277', 277)" onmouseover="showTip(event, '277', 277)">
+          <code onmouseout="hideTip(event, '263', 263)" onmouseover="showTip(event, '263', 263)">
             MeasurementNameSelector()
           </code>
-          <div class="tip" id="277">
+          <div class="tip" id="263">
             <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-          <p>Function used to select to measurement name. Default is the metric name.</p>
+                    <p>Function used to select to measurement name. Default is the metric name.</p>
 
 
         </td>
@@ -125,15 +126,15 @@ Default is the database name passed into constructor.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '278', 278)" onmouseover="showTip(event, '278', 278)">
+          <code onmouseout="hideTip(event, '264', 264)" onmouseover="showTip(event, '264', 264)">
             RetentionPolicySelector()
           </code>
-          <div class="tip" id="278">
+          <div class="tip" id="264">
             <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-          <p>Retention policy selector. Selects the retention policy based on the metric and database name.
+                    <p>Retention policy selector. Selects the retention policy based on the metric and database name.
 Default is "autogen", as this is the default retention policy in newer versions of InfluxDB.</p>
 
 
@@ -142,15 +143,15 @@ Default is "autogen", as this is the default retention policy in newer versions 
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '279', 279)" onmouseover="showTip(event, '279', 279)">
+          <code onmouseout="hideTip(event, '265', 265)" onmouseover="showTip(event, '265', 265)">
             TagsToIgnore()
           </code>
-          <div class="tip" id="279">
+          <div class="tip" id="265">
             <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-          <p>List of tag keys to ignore.</p>
+                    <p>List of tag keys to ignore.</p>
 
 
         </td>
@@ -158,15 +159,15 @@ Default is "autogen", as this is the default retention policy in newer versions 
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '280', 280)" onmouseover="showTip(event, '280', 280)">
+          <code onmouseout="hideTip(event, '266', 266)" onmouseover="showTip(event, '266', 266)">
             TagToFieldSelector()
           </code>
-          <div class="tip" id="280">
+          <div class="tip" id="266">
             <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-          <p>Predicate for converting tags to fields.</p>
+                    <p>Predicate for converting tags to fields.</p>
 
 
         </td>
@@ -182,7 +183,7 @@ Default is "autogen", as this is the default retention policy in newer versions 
             <li><a href="/Okanshi/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/Okanshi">Get Library via NuGet</a></li>
-            <li><a href="http://github.com/mvno/Okanshi">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/mvno/Okanshi">Source Code on GitHub</a></li>
             <li><a href="/Okanshi/license.html">License</a></li>
             <li><a href="/Okanshi/release-notes.html">Release Notes</a></li>
             
@@ -195,6 +196,6 @@ Default is "autogen", as this is the default retention policy in newer versions 
         </div>
       </div>
     </div>
-    <a href="http://github.com/mvno/Okanshi"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/mvno/Okanshi"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>

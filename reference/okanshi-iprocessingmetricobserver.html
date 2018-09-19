@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>OkanshiMiddleware - Okanshi</title>
+    <title>IProcessingMetricObserver - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen"/>
@@ -35,33 +35,40 @@
 
 
 
-<h1>OkanshiMiddleware</h1>
+<h1>IProcessingMetricObserver</h1>
 <p>
 
-    <span>Namespace: Okanshi.Owin</span><br />
+    <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>The Okanshi middleware</p>
+<p>Observer that can receive updates about metrics and return its accumulated values to someone else</p>
 
 </div>
-  <h3>Constructors</h3>
+  <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Constructor</td><td>Description</td></tr>
+      <tr><td>Instance member</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '267', 267)" onmouseover="showTip(event, '267', 267)">
-            new(next, options)
+          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
+            GetObservations()
           </code>
-          <div class="tip" id="267">
-            <strong>Signature:</strong> (next:Func&lt;IDictionary&lt;string,obj&gt;,Task&gt; * options:OkanshiOwinOptions) -&gt; unit<br />
+          <div class="tip" id="98">
+            <strong>Signature:</strong> unit -&gt; seq&lt;seq&lt;Metric&gt;&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                    
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Observer.fs#L19-19" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Get the observations observed</p>
+
+
         </td>
       </tr>
     </tbody>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>DoubleGauge - Okanshi</title>
+    <title>SystemStopwatch - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen"/>
@@ -35,42 +35,13 @@
 
 
 
-<h1>DoubleGauge</h1>
+<h1>SystemStopwatch</h1>
 <p>
 
     <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>A gauge that reports a double value</p>
-
 </div>
-  <h3>Constructors</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Constructor</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '59', 59)" onmouseover="showTip(event, '59', 59)">
-            new(config)
-          </code>
-          <div class="tip" id="59">
-            <strong>Signature:</strong> config:MonitorConfig -&gt; DoubleGauge<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L128-128" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
   <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -80,102 +51,111 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '60', 60)" onmouseover="showTip(event, '60', 60)">
-            Config
+          <code onmouseout="hideTip(event, '217', 217)" onmouseover="showTip(event, '217', 217)">
+            ElapsedMilliseconds
           </code>
-          <div class="tip" id="60">
-            <strong>Signature:</strong> MonitorConfig<br />
+          <div class="tip" id="217">
+            <strong>Signature:</strong> int64<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L138-138" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L24-24" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the monitor configuration</p>
-
-
-              <p>CompiledName: <code>get_Config</code></p>
+          
+              <p>CompiledName: <code>get_ElapsedMilliseconds</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '61', 61)" onmouseover="showTip(event, '61', 61)">
-            GetValues()
+          <code onmouseout="hideTip(event, '218', 218)" onmouseover="showTip(event, '218', 218)">
+            IsRunning
           </code>
-          <div class="tip" id="61">
-            <strong>Signature:</strong> unit -&gt; seq&lt;Measurement&lt;float&gt;&gt;<br />
+          <div class="tip" id="218">
+            <strong>Signature:</strong> bool<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L135-135" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L26-26" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the current value</p>
-
-
+          
+              <p>CompiledName: <code>get_IsRunning</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '62', 62)" onmouseover="showTip(event, '62', 62)">
-            GetValuesAndReset()
+          <code onmouseout="hideTip(event, '219', 219)" onmouseover="showTip(event, '219', 219)">
+            Start()
           </code>
-          <div class="tip" id="62">
-            <strong>Signature:</strong> unit -&gt; seq&lt;Measurement&lt;float&gt;&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L144-144" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Gets the value and resets the monitor</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '63', 63)" onmouseover="showTip(event, '63', 63)">
-            Reset()
-          </code>
-          <div class="tip" id="63">
+          <div class="tip" id="219">
             <strong>Signature:</strong> unit -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L141-141" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L28-28" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Reset the gauge</p>
-
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '64', 64)" onmouseover="showTip(event, '64', 64)">
-            Set(newValue)
+          <code onmouseout="hideTip(event, '220', 220)" onmouseover="showTip(event, '220', 220)">
+            Stop()
           </code>
-          <div class="tip" id="64">
-            <strong>Signature:</strong> newValue:float -&gt; unit<br />
+          <div class="tip" id="220">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L132-132" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L30-30" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Sets the value</p>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
 
+          <code onmouseout="hideTip(event, '221', 221)" onmouseover="showTip(event, '221', 221)">
+            Time(f)
+          </code>
+          <div class="tip" id="221">
+            <strong>Signature:</strong> f:Action -&gt; int64<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L34-34" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
 
+          <code onmouseout="hideTip(event, '222', 222)" onmouseover="showTip(event, '222', 222)">
+            Time(f)
+          </code>
+          <div class="tip" id="222">
+            <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; &#39;T * int64<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Timers.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
         </td>
       </tr>
     </tbody>
