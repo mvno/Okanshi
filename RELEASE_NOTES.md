@@ -1,4 +1,4 @@
-### 6.0.0 (not-yet-released)
+### 6.0.0
 
 The v6.0.0 release has done a major overhaul in the naming of monitors to make it simpler for new users of the API. 
 
