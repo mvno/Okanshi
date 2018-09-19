@@ -33,15 +33,22 @@
         <div class="span9" id="main">
           
 <h3><a name="6-0-0" class="anchor" href="#6-0-0">6.0.0</a></h3>
-<p><strong>BREAKING CHANGES</strong>
-<em> <code>Timer.Register(long)</code> has been removed. Replace use with <code>Timer.Register(StopWatch)</code> or <code>Timer.Register(TimeSpan)</code>
-</em> <code>OkanshiMonitor.HealthCheck()</code> has been removed. Replace use with a <code>Gauge</code>
-<em> <code>LongTaskTimer</code> has been removed
-</em> BasicCounter has been renamed to CumulativeCounter to better explain what it does
-<em> PeakRateCounter has been renamed to Counter, as it was hard to figure out what PeakRateCounter meant
-</em> BasicTimer has been renamed to Timer, as it was hard to figure out what BasicTimer meant
-<em> Basicgauge has been renamed to Gauge, as it was hard to figure out what BasicGauge meant
-</em> DataPoint has been deleted as it was no longer used internally</p>
+<p>The v6.0.0 release has done a major overhaul in the naming of monitors to make it simpler for new users of the API.</p>
+<p><strong>BREAKING CHANGES</strong></p>
+<ul>
+<li><code>Timer.Register(long)</code> has been removed. Replace use with <code>Timer.Register(StopWatch)</code> or <code>Timer.Register(TimeSpan)</code></li>
+<li><code>OkanshiMonitor.HealthCheck()</code> has been removed. Replace use with a <code>Gauge</code></li>
+<li><code>LongTaskTimer</code> has been removed</li>
+<li><code>BasicCounter</code> has been renamed to <code>CumulativeCounter</code> to better explain what it does</li>
+<li><code>PeakRateCounter</code> has been renamed to <code>Counter</code>, as it was hard to figure out what PeakRateCounter meant</li>
+<li><code>BasicTimer</code> has been renamed to <code>Timer</code>, as it was hard to figure out what BasicTimer meant</li>
+<li><code>BasicGauge</code> has been renamed to <code>Gauge</code>, as it was hard to figure out what BasicGauge meant</li>
+<li><code>DataPoint</code> has been deleted as it was no longer used internally</li>
+<li><code>DataSourceType</code> has been removed, instead descriptive names should be used</li>
+<li>The tag statistic has been removed from the Timer, this has been replaced by value names</li>
+<li><code>OkanshiMonitor.DefaultTags</code> has been change to an <code>ISet&lt;Tag&gt;</code> to make it clear how duplicates are handled</li>
+<li><code>InfluxDB.WriteOnly</code> dependency has been updated to version 3.1.0</li>
+</ul>
 <h3><a name="6-0-0-alpha2" class="anchor" href="#6-0-0-alpha2">6.0.0-alpha2</a></h3>
 <p><strong>BREAKING CHANGES</strong></p>
 <ul>
