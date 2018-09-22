@@ -119,11 +119,7 @@ type OkanshiMonitor private () =
     
     /// Get or add a ApdexTimer with custom tags
     static member ApdexTimer(name : string, toleratableThreshold : TimeSpan, tags : Tag array) = 
-        let config = MonitorConfig.Build(name)
-                        .WithTags(OkanshiMonitor.DefaultTags)
-                        .WithTags(tags)
-                        .WithTags([| {Key = ApdexConstants.ThresholdKey; Value = toleratableThreshold.TotalMilliseconds.ToString()} |])
-
+        let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new ApdexTimer(x, toleratableThreshold))
     
     

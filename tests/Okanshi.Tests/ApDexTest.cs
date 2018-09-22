@@ -16,6 +16,13 @@ namespace Okanshi.Test
         }
 
         [Fact]
+        public void Can_get_timer_from_okanshimonitor()
+        {
+            var t = OkanshiMonitor.ApdexTimer("name", TimeSpan.FromSeconds(2));
+            t.Should().NotBeNull();
+        }
+
+        [Fact]
         public void ctor_adds_threshold_as_tag_if_absent()
         {
             timer.Config.Tags.Single(x => x.Key == ApdexConstants.ThresholdKey);
