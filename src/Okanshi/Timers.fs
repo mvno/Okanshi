@@ -184,13 +184,6 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
-
-[<AbstractClass; Sealed>]
-[<NoEquality>]
-[<NoComparison>]
-type SlaTimerConstants =
-    static member ThresholdKey = "threshold"
-
 /// A SLA-Timer (Servie Level Agreement timer) keeps track of your SLA's and whether they are honored. 
 ///
 /// The SLA-Timer is different than a timer in that it measures strictly against the SLA, whereas the Timer operate on averages.
@@ -232,14 +225,16 @@ type SlaTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, SLA: 
         result |> List.toSeq
 
     let containsThresholdKey x =
-        x.Tags.Exists(fun x -> x.Key.Equals(SlaTimerConstants.ThresholdKey, StringComparison.Ordinal))
+        x.Tags.Exists(fun x -> x.Key.Equals(SlaTimer.ThresholdKey, StringComparison.Ordinal))
 
     do
         if (containsThresholdKey config) then 
-            raise (ArgumentException(sprintf "You cannot supply a tag names '%s'" SlaTimerConstants.ThresholdKey))
-        config.Tags.Add({Key = SlaTimerConstants.ThresholdKey; Value = SLA.TotalMilliseconds.ToString()})
+            raise (ArgumentException(sprintf "You cannot supply a tag names '%s'" SlaTimer.ThresholdKey))
+        config.Tags.Add({Key = SlaTimer.ThresholdKey; Value = SLA.TotalMilliseconds.ToString()})
 
     new(config: MonitorConfig, sla: TimeSpan) = SlaTimer(config, (fun () -> SystemStopwatch() :> IStopwatch), sla)
+
+    static member ThresholdKey = "threshold"
 
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) =
