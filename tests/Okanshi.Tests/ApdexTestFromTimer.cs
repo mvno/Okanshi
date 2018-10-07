@@ -1,22 +1,20 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using FluentAssertions;
-using Xunit;
 using NSubstitute;
+using Xunit;
 
 namespace Okanshi.Test
 {
-    public class TimerTest
+    public class ApdexTestFromTimer
     {
         private readonly IStopwatch stopwatch = Substitute.For<IStopwatch>();
-        private readonly Timer timer;
+        private readonly ApdexTimer timer;
 
-        public TimerTest()
+        public ApdexTestFromTimer()
         {
             DefaultMonitorRegistry.Instance.Clear();
-            timer = new Timer(MonitorConfig.Build("Test"), () => stopwatch);
+            timer = new ApdexTimer(MonitorConfig.Build("Test"), () => stopwatch, TimeSpan.FromSeconds(1));
         }
 
         [Fact]
@@ -49,14 +47,6 @@ namespace Okanshi.Test
             var totalTime = timer.GetTotalTime();
 
             totalTime.Value.Should().Be(0);
-        }
-
-        [Fact]
-        public void Initial_value_is_zero()
-        {
-            var value = timer.GetValues();
-
-            value.First().Value.Should().Be(0.0);
         }
 
         [Fact]
@@ -206,7 +196,7 @@ namespace Okanshi.Test
         public void Manual_registration_updates_sets_max()
         {
             const long elapsed = 1000;
-            
+
             timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetMax().Value.Should().Be(elapsed);
@@ -226,14 +216,13 @@ namespace Okanshi.Test
         public void Manual_registration_sets_count()
         {
             const long elapsed = 1000;
-
             timer.Register(TimeSpan.FromMilliseconds(elapsed));
 
             timer.GetCount().Value.Should().Be(1);
         }
 
         [Fact]
-        public void Manual_registration_with_long_sets_total_time()
+        public void Manual_registration_sets_total_time()
         {
             const long elapsed = 1000;
 
@@ -243,42 +232,13 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Manual_registration_with_timespan_sets_total_time()
-        {
-            timer.Register(TimeSpan.FromSeconds(1));
-
-            timer.GetTotalTime().Value.Should().Be(1000);
-        }
-
-
-        [Fact]
-        public void Manual_registration_with_stopwatch_sets_total_time()
-        {
-            var sw = Stopwatch.StartNew();
-            Thread.Sleep(50);
-            sw.Stop();
-
-            timer.RegisterElapsed(sw);
-
-            timer.GetTotalTime().Value.Should().Be(sw.ElapsedMilliseconds);
-        }
-
-        [Fact]
-        public void Manual_registrations_accumulate_total_time()
-        {
-            const long elapsed = 1000;
-
-            timer.Register(TimeSpan.FromMilliseconds(elapsed));
-            timer.Register(TimeSpan.FromMilliseconds(elapsed));
-
-            timer.GetTotalTime().Value.Should().Be(2 * elapsed);
-        }
-
-        [Fact]
         public void Values_are_correct()
         {
+            timer.Register(TimeSpan.Zero);
+
             var values = timer.GetValues().Select(x => x.Name);
-            values.Should().BeEquivalentTo("value", "max", "min", "count", "totalTime");
+
+            values.Should().BeEquivalentTo("value", "max", "min", "count", "totalTime", "apdex");
         }
     }
 }
