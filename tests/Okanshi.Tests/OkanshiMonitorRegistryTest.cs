@@ -91,6 +91,40 @@ namespace Okanshi.Test
             _okanshiMonitorRegistry.GetRegisteredMonitors().Should().HaveCount(2);
         }
 
+        [Fact]
+        public void Monitor_can_be_unregistered()
+        {
+            var monitor = new FakeMonitor();
+            _okanshiMonitorRegistry.GetOrAdd(monitor.Config, _ => monitor);
+
+            _okanshiMonitorRegistry.Unregister(monitor);
+
+            _okanshiMonitorRegistry.GetRegisteredMonitors().Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Monitor_can_be_unregistered_when_recreated()
+        {
+            var monitor = new FakeMonitor();
+            _okanshiMonitorRegistry.GetOrAdd(monitor.Config, _ => monitor);
+
+            _okanshiMonitorRegistry.Unregister(new FakeMonitor());
+
+            _okanshiMonitorRegistry.GetRegisteredMonitors().Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Monitor_can_be_unrgistered_when_registry_is_used_as_interface()
+        {
+            IMonitorRegistry registry = new OkanshiMonitorRegistry();
+            var monitor = new FakeMonitor();
+            registry.GetOrAdd(monitor.Config, _ => monitor);
+
+            registry.Unregister(monitor);
+
+            registry.GetRegisteredMonitors().Should().BeEmpty();
+        }
+
         private class FakeMonitor : IMonitor
         {
             public FakeMonitor(IEnumerable<Tag> tags = null)

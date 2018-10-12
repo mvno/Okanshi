@@ -20,7 +20,7 @@ type IMonitorRegistry =
     abstract Clear : unit -> unit
     
     /// Get or add a new registration
-    abstract GetOrAdd : MonitorConfig * Func<MonitorConfig, IMonitor> -> IMonitor
+    abstract GetOrAdd<'a when 'a :> IMonitor> : MonitorConfig * Func<MonitorConfig, 'a> -> 'a
 
 /// Monitor registry used by the OkanshiMonitor. This registry allows registration of monitors
 /// with the same name, but different types
@@ -53,7 +53,7 @@ type OkanshiMonitorRegistry() =
         let hash = hash config typeof<'a>
         match monitors.TryGetValue(hash) with
         | true, x -> x :?> 'a
-        | _ -> 
+        | _ ->
             let monitor = factory.Invoke(config)
             monitors.Add(hash, monitor)
             monitor
@@ -71,7 +71,7 @@ type OkanshiMonitorRegistry() =
     member __.Clear() = Lock.lock syncRoot clear'
     
     /// Get or add a new registration
-    member __.GetOrAdd<'a when 'a :> IMonitor>(config, factory : Func<MonitorConfig, 'a>) = 
+    member __.GetOrAdd<'a when 'a :> IMonitor>(config, factory : Func<MonitorConfig, 'a>) =
         Lock.lockWithArg syncRoot (config, factory) getOrAdd'
     
     interface IMonitorRegistry with
@@ -79,7 +79,7 @@ type OkanshiMonitorRegistry() =
         member self.Unregister(monitor) = self.Unregister(monitor)
         member self.IsRegistered(monitor) = self.IsRegistered(monitor)
         member self.Clear() = self.Clear()
-        member self.GetOrAdd(config, factory) = self.GetOrAdd(config, factory)
+        member self.GetOrAdd<'a when 'a :> IMonitor>(config, factory : Func<MonitorConfig, 'a>) = self.GetOrAdd(config, factory)
         member __.Dispose() = ()
 
 /// The default monitor registry handled as a singleton. Currently this is a OkanshiMonitorRegistry.
