@@ -210,9 +210,14 @@ type SlaTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, SLA: 
         lockWithArg syncRoot elapsed updateStatistics'
         
     let getValues' () =
+        let renameValueToAvg s =
+            match s with
+            | "value" -> "avg"
+            | _ -> s
+
         seq {
-            yield! withinSla.GetValues() |> Seq.map(fun x -> Measurement(sprintf "within.sla.%s" x.Name, x.Value)) |> Seq.cast<IMeasurement>
-            yield! aboveSla.GetValues() |> Seq.map(fun x -> Measurement(sprintf "above.sla.%s" x.Name, x.Value)) |> Seq.cast<IMeasurement>
+            yield! withinSla.GetValues() |> Seq.map(fun x -> Measurement(sprintf "within.sla.%s" (renameValueToAvg x.Name), x.Value)) |> Seq.cast<IMeasurement>
+            yield! aboveSla.GetValues() |> Seq.map(fun x -> Measurement(sprintf "above.sla.%s" (renameValueToAvg x.Name), x.Value)) |> Seq.cast<IMeasurement>
         }
 
     let reset'() =

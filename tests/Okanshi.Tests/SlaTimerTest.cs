@@ -29,19 +29,19 @@ namespace Okanshi.Test
 		public void Threshold_is_set_as_label()
 		{
 			timer = OkanshiMonitor.SlaTimer("name", TimeSpan.FromSeconds(2));
-			var thresholdTag = timer.Config.Tags.Single(x => x.Key == SlaTimerConstants.ThresholdKey).Value;
+			var thresholdTag = timer.Config.Tags.Single(x => x.Key == SlaTimer.ThresholdKey).Value;
 			thresholdTag.Should().Be("2000");
 		}
 
 		IMeasurement[] emptyMeasurement = new IMeasurement[] 
 		{
-			new Measurement<double>("within.sla.value", 0),
+			new Measurement<double>("within.sla.avg", 0),
 			new Measurement<long>("within.sla.totalTime", 0),
 			new Measurement<long>("within.sla.count", 0),
 			new Measurement<long>("within.sla.max", 0),
 			new Measurement<long>("within.sla.min", 0),
 
-			new Measurement<double>("above.sla.value", 0),
+			new Measurement<double>("above.sla.avg", 0),
 			new Measurement<long>("above.sla.totalTime", 0),
 			new Measurement<long>("above.sla.count", 0),
 			new Measurement<long>("above.sla.max", 0),
@@ -78,13 +78,13 @@ namespace Okanshi.Test
 
 			var expected = new IMeasurement[] 
 			{
-				new Measurement<double>("within.sla.value", 2000),
+				new Measurement<double>("within.sla.avg", 2000),
 				new Measurement<long>("within.sla.totalTime", 4000),
 				new Measurement<long>("within.sla.count", 2),
 				new Measurement<long>("within.sla.max", 3000),
 				new Measurement<long>("within.sla.min", 1000),
 				
-				new Measurement<double>("above.sla.value", 0),
+				new Measurement<double>("above.sla.avg", 0),
 				new Measurement<long>("above.sla.totalTime", 0),
 				new Measurement<long>("above.sla.count", 0),
 				new Measurement<long>("above.sla.max", 0),
@@ -103,13 +103,13 @@ namespace Okanshi.Test
 
 			var expected = new IMeasurement[] 
 			{
-				new Measurement<double>("within.sla.value", 0),
+				new Measurement<double>("within.sla.avg", 0),
 				new Measurement<long>("within.sla.totalTime", 0),
 				new Measurement<long>("within.sla.count", 0),
 				new Measurement<long>("within.sla.max", 0),
 				new Measurement<long>("within.sla.min", 0),
 				
-				new Measurement<double>("above.sla.value", 4500),
+				new Measurement<double>("above.sla.avg", 4500),
 				new Measurement<long>("above.sla.totalTime", 9000),
 				new Measurement<long>("above.sla.count", 2),
 				new Measurement<long>("above.sla.max", 5000),
