@@ -1,3 +1,7 @@
+### New in 6.1.0 (Unreleased)
+
+* Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
+
 ### 6.0.0
 
 The v6.0.0 release has done a major overhaul in the naming of monitors to make it simpler for new users of the API. 
