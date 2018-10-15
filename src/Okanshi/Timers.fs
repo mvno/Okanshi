@@ -187,7 +187,8 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
 /// A SLA-Timer (Servie Level Agreement timer) keeps track of your SLA's and whether they are honored. 
 ///
 /// The SLA-Timer is different than a timer in that it measures strictly against the SLA, whereas the Timer operate on averages.
-/// If your performance characteristics are such that you are always doing very good or very bad, a normal timer can be used instead, since the average will suffice.
+/// If your performance characteristics are such that you are always doing very good or very bad, a normal timer can be used instead 
+/// of the SLA-timer, since the average will suffice.
 ///
 /// The timer implements two timers one for registrations below the SLA and one above.
 /// Each timer provides the following data "average", "total time", "count", "min" and "max" 
