@@ -113,7 +113,15 @@ type OkanshiMonitor private () =
     static member Timer(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new Timer(x))
+
+    /// Get or add a SLA-Timer, with a step size of 1 minute
+    static member SlaTimer(name : string, sla: TimeSpan) = OkanshiMonitor.SlaTimer(name, sla, [||])
     
+    /// Get or add a SLA-Timer with custom tags
+    static member SlaTimer(name : string, sla : TimeSpan, tags : Tag array) = 
+        let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
+        monitorRegistry.GetOrAdd(config, fun x -> new SlaTimer(x, sla))
+
 #if NET45
     /// Get or add a performance counter monitor
     static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name)

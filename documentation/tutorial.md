@@ -16,6 +16,7 @@ Table of Content
        * [1.2.3. CumulativeCounter](#123-cumulativecounter)
      * [1.3. Timers](#13-timers)
        * [1.3.1. Timer](#131-timer)
+       * [1.3.2. SlaTimer](#132-slatimer)
      * [1.4. Performance counters](#14-performance-counters)
    * [2. Health checks](#2-health-checks)
    * [3. HTTP Endpoint](#3-http-endpoint)
@@ -37,6 +38,7 @@ Okanshi has a couple of different monitor types, divided into the following cate
   * Timers
 
 All monitors can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
+
 
 ### 1.1. Gauges
 
@@ -204,6 +206,18 @@ Example:
     timer.Record(() => Thread.Sleep(100))
 ```
 
+
+#### 1.3.2. SlaTimer
+
+A service-level agreement (SLA) is a commitment between a service provider and a client. For example, the service provider promise to respond to a request within an agreed amount of time. 
+
+A SLA-Timer is a special timer, that keeps track of your SLA's and whether they are honored. The SLA-Timer is different than a timer in that it measures strictly against the SLA, whereas the Timer operate on averages. If your performance characteristics are such that you are always doing very good or very bad, a normal timer can be used instead of the SLA-timer, since the average will suffice.
+
+The timer implements two timers one for registrations below the SLA and one above. Each timer provides the following data "average", "total time", "count", "min" and "max". We keep track of both executions below the SLA and above. The reason is, when things are going bad we want to know how bad we are doing. By tracking timings below our SLA we can see if we get dangerously close to our SLA, it also 
+enable us to better understand the periods where we break our SLA by knowing how "business as usual" looks like.
+
+
+
 ### 1.4. Performance counters
 
 As of version 4 it is also possible to monitor Windows performance counters.
@@ -215,6 +229,8 @@ As of version 4 it is also possible to monitor Windows performance counters.
 
     var performanceCounterMonitor = new PerformanceCounterMonitor(MonitorConfig.Build("Available Bytes"), PerformanceCounterConfig.Build("Memory", "Available Bytes"));
 ```
+
+
 
 ## 2. Health checks
 
@@ -340,6 +356,7 @@ To set up this particular observer we can use the following code. It sets up som
         }
     }
 ```
+
 
 ## 5. OWIN
 

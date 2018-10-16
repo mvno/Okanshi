@@ -39,7 +39,7 @@ The library comes with comprehensible documentation.
 
  * [Samples](samples) contains some different samples showcasing different parts of Okanshi.
 
- * [Tutorial](documentation) contains a further explanation of this library.
+ * [Tutorial](documentation\tutorial.md) contains a further explanation of this library ([older versions here](documentation)).
  
  * [Best practices](documentation/best_practices.md) contains a further explanation of this library.
  

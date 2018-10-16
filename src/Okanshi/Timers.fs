@@ -85,7 +85,7 @@ type ITimer =
     /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
     abstract Register : TimeSpan -> unit
 
-/// A timer providing the "total time", "count", "min" and "max" for the recordings
+/// A timer providing the "average","total time", "count", "min" and "max" for the recordings
 type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
     let max = new MaxGauge(config)
     let min = new MinGauge(config)
@@ -143,7 +143,7 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
     /// Gets the rate of calls timed within the specified step
     member __.GetCount() = lock syncRoot (fun() -> count.GetValues() |> Seq.head)
     
-    /// Gets the average calls time within the specified step
+    /// Gets the values of the timer which are: "total time", "count", "min" and "max" 
     member __.GetValues() = lock syncRoot getValues'
     
     /// Get the maximum value of all calls
@@ -174,6 +174,108 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
     
+    interface ITimer with
+        member self.Record(f : Func<'T>) = self.Record(f)
+        member self.Record(f : Action) = self.Record(f)
+        member self.GetValues() = self.GetValues() |> Seq.cast
+        member self.Config = self.Config
+        member self.Start() = self.Start()
+        member self.RegisterElapsed(elapsed : Stopwatch) = self.RegisterElapsed(elapsed)
+        member self.Register(elapsed : TimeSpan) = self.Register(elapsed)
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
+
+/// A SLA-Timer (Servie Level Agreement timer) keeps track of your SLA's and whether they are honored. 
+///
+/// The SLA-Timer is different than a timer in that it measures strictly against the SLA, whereas the Timer operate on averages.
+/// If your performance characteristics are such that you are always doing very good or very bad, a normal timer can be used instead 
+/// of the SLA-timer, since the average will suffice.
+///
+/// The timer implements two timers one for registrations below the SLA and one above.
+/// Each timer provides the following data "average", "total time", "count", "min" and "max" 
+///
+/// We keep track of both executions below the SLA and above. The reason is, when things are going bad we 
+/// want to know how bad we are doing. 
+/// By tracking timings below our SLA we can see if we get dangerously close to our SLA, it also 
+/// enable us to better understand the periods where we break our SLA by knowing how "business as usual" looks like.
+type SlaTimer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, SLA: TimeSpan) as self = 
+    let syncRoot = new obj()
+    let withinSla = new Timer(config, stopwatchFactory)
+    let aboveSla = new Timer(config, stopwatchFactory)
+
+    let updateStatistics' (elapsed : TimeSpan) =
+        if elapsed <= SLA
+            then withinSla.Register elapsed
+            else aboveSla.Register elapsed
+    
+    let updateStatistics elapsed = 
+        lockWithArg syncRoot elapsed updateStatistics'
+        
+    let getValues' () =
+        let renameValueToAvg s =
+            match s with
+            | "value" -> "avg"
+            | _ -> s
+
+        seq {
+            yield! withinSla.GetValues() |> Seq.map(fun x -> Measurement(sprintf "within.sla.%s" (renameValueToAvg x.Name), x.Value)) |> Seq.cast<IMeasurement>
+            yield! aboveSla.GetValues() |> Seq.map(fun x -> Measurement(sprintf "above.sla.%s" (renameValueToAvg x.Name), x.Value)) |> Seq.cast<IMeasurement>
+        }
+
+    let reset'() =
+        withinSla.GetValuesAndReset() |> ignore
+        aboveSla.GetValuesAndReset() |> ignore
+
+    let getValuesAndReset'() =
+        let result = self.GetValues() |> Seq.toList
+        reset'()
+        result |> List.toSeq
+
+    let containsThresholdKey x =
+        x.Tags.Exists(fun x -> x.Key.Equals(SlaTimer.ThresholdKey, StringComparison.Ordinal))
+
+    do
+        if (containsThresholdKey config) then 
+            raise (ArgumentException(sprintf "You cannot supply a tag names '%s'" SlaTimer.ThresholdKey))
+        config.Tags.Add({Key = SlaTimer.ThresholdKey; Value = SLA.TotalMilliseconds.ToString()})
+
+    new(config: MonitorConfig, sla: TimeSpan) = SlaTimer(config, (fun () -> SystemStopwatch() :> IStopwatch), sla)
+
+    static member ThresholdKey = "threshold"
+
+    /// Time a System.Func call and return the value
+    member __.Record(f : Func<'T>) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let (result, elapsed) = stopwatch.Time(f)
+        float elapsed |> TimeSpan.FromMilliseconds |> updateStatistics
+        result
+
+    /// Time a System.Action call
+    member __.Record(f : Action) =
+        let stopwatch = stopwatchFactory.Invoke()
+        let elapsed = stopwatch.Time(f)
+        float elapsed |> TimeSpan.FromMilliseconds |> updateStatistics
+
+    /// Gets the monitor config
+    member __.Config = config
+ 
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use.
+    /// You should stop the stopwatch before passing so you do not incur the overhead of Okanshi. But it is not a requirement. 
+    /// The stopwatch is not stopped by Okanshi.
+    member __.RegisterElapsed(stopwatch : Stopwatch) = updateStatistics stopwatch.Elapsed
+
+    /// Manually register a timing, should used when you can't call Record since you at the call time do not know the timer to use
+    member __.Register(elapsed : TimeSpan) = elapsed |> updateStatistics
+
+    /// Gets the SLA statistics
+    member __.GetValues() = lock syncRoot getValues'
+
+    /// Gets the value and resets the monitor
+    member __.GetValuesAndReset() = Lock.lock syncRoot getValuesAndReset'
+
+    /// Start a manually controlled timinig
+    member __.Start() =
+        OkanshiTimer((fun x -> updateStatistics (TimeSpan.FromMilliseconds(float x))), (fun () -> stopwatchFactory.Invoke()))
+
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
         member self.Record(f : Action) = self.Record(f)

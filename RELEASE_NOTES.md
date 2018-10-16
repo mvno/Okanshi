@@ -1,6 +1,7 @@
 ### New in 6.1.0 (Unreleased)
 
 * Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
+* `SlaTimer` has been added. The timer makes it easy to track SLA-breaches.
 
 ### 6.0.0
 
