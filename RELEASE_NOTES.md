@@ -2,6 +2,7 @@
 
 * Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
 * `SlaTimer` has been added. The timer makes it easy to track SLA-breaches.
+* `MinMaxAvgGauge` has been added. It allows you to detect extreme values that would otherwise disappear in an average calculation.
 
 ### 6.0.0
 

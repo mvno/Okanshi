@@ -73,8 +73,14 @@ type OkanshiMonitor private () =
     static member MinGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new MinGauge(x))
+
+    /// Get or create a MinMaxAvgGauge with custom tags
+    static member MinMaxAvgGauge(name : string) = OkanshiMonitor.MinMaxAvgGauge(name, [||])
     
-    /// Get or add a AverageGauge
+    /// Get or create a MinMaxAvgGauge with custom tags
+    static member MinMaxAvgGauge(name : string, tags : Tag array) = 
+        let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
+        monitorRegistry.GetOrAdd(config, fun x -> new MinMaxAvgGauge(x))
     static member AverageGauge(name : string) = OkanshiMonitor.AverageGauge(name, [||])
     
     /// Get or add a AverageGauge with custom tags
