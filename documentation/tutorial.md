@@ -133,17 +133,15 @@ An example from the trenches. As part of a performance measurement we found a su
 Values returned are "min", "max" and "avg"
 
 ```csharp
-    monitor.Config.Name.Should().Be("Payload").Set(300);
-    monitor.Config.Name.Should().Be("Payload").Set(900);
-    monitor.Config.Name.Should().Be("Payload").Set(1200);
-	
+    OkanshiMonitor.MinMaxAvgGauge("Payload").Set(300);
+    OkanshiMonitor.MinMaxAvgGauge.Set(900);
+    OkanshiMonitor.MinMaxAvgGauge.Set(1200);
     // OR
-    
-	var gauge = new AverageGauge(MonitorConfig.Build("Maximum number of users"));
-	gauge.Set(300);
-	gauge.Set(900);
-	gauge.Set(1200);
-	
+    var gauge = new MinMaxAvgGauge(MonitorConfig.Build("Maximum number of users"));
+    gauge.Set(300);
+    gauge.Set(900);
+    gauge.Set(1200);
+     
     // RESULT is "min:300", "max:1200", "avg:800"
 ```
 
