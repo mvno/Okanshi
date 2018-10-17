@@ -67,7 +67,7 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Average_is_calculated_correctly_after_reset()
+        public void Values_are_calculated_correctly_after_reset()
         {
             gauge.Set(100L);
             gauge.GetValuesAndReset();
