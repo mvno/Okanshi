@@ -39,7 +39,7 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Get_and_reset_gets_the_maximum_value()
+        public void Set_and_reset_gets_the_maximum_value()
         {
             const long expected = 100L;
             gauge.Set(expected);
