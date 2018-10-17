@@ -1,6 +1,7 @@
 ﻿namespace Okanshi
 
 open System
+open System.Collections.Generic
 open Okanshi.Helpers
 
 /// Monitor type that provides the current value, fx. the percentage of disk space used
@@ -14,10 +15,13 @@ type IGauge<'T> =
     abstract Reset : unit -> unit
 
 /// A gauge implemenation that invokes a func to get the current value
-type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>) = 
+type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>, measurementNames : Dictionary<string, string>) = 
+    let valueName = measurementNames.["value"]
     
+    new (config : MonitorConfig, getValue : Func<'T>) = Gauge<'T>(config, getValue, dic ["value";"value"])
+
     /// Gets the current value
-    member __.GetValues() = seq { yield Measurement("value", getValue.Invoke()) }
+    member __.GetValues() = seq { yield Measurement(valueName, getValue.Invoke()) }
     
     /// Gets the monitor configuration
     member __.Config = config
@@ -32,8 +36,9 @@ type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>) =
 
 /// Gauge that keeps track of the maximum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
-type MaxGauge(config : MonitorConfig) = 
+type MaxGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
     let value = new AtomicLong()
+    let valueName = measurementNames.["value"]
     
     let rec exchangeValue newValue = 
         let originalValue = value.Get()
@@ -41,11 +46,13 @@ type MaxGauge(config : MonitorConfig) =
             let result = value.CompareAndSet(newValue, originalValue)
             if result <> originalValue then exchangeValue newValue
     
+    new (config : MonitorConfig) = MaxGauge(config, dic ["value";"value"])
+    
     /// Sets the value
     member __.Set(newValue) = exchangeValue newValue
     
     /// Gets the current value
-    member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+    member __.GetValues() = seq { yield Measurement(valueName, value.Get()) }
     
     /// Gets the monitor configuration
     member __.Config = config

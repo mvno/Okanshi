@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
@@ -15,7 +16,7 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Supplying_value_greater_than_previously_record_updates_the_value()
+        public void Supplying_one_value_returns_the_value()
         {
             const long expectedValue = 1000;
             var gauge = new MaxGauge(MonitorConfig.Build("Test"));
@@ -24,6 +25,41 @@ namespace Okanshi.Test
 
             gauge.GetValues().First().Value.Should().Be(expectedValue);
         }
+
+        [Fact]
+        public void Supplying_value_greater_than_previously_record_updates_the_value()
+        {
+            const long expectedValue = 1000;
+            var gauge = new MaxGauge(MonitorConfig.Build("Test"));
+            gauge.Set(expectedValue-1);
+            gauge.Set(expectedValue);
+
+            gauge.GetValues().First().Value.Should().Be(expectedValue);
+        }
+
+        [Fact]
+        public void default_value_name_is_value()
+        {
+            var gauge = new MaxGauge(MonitorConfig.Build("Test"));
+            gauge.GetValues().First().Name.Should().Be("value");
+        }
+
+        [Fact]
+        public void value_name_is_configurable()
+        {
+            var gauge = new MaxGauge(MonitorConfig.Build("Test"), new Dictionary<string, string>(){{"value","newName"}});
+            gauge.GetValues().First().Name.Should().Be("newName");
+        }
+
+
+	    [Fact]
+	    public void value_name_is_configurable_through_OkanshiMonitor()
+	    {
+		    OkanshiMonitor.DefaultMeasurementNames.Add(typeof(MaxGauge), new Dictionary<string, string>() {{"value", "newName"}});
+
+		    var gauge = OkanshiMonitor.MaxGauge("");
+		    gauge.GetValues().First().Name.Should().Be("newName");
+	    }
 
         [Fact]
         public void Supplying_value_less_than_previously_record_does_not_update_the_value()

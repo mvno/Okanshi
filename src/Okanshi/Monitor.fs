@@ -14,6 +14,7 @@ type MonitorFactory = unit -> IMonitor
 type OkanshiMonitor private () = 
     static let monitorRegistry = DefaultMonitorRegistry.Instance
     static let mutable defaultTags = new HashSet<Tag>() :> ISet<Tag>;
+    static let mutable defaultMeasurementNames = Dictionary<Type, Dictionary<string, string>>()
     
     /// Gets the default tags added to all monitors created
     static member DefaultTags
@@ -22,6 +23,12 @@ type OkanshiMonitor private () =
         and set (value: ISet<Tag>) =
             defaultTags <- value
     
+    /// Gets the default measurement names 
+    static member DefaultMeasurementNames
+        with get () = defaultMeasurementNames
+        and set (value) =
+            defaultMeasurementNames <- value
+
     /// Get or create a CumulativeCounter
     static member CumulativeCounter(name : string) = OkanshiMonitor.CumulativeCounter(name, [||])
     
@@ -60,7 +67,8 @@ type OkanshiMonitor private () =
     /// Get or create a MaxGaug with custom tags
     static member MaxGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new MaxGauge(x))
+        let names = OkanshiMonitor.DefaultMeasurementNames.[typeof<MaxGauge>]
+        monitorRegistry.GetOrAdd(config, fun x -> new MaxGauge(x, names))
     
     /// Get or create a MinGauge
     static member MinGauge(name : string) = OkanshiMonitor.MinGauge(name, [||])
