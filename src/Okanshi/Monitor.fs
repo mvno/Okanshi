@@ -14,10 +14,6 @@ type MonitorFactory = unit -> IMonitor
 type OkanshiMonitor private () = 
     static let monitorRegistry = DefaultMonitorRegistry.Instance
     static let mutable defaultTags = new HashSet<Tag>() :> ISet<Tag>;
-    static let defaultStep = TimeSpan.FromMinutes(float 1)
-    
-    /// Gets the default step size
-    static member DefaultStep = defaultStep
     
     /// Gets the default tags added to all monitors created
     static member DefaultTags
