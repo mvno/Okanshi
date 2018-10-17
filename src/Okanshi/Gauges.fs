@@ -219,3 +219,52 @@ type AverageGauge(config : MonitorConfig) =
         member self.Config = self.Config
         member self.Reset() = self.Reset()
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
+
+/// The MinMaxAvgGauge is an extended AverageGauage in that it keeps track of the min, max and average values since last reset. 
+/// This gauge is able to detect extreme values that would otherwise disappear in an average calculation.
+/// The implementation is simply wrapping the existing MinGauge, MaxGauge and AverageGauge.
+/// Values returned are "min", "max" and "avg"
+type MinMaxAvgGauge(config : MonitorConfig) as self = 
+    let syncRoot = new obj()
+    let min = new MinGauge(config)
+    let max = new MaxGauge(config)
+    let avg = new AverageGauge(config)
+
+    let getValues' () =
+        seq {
+            yield! min.GetValues() |> Seq.map (fun x -> Measurement("min", x.Value)) |> Seq.cast<IMeasurement>
+            yield! max.GetValues() |> Seq.map (fun x -> Measurement("max", x.Value)) |> Seq.cast<IMeasurement>
+            yield! avg.GetValues() |> Seq.map (fun x -> Measurement("avg", x.Value)) |> Seq.cast<IMeasurement>
+        }
+
+    let resetValues'() =
+        min.Reset()
+        max.Reset()
+        avg.Reset()
+
+    let getValueAndReset'() = 
+        let result = self.GetValues() |> Seq.toList
+        resetValues'()
+        result |> List.toSeq
+    
+    /// Sets the value
+    member __.Set(newValue : float) = lock syncRoot (fun () -> max.Set(int64 newValue); min.Set(int64 newValue); avg.Set(newValue); )
+
+    /// Gets the average calls time within the specified step
+    member __.GetValues() = lock syncRoot getValues'
+
+    /// Reset the gauge
+    member __.Reset() = lock syncRoot resetValues'
+
+    /// Gets the value and resets the monitor
+    member __.GetValuesAndReset() = lock syncRoot getValueAndReset'
+
+    /// Gets the monitor configuration
+    member __.Config = config
+    
+    interface IGauge<float> with
+        member self.Set(newValue : float) = self.Set(newValue)
+        member self.GetValues() = self.GetValues() |> Seq.cast
+        member self.Config = self.Config
+        member self.Reset() = self.Reset()
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast

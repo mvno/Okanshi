@@ -4,12 +4,13 @@ This part of the documentation describes the overall functionality you'll find i
 
 Table of Content
 
-   * [1. Metrics](#1-metrics)
+   * [1. Metrics and performance measurement](#1-metrics-and-performance-measurement)
      * [1.1. Gauges](#11-gauges)
        * [1.1.1. Gauge](#111-gauge)
        * [1.1.2. Max/MinGauge](#112-maxmingauge)
        * [1.1.3. AverageGauge](#113-averagegauge)
-       * [1.1.4. Long/Double/DecimalGauge](#114-longdoubledecimalgauge)
+       * [1.1.4. MinMaxAvgGauge](#114-minmaxavggauge)
+       * [1.1.5. Long/Double/DecimalGauge](#115-longdoubledecimalgauge)
      * [1.2. Counters](#12-counters)
        * [1.2.1. Counter](#121-counter)
        * [1.2.2. DoubleCounter](#122-doublecounter)
@@ -29,7 +30,7 @@ Table of Content
    * [5. OWIN](#5-owin)
  
 
-## 1. Metrics
+## 1. Metrics and performance measurement
 
 Okanshi has a couple of different monitor types, divided into the following categories:
 
@@ -37,12 +38,34 @@ Okanshi has a couple of different monitor types, divided into the following cate
   * Counters
   * Timers
 
-All monitors can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
+Where a "gauge" is something that returns its most present value, a "counter" is something you increment and a "timer", is the time taken for some chunk of code to execute. At its heart, what Okanshi does, is to aggregate data around these three concepts. Data is aggregated in order for the information load to be manageable both in terms of collection, transmission to a central storage and the following indexing.
+
+The three monitors represents the fundamentals to monitoring. And thus it is not uncommon to see these monitors combined into larger and more complex monitors. In fact, Okanshi is shipping such monitors itself. Why do we need to combine monitors? Remember that values from Okanshi are aggregated values. A measurement from a monitor may stem from possibly thousands of measurements. And so, it may be useful to operate on slightly more than just a single aggregated value. 
+
+An example from the trenches: You have a service level agreement to respond to request within 500 ms, and with Okanshi you measure the average time taken to be 400 ms. Are you in the clear? How many times could you have response times above 500 ms and still have an average of 400 ms? The answer is that you can't tell using the simples timer monitor provided in Okanshi. But you can turn to more advanced timers to help you out.
+
+At other times, the simplest readings more than suffice. It depends on a lot of factors. On factor being that your average response time is 10 ms and you maximum response time is 50 ms. Another factor may be that you do not have an explicit SLA with your online users, but you'd like to track long term trends of the user experience and identify releases that particular hurt performance. Do you want automated alarming? Identify critical situations where something is about to go wrong or has gone wrong without the service has crashed? 
+
+We consider the art of measuring a fine art. The relevancy of measurements depends on how what you want to do with your results. Gaining an understanding of what you want to do with you data is often an interactive process:
+
+  1. You measure data, 
+  2. evaluate the data and its uses, 
+  3. figure out you need to cover new situations or is missing data, 
+  4. you extend the monitoring 
+  5. goto 1.
+  
+Also you'll find not all code and not all services needs be treated the same. They have different characteristics, risk profiles etc. that make it relevant to do different kinds of measurements. Hence the iterative process stated above. 
+
+Starting with Okanshi, it's perfectly fine if you are unsure on how exactly you want to measure. Likewise, it is just as OK to have a very thorough understanding of what you want to measure, only to get a lot smarter once you see the results. 
+
+
 
 
 ### 1.1. Gauges
 
 Gauges are monitors that returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.
+
+All gauges can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
 #### 1.1.1. Gauge 
 
@@ -100,7 +123,30 @@ Example:
     gauge.Set(200);
 ```
 
-#### 1.1.4. Long/Double/DecimalGauge 
+
+#### 1.1.4. MinMaxAvgGauge
+
+The `MinMaxAvgGauge` is a combination of three gauges: MinGauge, MaxGauge and AverageGauge. It keeps track of the min, max and average values since last reset.  This gauge is able to detect extreme values that would otherwise disappear in an average calculation. When you are in need of a gauge and you are unsure about what data you are going to get out, this gauge may be the gauge to use.
+ 
+An example from the trenches. As part of a performance measurement we found a suspicious function that looked performance expensive. Initial averages shoved that it contributed only very few milliseconds to the processing time. But almost by accident, we found that sometimes the input payload rose from 1k-3k to 500k, and the execution time likewise rose to seconds! Those spikes would have been averaged away with the `AverageGauge`.
+ 
+Values returned are "min", "max" and "avg"
+
+```csharp
+    OkanshiMonitor.MinMaxAvgGauge("Payload").Set(300);
+    OkanshiMonitor.MinMaxAvgGauge.Set(900);
+    OkanshiMonitor.MinMaxAvgGauge.Set(1200);
+    // OR
+    var gauge = new MinMaxAvgGauge(MonitorConfig.Build("Maximum number of users"));
+    gauge.Set(300);
+    gauge.Set(900);
+    gauge.Set(1200);
+     
+    // RESULT is "min:300", "max:1200", "avg:800"
+```
+
+
+#### 1.1.5. Long/Double/DecimalGauge 
 
 The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`, `double` and `decimal` values respectively. The value you set is the value you get. Usage of these monitors is the same.
 
@@ -118,6 +164,8 @@ The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`
 ### 1.2. Counters 
 
 Counters are monitors that you can increment as needed. They are thread-safe by default.
+
+All counters can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
 #### 1.2.1. Counter 
 
@@ -175,6 +223,8 @@ This counter make sense to use then you don't want to take the polling interval 
 ### 1.3. Timers 
 
 Timers measures the time it takes to execute a function.
+
+All timers can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
 All timers also support "manual" timing, that are stopped manually instead of passing a Func<T> or Action.
 Example:

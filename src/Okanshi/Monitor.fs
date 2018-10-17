@@ -26,107 +26,115 @@ type OkanshiMonitor private () =
         and set (value: ISet<Tag>) =
             defaultTags <- value
     
-    /// Get or add a CumulativeCounter
+    /// Get or create a CumulativeCounter
     static member CumulativeCounter(name : string) = OkanshiMonitor.CumulativeCounter(name, [||])
     
-    /// Get or add a CumulativeCounter with custom tags
+    /// Get or create a CumulativeCounter with custom tags
     static member CumulativeCounter(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new CumulativeCounter(x))
     
-    /// Get or add a PeakRateCounter
+    /// Get or create a PeakRateCounter
     static member Counter(name) = OkanshiMonitor.Counter(name, [||])
     
-    /// Get or add a PeakRateCounter with custom tags
+    /// Get or create a PeakRateCounter with custom tags
     static member Counter(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new Counter(x))
     
-    /// Get or add a DoubleCounter
+    /// Get or create a DoubleCounter
     static member DoubleCounter(name) = OkanshiMonitor.DoubleCounter(name, [||])
     
-    /// Get or add a DoubleCounter
+    /// Get or create a DoubleCounter
     static member DoubleCounter(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new DoubleCounter(x))
     
-    /// Get or add a Gauge
+    /// Get or create a Gauge
     static member Gauge(name : string, getValue : Func<'T>) = OkanshiMonitor.Gauge(name, getValue, [||])
     
-    /// Get or add a Gauge with custom tags
+    /// Get or create a Gauge with custom tags
     static member Gauge<'T>(name : string, getValue : Func<'T>, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new Gauge<'T>(x, getValue))
     
-    /// Get or add a MaxGauge 
+    /// Get or create a MaxGauge 
     static member MaxGauge(name : string) = OkanshiMonitor.MaxGauge(name, [||])
     
-    /// Get or add a MaxGaug with custom tags
+    /// Get or create a MaxGaug with custom tags
     static member MaxGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new MaxGauge(x))
     
-    /// Get or add a MinGauge
+    /// Get or create a MinGauge
     static member MinGauge(name : string) = OkanshiMonitor.MinGauge(name, [||])
     
-    /// Get or add a MinGauge with custom tags
+    /// Get or create a MinGauge with custom tags
     static member MinGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new MinGauge(x))
+
+    /// Get or create a MinMaxAvgGauge with custom tags
+    static member MinMaxAvgGauge(name : string) = OkanshiMonitor.MinMaxAvgGauge(name, [||])
     
-    /// Get or add a AverageGauge
+    /// Get or create a MinMaxAvgGauge with custom tags
+    static member MinMaxAvgGauge(name : string, tags : Tag array) = 
+        let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
+        monitorRegistry.GetOrAdd(config, fun x -> new MinMaxAvgGauge(x))
+    
+    /// Get or create a AverageGauge
     static member AverageGauge(name : string) = OkanshiMonitor.AverageGauge(name, [||])
     
-    /// Get or add a AverageGauge with custom tags
+    /// Get or create a AverageGauge with custom tags
     static member AverageGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new AverageGauge(x))
     
-    /// Get or add a LongGauge
+    /// Get or create a LongGauge
     static member LongGauge(name : string) = OkanshiMonitor.LongGauge(name, [||])
     
-    /// Get or add a LongGauge
+    /// Get or create a LongGauge
     static member LongGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new LongGauge(x))
     
-    /// Get or add a DoubleGauge
+    /// Get or create a DoubleGauge
     static member DoubleGauge(name : string) = OkanshiMonitor.DoubleGauge(name, [||])
     
-    /// Get or add a DoubleGauge with custom tags
+    /// Get or create a DoubleGauge with custom tags
     static member DoubleGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new DoubleGauge(x))
     
-    /// Get or add a DecimalGauge
+    /// Get or create a DecimalGauge
     static member DecimalGauge(name : string) = OkanshiMonitor.DecimalGauge(name, [||])
     
-    /// Get or add a DecimalGauge with custom tags
+    /// Get or create a DecimalGauge with custom tags
     static member DecimalGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new DecimalGauge(x))
     
-    /// Get or add a Timer, with a step size of 1 minute
+    /// Get or create a Timer, with a step size of 1 minute
     static member Timer(name) = OkanshiMonitor.Timer(name, [||])
     
-    /// Get or add a Timer with custom tags
+    /// Get or create a Timer with custom tags
     static member Timer(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new Timer(x))
 
-    /// Get or add a SLA-Timer, with a step size of 1 minute
+    /// Get or create a SLA-Timer, with a step size of 1 minute
     static member SlaTimer(name : string, sla: TimeSpan) = OkanshiMonitor.SlaTimer(name, sla, [||])
     
-    /// Get or add a SLA-Timer with custom tags
+    /// Get or create a SLA-Timer with custom tags
     static member SlaTimer(name : string, sla : TimeSpan, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new SlaTimer(x, sla))
 
 #if NET45
-    /// Get or add a performance counter monitor
+    /// Get or create a performance counter monitor
     static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name)
     
-    /// Get or add a performance counter monitor with custom tags
+    /// Get or create a performance counter monitor with custom tags
     static member PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new PerformanceCounterMonitor(x, counterConfig))

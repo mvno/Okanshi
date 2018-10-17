@@ -66,6 +66,8 @@ type Measurement<'a>(name : string, value: 'a) =
     /// The value
     member __.Value = value
 
+    override Object.ToString() = sprintf "%s:%s" name (value.ToString())
+
     interface IMeasurement with
         member self.Name = self.Name
         member self.Value = self.Value :> obj
