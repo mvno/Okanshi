@@ -1,6 +1,7 @@
 ﻿namespace Okanshi
 
 open System
+open System.Collections.Generic
 open System.Diagnostics
 open Okanshi.Helpers
 
@@ -86,8 +87,8 @@ type ITimer =
     abstract Register : TimeSpan -> unit
 
 /// A timer providing the "average","total time", "count", "min" and "max" for the recordings
-type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self = 
-    let max = new MaxGauge(config)
+type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>, measurementNames : Dictionary<string, string>) as self = 
+    let max = new MaxGauge(config, dic ["value"; measurementNames.["max"]])
     let min = new MinGauge(config)
     let count = new Counter(config)
     let total = new Counter(config)
@@ -109,7 +110,7 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
             yield! avg.GetValues() |> Seq.map (fun x -> Measurement("value", x.Value)) |> Seq.cast<IMeasurement>
             yield! total.GetValues() |> Seq.map (fun x -> Measurement("totalTime", x.Value)) |> Seq.cast<IMeasurement>
             yield! count.GetValues() |> Seq.map (fun x -> Measurement("count", x.Value)) |> Seq.cast<IMeasurement>
-            yield! max.GetValues() |> Seq.map (fun x -> Measurement("max", x.Value)) |> Seq.cast<IMeasurement>
+            yield! max.GetValues() |> Seq.cast<IMeasurement>
             yield! min.GetValues() |> Seq.map (fun x -> Measurement("min", x.Value)) |> Seq.cast<IMeasurement>
         }
 
@@ -126,6 +127,7 @@ type Timer(config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) as self 
         result |> List.toSeq
 
     new(config: MonitorConfig) = Timer(config, fun () -> SystemStopwatch() :> IStopwatch)
+    new (config : MonitorConfig, stopwatchFactory : Func<IStopwatch>) = Timer(config, stopwatchFactory, dic ["value";"value";"total";"total";"count";"count";"max";"max";"min";"min"])
     
     /// Time a System.Func call and return the value
     member __.Record(f : Func<'T>) =

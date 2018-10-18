@@ -5,8 +5,10 @@ open System.Collections.Generic
 [<AutoOpen>]
 module DictionaryHelp =
     let dic (keyValues : seq<string>) : Dictionary<string, string> =
+        let x = Array.ofSeq keyValues
         let result = new Dictionary<string, string>()
-        Seq.iter2 (fun a b -> result.Add(a,b)) keyValues (Seq.skip 1 keyValues )
+        for i in [0..2..x.Length-1] do
+            result.Add(x.[i], x.[i+1])
         result
 
 [<AutoOpen>]

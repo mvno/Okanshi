@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -280,5 +281,16 @@ namespace Okanshi.Test
             var values = timer.GetValues().Select(x => x.Name);
             values.Should().BeEquivalentTo("value", "max", "min", "count", "totalTime");
         }
+
+	    [Fact]
+	    public void Measurement_names_are_configable()
+	    {
+		    var measurementNames = new Dictionary<string,string>(){{"max","maksimus"}};
+		    var t = new Timer(MonitorConfig.Build("Test"), () => stopwatch, measurementNames);
+
+		    var values = t.GetValues().Select(x => x.Name);
+
+		    values.Should().BeEquivalentTo("value", "maksimus", "min", "count", "totalTime");
+	    }
     }
 }
