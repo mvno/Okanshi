@@ -4,33 +4,38 @@ This part of the documentation describes the overall functionality you'll find i
 
 Table of Content
 
-   * [1. Metrics and performance measurement](#1-metrics-and-performance-measurement)
-     * [1.1. Gauges](#11-gauges)
-       * [1.1.1. Gauge](#111-gauge)
-       * [1.1.2. Max/MinGauge](#112-maxmingauge)
-       * [1.1.3. AverageGauge](#113-averagegauge)
-       * [1.1.4. MinMaxAvgGauge](#114-minmaxavggauge)
-       * [1.1.5. Long/Double/DecimalGauge](#115-longdoubledecimalgauge)
-     * [1.2. Counters](#12-counters)
-       * [1.2.1. Counter](#121-counter)
-       * [1.2.2. DoubleCounter](#122-doublecounter)
-       * [1.2.3. CumulativeCounter](#123-cumulativecounter)
-     * [1.3. Timers](#13-timers)
-       * [1.3.1. Timer](#131-timer)
-       * [1.3.2. SlaTimer](#132-slatimer)
-     * [1.4. Performance counters](#14-performance-counters)
-   * [2. Health checks](#2-health-checks)
-   * [3. HTTP Endpoint](#3-http-endpoint)
-     * [3.1. Starting the endpoint](#31-starting-the-endpoint)
-     * [3.2. Health checks](#32-health-checks)
-     * [3.3. Assembly dependencies](#33-assembly-dependencies)
-     * [3.4. NuGet dependencies](#34-nuget-dependencies)
-   * [4. Observers](#4-observers)
-     * [4.1. Observer setup](#41-observer-setup)
-   * [5. OWIN](#5-owin)
+   * [1. Introduction](#1-introduction)
+     * [1.1. Metrics and performance measurement](#11-metrics-and-performance-measurement)
+     * [1.2. Names and tags](#12-names-and-tags)
+   * [2. Monitor documentation](#2-monitor-documentation)
+     * [2.1. Gauges](#21-gauges)
+       * [2.1.1. Gauge](#211-gauge)
+       * [2.1.2. Max/MinGauge](#212-maxmingauge)
+       * [2.1.3. AverageGauge](#213-averagegauge)
+       * [2.1.4. MinMaxAvgGauge](#214-minmaxavggauge)
+       * [2.1.5. Long/Double/DecimalGauge](#215-longdoubledecimalgauge)
+     * [2.2. Counters](#22-counters)
+       * [2.2.1. Counter](#221-counter)
+       * [2.2.2. DoubleCounter](#222-doublecounter)
+       * [2.2.3. CumulativeCounter](#223-cumulativecounter)
+     * [2.3. Timers](#23-timers)
+       * [2.3.1. Timer](#231-timer)
+       * [2.3.2. SlaTimer](#232-slatimer)
+     * [2.4. Performance counters](#24-performance-counters)
+   * [3. Health checks](#3-health-checks)
+   * [4. HTTP Endpoint](#4-http-endpoint)
+     * [4.1. Starting the endpoint](#41-starting-the-endpoint)
+     * [4.2. Health checks](#42-health-checks)
+     * [4.3. Assembly dependencies](#43-assembly-dependencies)
+     * [4.4. NuGet dependencies](#44-nuget-dependencies)
+   * [5. Observers](#5-observers)
+     * [5.1. Observer setup](#51-observer-setup)
+   * [6. OWIN](#6-owin)
  
 
-## 1. Metrics and performance measurement
+## 1. Introduction
+
+### 1.1. Metrics and performance measurement
 
 Okanshi has a couple of different monitor types, divided into the following categories:
 
@@ -59,15 +64,36 @@ Also you'll find not all code and not all services needs be treated the same. Th
 Starting with Okanshi, it's perfectly fine if you are unsure on how exactly you want to measure. Likewise, it is just as OK to have a very thorough understanding of what you want to measure, only to get a lot smarter once you see the results. 
 
 
+### 1.2. Names and tags
+
+An Okanshi measurement come with both a *name* and a set of *tags*, both of which play a role in distinguishing one measurement from another.
+Think of the name of a measurement as the overal distinguishing component, a key if you will. And think of a tag like an *optional* subdivision of that measurement that enable you to "slice and dice" you data.
+
+For example, take the measurement named "Request count" that is a counter counting the number of requests our system receives. We can sum our measurements for a time period and know our load. We can then use the tag "servername" to group our measurements so we know about the distribution of load across our cluster. We can then further split our data using the tag "endpoint path" to see within each server what end points are the most active. 
+
+Recall that we said we can "slide and dice" data with tags. For example, we can choose to only see the request count pr. endpoint to get an overall overview of our end point traffic disregarding the actual machines they hit. Another useful tag could be an "environment" tag describing whether you are in test, pre-production, production, ...
+
+Had we instead incorporated server name and end point names in the measurement name, we would not be able to do the same kind of dynamic grouping of data.
+
+These were just two examples of how you can utilize names and tags. What tags you best fit your situation is difficult to say, but we can provide a list of inspiration for general useful tags. 
+
+* **Computer name:** The name/id of the computer making measurement can identify if a particular machine or hardware is experiencing problems.
+* **Environment name:** For example "test" and "production" - enable you to see how things are going in various environments.
+* **Request path:** In a web-service context the request path enable you to summarize either on individual end point or globally
+* **Request method:** In a web-service context, e.g. GET or POST
+* **Unit of measure:** When you cannot determine from the measurement name the unit of measure, and its not a standard unit (e.g. days or seconds) consider applying it as a tag.
 
 
-### 1.1. Gauges
+
+## 2. Monitor documentation
+
+### 2.1. Gauges
 
 Gauges are monitors that returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.
 
 All gauges can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
-#### 1.1.1. Gauge 
+#### 2.1.1. Gauge 
 
 The `Gauge` is a monitor that takes a `Func<T>`. Each time the value is polled from the gauge, the `Func<T>` is called and the value returned is the current value.
 
@@ -79,7 +105,7 @@ Example:
     var gauge = new Gauge(MonitorConfig.Build("Number of users"), () => _numberOfUsers);
 ```
 
-#### 1.1.2. Max/MinGauge 
+#### 2.1.2. Max/MinGauge 
 
 The `MaxGauge` is a monitor that tracks the current maximum value. It can be used to track the maximum number of users logged in at the same time or similar. The initial value of the gauge is zero.
 The `MinGauge` is a monitor that tracks the current minimum value. The initial value of the gauge is zero, which means zero is treated as no value at all. This has the affect that if the gauge is zero, and a non zero value is posted to the gauge, it would effectively change the minimum value. This is a bug that will be fixed in a future version.
@@ -108,7 +134,7 @@ Example:
     gauge.Set(1);
 ```
 
-#### 1.1.3. AverageGauge 
+#### 2.1.3. AverageGauge 
 
 The `AverageGauge` monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval. The interval is controlled by the poller.
 
@@ -124,7 +150,7 @@ Example:
 ```
 
 
-#### 1.1.4. MinMaxAvgGauge
+#### 2.1.4. MinMaxAvgGauge
 
 The `MinMaxAvgGauge` is a combination of three gauges: MinGauge, MaxGauge and AverageGauge. It keeps track of the min, max and average values since last reset.  This gauge is able to detect extreme values that would otherwise disappear in an average calculation. When you are in need of a gauge and you are unsure about what data you are going to get out, this gauge may be the gauge to use.
  
@@ -146,7 +172,7 @@ Values returned are "min", "max" and "avg"
 ```
 
 
-#### 1.1.5. Long/Double/DecimalGauge 
+#### 2.1.5. Long/Double/DecimalGauge 
 
 The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`, `double` and `decimal` values respectively. The value you set is the value you get. Usage of these monitors is the same.
 
@@ -161,13 +187,13 @@ The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`
     gauge.Set(0);
 ```
 
-### 1.2. Counters 
+### 2.2. Counters 
 
 Counters are monitors that you can increment as needed. They are thread-safe by default.
 
 All counters can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
-#### 1.2.1. Counter 
+#### 2.2.1. Counter 
 
 A `Counter` counts the number of events between polling. The value is a ```int``` and can be incremented using a ```int```.
 
@@ -184,7 +210,7 @@ A `Counter` counts the number of events between polling. The value is a ```int``
     counter.Increment();
 ```
 
-#### 1.2.2. DoubleCounter 
+#### 2.2.2. DoubleCounter 
 
 A `DoubleCounter` counts the number of events between polling. The value is a ```double``` and can be incremented using a ```double```.
 
@@ -201,7 +227,7 @@ A `DoubleCounter` counts the number of events between polling. The value is a ``
     counter.Increment();
 ```
 
-#### 1.2.3. CumulativeCounter 
+#### 2.2.3. CumulativeCounter 
 
 Is a counter that is never reset at runtime, but retained during the lifetime of the process. Other than that, it works exactly like all other counters. . The value is a ```int``` and can be incremented using a ```int```.
 
@@ -220,7 +246,7 @@ This counter make sense to use then you don't want to take the polling interval 
     counter.Increment();
 ```
 
-### 1.3. Timers 
+### 2.3. Timers 
 
 Timers measures the time it takes to execute a function.
 
@@ -235,7 +261,7 @@ Example:
     timer.Stop(); // When stopped the timing is registered
 ```
 
-#### 1.3.1. Timer 
+#### 2.3.1. Timer 
 
 This is a simple timer that, within a specified interval, measures:
 
@@ -257,7 +283,7 @@ Example:
 ```
 
 
-#### 1.3.2. SlaTimer
+#### 2.3.2. SlaTimer
 
 A service-level agreement (SLA) is a commitment between a service provider and a client. For example, the service provider promise to respond to a request within an agreed amount of time. 
 
@@ -268,7 +294,7 @@ enable us to better understand the periods where we break our SLA by knowing how
 
 
 
-### 1.4. Performance counters
+### 2.4. Performance counters
 
 As of version 4 it is also possible to monitor Windows performance counters.
 
@@ -282,7 +308,7 @@ As of version 4 it is also possible to monitor Windows performance counters.
 
 
 
-## 2. Health checks
+## 3. Health checks
 
 You can also add different health checks to you application. For example the number of files in a directory or something else making sense in you case.
 Health checks are added like this:
@@ -306,11 +332,11 @@ As of version 6 health checks can no longer be registered as a monitor.
 
 
 
-## 3. HTTP Endpoint
+## 4. HTTP Endpoint
 
 Prior to version 4, the HTTP endpoint was include in the core package. This is no longer the case, it now exists in a separate package called Okanshi.Endpoint.
 
-### 3.1. Starting the endpoint
+### 4.1. Starting the endpoint
 
 You start the monitor like this:
 
@@ -328,29 +354,29 @@ For custom configuration of the endpoint see the API reference.
 
 Notice that at application startup, the enpoint contains *no data* the first minute. This is because no data have been gathered yet. You can control that period by tweaking the poller interval.
 
-### 3.2. Health checks
+### 4.2. Health checks
 
 To see the current status of all defined healthchecks, go to [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
 
-### 3.3. Assembly dependencies
+### 4.3. Assembly dependencies
 
 The endpoint can show all assemblies currently loaded in the AppDomain.
 
 To see all assembly dependencies for you application just access [http://localhost:13004/dependencies](http://localhost:13004/dependencies). It will provide a list of the names and version of all dependencies.
 
-### 3.4. NuGet dependencies
+### 4.4. NuGet dependencies
 
 If the package.config file is available in the current directory of the process. The endpoint can show all NuGet dependencies and their version. This information can be accessed through [http://localhost:13004/packages](http://localhost:13004/packages).
 
 
 
-## 4. Observers
+## 5. Observers
 
 Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database. An observer storing metrics in-memory is included in the Okanshi package.
 
 An observer to send metrics to InfluxDB is provided through another NuGet package called, Okanshi.InfluxDBObserver.
 
-### 4.1. Observer setup
+### 5.1. Observer setup
 
 Setting up an observer is easy:
 
@@ -408,7 +434,7 @@ To set up this particular observer we can use the following code. It sets up som
 ```
 
 
-## 5. OWIN
+## 6. OWIN
 
 Using the package Okanshi.Owin it is possible to measure the request duration grouped by path, HTTP method and optionally the response status code.
 
