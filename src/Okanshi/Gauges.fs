@@ -246,17 +246,17 @@ type AverageGauge(config : MonitorConfig, measurementNames : Dictionary<string, 
 /// This gauge is able to detect extreme values that would otherwise disappear in an average calculation.
 /// The implementation is simply wrapping the existing MinGauge, MaxGauge and AverageGauge.
 /// Values returned are "min", "max" and "avg"
-type MinMaxAvgGauge(config : MonitorConfig) as self = 
+type MinMaxAvgGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) as self = 
     let syncRoot = new obj()
-    let min = new MinGauge(config)
-    let max = new MaxGauge(config)
-    let avg = new AverageGauge(config)
+    let min = new MinGauge(config, dic ["value"; measurementNames.["min"]])
+    let max = new MaxGauge(config, dic ["value"; measurementNames.["max"]])
+    let avg = new AverageGauge(config, dic ["value"; measurementNames.["avg"]])
 
     let getValues' () =
         seq {
-            yield! min.GetValues() |> Seq.map (fun x -> Measurement("min", x.Value)) |> Seq.cast<IMeasurement>
-            yield! max.GetValues() |> Seq.map (fun x -> Measurement("max", x.Value)) |> Seq.cast<IMeasurement>
-            yield! avg.GetValues() |> Seq.map (fun x -> Measurement("avg", x.Value)) |> Seq.cast<IMeasurement>
+            yield! min.GetValues() |> Seq.cast<IMeasurement>
+            yield! max.GetValues() |> Seq.cast<IMeasurement>
+            yield! avg.GetValues() |> Seq.cast<IMeasurement>
         }
 
     let resetValues'() =
@@ -268,6 +268,8 @@ type MinMaxAvgGauge(config : MonitorConfig) as self =
         let result = self.GetValues() |> Seq.toList
         resetValues'()
         result |> List.toSeq
+
+    new (config : MonitorConfig) = MinMaxAvgGauge(config, dic ["min";"min";"max";"max";"avg";"avg"])
     
     /// Sets the value
     member __.Set(newValue : float) = lock syncRoot (fun () -> max.Set(int64 newValue); min.Set(int64 newValue); avg.Set(newValue); )
