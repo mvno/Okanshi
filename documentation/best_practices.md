@@ -28,7 +28,7 @@ While naming monitors is important, remember you can configure tags that are sup
 
 The list
 
-* **Computer name:** The name/id of the computer making measurement can identify if a particular machine or hardware is experienceing problems.
+* **Computer name:** The name/id of the computer making measurement can identify if a particular machine or hardware is experiencing problems.
 * **Environment name:** For example "test" and "production" - enable you to see how things are going in various environments.
 * **Request path:** In a web-service context the request path enable you to summarize either on individual end point or globally
 * **Request method:** In a web-service context, e.g. GET or POST
