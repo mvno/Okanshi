@@ -59,6 +59,7 @@ type OkanshiMonitor private () =
     /// Get or create a Gauge with custom tags
     static member Gauge<'T>(name : string, getValue : Func<'T>, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
+        let names = OkanshiMonitor.DefaultMeasurementNames.[typeof<MaxGauge>]
         monitorRegistry.GetOrAdd(config, fun x -> new Gauge<'T>(x, getValue))
     
     /// Get or create a MaxGauge 
@@ -76,7 +77,8 @@ type OkanshiMonitor private () =
     /// Get or create a MinGauge with custom tags
     static member MinGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new MinGauge(x))
+        let names = OkanshiMonitor.DefaultMeasurementNames.[typeof<MinGauge>]
+        monitorRegistry.GetOrAdd(config, fun x -> new MinGauge(x, names))
 
     /// Get or create a MinMaxAvgGauge with custom tags
     static member MinMaxAvgGauge(name : string) = OkanshiMonitor.MinMaxAvgGauge(name, [||])
@@ -92,7 +94,8 @@ type OkanshiMonitor private () =
     /// Get or create a AverageGauge with custom tags
     static member AverageGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new AverageGauge(x))
+        let names = OkanshiMonitor.DefaultMeasurementNames.[typeof<AverageGauge>]
+        monitorRegistry.GetOrAdd(config, fun x -> new AverageGauge(x, names))
     
     /// Get or create a LongGauge
     static member LongGauge(name : string) = OkanshiMonitor.LongGauge(name, [||])
@@ -100,7 +103,8 @@ type OkanshiMonitor private () =
     /// Get or create a LongGauge
     static member LongGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new LongGauge(x))
+        let names = OkanshiMonitor.DefaultMeasurementNames.[typeof<LongGauge>]
+        monitorRegistry.GetOrAdd(config, fun x -> new LongGauge(x, names))
     
     /// Get or create a DoubleGauge
     static member DoubleGauge(name : string) = OkanshiMonitor.DoubleGauge(name, [||])
@@ -108,7 +112,8 @@ type OkanshiMonitor private () =
     /// Get or create a DoubleGauge with custom tags
     static member DoubleGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new DoubleGauge(x))
+        let names = OkanshiMonitor.DefaultMeasurementNames.[typeof<DoubleGauge>]
+        monitorRegistry.GetOrAdd(config, fun x -> new DoubleGauge(x, names))
     
     /// Get or create a DecimalGauge
     static member DecimalGauge(name : string) = OkanshiMonitor.DecimalGauge(name, [||])
@@ -116,7 +121,8 @@ type OkanshiMonitor private () =
     /// Get or create a DecimalGauge with custom tags
     static member DecimalGauge(name : string, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
-        monitorRegistry.GetOrAdd(config, fun x -> new DecimalGauge(x))
+        let names = OkanshiMonitor.DefaultMeasurementNames.[typeof<DecimalGauge>]
+        monitorRegistry.GetOrAdd(config, fun x -> new DecimalGauge(x, names))
     
     /// Get or create a Timer, with a step size of 1 minute
     static member Timer(name) = OkanshiMonitor.Timer(name, [||])

@@ -63,7 +63,7 @@ type MaxGauge(config : MonitorConfig, measurementNames : Dictionary<string, stri
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() =
         let value = value.GetAndSet(0L)
-        seq { yield Measurement("value", value) }
+        seq { yield Measurement(valueName, value) }
 
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -74,8 +74,9 @@ type MaxGauge(config : MonitorConfig, measurementNames : Dictionary<string, stri
 
 /// Gauge that keeps track of the minimum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
-type MinGauge(config : MonitorConfig) = 
+type MinGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
     let value = new AtomicLong()
+    let valueName = measurementNames.["value"]
     
     let rec exchangeValue newValue = 
         let originalValue = value.Get()
@@ -83,11 +84,13 @@ type MinGauge(config : MonitorConfig) =
             let result = value.CompareAndSet(newValue, originalValue)
             if result <> originalValue then exchangeValue newValue
     
+    new (config : MonitorConfig) = MinGauge(config, dic ["value";"value"])
+
     /// Sets the value
     member __.Set(newValue) = exchangeValue newValue
     
     /// Gets the current value
-    member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+    member __.GetValues() = seq { yield Measurement(valueName, value.Get()) }
     
     /// Gets the monitor configuration
     member __.Config = config
@@ -96,7 +99,7 @@ type MinGauge(config : MonitorConfig) =
     member __.Reset() = value.Set(0L)
     
     /// Gets the value and resets the monitor
-    member __.GetValuesAndReset() = seq { yield Measurement("value", value.GetAndSet(0L)) }
+    member __.GetValuesAndReset() = seq { yield Measurement(valueName, value.GetAndSet(0L)) }
     
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -106,14 +109,17 @@ type MinGauge(config : MonitorConfig) =
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A gauge the reports a long value
-type LongGauge(config : MonitorConfig) = 
+type LongGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
     let value = new AtomicLong()
+    let valueName = measurementNames.["value"]
     
+    new (config : MonitorConfig) = LongGauge(config, dic ["value";"value"])
+
     /// Sets the value
     member __.Set(newValue) = value.Set(newValue)
     
     /// Gets the current value
-    member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+    member __.GetValues() = seq { yield Measurement(valueName, value.Get()) }
     
     /// Gets the monitor configuration
     member __.Config = config
@@ -122,7 +128,7 @@ type LongGauge(config : MonitorConfig) =
     member __.Reset() = value.Set(0L)
     
     /// Gets the value and resets the monitor
-    member __.GetValuesAndReset() = seq { yield Measurement("value", value.GetAndSet(0L)) }
+    member __.GetValuesAndReset() = seq { yield Measurement(valueName, value.GetAndSet(0L)) }
     
     interface IGauge<int64> with
         member self.Set(newValue) = self.Set(newValue)
@@ -132,14 +138,17 @@ type LongGauge(config : MonitorConfig) =
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A gauge that reports a double value
-type DoubleGauge(config : MonitorConfig) = 
+type DoubleGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
     let value = new AtomicDouble()
+    let valueName = measurementNames.["value"]
     
+    new (config : MonitorConfig) = DoubleGauge(config, dic ["value";"value"])
+
     /// Sets the value
     member __.Set(newValue) = value.Set(newValue)
     
     /// Gets the current value
-    member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+    member __.GetValues() = seq { yield Measurement(valueName, value.Get()) }
     
     /// Gets the monitor configuration
     member __.Config = config
@@ -150,7 +159,7 @@ type DoubleGauge(config : MonitorConfig) =
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() =
         let value = value.GetAndSet(0.0)
-        seq { yield Measurement("value", value) }
+        seq { yield Measurement(valueName, value) }
     
     interface IGauge<double> with
         member self.Set(newValue) = self.Set(newValue)
@@ -160,14 +169,17 @@ type DoubleGauge(config : MonitorConfig) =
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A gauge that reports a decimal value
-type DecimalGauge(config : MonitorConfig) = 
+type DecimalGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
     let value = new AtomicDecimal()
+    let valueName = measurementNames.["value"]
     
+    new (config : MonitorConfig) = DecimalGauge(config, dic ["value";"value"])
+
     /// Sets the value
     member __.Set(newValue) = value.Set(newValue)
     
     /// Gets the current value
-    member __.GetValues() = seq { yield Measurement("value", value.Get()) }
+    member __.GetValues() = seq { yield Measurement(valueName, value.Get()) }
     
     /// Gets the monitor configuration
     member __.Config = config
@@ -176,7 +188,7 @@ type DecimalGauge(config : MonitorConfig) =
     member __.Reset() = value.Set(0m)
     
     /// Gets the value and resets the monitor
-    member __.GetValuesAndReset() = seq { yield Measurement("value", value.GetAndSet(0m)) }
+    member __.GetValuesAndReset() = seq { yield Measurement(valueName, value.GetAndSet(0m)) }
     
     interface IGauge<decimal> with
         member self.Set(newValue) = self.Set(newValue)
@@ -186,16 +198,17 @@ type DecimalGauge(config : MonitorConfig) =
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// Gauge that keeps track of the average value since last reset. Initial value is 0.
-type AverageGauge(config : MonitorConfig) = 
+type AverageGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
     let mutable value = 0.0
     let mutable count = 0L
     let syncRoot = new obj()
+    let valueName = measurementNames.["value"]
     
     let rec updateAverage v = 
         count <- count + 1L
         value <- ((value * ((count - 1L) |> float)) + v) / (count |> float)
     
-    let getValue'() = seq { yield Measurement("value", value) } |> Seq.toList
+    let getValue'() = seq { yield Measurement(valueName, value) } |> Seq.toList
     let resetValue'() =
         count <- 0L
         value <- 0.0
@@ -205,6 +218,8 @@ type AverageGauge(config : MonitorConfig) =
         resetValue'()
         result |> List.toSeq
     
+    new (config : MonitorConfig) = AverageGauge(config, dic ["value";"value"])
+
     /// Sets the value
     member __.Set(newValue) = lockWithArg syncRoot newValue updateAverage
     
