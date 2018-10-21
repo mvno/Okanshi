@@ -3,6 +3,7 @@
 * Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
 * `SlaTimer` has been added. The timer makes it easy to track SLA-breaches.
 * `MinMaxAvgGauge` has been added. It allows you to detect extreme values that would otherwise disappear in an average calculation.
+* `OkanshiMonitor.DefaultStep` has been deleted since it was forgotten in an earlier clean up process.
 
 ### 6.0.0
 
@@ -71,7 +72,7 @@ All fixes in the beta releases, see below
 ### 5.0.0-beta2
 
 **BREAKING CHANGES**
-* Introduce submonitors to allowing grouping of monitors. This means that submonitors no longer should be registered in the registry, instead submonitors should be returned by ```GetAllMonitors()```. This allows more control in the obsservers to decide how to process the information. Currently the InfluxDbObserver doesn't support submonitors with submonitors.
+* Introduce submonitors to allowing grouping of monitors. This means that submonitors no longer should be registered in the registry, instead submonitors should be returned by ```GetAllMonitors()```. This allows more control in the observers to decide how to process the information. Currently the InfluxDbObserver doesn't support submonitors with submonitors.
 
 ### 5.0.0-beta
 
@@ -88,7 +89,7 @@ All fixes in the beta releases, see below
 
 ### 4.0.2
 
-* Fixed bug where diposing the InfluxDB observer, would cause the underlying poller to be stopped.
+* Fixed bug where disposing the InfluxDB observer, would cause the underlying poller to be stopped.
 
 ### 4.0.1
 
@@ -153,4 +154,4 @@ OkanshiMonitor.BasicTimer("Test", new[] { new Tag("CustomerTag", "CustomValue") 
 * Fix bug where CSharp.Monitor would not be usable in conjuction with the API
 
 ### 1.0.0
-* Intial project release
+* Initial project release
