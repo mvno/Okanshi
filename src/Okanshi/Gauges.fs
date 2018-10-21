@@ -15,7 +15,7 @@ type IGauge<'T> =
     abstract Reset : unit -> unit
 
 /// A gauge implemenation that invokes a func to get the current value
-type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>, measurementNames : Dictionary<string, string>) = 
+type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>, measurementNames : IDictionary<string, string>) = 
     let valueName = measurementNames.["value"]
     
     new (config : MonitorConfig, getValue : Func<'T>) = Gauge<'T>(config, getValue, dic ["value";"value"])
@@ -36,7 +36,7 @@ type Gauge<'T>(config : MonitorConfig, getValue : Func<'T>, measurementNames : D
 
 /// Gauge that keeps track of the maximum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
-type MaxGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
+type MaxGauge(config : MonitorConfig, measurementNames : IDictionary<string, string>) = 
     let value = new AtomicLong()
     let valueName = measurementNames.["value"]
     
@@ -74,7 +74,7 @@ type MaxGauge(config : MonitorConfig, measurementNames : Dictionary<string, stri
 
 /// Gauge that keeps track of the minimum value seen since the last reset. Updates should be
 /// non-negative, the initial value is 0.
-type MinGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
+type MinGauge(config : MonitorConfig, measurementNames : IDictionary<string, string>) = 
     let value = new AtomicLong()
     let valueName = measurementNames.["value"]
     
@@ -109,7 +109,7 @@ type MinGauge(config : MonitorConfig, measurementNames : Dictionary<string, stri
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A gauge the reports a long value
-type LongGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
+type LongGauge(config : MonitorConfig, measurementNames : IDictionary<string, string>) = 
     let value = new AtomicLong()
     let valueName = measurementNames.["value"]
     
@@ -138,7 +138,7 @@ type LongGauge(config : MonitorConfig, measurementNames : Dictionary<string, str
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A gauge that reports a double value
-type DoubleGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
+type DoubleGauge(config : MonitorConfig, measurementNames : IDictionary<string, string>) = 
     let value = new AtomicDouble()
     let valueName = measurementNames.["value"]
     
@@ -169,7 +169,7 @@ type DoubleGauge(config : MonitorConfig, measurementNames : Dictionary<string, s
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A gauge that reports a decimal value
-type DecimalGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
+type DecimalGauge(config : MonitorConfig, measurementNames : IDictionary<string, string>) = 
     let value = new AtomicDecimal()
     let valueName = measurementNames.["value"]
     
@@ -198,7 +198,7 @@ type DecimalGauge(config : MonitorConfig, measurementNames : Dictionary<string, 
         member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// Gauge that keeps track of the average value since last reset. Initial value is 0.
-type AverageGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) = 
+type AverageGauge(config : MonitorConfig, measurementNames : IDictionary<string, string>) = 
     let mutable value = 0.0
     let mutable count = 0L
     let syncRoot = new obj()
@@ -246,7 +246,7 @@ type AverageGauge(config : MonitorConfig, measurementNames : Dictionary<string, 
 /// This gauge is able to detect extreme values that would otherwise disappear in an average calculation.
 /// The implementation is simply wrapping the existing MinGauge, MaxGauge and AverageGauge.
 /// Values returned are "min", "max" and "avg"
-type MinMaxAvgGauge(config : MonitorConfig, measurementNames : Dictionary<string, string>) as self = 
+type MinMaxAvgGauge(config : MonitorConfig, measurementNames : IDictionary<string, string>) as self = 
     let syncRoot = new obj()
     let min = new MinGauge(config, dic ["value"; measurementNames.["min"]])
     let max = new MaxGauge(config, dic ["value"; measurementNames.["max"]])
