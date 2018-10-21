@@ -14,8 +14,13 @@ type MonitorFactory = unit -> IMonitor
 type OkanshiMonitor private () = 
     static let monitorRegistry = DefaultMonitorRegistry.Instance
     static let mutable defaultTags = new HashSet<Tag>() :> ISet<Tag>;
-    static let mutable defaultMeasurementNames = Dictionary<Type, Dictionary<string, string>>()
+
+    static let StandardMeasurementNames = dict [ (typeof<CumulativeCounter>, dict[("value","value")])]
+    static let LegacyMeasurementNames = dict [ (typeof<CumulativeCounter>, dict[("value","value")])]
+
+    static let mutable defaultMeasurementNames = StandardMeasurementNames
     
+
     /// Gets the default tags added to all monitors created
     static member DefaultTags
         with get () = defaultTags
