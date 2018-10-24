@@ -42,7 +42,8 @@ type EndpointOptions() =
     member val CollectMetricsOnProcessExit = false with get, set
 
 /// Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.
-type MonitorEndpoint(options : EndpointOptions) =
+type MonitorEndpoint(options : EndpointOptions, jsonSerialize : Func<Object, string>) =
+    let jsonSerializeObject = jsonSerialize
     let listener = new System.Net.HttpListener()
     let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
     let cancellationTokenSource = new CancellationTokenSource()
@@ -52,7 +53,7 @@ type MonitorEndpoint(options : EndpointOptions) =
         observer.GetObservations()
     
     /// Create the endpoint with default values
-    new () = MonitorEndpoint(new EndpointOptions())
+    new (jsonSerialize : Func<Object, string>) = MonitorEndpoint(new EndpointOptions(), jsonSerialize)
 
     /// Start endpoint and using the default metrics registry
     member __.Start() =
@@ -62,7 +63,7 @@ type MonitorEndpoint(options : EndpointOptions) =
                 if options.EnableCors then
                     response.AddHeader("Access-Control-Allow-Origin", "*")
                     response.AddHeader("Access-Control-Allow-Methods", "*")
-                let serializedContent = content |> JsonConvert.SerializeObject
+                let serializedContent = content |> jsonSerializeObject.Invoke   
                 let buffer = serializedContent |> System.Text.Encoding.UTF8.GetBytes
                 response.ContentLength64 <- buffer.LongLength
                 use output = response.OutputStream
