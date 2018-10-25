@@ -1,6 +1,8 @@
-﻿# Tutorial
+﻿# ![Logo](okanshi_logo_small.png) Okanshi Tutorial
 
 This part of the documentation describes the overall functionality you'll find in Okanshi. It will not cover "best practices", limitations of Okanshi, or how to get started using Okanshi.
+
+<p>
 
 Table of Content
 
