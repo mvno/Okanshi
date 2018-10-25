@@ -1,8 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/g9glkc76m1cala6b/branch/master?svg=true)](https://ci.appveyor.com/project/Mvno/okanshi/branch/master) [![Nuget Badge](https://img.shields.io/nuget/v/Okanshi.svg)](https://www.nuget.org/packages/Okanshi/) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/Okanshi.svg)](https://www.nuget.org/packages/Okanshi/)
 
-
-
-# Okanshi
+# ![Logo](documentation/okanshi_logo_small.png) Okanshi
 
 Okanshi is a high performance low overhead library for measuring, collecting and transporting in-process application metrics. It also provide a convenient health check mechanism that works out of the box.
 
