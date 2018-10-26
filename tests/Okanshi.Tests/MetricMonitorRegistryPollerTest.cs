@@ -146,14 +146,13 @@ namespace Okanshi.Test
         public void Polling_metrics_Task_with_slow_observer_waits_for_the_observer_to_finish()
         {
             _monitorRegistry.GetRegisteredMonitors().Returns(new[] { new Timer(MonitorConfig.Build("Test")) });
-            var resetEvent = new ManualResetEventSlim(false);
             Func<IEnumerable<Metric>, Task> observer = _ => Task.Delay(TimeSpan.FromSeconds(2));
             _metricMonitorRegistryPoller.RegisterObserver(observer);
 
             var task = _metricMonitorRegistryPoller.PollMetrics();
 
             task.Wait(TimeSpan.FromMilliseconds(500)).Should().BeFalse();
-            task.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
+            task.Wait(TimeSpan.FromSeconds(20)).Should().BeTrue();
         }
     }
 }
