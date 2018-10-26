@@ -4,7 +4,6 @@ open System
 open System.Threading
 open System.Xml
 open System.Xml.Linq
-open Newtonsoft.Json
 open Okanshi
 
 /// Dependecy information
