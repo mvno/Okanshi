@@ -5,6 +5,8 @@
 * `SlaTimer` has been added. The timer makes it easy to track SLA-breaches.
 * `MinMaxAvgGauge` has been added. It allows you to detect extreme values that would otherwise disappear in an average calculation.
 * `OkanshiMonitor.DefaultStep` has been deleted since it was forgotten in an earlier clean up process.
+* Unnecessary calculation has been removed from `Counter`, and locks are no longer used in the counter, instead atomics are used.
+* `Counter` now allows increment by negative numbers.
 
 ### 6.0.0
 
