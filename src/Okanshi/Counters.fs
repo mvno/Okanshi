@@ -33,14 +33,14 @@ type Counter(config : MonitorConfig) =
     
     /// Gets the value and resets the monitor
     member __.GetValuesAndReset() =
-        seq { yield Measurement("value", current.GetAndSet(0L)) } |> Seq.toList
+        [ Measurement("value", current.GetAndSet(0L)) ] |> List.toSeq
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()
         member self.Increment(amount) = self.Increment(amount)
         member self.GetValues() = self.GetValues() |> Seq.cast
         member self.Config = self.Config
-        member self.GetValuesAndReset() = self.GetValuesAndReset() |> List.toSeq |> Seq.cast
+        member self.GetValuesAndReset() = self.GetValuesAndReset() |> Seq.cast
 
 /// A simple double counter.
 type DoubleCounter(config : MonitorConfig) = 
