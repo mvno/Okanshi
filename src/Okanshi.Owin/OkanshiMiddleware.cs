@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
@@ -40,7 +41,8 @@ namespace Okanshi.Owin
 
             tags.Add(new Tag("path", environment["owin.RequestPath"].ToString()));
             tags.Add(new Tag("method", environment["owin.RequestMethod"].ToString()));
-            var okanshiTimer = OkanshiMonitor.Timer(options.MetricName, tags.ToArray());
+
+            var okanshiTimer = options.TimerFactory(options.MetricName, tags.ToArray());
             okanshiTimer.RegisterElapsed(timer);
         }
     }
