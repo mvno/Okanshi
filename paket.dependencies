@@ -4,6 +4,7 @@ source https://nuget.org/api/v2
 
 nuget InfluxDB.WriteOnly 3.1.0
 nuget Owin 1.0
+nuget FSharp.Core 4.5.2
 
 clitool dotnet-fake
 
