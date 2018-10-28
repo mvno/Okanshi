@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Okanshi.Endpoint.Sample
 {
@@ -18,7 +19,7 @@ namespace Okanshi.Endpoint.Sample
             var httpEndpoint = new MonitorEndpoint(new EndpointOptions {
                 PollingInterval = TimeSpan.FromSeconds(10),
                 NumberOfSamplesToStore = 100,
-            });
+            }, o => JsonConvert.SerializeObject(o, Formatting.Indented));
             httpEndpoint.Start();
 
             while (true) {

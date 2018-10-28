@@ -2,8 +2,9 @@ framework: auto-detect
 
 source https://nuget.org/api/v2
 
-nuget InfluxDB.WriteOnly 3.1.0
+nuget InfluxDB.WriteOnly 3.0.1-beta
 nuget Owin 1.0
+nuget FSharp.Core 4.5.2
 
 clitool dotnet-fake
 
@@ -37,3 +38,8 @@ nuget Fake.DotNet.Paket
 nuget Fake.DotNet.Testing.Expecto 
 nuget Fake.DotNet.FSFormatting 
 nuget Fake.Api.GitHub
+
+group Samples
+source https://api.nuget.org/v3/index.json
+
+nuget Newtonsoft.Json
