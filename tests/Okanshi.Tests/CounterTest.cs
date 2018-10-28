@@ -59,5 +59,13 @@ namespace Okanshi.Test
         {
             counter.GetValues().Single().Name.Should().Be("value");
         }
+
+        [Fact]
+        public void Increment_with_negative_values_works()
+        {
+            counter.Increment(-1);
+
+            counter.GetValues().Single().Value.Should().Be(-1);
+        }
     }
 }
