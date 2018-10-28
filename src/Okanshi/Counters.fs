@@ -15,42 +15,25 @@ type ICounter<'T> =
 
 /// Tracking the count between polls
 type Counter(config : MonitorConfig) = 
-    let mutable peakRate = 0L
-    let mutable current = 0L
-    let syncRoot = new obj()
-
-    let getValue' () =
-        seq {
-            yield Measurement("value", peakRate)
-        }
-
-    let increment' amount =
-        current <- current + amount
-        if current > peakRate then peakRate <- current
-
-    let reset'() =
-        peakRate <- 0L
-        current <- 0L
-
-    let getValueAndReset'() =
-        let result = getValue'() |> Seq.toList
-        reset'()
-        result |> List.toSeq
+    let current = new AtomicLong()
     
     /// Gets the maximum count
-    member __.GetValues() = Lock.lock syncRoot getValue'
+    member __.GetValues() =
+        seq { yield Measurement("value", current.Get()) }
     
     /// Increment the value by one
     member self.Increment() = self.Increment(1L)
     
     /// Increment the value by the specified amount
-    member __.Increment(amount) = lockWithArg syncRoot amount increment'
+    member __.Increment(amount) =
+        current.Increment(amount) |> ignore
     
     /// Gets the configuration
     member __.Config = config
     
     /// Gets the value and resets the monitor
-    member __.GetValuesAndReset() = Lock.lock syncRoot getValueAndReset'
+    member __.GetValuesAndReset() =
+        [ Measurement("value", current.GetAndSet(0L)) ] |> List.toSeq
     
     interface ICounter<int64> with
         member self.Increment() = self.Increment()

@@ -55,29 +55,17 @@ namespace Okanshi.Test
         }
 
         [Fact]
-        public void Incrementing_with_negative_numbers_does_not_change_the_value()
-        {
-            counter.Increment();
-
-            counter.Increment(-1);
-
-            counter.GetValues().First().Value.Should().Be(1);
-        }
-
-        [Fact]
-        public void Incrementing_with_negative_numbers_and_then_with_a_positive_does_not_change_the_value()
-        {
-            counter.Increment();
-            counter.Increment(-1);
-            counter.Increment();
-
-            counter.GetValues().First().Value.Should().Be(1);
-        }
-
-        [Fact]
         public void Value_is_called_value()
         {
             counter.GetValues().Single().Name.Should().Be("value");
+        }
+
+        [Fact]
+        public void Increment_with_negative_values_works()
+        {
+            counter.Increment(-1);
+
+            counter.GetValues().Single().Value.Should().Be(-1);
         }
     }
 }
