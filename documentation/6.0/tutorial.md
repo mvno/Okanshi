@@ -119,7 +119,7 @@ Counters are monitors that you can increment as needed. They are thread-safe by 
 
 #### 1.2.1. Counter 
 
-A `Counter` counts the number of events between polling. The value is a ```int``` and can be incremented using a ```int```.
+A `Counter` counts the number of events between polling. The value is a `long` and can be incremented using a `long`.
 
 ```csharp
     OkanshiMonitor.Counter("Name").Increment();
@@ -153,7 +153,7 @@ A `DoubleCounter` counts the number of events between polling. The value is a ``
 
 #### 1.2.3. CumulativeCounter 
 
-Is a counter that is never reset at runtime, but retained during the lifetime of the process. Other than that, it works exactly like all other counters. . The value is a ```int``` and can be incremented using a ```int```.
+Is a counter that is never reset at runtime, but retained during the lifetime of the process. Other than that, it works exactly like all other counters. . The value is a `long` and can be incremented using a `long`.
 
 This counter make sense to use then you don't want to take the polling interval into account, and instead post-process the data.
 
