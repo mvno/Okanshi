@@ -1,4 +1,5 @@
 FSharp.Core
+InfluxDB.WriteOnly
 group Test
 xunit
 xunit.runner.visualstudio
