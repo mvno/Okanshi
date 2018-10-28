@@ -8,6 +8,10 @@
 * Unnecessary calculation has been removed from `Counter`, and locks are no longer used in the counter, instead atomics are used.
 * `Counter` now allows increment by negative numbers.
 
+**BREAKING CHANGES**
+
+* Instead of Okanshi.Endpoint depending on Newtonsoft.Json to do the JSON serialization, it now accepts a `Func` doing the serialization, which makes it possible for the user to control dependencies and serialization
+
 ### 6.0.0
 
 The v6.0.0 release has done a major overhaul in the naming of monitors to make it simpler for new users of the API. 
