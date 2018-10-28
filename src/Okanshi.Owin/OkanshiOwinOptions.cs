@@ -16,5 +16,10 @@ namespace Okanshi.Owin
         /// The metric name to use. Default values is Request.
         /// </summary>
         public string MetricName { get; set; } = "Request";
+
+	    /// <summary>
+	    /// A factory method which is invoked whenever a timer is needed
+	    /// </summary>
+	    public Func<string, Tag[], ITimer> TimerFactory = (name, tags) => OkanshiMonitor.Timer(name, tags);
     }
 }

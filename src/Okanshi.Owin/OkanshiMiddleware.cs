@@ -13,13 +13,11 @@ namespace Okanshi.Owin
     {
         private readonly AppFunc next;
         private readonly OkanshiOwinOptions options;
-        private readonly Func<string, Tag[], ITimer> timerFactory;
 
-        public OkanshiMiddleware(AppFunc next, OkanshiOwinOptions options, Func<string, Tag[], ITimer> timerFactory = null)
+        public OkanshiMiddleware(AppFunc next, OkanshiOwinOptions options)
         {
             this.next = next;
             this.options = options;
-            this.timerFactory = timerFactory ?? throw new ArgumentNullException(nameof(timerFactory));
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
@@ -44,7 +42,7 @@ namespace Okanshi.Owin
             tags.Add(new Tag("path", environment["owin.RequestPath"].ToString()));
             tags.Add(new Tag("method", environment["owin.RequestMethod"].ToString()));
 
-            var okanshiTimer = timerFactory(options.MetricName, tags.ToArray());
+            var okanshiTimer = options.TimerFactory(options.MetricName, tags.ToArray());
             okanshiTimer.RegisterElapsed(timer);
         }
     }
