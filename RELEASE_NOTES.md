@@ -1,6 +1,5 @@
 ### New in 6.1.0 (Unreleased)
 
-* Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
 * Okanshi.Owin now has an option for which timer to use when monitoring.
 * `SlaTimer` has been added. The timer makes it easy to track SLA-breaches.
 * `MinMaxAvgGauge` has been added. It allows you to detect extreme values that would otherwise disappear in an average calculation.
@@ -9,7 +8,7 @@
 * `Counter` now allows increment by negative numbers.
 
 **BREAKING CHANGES**
-
+* Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
 * Instead of Okanshi.Endpoint depending on Newtonsoft.Json to do the JSON serialization, it now accepts a `Func` doing the serialization, which makes it possible for the user to control dependencies and serialization
 
 ### 6.0.0
