@@ -312,13 +312,16 @@ As of version 4 it is also possible to monitor Windows performance counters.
     var performanceCounterMonitor = new PerformanceCounterMonitor(MonitorConfig.Build("Available Bytes"), PerformanceCounterConfig.Build("Memory", "Available Bytes"));
 ```
 
+
 ## 3. Filters
-Filters wrap monitors and in the absence of registrations on the monitor, it does not send zero-values. This is useful when you want to reduce the data sent to the receiving system, e.g. due to licensing cost or to reduce the load
-on the receiver. Or perhaps you are using a receiving system where each data point is stored less efficiently, and thus you are concerned about sending too much data "with no data in it".
+
+Filters wrap monitors such that in the absence of registrations on the monitor, the monitor will not send zero-values when polled. This is useful when you want to reduce the amount of data sent to the receiving system. There can be may reasons for that such as licensing cost, or to reduce the load
+on the receiver. Or perhaps you are using a receiving system, where data is stored in a less efficient manner, making you concerned about too much data "with no data in it". 
+
+Using Splunk as the receiving system, you may face many of those reasons, and much less so when using e.g. InfluxDb.
 
 The filter implementations are `CounterZeroFilter`, `GaugeZeroFilter` and `TimerZeroFilter`.
 
-Filters are currently not supported by `OkanshiMonitor`.
 
 Example:
 
@@ -329,6 +332,17 @@ Example:
     counter.Increment()
     counter.GetValues(); // value is returned
 ```
+
+Then we need to register our filter counter
+
+Filters are currently not supported by `OkanshiMonitor`. The following wILL NOT WORK
+
+```csharp
+    // don't do this!
+    var wrong! = new CounterZeroFilter<long>(OkanshiMonitor.Counter("Foo"));
+```
+
+When we use `OkanshiMonitor`, it registers the monitor in a default registry associated with a poller! Hence we will start sending 0-values.
 
 
 ## 4. Health checks
@@ -420,7 +434,7 @@ you can create your own observers easily as shown in the following example that 
 
         public async Task Update(IEnumerable<Metric> metrics)
         {
-            var msg = JsonConvert.SerializeToJson(metrics);
+            var msg = JsonConvert.SerializeObject(metrics);
             Console.WriteLine($"sending info to MyLegacySystem<tm> '{msg}'");
         }
 
