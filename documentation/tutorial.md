@@ -333,7 +333,17 @@ Example:
     counter.GetValues(); // value is returned
 ```
 
-Then we need to register our filter counter
+And then we need to register our filter counter.. So a more complete example of a factory method may be
+
+```csharp
+    private static CounterZeroFilter<long> FilterCounter(string name, IEnumerable<Tag> tags)
+    {
+        var config = MonitorConfig.Build(name).WithTags(tags);
+        var registry = DefaultMonitorRegistry.Instance;
+        var monitor = registry.GetOrAdd(config, x => new CounterZeroFilter<long>(new Counter(x)));
+        return monitor;
+    }
+```
 
 Filters are currently not supported by `OkanshiMonitor`. The following wILL NOT WORK
 
