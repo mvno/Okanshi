@@ -4,6 +4,7 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open System.Collections.Generic
+open System.Linq
 
 /// The metric type
 type Metric =
@@ -48,6 +49,7 @@ type MetricMonitorRegistryPoller(registry : IMonitorRegistry, interval : TimeSpa
         let metrics =
             registry.GetRegisteredMonitors()
             |> Seq.map convertMonitorToMetric
+            |> Seq.where (fun x -> x.Values.Any())
             |> Seq.toArray
         observers
         |> Seq.map (fun x -> x.Invoke(metrics) |> Async.AwaitTask)

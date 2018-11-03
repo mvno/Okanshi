@@ -24,15 +24,16 @@ Table of Content
        * [2.3.1. Timer](#231-timer)
        * [2.3.2. SlaTimer](#232-slatimer)
      * [2.4. Performance counters](#24-performance-counters)
-   * [3. Health checks](#3-health-checks)
-   * [4. HTTP Endpoint](#4-http-endpoint)
-     * [4.1. Starting the endpoint](#41-starting-the-endpoint)
-     * [4.2. Health checks](#42-health-checks)
-     * [4.3. Assembly dependencies](#43-assembly-dependencies)
-     * [4.4. NuGet dependencies](#44-nuget-dependencies)
-   * [5. Observers](#5-observers)
-     * [5.1. Observer setup](#51-observer-setup)
-   * [6. OWIN](#6-owin)
+   * [3. Filters](#3-filters)
+   * [4. Health checks](#4-health-checks)
+   * [5. HTTP Endpoint](#5-http-endpoint)
+     * [5.1. Starting the endpoint](#51-starting-the-endpoint)
+     * [5.2. Health checks](#52-health-checks)
+     * [5.3. Assembly dependencies](#53-assembly-dependencies)
+     * [5.4. NuGet dependencies](#54-nuget-dependencies)
+   * [6. Observers](#6-observers)
+     * [6.1. Observer setup](#61-observer-setup)
+   * [7. OWIN](#7-owin)
  
 
 ## 1. Introduction
@@ -195,6 +196,9 @@ Counters are monitors that you can increment as needed. They are thread-safe by 
 
 All counters can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
+Counters may be incremented with negative values. For the most part, this makes little sense. If you find yourself wanting to use negative increments, chances are you
+should be using a gauge instead. In fact, we cannot think of a single example where this is not the case. :-)
+
 #### 2.2.1. Counter 
 
 A `Counter` counts the number of events between polling. The value is a ```int``` and can be incremented using a ```int```.
@@ -309,8 +313,49 @@ As of version 4 it is also possible to monitor Windows performance counters.
 ```
 
 
+## 3. Filters
 
-## 3. Health checks
+Filters wrap monitors such that in the absence of registrations on the monitor, the monitor will not send zero-values when polled. This is useful when you want to reduce the amount of data sent to the receiving system. There can be may reasons for that such as licensing cost, or to reduce the load
+on the receiver. Or perhaps you are using a receiving system, where data is stored in a less efficient manner, making you concerned about too much data "with no data in it". 
+
+Using Splunk as the receiving system, you may face many of those reasons, and much less so when using e.g. InfluxDb.
+
+The filter implementations are `CounterZeroFilter`, `GaugeZeroFilter` and `TimerZeroFilter`.
+
+
+Example:
+
+```csharp
+    var counter = new CounterZeroFilter<long>(new Counter(MonitorConfig.Build("Test")));
+    counter.GetValues(); // no values are returned
+    //
+    counter.Increment()
+    counter.GetValues(); // value is returned
+```
+
+And then we need to register our filter counter.. So a more complete example of a factory method may be
+
+```csharp
+    private static CounterZeroFilter<long> FilterCounter(string name, IEnumerable<Tag> tags)
+    {
+        var config = MonitorConfig.Build(name).WithTags(tags);
+        var registry = DefaultMonitorRegistry.Instance;
+        var monitor = registry.GetOrAdd(config, x => new CounterZeroFilter<long>(new Counter(x)));
+        return monitor;
+    }
+```
+
+Filters are currently not supported by `OkanshiMonitor`. The following wILL NOT WORK
+
+```csharp
+    // don't do this!
+    var wrong! = new CounterZeroFilter<long>(OkanshiMonitor.Counter("Foo"));
+```
+
+When we use `OkanshiMonitor`, it registers the monitor in a default registry associated with a poller! Hence we will start sending 0-values.
+
+
+## 4. Health checks
 
 You can also add different health checks to you application. For example the number of files in a directory or something else making sense in you case.
 Health checks are added like this:
@@ -333,12 +378,11 @@ As of version 6 health checks can no longer be registered as a monitor.
 
 
 
-
-## 4. HTTP Endpoint
+## 5. HTTP Endpoint
 
 Prior to version 4, the HTTP endpoint was include in the core package. This is no longer the case, it now exists in a separate package called Okanshi.Endpoint.
 
-### 4.1. Starting the endpoint
+### 5.1. Starting the endpoint
 
 You start the monitor like this:
 
@@ -356,29 +400,29 @@ For custom configuration of the endpoint see the API reference.
 
 Notice that at application startup, the enpoint contains *no data* the first minute. This is because no data have been gathered yet. You can control that period by tweaking the poller interval.
 
-### 4.2. Health checks
+### 5.2. Health checks
 
 To see the current status of all defined healthchecks, go to [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
 
-### 4.3. Assembly dependencies
+### 5.3. Assembly dependencies
 
 The endpoint can show all assemblies currently loaded in the AppDomain.
 
 To see all assembly dependencies for you application just access [http://localhost:13004/dependencies](http://localhost:13004/dependencies). It will provide a list of the names and version of all dependencies.
 
-### 4.4. NuGet dependencies
+### 5.4. NuGet dependencies
 
 If the package.config file is available in the current directory of the process. The endpoint can show all NuGet dependencies and their version. This information can be accessed through [http://localhost:13004/packages](http://localhost:13004/packages).
 
 
 
-## 5. Observers
+## 6. Observers
 
 Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database. An observer storing metrics in-memory is included in the Okanshi package.
 
 An observer to send metrics to InfluxDB is provided through another NuGet package called, Okanshi.InfluxDBObserver.
 
-### 5.1. Observer setup
+### 6.1. Observer setup
 
 Setting up an observer is easy:
 
@@ -400,7 +444,7 @@ you can create your own observers easily as shown in the following example that 
 
         public async Task Update(IEnumerable<Metric> metrics)
         {
-            var msg = JsonConvert.SerializeToJson(metrics);
+            var msg = JsonConvert.SerializeObject(metrics);
             Console.WriteLine($"sending info to MyLegacySystem<tm> '{msg}'");
         }
 
@@ -436,7 +480,7 @@ To set up this particular observer we can use the following code. It sets up som
 ```
 
 
-## 6. OWIN
+## 7. OWIN
 
 Using the package Okanshi.Owin it is possible to measure the request duration grouped by path, HTTP method and optionally the response status code.
 
