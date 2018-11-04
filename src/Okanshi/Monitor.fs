@@ -10,11 +10,15 @@ type OkanshiMonitor private () =
     static let mutable defaultTags = new HashSet<Tag>() :> ISet<Tag>;
     static let factory = new MonitorFactory(monitorRegistry, defaultTags)
     
+    /// factory for zero value filtering
+    static member WithZeroFiltering = new ZeroFilterFactory(monitorRegistry, defaultTags)
+    
     /// Gets the default tags added to all monitors created
     static member DefaultTags
         with get () = defaultTags
         /// Sets the default tags added to all monitors created
         and set (value: ISet<Tag>) =
+            OkanshiMonitor.WithZeroFiltering.UpdateDefaultTags(value)
             factory.UpdateDefaultTags(value)
             defaultTags <- value
     
