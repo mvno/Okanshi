@@ -128,7 +128,7 @@ type OkanshiMonitor private () =
 
 #if NET45
     /// Get or create a performance counter monitor
-    static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name)
+    static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name, [||])
     
     /// Get or create a performance counter monitor with custom tags
     static member PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) = 

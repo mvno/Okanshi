@@ -53,6 +53,7 @@ namespace Okanshi.Test
             counter.GetValues().Single();
         }
 
+        [Fact]
         public void Do_not_send_data_and_reset_when_nothing_registered()
         {
             var counter = new CounterZeroFilter<long>(new Counter(MonitorConfig.Build("Test")));

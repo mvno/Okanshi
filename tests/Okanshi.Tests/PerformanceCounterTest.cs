@@ -13,6 +13,20 @@ namespace Okanshi.Test
             DefaultMonitorRegistry.Instance.Clear();
         }
 
+        [Fact]
+        public void Okanshimonitor_can_create_instance()
+        {
+            PerformanceCounterMonitor p = OkanshiMonitor.PerformanceCounter(PerformanceCounterConfig.Build("Memory", "Available Bytes"), "name");
+            p.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Okanshimonitor_can_create_instance_with_tags()
+        {
+            PerformanceCounterMonitor p = OkanshiMonitor.PerformanceCounter(PerformanceCounterConfig.Build("Memory", "Available Bytes"),"name", new[]{new Tag("a","b")});
+            p.Should().NotBeNull();
+        }
+
         [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
         public void Performance_counter_without_instance_name()
         {
