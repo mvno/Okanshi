@@ -3,12 +3,6 @@
 open System
 open System.Collections.Generic
 
-/// Tuple representing a key used to identify a monitor
-type MonitorKey = string * Type * string
-
-/// Type representing a monitor factory
-type MonitorFactory = unit -> IMonitor
-
 /// Static use of monitors
 [<AbstractClass; Sealed>]
 type OkanshiMonitor private () = 
