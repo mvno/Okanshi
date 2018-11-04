@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Okanshi.Test
 {
-#if NET45
+#if NET46
     public class PerformanceCounterTest
     {
         public PerformanceCounterTest()
@@ -35,7 +35,9 @@ namespace Okanshi.Test
             var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
                 PerformanceCounterConfig.Build("Memory", "Available Bytes"));
 
-            monitor.GetValue()
+            monitor.GetValues()
+                .Cast<float>()
+                .Single()
                 .Should()
                 .BeGreaterThan(0)
                 .And.BeApproximately(performanceCounter.NextValue(), 1000000,
@@ -50,7 +52,9 @@ namespace Okanshi.Test
             var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
                 PerformanceCounterConfig.Build("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName));
 
-            monitor.GetValue()
+            monitor.GetValues()
+                .Cast<float>()
+                .Single()
                 .Should()
                 .BeGreaterThan(0)
                 .And.BeApproximately(performanceCounter.NextValue(), 1000000,
@@ -58,13 +62,12 @@ namespace Okanshi.Test
         }
 
         [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
-        public void Performance_counter_consists_of_a_single_monitor()
+        public void Performance_counter_consists_of_a_single_value()
         {
             var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
                 PerformanceCounterConfig.Build("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName));
 
-            monitor.GetAllMonitors().Should().HaveCount(1);
-            monitor.GetAllMonitors().Single().Should().BeSameAs(monitor);
+            monitor.GetValues().Should().HaveCount(1);
         }
 
         [Fact]
