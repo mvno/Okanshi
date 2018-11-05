@@ -14,6 +14,23 @@ namespace Okanshi.Test
         }
 
         [Fact]
+        public void okanshimonitor_can_create_instance()
+        {
+            ITimer timer = OkanshiMonitor.WithZeroFiltering.Timer("foo");
+
+            timer.Config.Name.Should().Be("foo");
+        }
+
+        [Fact]
+        public void factory_can_create_instance()
+        {
+            var factory = new ZeroFilterFactory(new OkanshiMonitorRegistry(), new Tag[0]);
+            ITimer timer = factory.Timer("foo");
+
+            timer.Config.Name.Should().Be("foo");
+        }
+
+        [Fact]
         public void Do_not_send_data_when_nothing_registered()
         {
             var timer = new TimerZeroFilter(new Timer(MonitorConfig.Build("Test")));

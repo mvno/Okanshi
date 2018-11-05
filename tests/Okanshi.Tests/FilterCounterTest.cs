@@ -7,6 +7,23 @@ namespace Okanshi.Test
     public class FilterCounterTest
     {
         [Fact]
+        public void okanshimonitor_can_create_instance()
+        {
+            ICounter<long> counter = OkanshiMonitor.WithZeroFiltering.Counter("foo");
+
+            counter.Config.Name.Should().Be("foo");
+        }
+
+        [Fact]
+        public void factory_can_create_instance()
+        {
+            var factory = new ZeroFilterFactory(new OkanshiMonitorRegistry(), new Tag[0]);
+            ICounter<long> counter = factory.Counter("foo");
+
+            counter.Config.Name.Should().Be("foo");
+        }
+
+        [Fact]
         public void FilterCounter_is_an_icounter()
         {
             ICounter<long> counter = new CounterZeroFilter<long>(new Counter(MonitorConfig.Build("Test")));

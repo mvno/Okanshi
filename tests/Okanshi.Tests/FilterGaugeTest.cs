@@ -13,6 +13,23 @@ namespace Okanshi.Test
         }
 
         [Fact]
+        public void okanshimonitor_can_create_instance()
+        {
+            IGauge<long> gauge = OkanshiMonitor.WithZeroFiltering.LongGauge("foo");
+
+            gauge.Config.Name.Should().Be("foo");
+        }
+
+        [Fact]
+        public void factory_can_create_instance()
+        {
+            var factory = new ZeroFilterFactory(new OkanshiMonitorRegistry(), new Tag[0]);
+            IGauge<long> gauge = factory.LongGauge("foo");
+
+            gauge.Config.Name.Should().Be("foo");
+        }
+
+        [Fact]
         public void Do_not_send_data_when_nothing_registered()
         {
             var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));

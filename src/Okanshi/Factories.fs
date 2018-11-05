@@ -4,7 +4,7 @@ open System
 open System.Collections.Generic
 
 /// factory to create monitors sharing the same polling frequency
-type MonitorFactory internal (monitorRegistry : IMonitorRegistry, DefaultTags) = 
+type MonitorFactory (monitorRegistry : IMonitorRegistry, DefaultTags) = 
     let mutable defaultTags = DefaultTags
 
     member self.UpdateDefaultTags(newTags) = defaultTags <- newTags
@@ -126,7 +126,7 @@ type MonitorFactory internal (monitorRegistry : IMonitorRegistry, DefaultTags) =
 
 
 /// Zero filter factory to create monitors wrapped in a zero filter
-type ZeroFilterFactory internal (monitorRegistry : IMonitorRegistry, DefaultTags) = 
+type ZeroFilterFactory (monitorRegistry : IMonitorRegistry, DefaultTags) = 
     let mutable defaultTags = DefaultTags
 
     member self.UpdateDefaultTags(newTags) = defaultTags <- newTags
