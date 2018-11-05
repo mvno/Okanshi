@@ -20,6 +20,9 @@ namespace Okanshi.Owin
             this.options = options;
         }
 
+        /// <summary>
+        /// Called by OWIN
+        /// </summary>
         public async Task Invoke(IDictionary<string, object> environment)
         {
             var timer = Stopwatch.StartNew();

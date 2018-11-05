@@ -9,6 +9,10 @@
 * Unnecessary calculation has been removed from `Counter`, and locks are no longer used in the counter, instead atomics are used.
 * `Counter` now allows increment by negative numbers.
 * `ConsoleObserver` has been added to make it easier to get started with Okanshi.
+* `OkanshiMonitor.WithZeroFiltering` has been added. This allows you to instantiate zero filter monitors.
+* `MonitorFactory` has been added. It allows you to administrate multiple monitors with different polling frequency.
+* `ZeroFilterFactory` has been added. It allows you to instantiate zero filter monitors.
+
 **BREAKING CHANGES**
 
 * Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
