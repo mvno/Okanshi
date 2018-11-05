@@ -10,6 +10,9 @@ Table of Content
      * [1.1. Metrics and performance measurement](#11-metrics-and-performance-measurement)
      * [1.2. Names and tags](#12-names-and-tags)
      * [1.3. Getting started](#13-getting-started)
+     * [1.3. Instantiating monitors](#13-instantiating-monitors)
+       * [1.3.1. OkanshiMonitor](#131-okanshimonitor)
+       * [1.3.2. Factories](#132-factories)
    * [2. Monitor documentation](#2-monitor-documentation)
      * [2.1. Gauges](#21-gauges)
        * [2.1.1. Gauge](#211-gauge)
@@ -89,6 +92,45 @@ These were just two examples of how you can utilize names and tags. What tags yo
 * **Request method:** In a web-service context, e.g. GET or POST
 * **Unit of measure:** When you cannot determine from the measurement name the unit of measure, and its not a standard unit (e.g. days or seconds) consider applying it as a tag.
 
+
+### 1.3. Instantiating monitors
+
+#### 1.3.1. OkanshiMonitor
+
+Advantages
+  * very easy to get started
+
+#### 1.3.2. Factories
+
+Advantages
+  * multiple polling intervals
+  * extensionmethods to enhance the factory with your own monitors
+
+  
+Plumbing code for using the factories
+
+```
+	public static class OkanshiIntegrator
+	{
+		public static MonitorFactory CreateFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
+		{
+			defaultTags = defaultTags ?? new Tag[0];
+			var registry = new OkanshiMonitorRegistry();
+			new MyObserver(new MetricMonitorRegistryPoller(registry, pollFrequency, pollOnExit));
+			var factory = new MonitorFactory(registry, defaultTags);
+			return factory;
+		}
+
+		public static ZeroFilterFactory CreateZeroFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
+		{
+			defaultTags = defaultTags ?? new Tag[0];
+			var registry = new OkanshiMonitorRegistry();
+			new MyObserver(new MetricMonitorRegistryPoller(registry, pollFrequency, pollOnExit));
+			var factory = new ZeroFilterFactory(registry, defaultTags);
+			return factory;
+		}
+	}
+```
 
 ### 1.3. Getting started
 
