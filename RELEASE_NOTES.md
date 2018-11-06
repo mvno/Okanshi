@@ -9,11 +9,13 @@
 * Unnecessary calculation has been removed from `Counter`, and locks are no longer used in the counter, instead atomics are used.
 * `Counter` now allows increment by negative numbers.
 * `ConsoleObserver` has been added to make it easier to get started with Okanshi.
+
 **BREAKING CHANGES**
 
 * Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
 * Instead of Okanshi.Endpoint depending on Newtonsoft.Json to do the JSON serialization, it now accepts a `Func` doing the serialization, which makes it possible for the user to control dependencies and serialization
 * `Okanshi.Endpoint` nows takes a poller to be able to easily avoid problems with multiple pollers on the default registry. This also removes `PollingInterval` and `CollectMetricsOnProcessExit` from `EndpointOptions`.
+* Remove `Update` method from `IMetricObserver` as this method is was not used for anything
 
 ### 6.0.0
 
