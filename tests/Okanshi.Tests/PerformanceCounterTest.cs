@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using Xunit;
+using System;
 
 namespace Okanshi.Test
 {
@@ -27,7 +28,7 @@ namespace Okanshi.Test
             p.Should().NotBeNull();
         }
 
-        [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
+        [Fact]
         public void Performance_counter_without_instance_name()
         {
             var performanceCounter = new PerformanceCounter("Memory", "Available Bytes");
@@ -36,15 +37,15 @@ namespace Okanshi.Test
                 PerformanceCounterConfig.Build("Memory", "Available Bytes"));
 
             monitor.GetValues()
-                .Cast<float>()
                 .Single()
+                .Value
                 .Should()
                 .BeGreaterThan(0)
                 .And.BeApproximately(performanceCounter.NextValue(), 1000000,
                     "Because memory usage can change between the two values");
         }
 
-        [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
+        [Fact]
         public void Performance_counter_with_instance_name()
         {
             var performanceCounter = new PerformanceCounter("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName);
@@ -53,15 +54,15 @@ namespace Okanshi.Test
                 PerformanceCounterConfig.Build("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName));
 
             monitor.GetValues()
-                .Cast<float>()
                 .Single()
+                .Value
                 .Should()
                 .BeGreaterThan(0)
                 .And.BeApproximately(performanceCounter.NextValue(), 1000000,
                     "Because memory usage can change between the two values");
         }
 
-        [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
+        [Fact]
         public void Performance_counter_consists_of_a_single_value()
         {
             var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
