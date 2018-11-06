@@ -9,7 +9,7 @@
     <PackageTags>monitoring;microservices</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
@@ -24,7 +24,7 @@
     <Compile Include="Timers.fs" />
     <Compile Include="Filters.fs" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46'">
     <Compile Include="PerformanceCounter.fs" />
   </ItemGroup>
   <ItemGroup>
