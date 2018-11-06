@@ -2,10 +2,11 @@
 using System.Linq;
 using FluentAssertions;
 using Xunit;
+using System;
 
 namespace Okanshi.Test
 {
-#if NET45
+#if NET46
     public class PerformanceCounterTest
     {
         public PerformanceCounterTest()
@@ -27,7 +28,7 @@ namespace Okanshi.Test
             p.Should().NotBeNull();
         }
 
-        [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
+        [Fact]
         public void Performance_counter_without_instance_name()
         {
             var performanceCounter = new PerformanceCounter("Memory", "Available Bytes");
@@ -35,14 +36,16 @@ namespace Okanshi.Test
             var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
                 PerformanceCounterConfig.Build("Memory", "Available Bytes"));
 
-            monitor.GetValue()
+            monitor.GetValues()
+                .Single()
+                .Value
                 .Should()
                 .BeGreaterThan(0)
                 .And.BeApproximately(performanceCounter.NextValue(), 1000000,
                     "Because memory usage can change between the two values");
         }
 
-        [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
+        [Fact]
         public void Performance_counter_with_instance_name()
         {
             var performanceCounter = new PerformanceCounter("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName);
@@ -50,21 +53,22 @@ namespace Okanshi.Test
             var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
                 PerformanceCounterConfig.Build("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName));
 
-            monitor.GetValue()
+            monitor.GetValues()
+                .Single()
+                .Value
                 .Should()
                 .BeGreaterThan(0)
                 .And.BeApproximately(performanceCounter.NextValue(), 1000000,
                     "Because memory usage can change between the two values");
         }
 
-        [Fact(Skip = "Unstable test, because of the nature of Performance Counters")]
-        public void Performance_counter_consists_of_a_single_monitor()
+        [Fact]
+        public void Performance_counter_consists_of_a_single_value()
         {
             var monitor = new PerformanceCounterMonitor(MonitorConfig.Build("Test"),
                 PerformanceCounterConfig.Build("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName));
 
-            monitor.GetAllMonitors().Should().HaveCount(1);
-            monitor.GetAllMonitors().Single().Should().BeSameAs(monitor);
+            monitor.GetValues().Should().HaveCount(1);
         }
 
         [Fact]
