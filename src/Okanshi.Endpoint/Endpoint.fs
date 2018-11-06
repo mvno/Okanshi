@@ -33,18 +33,14 @@ type EndpointOptions() =
     member val EnableCors = false with get, set
     /// The HTTP prefix used as endpoint. Default value is "http://+:13004/"
     member val HttpPrefix = "http://+:13004/" with get, set
-    /// The polling interval. Default value is 1 minute
-    member val PollingInterval = TimeSpan.FromMinutes(float 1) with get, set
     /// The number of samples to store in memory. Default value is 100
     member val NumberOfSamplesToStore = 100 with get, set
-    /// Should metrics be collected when process is exiting. Default value is false.
-    member val CollectMetricsOnProcessExit = false with get, set
 
 /// Controls the monitor endpoint. This needs to be started to allow querying the endpoint for information.
-type MonitorEndpoint(options : EndpointOptions, jsonSerialize : Func<Object, string>) =
+type MonitorEndpoint(options : EndpointOptions, poller : IMetricPoller, jsonSerialize : Func<Object, string>) =
     let jsonSerializeObject = jsonSerialize
     let listener = new System.Net.HttpListener()
-    let observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, options.PollingInterval, options.CollectMetricsOnProcessExit), options.NumberOfSamplesToStore)
+    let observer = new MemoryMetricObserver(poller, options.NumberOfSamplesToStore)
     let cancellationTokenSource = new CancellationTokenSource()
     let cancellationToken = cancellationTokenSource.Token
 
@@ -52,7 +48,7 @@ type MonitorEndpoint(options : EndpointOptions, jsonSerialize : Func<Object, str
         observer.GetObservations()
     
     /// Create the endpoint with default values
-    new (jsonSerialize : Func<Object, string>) = MonitorEndpoint(new EndpointOptions(), jsonSerialize)
+    new (poller, jsonSerialize : Func<Object, string>) = MonitorEndpoint(new EndpointOptions(), poller, jsonSerialize)
 
     /// Start endpoint and using the default metrics registry
     member __.Start() =

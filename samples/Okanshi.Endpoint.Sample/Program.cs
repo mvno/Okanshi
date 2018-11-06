@@ -19,7 +19,7 @@ namespace Okanshi.Endpoint.Sample
             var httpEndpoint = new MonitorEndpoint(new EndpointOptions {
                 PollingInterval = TimeSpan.FromSeconds(10),
                 NumberOfSamplesToStore = 100,
-            }, o => JsonConvert.SerializeObject(o, Formatting.Indented));
+            }, DefaultMonitorRegistry.Instance, o => JsonConvert.SerializeObject(o, Formatting.Indented));
             httpEndpoint.Start();
 
             while (true) {
