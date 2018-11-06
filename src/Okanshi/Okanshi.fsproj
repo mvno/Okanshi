@@ -24,7 +24,7 @@
     <Compile Include="Timers.fs" />
     <Compile Include="Filters.fs" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46'">
     <Compile Include="PerformanceCounter.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -225,7 +225,7 @@ Target.create "ReferenceDocs" (fun _ ->
             |> Array.collect (fun d ->
                 let name, dInfo =
                     let net45Bin =
-                        DirectoryInfo.getSubDirectories d |> Array.filter(fun x -> x.FullName.ToLower().Contains("net45"))
+                        DirectoryInfo.getSubDirectories d |> Array.filter(fun x -> x.FullName.ToLower().Contains("net46"))
                     let net47Bin =
                         DirectoryInfo.getSubDirectories d |> Array.filter(fun x -> x.FullName.ToLower().Contains("net47"))
                     if net45Bin.Length > 0 then

@@ -126,7 +126,7 @@ type OkanshiMonitor private () =
         let config = MonitorConfig.Build(name).WithTags(OkanshiMonitor.DefaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new SlaTimer(x, sla))
 
-#if NET45
+#if NET46
     /// Get or create a performance counter monitor
     static member PerformanceCounter(check, name) = OkanshiMonitor.PerformanceCounter(check, name, [||])
     
