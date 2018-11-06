@@ -6,9 +6,6 @@ open System.Threading.Tasks
 /// Observer that can receive updates about metrics
 type IMetricObserver = 
     inherit IDisposable
-    
-    /// Update the observer with the specified metrics
-    abstract Update : metrics : Metric seq -> Task
 
 
 /// Observer that can receive updates about metrics and return its accumulated values to someone else
@@ -20,14 +17,14 @@ type IProcessingMetricObserver =
 
 
 /// Metric observer storing the specified number of observations in memory
-type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) as self = 
+type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) =
     let observations = new Collections.Concurrent.ConcurrentQueue<_>()
     
-    let addObservation x = 
+    let addObservation x =
         if observations.Count = numberOfSamplesToStore then observations.TryDequeue() |> ignore
         observations.Enqueue(x)
 
-    let observerAction = new Func<Metric seq, Task>(self.Update)
+    let observerAction = new Func<Metric seq, Task>(fun metrics -> Task.Run(fun() -> metrics |> addObservation))
     
     do
         poller.RegisterObserver(observerAction)
@@ -35,7 +32,7 @@ type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) as sel
     new(poller) = new MemoryMetricObserver(poller, 100)
     
     /// Update the observer with the specified metrics
-    member __.Update(metrics : Metric seq) = Task.Run(fun() -> metrics |> addObservation)
+    
     
     /// Get the observations observed
     member __.GetObservations() = observations |> Seq.cache
@@ -44,7 +41,6 @@ type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) as sel
     member __.Dispose() = poller.UnregisterObserver(observerAction)
     
     interface IMetricObserver with
-        member self.Update(metrics) = self.Update(metrics)
         member self.Dispose() = self.Dispose()
     
     interface IProcessingMetricObserver with
