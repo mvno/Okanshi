@@ -70,7 +70,7 @@ Starting with Okanshi, it's perfectly fine if you are unsure on how exactly you 
 ### 1.2. Names and tags
 
 An Okanshi measurement come with both a *name* and a set of *tags*, both of which play a role in distinguishing one measurement from another.
-Think of the name of a measurement as the overal distinguishing component, a key if you will. And think of a tag like an *optional* subdivision of that measurement that enable you to "slice and dice" you data.
+Think of the name of a measurement as the overall distinguishing component, a key if you will. And think of a tag like an *optional* subdivision of that measurement that enable you to "slice and dice" you data.
 
 For example, take the measurement named "Request count" that is a counter counting the number of requests our system receives. We can sum our measurements for a time period and know our load. We can then use the tag "servername" to group our measurements so we know about the distribution of load across our cluster. We can then further split our data using the tag "endpoint path" to see within each server what end points are the most active. 
 
