@@ -9,6 +9,7 @@ Table of Content
    * [1. Introduction](#1-introduction)
      * [1.1. Metrics and performance measurement](#11-metrics-and-performance-measurement)
      * [1.2. Names and tags](#12-names-and-tags)
+     * [1.3. Getting started](#13-getting-started)
    * [2. Monitor documentation](#2-monitor-documentation)
      * [2.1. Gauges](#21-gauges)
        * [2.1.1. Gauge](#211-gauge)
@@ -33,6 +34,8 @@ Table of Content
      * [5.4. NuGet dependencies](#54-nuget-dependencies)
    * [6. Observers](#6-observers)
      * [6.1. Observer setup](#61-observer-setup)
+     * [6.2. ConsoleObserver](#62-consoleobserver)
+     * [6.3. Custom observers](#63-custom-observers)
    * [7. OWIN](#7-owin)
  
 
@@ -86,6 +89,43 @@ These were just two examples of how you can utilize names and tags. What tags yo
 * **Request method:** In a web-service context, e.g. GET or POST
 * **Unit of measure:** When you cannot determine from the measurement name the unit of measure, and its not a standard unit (e.g. days or seconds) consider applying it as a tag.
 
+
+### 1.3. Getting started
+
+We know you are excited by now to see something running. We've made it easy for you to get started. Simply run the following program in a console
+
+
+```csharp
+	static void Main(string[] args)
+	{
+		new ConsoleObserver(x => JsonConvert.SerializeObject(x, Formatting.Indented));
+		
+		while (true)
+		{
+			OkanshiMonitor.Counter("hello world").Increment();
+		}
+	}
+```
+
+you should see measurements being collected and printed to the screen. The output resembles the following:
+
+
+```
+** 06/11/2018 16.56.01
+{
+  "Name": "test",
+  "Timestamp": "2018-11-06T15:56:01.1543922+00:00",
+  "Tags": [],
+  "Values": [
+    {
+      "Name": "value",
+      "Value": 13275355
+    }
+  ]
+}
+```
+
+You'll notice that the `Values.Value` is not growing but oscilates around the same number. This is because every time Okanshi reads the monitors in the poller, the monitor is reset.
 
 
 ## 2. Monitor documentation
@@ -431,6 +471,45 @@ Setting up an observer is easy:
 ```
 
 This observer stores metrics in-memory using a poller getting data from the default monitor registry.
+
+
+### 6.2. ConsoleObserver
+
+The `ConsoleObserver` prints measurements to the console, so you can get a quick start seeing that Okanshi works. No need to mess about with a receiver system. To get things up and running simply run the following program.
+
+```csharp
+	static void Main(string[] args)
+	{
+		new ConsoleObserver(x => JsonConvert.SerializeObject(x, Formatting.Indented));
+		
+		while (true)
+		{
+			OkanshiMonitor.Counter("test").Increment();
+		}
+	}
+```
+
+A slightly longer version of this program reveals better the inner workings of Okanshi and how it can be customized. I.e. now we explicitly define a poller and a registry to operate on.
+
+
+```csharp
+	static void Main(string[] args)
+	{
+		var pollingInterval = TimeSpan.FromSeconds(5);
+		var collectOnExit = true;
+		var registry = DefaultMonitorRegistry.Instance;
+		var poller = new MetricMonitorRegistryPoller(registry, pollingInterval, collectOnExit);
+		new ConsoleObserver(poller, x => JsonConvert.SerializeObject(x, Formatting.Indented));
+
+		while (true)
+		{
+			OkanshiMonitor.Counter("test").Increment();
+		}
+	}
+```
+
+
+### 6.3. Custom observers
 
 you can create your own observers easily as shown in the following example that not only prints to the screen but does some processing first
 
