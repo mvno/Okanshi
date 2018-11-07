@@ -109,8 +109,12 @@ type ZeroFilterFactory (monitorRegistry : IMonitorRegistry, DefaultTags) =
 /// factory to create monitors sharing the same polling frequency
 type MonitorFactory (monitorRegistry : IMonitorRegistry, DefaultTags) = 
     let mutable defaultTags = DefaultTags
-
-    member self.UpdateDefaultTags(newTags) = defaultTags <- newTags
+    
+    member self.WithZeroFiltering = new ZeroFilterFactory(monitorRegistry, defaultTags)
+    
+    member self.UpdateDefaultTags(newTags) = 
+        defaultTags <- newTags
+        self.WithZeroFiltering.UpdateDefaultTags(newTags)
     
     /// Get or create a CumulativeCounter
     member self.CumulativeCounter(name : string) = self.CumulativeCounter(name, [||])
@@ -216,7 +220,7 @@ type MonitorFactory (monitorRegistry : IMonitorRegistry, DefaultTags) =
         let config = MonitorConfig.Build(name).WithTags(defaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new SlaTimer(x, sla))
 
-#if NET45
+#if NET46
     /// Get or create a performance counter monitor
     member self.PerformanceCounter(check, name) = self.PerformanceCounter(check, name)
     

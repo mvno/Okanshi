@@ -15,16 +15,25 @@ namespace Okanshi.Test
         [Fact]
         public void okanshimonitor_can_create_instance()
         {
-            IGauge<long> gauge = OkanshiMonitor.WithZeroFiltering.LongGauge("foo");
+            GaugeZeroFilter<long> gauge = OkanshiMonitor.WithZeroFiltering.LongGauge("foo");
 
             gauge.Config.Name.Should().Be("foo");
         }
 
         [Fact]
-        public void factory_can_create_instance()
+        public void zerofactory_can_create_instance()
         {
             var factory = new ZeroFilterFactory(new OkanshiMonitorRegistry(), new Tag[0]);
-            IGauge<long> gauge = factory.LongGauge("foo");
+            GaugeZeroFilter<long> gauge = factory.LongGauge("foo");
+
+            gauge.Config.Name.Should().Be("foo");
+        }
+
+        [Fact]
+        public void factory_can_create_zerofilter_instance()
+        {
+            var factory = new MonitorFactory(new OkanshiMonitorRegistry(), new Tag[0]);
+            GaugeZeroFilter<long> gauge = factory.WithZeroFiltering.LongGauge("foo");
 
             gauge.Config.Name.Should().Be("foo");
         }
