@@ -92,13 +92,15 @@ These were just two examples of how you can utilize names and tags. What tags yo
 
 ### 1.3. Getting started
 
-We know you are excited by now to see something running. We've made it easy for you to get started. Simply run the following program in a console
+We know you are excited by now to see something running. We've made it easy for you to get started, simply run the following program in a console:
 
 
 ```csharp
 	static void Main(string[] args)
 	{
-		new ConsoleObserver(x => JsonConvert.SerializeObject(x, Formatting.Indented));
+		var registry = DefaultMonitorRegistry.Instance;
+		var poller = new MetricMonitorRegistryPoller(registry, TimeSpan.FromSeconds(5), false);
+        new ConsoleObserver(poller, x => JsonConvert.SerializeObject(x, Formatting.Indented));
 		
 		while (true)
 		{
@@ -107,7 +109,9 @@ We know you are excited by now to see something running. We've made it easy for 
 	}
 ```
 
-you should see measurements being collected and printed to the screen. The output resembles the following:
+The main entities of the program is a *registry* which holds a set of monitors. A *poller* which with certain intervals will query the measurements of the monitors, and an *observer* that typically transports measurements to a receiver system that can do data analysis, draw graphs etc. In this case we print to the console to visually show that we are up and running. 
+
+The output when running this program resembles the following:
 
 
 ```
@@ -125,7 +129,9 @@ you should see measurements being collected and printed to the screen. The outpu
 }
 ```
 
-You'll notice that the `Values.Value` is not growing but oscilates around the same number. This is because every time Okanshi reads the monitors in the poller, the monitor is reset.
+You'll notice that the `Values.Value` oscillates around the same number rather than growing. This is because every time Okanshi reads the monitors in the poller, the monitor is reset.
+
+
 
 
 ## 2. Monitor documentation
@@ -475,22 +481,7 @@ This observer stores metrics in-memory using a poller getting data from the defa
 
 ### 6.2. ConsoleObserver
 
-The `ConsoleObserver` prints measurements to the console, so you can get a quick start seeing that Okanshi works. No need to mess about with a receiver system. To get things up and running simply run the following program.
-
-```csharp
-	static void Main(string[] args)
-	{
-		new ConsoleObserver(x => JsonConvert.SerializeObject(x, Formatting.Indented));
-		
-		while (true)
-		{
-			OkanshiMonitor.Counter("test").Increment();
-		}
-	}
-```
-
-A slightly longer version of this program reveals better the inner workings of Okanshi and how it can be customized. I.e. now we explicitly define a poller and a registry to operate on.
-
+The `ConsoleObserver` prints measurements to the console, so you can get a quick start seeing that Okanshi works. No need to mess about with a receiver system. 
 
 ```csharp
 	static void Main(string[] args)

@@ -58,9 +58,6 @@ type ConsoleObserver(poller : IMetricPoller, serializer : Func<Object, string>) 
     do
         poller.RegisterObserver(new Func<Metric seq, Task>(self.Update))
    
-    new (serializer : Func<Object, string>) = 
-        new ConsoleObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, TimeSpan.FromSeconds(2.0), true), serializer)
-
     /// Update the observer with the specified metrics
     member __.Update(metrics : Metric seq) = 
         Task.Run(fun() ->
