@@ -12,7 +12,7 @@ namespace Okanshi.Sample
     {
         public static readonly AutoResetEvent closing = new AutoResetEvent(false);
         public static IMetricPoller poller;
-        public static IProcessingMetricObserver observer;
+        public static IMetricObserver observer;
 
         public static void Main(string[] args)
         {
@@ -23,21 +23,10 @@ namespace Okanshi.Sample
             // Create a new poller to get data from the registry every 10 seconds
             poller = new MetricMonitorRegistryPoller(registry, TimeSpan.FromSeconds(10), false);
 
-            // Add a memory observer getting data from the poller, and keep the last 100 observations
-            // in memory
-            observer = new MemoryMetricObserver(poller, 100);
+            observer = new ConsoleObserver(poller, x => JsonConvert.SerializeObject(x, Formatting.Indented));
 
             // Start the actual program
             Start();
-
-            // This flushes all the measurements to the observer, before displaying the result
-            poller.PollMetrics().Wait();
-
-            // Write the result as JSON
-            Console.WriteLine("Measurements:");
-            var observations = observer.GetObservations();
-            var result = JsonConvert.SerializeObject(observations, Formatting.Indented);
-            Console.WriteLine(result);
         }
 
         public static void Start() {

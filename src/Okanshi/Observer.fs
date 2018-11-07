@@ -49,3 +49,27 @@ type MemoryMetricObserver(poller : IMetricPoller, numberOfSamplesToStore) as sel
     
     interface IProcessingMetricObserver with
         member self.GetObservations() = self.GetObservations()
+
+/// Observer that prints to the Console. An easy way to see that Okanshi is working
+/// The serializer function could be e.g. a standard serializer such as newtonsoft Json: 
+/// <code>observer = new ConsoleObserver(poller, x => JsonConvert.SerializeObject(x, Formatting.Indented))</code>
+type ConsoleObserver(poller : IMetricPoller, serializer : Func<Object, string>) as self = 
+    
+    do
+        poller.RegisterObserver(new Func<Metric seq, Task>(self.Update))
+   
+    /// Update the observer with the specified metrics
+    member __.Update(metrics : Metric seq) = 
+        Task.Run(fun() ->
+            printf "\n** %s\n" <| DateTime.Now.ToString()
+            for metric in metrics do
+                printf "%s\n" <| serializer.Invoke(metric)
+        )
+
+    /// Dispose the observer
+    member __.Dispose() = ()
+    
+    interface IMetricObserver with
+        member self.Update(metrics) = self.Update(metrics)
+        member self.Dispose() = self.Dispose()
+    

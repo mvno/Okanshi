@@ -8,7 +8,7 @@
 * `OkanshiMonitor.PerformanceCounter` bugfix so it now returns an instance.
 * Unnecessary calculation has been removed from `Counter`, and locks are no longer used in the counter, instead atomics are used.
 * `Counter` now allows increment by negative numbers.
-
+* `ConsoleObserver` has been added to make it easier to get started with Okanshi.
 **BREAKING CHANGES**
 
 * Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
