@@ -5,10 +5,19 @@ open System.Collections.Generic
 
 /// The AbsentFilterFactory can create monitors wrapped in an absent filter preveing okanshi from 
 /// sending 0-values when no measurements are made
-type AbsentMeasurementsFilterFactory (monitorRegistry : IMonitorRegistry, DefaultTags) = 
+type AbsentMeasurementsFilterFactory (monitorRegistry : IMonitorRegistry, DefaultTags, monitorFactory : MonitorFactory) = 
     let mutable defaultTags = DefaultTags
 
-    member self.UpdateDefaultTags(newTags) = defaultTags <- newTags
+    new (monitorRegistry, defaultTags) = AbsentMeasurementsFilterFactory (monitorRegistry, defaultTags, new MonitorFactory(monitorRegistry, defaultTags))
+
+    member self.WithNoFiltering = monitorFactory 
+
+    member self.UpdateDefaultTags(newTags) = 
+        defaultTags <- newTags
+        self.WithNoFiltering.UpdateDefaultTags(newTags)
+
+    member internal self.UpdateDefaultTagsNonRecursive(newTags) = 
+        defaultTags <- newTags
     
     /// Get or create a CumulativeCounter
     member self.CumulativeCounter(name : string) = self.CumulativeCounter(name, [||])
@@ -108,14 +117,17 @@ type AbsentMeasurementsFilterFactory (monitorRegistry : IMonitorRegistry, Defaul
 
 
 /// factory to create monitors sharing the same polling frequency
-type MonitorFactory (monitorRegistry : IMonitorRegistry, DefaultTags) = 
+and MonitorFactory (monitorRegistry : IMonitorRegistry, DefaultTags) = 
     let mutable defaultTags = DefaultTags
     
-    member self.WithAbsentFiltering = new AbsentMeasurementsFilterFactory(monitorRegistry, defaultTags)
+    member self.WithAbsentFiltering = new AbsentMeasurementsFilterFactory(monitorRegistry, defaultTags, self)
     
     member self.UpdateDefaultTags(newTags) = 
         defaultTags <- newTags
-        self.WithAbsentFiltering.UpdateDefaultTags(newTags)
+        self.WithAbsentFiltering.UpdateDefaultTagsNonRecursive(newTags)
+
+    member internal self.UpdateDefaultTagsNonRecursive(newTags) = 
+        defaultTags <- newTags
     
     /// Get or create a CumulativeCounter
     member self.CumulativeCounter(name : string) = self.CumulativeCounter(name, [||])
