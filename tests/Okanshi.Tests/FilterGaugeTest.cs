@@ -9,31 +9,31 @@ namespace Okanshi.Test
         [Fact]
         public void FilterGauge_is_an_igauge()
         {
-            IGauge<long> gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            IGauge<long> gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
         }
 
         [Fact]
         public void okanshimonitor_can_create_instance()
         {
-            GaugeZeroFilter<long> gauge = OkanshiMonitor.WithZeroFiltering.LongGauge("foo");
+            GaugeAbsentFilter<long> gauge = OkanshiMonitor.WithAbsentFiltering.LongGauge("foo");
 
             gauge.Config.Name.Should().Be("foo");
         }
 
         [Fact]
-        public void zerofactory_can_create_instance()
+        public void Absentfactory_can_create_instance()
         {
-            var factory = new ZeroFilterFactory(new OkanshiMonitorRegistry(), new Tag[0]);
-            GaugeZeroFilter<long> gauge = factory.LongGauge("foo");
+            var factory = new AbsentMeasurementsFilterFactory(new OkanshiMonitorRegistry(), new Tag[0]);
+            GaugeAbsentFilter<long> gauge = factory.LongGauge("foo");
 
             gauge.Config.Name.Should().Be("foo");
         }
 
         [Fact]
-        public void factory_can_create_zerofilter_instance()
+        public void factory_can_create_Absentfilter_instance()
         {
             var factory = new MonitorFactory(new OkanshiMonitorRegistry(), new Tag[0]);
-            GaugeZeroFilter<long> gauge = factory.WithZeroFiltering.LongGauge("foo");
+            GaugeAbsentFilter<long> gauge = factory.WithAbsentFiltering.LongGauge("foo");
 
             gauge.Config.Name.Should().Be("foo");
         }
@@ -41,7 +41,7 @@ namespace Okanshi.Test
         [Fact]
         public void Do_not_send_data_when_nothing_registered()
         {
-            var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            var gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
             
             gauge.GetValues().ShouldBeEquivalentTo(new IMeasurement[0]);
             ((IGauge<long>)gauge).GetValues().ShouldBeEquivalentTo(new IMeasurement[0]);
@@ -50,7 +50,7 @@ namespace Okanshi.Test
         [Fact]
         public void Do_not_send_data_when_nothing_registered_after_GetValues()
         {
-            var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            var gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
             gauge.Set(33);
             gauge.GetValues();
             
@@ -64,7 +64,7 @@ namespace Okanshi.Test
         [InlineData(42)]        
         public void Send_data_when_registered(int someValue)
         {
-            var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            var gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
             gauge.Set(someValue);
 
             gauge.GetValues().Single();
@@ -73,7 +73,7 @@ namespace Okanshi.Test
         [Fact]
         public void Send_data_when_Reset()
         {
-            var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            var gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
             gauge.Reset();
 
             gauge.GetValues().Single();
@@ -82,7 +82,7 @@ namespace Okanshi.Test
         [Fact]
         public void Do_not_send_data_and_reset_when_nothing_registered()
         {
-            var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            var gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
             
             gauge.GetValuesAndReset().ShouldBeEquivalentTo(new IMeasurement[0]);
             ((IGauge<long>)gauge).GetValuesAndReset().ShouldBeEquivalentTo(new IMeasurement[0]);
@@ -94,7 +94,7 @@ namespace Okanshi.Test
         [InlineData(42)]
         public void Do_not_send_data_and_reset_when_nothing_registered_after_GetValues(int someValue)
         {
-            var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            var gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
             gauge.Set(someValue);
             gauge.GetValuesAndReset();
             
@@ -105,7 +105,7 @@ namespace Okanshi.Test
         [Fact]
         public void Send_data_and_reset_when_registered()
         {
-            var gauge = new GaugeZeroFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
+            var gauge = new GaugeAbsentFilter<long>(new LongGauge(MonitorConfig.Build("Test")));
             gauge.Set(33);
 
             gauge.GetValuesAndReset().Single();
