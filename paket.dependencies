@@ -5,7 +5,7 @@ source https://nuget.org/api/v2
 nuget InfluxDB.WriteOnly 3.0.1-beta
 nuget Owin 1.0
 nuget FSharp.Core 4.5.2
-
+nuget Microsoft.AspNet.WebApi.Core 5.2.3
 clitool dotnet-fake
 
 group Test
