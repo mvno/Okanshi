@@ -30,6 +30,7 @@
   <ItemGroup>
     <Compile Include="Poller.fs" />
     <Compile Include="Observer.fs" />
+    <Compile Include="Factories.fs" />
     <Compile Include="Monitor.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

@@ -10,6 +10,9 @@ Table of Content
      * [1.1. Metrics and performance measurement](#11-metrics-and-performance-measurement)
      * [1.2. Names and tags](#12-names-and-tags)
      * [1.3. Getting started](#13-getting-started)
+     * [1.4. Instantiating monitors](#14-instantiating-monitors)
+       * [1.4.1. OkanshiMonitor](#141-okanshimonitor)
+       * [1.4.2. Factories](#142-factories)
    * [2. Monitor documentation](#2-monitor-documentation)
      * [2.1. Gauges](#21-gauges)
        * [2.1.1. Gauge](#211-gauge)
@@ -92,21 +95,21 @@ These were just two examples of how you can utilize names and tags. What tags yo
 
 ### 1.3. Getting started
 
-We know you are excited by now to see something running. We've made it easy for you to get started, simply run the following program in a console:
+By now, you are probably excited to see something running. To get an understanding of the "wheels and cogs" of Okanshi, run the following illuminating example. Simply compile and run the in a console:
 
 
 ```csharp
-	static void Main(string[] args)
-	{
-		var registry = DefaultMonitorRegistry.Instance;
-		var poller = new MetricMonitorRegistryPoller(registry, TimeSpan.FromSeconds(5), false);
+    static void Main(string[] args)
+    {
+        var registry = DefaultMonitorRegistry.Instance;
+        var poller = new MetricMonitorRegistryPoller(registry, TimeSpan.FromSeconds(5), false);
         new ConsoleObserver(poller, x => JsonConvert.SerializeObject(x, Formatting.Indented));
-		
-		while (true)
-		{
-			OkanshiMonitor.Counter("hello world").Increment();
-		}
-	}
+        
+        while (true)
+        {
+            OkanshiMonitor.Counter("hello world").Increment();
+        }
+    }
 ```
 
 The main entities of the program is a *registry* which holds a set of monitors. A *poller* which with certain intervals will query the measurements of the monitors, and an *observer* that typically transports measurements to a receiver system that can do data analysis, draw graphs etc. In this case we print to the console to visually show that we are up and running. 
@@ -132,6 +135,46 @@ The output when running this program resembles the following:
 You'll notice that the `Values.Value` oscillates around the same number rather than growing. This is because every time Okanshi reads the monitors in the poller, the monitor is reset.
 
 
+
+
+### 1.4. Instantiating monitors
+
+#### 1.4.1. OkanshiMonitor
+
+Advantages
+  * very easy to get started
+
+#### 1.4.2. Factories
+
+Advantages
+  * multiple polling intervals
+  * extensionmethods to enhance the factory with your own monitors
+
+  
+Plumbing code for using the factories
+
+```
+    public static class OkanshiIntegrator
+    {
+        public static MonitorFactory CreateFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
+        {
+            defaultTags = defaultTags ?? new Tag[0];
+            var registry = new OkanshiMonitorRegistry();
+            new MyObserver(new MetricMonitorRegistryPoller(registry, pollFrequency, pollOnExit));
+            var factory = new MonitorFactory(registry, defaultTags);
+            return factory;
+        }
+
+        public static ZeroFilterFactory CreateZeroFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
+        {
+            defaultTags = defaultTags ?? new Tag[0];
+            var registry = new OkanshiMonitorRegistry();
+            new MyObserver(new MetricMonitorRegistryPoller(registry, pollFrequency, pollOnExit));
+            var factory = new ZeroFilterFactory(registry, defaultTags);
+            return factory;
+        }
+    }
+```
 
 
 ## 2. Monitor documentation
@@ -484,19 +527,19 @@ This observer stores metrics in-memory using a poller getting data from the defa
 The `ConsoleObserver` prints measurements to the console, so you can get a quick start seeing that Okanshi works. No need to mess about with a receiver system. 
 
 ```csharp
-	static void Main(string[] args)
-	{
-		var pollingInterval = TimeSpan.FromSeconds(5);
-		var collectOnExit = true;
-		var registry = DefaultMonitorRegistry.Instance;
-		var poller = new MetricMonitorRegistryPoller(registry, pollingInterval, collectOnExit);
-		new ConsoleObserver(poller, x => JsonConvert.SerializeObject(x, Formatting.Indented));
+    static void Main(string[] args)
+    {
+        var pollingInterval = TimeSpan.FromSeconds(5);
+        var collectOnExit = true;
+        var registry = DefaultMonitorRegistry.Instance;
+        var poller = new MetricMonitorRegistryPoller(registry, pollingInterval, collectOnExit);
+        new ConsoleObserver(poller, x => JsonConvert.SerializeObject(x, Formatting.Indented));
 
-		while (true)
-		{
-			OkanshiMonitor.Counter("test").Increment();
-		}
-	}
+        while (true)
+        {
+            OkanshiMonitor.Counter("test").Increment();
+        }
+    }
 ```
 
 
@@ -560,9 +603,12 @@ To enable use the `AppBuilder` extension method, `UseOkanshi`:
     app.UseOkanshi()
 ```
 
-For configuration see the API reference.
+You can provide a `OkanshiOwinOptions` where you can define e.g. which timer to use (and thus also which registry) 
 
-Currently the OWIN integration always uses the default registry.
+
+
+
+
 
 
 (document sections maintained by https://github.com/kbilsted/AutonumberMarkdown)
