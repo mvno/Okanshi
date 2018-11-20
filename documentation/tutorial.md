@@ -603,9 +603,12 @@ To enable use the `AppBuilder` extension method, `UseOkanshi`:
     app.UseOkanshi()
 ```
 
-For configuration see the API reference.
+You can provide a `OkanshiOwinOptions` where you can define e.g. which timer to use (and thus also which registry) 
 
-Currently the OWIN integration always uses the default registry.
+
+
+
+
 
 
 (document sections maintained by https://github.com/kbilsted/AutonumberMarkdown)
