@@ -5,8 +5,8 @@ open System.Diagnostics
 
 /// A filter decorator for gauges.
 /// The wrapped monitor only returns values to the poller in case a change has been registered
-/// With this you can avoid sending 0-value measurements that normally is sent when no measurements are registered
-type GaugeZeroFilter<'T>(inner : IGauge<'T>) =
+/// With this you avoid sending 0-value measurements that normally is sent when no measurements are registered
+type GaugeAbsentFilter<'T>(inner : IGauge<'T>) =
     let mutable hasChanged = false
     let syncRoot = new obj()
 
@@ -44,8 +44,8 @@ type GaugeZeroFilter<'T>(inner : IGauge<'T>) =
 
 /// A filter decorator for counters.
 /// The wrapped monitor only returns values to the poller in case a change has been registered
-/// With this you can avoid sending 0-value measurements that normally is sent when no measurements are registered
-type CounterZeroFilter<'T>(inner : ICounter<'T>) =
+/// With this you avoid sending 0-value measurements that normally is sent when no measurements are registered
+type CounterAbsentFilter<'T>(inner : ICounter<'T>) =
     let mutable hasChanged = false
     let syncRoot = new obj()
     
@@ -83,8 +83,8 @@ type CounterZeroFilter<'T>(inner : ICounter<'T>) =
 
 /// A filter decorator for timers.
 /// The wrapped monitor only returns values to the poller in case a change has been registered
-/// With this you can avoid sending 0-value measurements that normally is sent when no measurements are registered
-type TimerZeroFilter(inner : ITimer) =
+/// With this you avoid sending 0-value measurements that normally is sent when no measurements are registered
+type TimerAbsentFilter(inner : ITimer) =
     let mutable hasChanged = false
     let syncRoot = new obj()
     
