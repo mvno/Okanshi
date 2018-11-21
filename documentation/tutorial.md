@@ -182,12 +182,12 @@ Plumbing code for using the factories
             return factory;
         }
 
-        public static ZeroFilterFactory CreateZeroFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
+        public static AbsentMeasurementsFilterFactory CreateAbsentMeasurementsFilterFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
         {
             defaultTags = defaultTags ?? new Tag[0];
             var registry = new OkanshiMonitorRegistry();
             new MyObserver(new MetricMonitorRegistryPoller(registry, pollFrequency, pollOnExit));
-            var factory = new ZeroFilterFactory(registry, defaultTags);
+            var factory = new AbsentMeasurementsFilterFactory(registry, defaultTags);
             return factory;
         }
     }
@@ -426,13 +426,13 @@ on the receiver. Or perhaps you are using a receiving system, where data is stor
 
 Using Splunk as the receiving system, you may face many of those reasons, and much less so when using e.g. InfluxDb.
 
-The filter implementations are `CounterZeroFilter`, `GaugeZeroFilter` and `TimerZeroFilter`.
+The filter implementations are `CounterAbsentFilter`, `GaugeAbsentFilter` and `TimerAbsentFilter`. You can use these directly or use the factory `AbsentMeasurementsFilterFactory` or use the `OkanshiMonitor.WithAbsentFiltering`.
 
 
 Example:
 
 ```csharp
-    var counter = new CounterZeroFilter<long>(new Counter(MonitorConfig.Build("Test")));
+    var counter = new CounterAbsentFilter<long>(new Counter(MonitorConfig.Build("Test")));
     counter.GetValues(); // no values are returned
     //
     counter.Increment()
@@ -442,11 +442,11 @@ Example:
 And then we need to register our filter counter.. So a more complete example of a factory method may be
 
 ```csharp
-    private static CounterZeroFilter<long> FilterCounter(string name, IEnumerable<Tag> tags)
+    private static CounterAbsentFilter<long> FilterCounter(string name, IEnumerable<Tag> tags)
     {
         var config = MonitorConfig.Build(name).WithTags(tags);
         var registry = DefaultMonitorRegistry.Instance;
-        var monitor = registry.GetOrAdd(config, x => new CounterZeroFilter<long>(new Counter(x)));
+        var monitor = registry.GetOrAdd(config, x => new CounterAbsentFilter<long>(new Counter(x)));
         return monitor;
     }
 ```
@@ -455,10 +455,16 @@ Filters are currently not supported by `OkanshiMonitor`. The following wILL NOT 
 
 ```csharp
     // don't do this!
-    var wrong! = new CounterZeroFilter<long>(OkanshiMonitor.Counter("Foo"));
+    var wrong! = new CounterAbsentFilter<long>(OkanshiMonitor.Counter("Foo"));
 ```
 
 When we use `OkanshiMonitor`, it registers the monitor in a default registry associated with a poller! Hence we will start sending 0-values.
+
+We have created a shortcut in OkanshiMonitor for you
+
+```csharp
+    var corrent = OkanshiMonitor.WithAbsentFiltering.Counter("Foo");
+```
 
 
 ## 5. Health checks
