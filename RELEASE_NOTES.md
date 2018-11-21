@@ -12,6 +12,7 @@
 * `OkanshiMonitor.WithZeroFiltering` has been added. This allows you to instantiate zero filter monitors.
 * `MonitorFactory` has been added. It allows you to administrate multiple monitors with different polling frequency.
 * `ZeroFilterFactory` has been added. It allows you to instantiate zero filter monitors.
+* `WebApi` middleware has been added. Allows you to do black box monitoring of your webapi applications.
 
 **BREAKING CHANGES**
 
