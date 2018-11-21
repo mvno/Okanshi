@@ -149,6 +149,9 @@ The output when running this program resembles the following:
 
 You'll notice that the `Values.Value` oscillates around the same number rather than growing. This is because every time Okanshi reads the monitors in the poller, the monitor is reset.
 
+So now you have some measurements, what are you going to do with them? Okanshi is made to only collect and aggregate measurements. You need a different system to send that data to for further processing and insights, alarms etc. You can use logging systems such as Elastic Search or Splunk, but perhaps the most natural choice is a time-series database sucn as InfluxDb. 
+
+You need to use an observer to transfer the measurements, e.g. `Okanshi.InfluxDBObserver`.
 
 
 ### 2.1. Instantiating monitors
