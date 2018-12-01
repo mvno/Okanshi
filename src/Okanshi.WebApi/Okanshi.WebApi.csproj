@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <VersionPrefix>6.0.0</VersionPrefix>
+    <PackageId>Okanshi.WepApi</PackageId>
+    <Authors>Kasper Graversen</Authors>
+    <Company>Telenor MVNO</Company>
+    <Description>WepApi middleware for Okanshi</Description>
+    <PackageTags>monitoring;microservices;webapi</PackageTags>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net46</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Okanshi\Okanshi.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

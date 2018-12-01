@@ -9,37 +9,40 @@ Table of Content
    * [1. Introduction](#1-introduction)
      * [1.1. Metrics and performance measurement](#11-metrics-and-performance-measurement)
      * [1.2. Names and tags](#12-names-and-tags)
-     * [1.3. Getting started](#13-getting-started)
-     * [1.4. Instantiating monitors](#14-instantiating-monitors)
-       * [1.4.1. OkanshiMonitor](#141-okanshimonitor)
-       * [1.4.2. Factories](#142-factories)
-   * [2. Monitor documentation](#2-monitor-documentation)
-     * [2.1. Gauges](#21-gauges)
-       * [2.1.1. Gauge](#211-gauge)
-       * [2.1.2. Max/MinGauge](#212-maxmingauge)
-       * [2.1.3. AverageGauge](#213-averagegauge)
-       * [2.1.4. MinMaxAvgGauge](#214-minmaxavggauge)
-       * [2.1.5. Long/Double/DecimalGauge](#215-longdoubledecimalgauge)
-     * [2.2. Counters](#22-counters)
-       * [2.2.1. Counter](#221-counter)
-       * [2.2.2. DoubleCounter](#222-doublecounter)
-       * [2.2.3. CumulativeCounter](#223-cumulativecounter)
-     * [2.3. Timers](#23-timers)
-       * [2.3.1. Timer](#231-timer)
-       * [2.3.2. SlaTimer](#232-slatimer)
-     * [2.4. Performance counters](#24-performance-counters)
-   * [3. Filters](#3-filters)
-   * [4. Health checks](#4-health-checks)
-   * [5. HTTP Endpoint](#5-http-endpoint)
-     * [5.1. Starting the endpoint](#51-starting-the-endpoint)
-     * [5.2. Health checks](#52-health-checks)
-     * [5.3. Assembly dependencies](#53-assembly-dependencies)
-     * [5.4. NuGet dependencies](#54-nuget-dependencies)
-   * [6. Observers](#6-observers)
-     * [6.1. Observer setup](#61-observer-setup)
-     * [6.2. ConsoleObserver](#62-consoleobserver)
-     * [6.3. Custom observers](#63-custom-observers)
-   * [7. OWIN](#7-owin)
+     * [1.3. "Black box" vs "White box" monitoring](#13-black-box-vs-white-box-monitoring)
+   * [2. Getting started](#2-getting-started)
+     * [2.1. Instantiating monitors](#21-instantiating-monitors)
+       * [2.1.1. OkanshiMonitor](#211-okanshimonitor)
+       * [2.1.2. Factories](#212-factories)
+   * [3. Monitor documentation](#3-monitor-documentation)
+     * [3.1. Gauges](#31-gauges)
+       * [3.1.1. Gauge](#311-gauge)
+       * [3.1.2. Max/MinGauge](#312-maxmingauge)
+       * [3.1.3. AverageGauge](#313-averagegauge)
+       * [3.1.4. MinMaxAvgGauge](#314-minmaxavggauge)
+       * [3.1.5. Long/Double/DecimalGauge](#315-longdoubledecimalgauge)
+     * [3.2. Counters](#32-counters)
+       * [3.2.1. Counter](#321-counter)
+       * [3.2.2. DoubleCounter](#322-doublecounter)
+       * [3.2.3. CumulativeCounter](#323-cumulativecounter)
+     * [3.3. Timers](#33-timers)
+       * [3.3.1. Timer](#331-timer)
+       * [3.3.2. SlaTimer](#332-slatimer)
+     * [3.4. Performance counters](#34-performance-counters)
+   * [4. Filters](#4-filters)
+   * [5. Health checks](#5-health-checks)
+   * [6. HTTP Endpoint](#6-http-endpoint)
+     * [6.1. Starting the endpoint](#61-starting-the-endpoint)
+     * [6.2. Health checks](#62-health-checks)
+     * [6.3. Assembly dependencies](#63-assembly-dependencies)
+     * [6.4. NuGet dependencies](#64-nuget-dependencies)
+   * [7. Observers](#7-observers)
+     * [7.1. Observer setup](#71-observer-setup)
+     * [7.2. ConsoleObserver](#72-consoleobserver)
+     * [7.3. Custom observers](#73-custom-observers)
+   * [8. Black box metrics](#8-black-box-metrics)
+     * [8.1. OWIN middleware](#81-owin-middleware)
+     * [8.2. WebApi middleware](#82-webapi-middleware)
  
 
 ## 1. Introduction
@@ -93,7 +96,19 @@ These were just two examples of how you can utilize names and tags. What tags yo
 * **Unit of measure:** When you cannot determine from the measurement name the unit of measure, and its not a standard unit (e.g. days or seconds) consider applying it as a tag.
 
 
-### 1.3. Getting started
+
+### 1.3. "Black box" vs "White box" monitoring
+
+There are two kinds of monitoring supported by Okanshi - black box monitoring and white box monitoring. Both kind of monitoring is supported because they complement each other. But you can choose to use one or the other - or both. 
+
+* **Black box monitoring** monitors your application from the outside. It provides *coarse grained measurements*, but can be turned on using few  lines of code. 
+* **White box montioring** monitors your application from the inside. It provides *very fine-grained measurements*, but require more instrumentation of the application. 
+
+The black box monitoring supported is through middleware "OWIN" and "WebApi" which  are documented at the *"black box monitoring"* section of the document. The rest of the document focuses on white box monitoring.
+
+
+
+## 2. Getting started
 
 By now, you are probably excited to see something running. To get an understanding of the "wheels and cogs" of Okanshi, run the following illuminating example. Simply compile and run the in a console:
 
@@ -134,17 +149,19 @@ The output when running this program resembles the following:
 
 You'll notice that the `Values.Value` oscillates around the same number rather than growing. This is because every time Okanshi reads the monitors in the poller, the monitor is reset.
 
+So now you have some measurements, what are you going to do with them? Okanshi is made to only collect and aggregate measurements. You need a different system to send that data to for further processing and insights, alarms etc. You can use logging systems such as Elastic Search or Splunk, but perhaps the most natural choice is a time-series database sucn as InfluxDb. 
+
+You need to use an observer to transfer the measurements, e.g. `Okanshi.InfluxDBObserver`.
 
 
+### 2.1. Instantiating monitors
 
-### 1.4. Instantiating monitors
-
-#### 1.4.1. OkanshiMonitor
+#### 2.1.1. OkanshiMonitor
 
 Advantages
   * very easy to get started
 
-#### 1.4.2. Factories
+#### 2.1.2. Factories
 
 Advantages
   * multiple polling intervals
@@ -165,27 +182,27 @@ Plumbing code for using the factories
             return factory;
         }
 
-        public static ZeroFilterFactory CreateZeroFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
+        public static AbsentMeasurementsFilterFactory CreateAbsentMeasurementsFilterFactory(TimeSpan pollFrequency, IEnumerable<Tag> defaultTags, bool pollOnExit = false)
         {
             defaultTags = defaultTags ?? new Tag[0];
             var registry = new OkanshiMonitorRegistry();
             new MyObserver(new MetricMonitorRegistryPoller(registry, pollFrequency, pollOnExit));
-            var factory = new ZeroFilterFactory(registry, defaultTags);
+            var factory = new AbsentMeasurementsFilterFactory(registry, defaultTags);
             return factory;
         }
     }
 ```
 
 
-## 2. Monitor documentation
+## 3. Monitor documentation
 
-### 2.1. Gauges
+### 3.1. Gauges
 
 Gauges are monitors that returns the current value of something. It could be the number of files in a director, the number of users currently logged and etc.
 
 All gauges can be instantiated directly or, declared and used through the static `OkanshiMonitor` class.
 
-#### 2.1.1. Gauge 
+#### 3.1.1. Gauge 
 
 The `Gauge` is a monitor that takes a `Func<T>`. Each time the value is polled from the gauge, the `Func<T>` is called and the value returned is the current value.
 
@@ -197,7 +214,7 @@ Example:
     var gauge = new Gauge(MonitorConfig.Build("Number of users"), () => _numberOfUsers);
 ```
 
-#### 2.1.2. Max/MinGauge 
+#### 3.1.2. Max/MinGauge 
 
 The `MaxGauge` is a monitor that tracks the current maximum value. It can be used to track the maximum number of users logged in at the same time or similar. The initial value of the gauge is zero.
 The `MinGauge` is a monitor that tracks the current minimum value. The initial value of the gauge is zero, which means zero is treated as no value at all. This has the affect that if the gauge is zero, and a non zero value is posted to the gauge, it would effectively change the minimum value. This is a bug that will be fixed in a future version.
@@ -226,7 +243,7 @@ Example:
     gauge.Set(1);
 ```
 
-#### 2.1.3. AverageGauge 
+#### 3.1.3. AverageGauge 
 
 The `AverageGauge` monitors the average value over a time interval. This can be for example be used to monitor the average queue length over a time interval. The interval is controlled by the poller.
 
@@ -242,7 +259,7 @@ Example:
 ```
 
 
-#### 2.1.4. MinMaxAvgGauge
+#### 3.1.4. MinMaxAvgGauge
 
 The `MinMaxAvgGauge` is a combination of three gauges: MinGauge, MaxGauge and AverageGauge. It keeps track of the min, max and average values since last reset.  This gauge is able to detect extreme values that would otherwise disappear in an average calculation. When you are in need of a gauge and you are unsure about what data you are going to get out, this gauge may be the gauge to use.
  
@@ -264,7 +281,7 @@ Values returned are "min", "max" and "avg"
 ```
 
 
-#### 2.1.5. Long/Double/DecimalGauge 
+#### 3.1.5. Long/Double/DecimalGauge 
 
 The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`, `double` and `decimal` values respectively. The value you set is the value you get. Usage of these monitors is the same.
 
@@ -279,7 +296,7 @@ The `LongGauge`, `DoubleGauge` and `DecimalGauge` are gauges that handles `long`
     gauge.Set(0);
 ```
 
-### 2.2. Counters 
+### 3.2. Counters 
 
 Counters are monitors that you can increment as needed. They are thread-safe by default.
 
@@ -288,7 +305,7 @@ All counters can be instantiated directly or, declared and used through the stat
 Counters may be incremented with negative values. For the most part, this makes little sense. If you find yourself wanting to use negative increments, chances are you
 should be using a gauge instead. In fact, we cannot think of a single example where this is not the case. :-)
 
-#### 2.2.1. Counter 
+#### 3.2.1. Counter 
 
 A `Counter` counts the number of events between polling. The value is a ```int``` and can be incremented using a ```int```.
 
@@ -305,7 +322,7 @@ A `Counter` counts the number of events between polling. The value is a ```int``
     counter.Increment();
 ```
 
-#### 2.2.2. DoubleCounter 
+#### 3.2.2. DoubleCounter 
 
 A `DoubleCounter` counts the number of events between polling. The value is a ```double``` and can be incremented using a ```double```.
 
@@ -322,7 +339,7 @@ A `DoubleCounter` counts the number of events between polling. The value is a ``
     counter.Increment();
 ```
 
-#### 2.2.3. CumulativeCounter 
+#### 3.2.3. CumulativeCounter 
 
 Is a counter that is never reset at runtime, but retained during the lifetime of the process. Other than that, it works exactly like all other counters. . The value is a ```int``` and can be incremented using a ```int```.
 
@@ -341,7 +358,7 @@ This counter make sense to use then you don't want to take the polling interval 
     counter.Increment();
 ```
 
-### 2.3. Timers 
+### 3.3. Timers 
 
 Timers measures the time it takes to execute a function.
 
@@ -356,7 +373,7 @@ Example:
     timer.Stop(); // When stopped the timing is registered
 ```
 
-#### 2.3.1. Timer 
+#### 3.3.1. Timer 
 
 This is a simple timer that, within a specified interval, measures:
 
@@ -378,7 +395,7 @@ Example:
 ```
 
 
-#### 2.3.2. SlaTimer
+#### 3.3.2. SlaTimer
 
 A service-level agreement (SLA) is a commitment between a service provider and a client. For example, the service provider promise to respond to a request within an agreed amount of time. 
 
@@ -389,7 +406,7 @@ enable us to better understand the periods where we break our SLA by knowing how
 
 
 
-### 2.4. Performance counters
+### 3.4. Performance counters
 
 As of version 4 it is also possible to monitor Windows performance counters.
 
@@ -402,20 +419,20 @@ As of version 4 it is also possible to monitor Windows performance counters.
 ```
 
 
-## 3. Filters
+## 4. Filters
 
 Filters wrap monitors such that in the absence of registrations on the monitor, the monitor will not send zero-values when polled. This is useful when you want to reduce the amount of data sent to the receiving system. There can be may reasons for that such as licensing cost, or to reduce the load
 on the receiver. Or perhaps you are using a receiving system, where data is stored in a less efficient manner, making you concerned about too much data "with no data in it". 
 
 Using Splunk as the receiving system, you may face many of those reasons, and much less so when using e.g. InfluxDb.
 
-The filter implementations are `CounterZeroFilter`, `GaugeZeroFilter` and `TimerZeroFilter`.
+The filter implementations are `CounterAbsentFilter`, `GaugeAbsentFilter` and `TimerAbsentFilter`. You can use these directly or use the factory `AbsentMeasurementsFilterFactory` or use the `OkanshiMonitor.WithAbsentFiltering`.
 
 
 Example:
 
 ```csharp
-    var counter = new CounterZeroFilter<long>(new Counter(MonitorConfig.Build("Test")));
+    var counter = new CounterAbsentFilter<long>(new Counter(MonitorConfig.Build("Test")));
     counter.GetValues(); // no values are returned
     //
     counter.Increment()
@@ -425,11 +442,11 @@ Example:
 And then we need to register our filter counter.. So a more complete example of a factory method may be
 
 ```csharp
-    private static CounterZeroFilter<long> FilterCounter(string name, IEnumerable<Tag> tags)
+    private static CounterAbsentFilter<long> FilterCounter(string name, IEnumerable<Tag> tags)
     {
         var config = MonitorConfig.Build(name).WithTags(tags);
         var registry = DefaultMonitorRegistry.Instance;
-        var monitor = registry.GetOrAdd(config, x => new CounterZeroFilter<long>(new Counter(x)));
+        var monitor = registry.GetOrAdd(config, x => new CounterAbsentFilter<long>(new Counter(x)));
         return monitor;
     }
 ```
@@ -438,13 +455,19 @@ Filters are currently not supported by `OkanshiMonitor`. The following wILL NOT 
 
 ```csharp
     // don't do this!
-    var wrong! = new CounterZeroFilter<long>(OkanshiMonitor.Counter("Foo"));
+    var wrong! = new CounterAbsentFilter<long>(OkanshiMonitor.Counter("Foo"));
 ```
 
 When we use `OkanshiMonitor`, it registers the monitor in a default registry associated with a poller! Hence we will start sending 0-values.
 
+We have created a shortcut in OkanshiMonitor for you
 
-## 4. Health checks
+```csharp
+    var corrent = OkanshiMonitor.WithAbsentFiltering.Counter("Foo");
+```
+
+
+## 5. Health checks
 
 You can also add different health checks to you application. For example the number of files in a directory or something else making sense in you case.
 Health checks are added like this:
@@ -467,11 +490,11 @@ As of version 6 health checks can no longer be registered as a monitor.
 
 
 
-## 5. HTTP Endpoint
+## 6. HTTP Endpoint
 
 Prior to version 4, the HTTP endpoint was include in the core package. This is no longer the case, it now exists in a separate package called Okanshi.Endpoint.
 
-### 5.1. Starting the endpoint
+### 6.1. Starting the endpoint
 
 You start the monitor like this:
 
@@ -489,29 +512,29 @@ For custom configuration of the endpoint see the API reference.
 
 Notice that at application startup, the enpoint contains *no data* the first minute. This is because no data have been gathered yet. You can control that period by tweaking the poller interval.
 
-### 5.2. Health checks
+### 6.2. Health checks
 
 To see the current status of all defined healthchecks, go to [http://localhost:13004/healthchecks](http://localhost:13004/healthchecks).
 
-### 5.3. Assembly dependencies
+### 6.3. Assembly dependencies
 
 The endpoint can show all assemblies currently loaded in the AppDomain.
 
 To see all assembly dependencies for you application just access [http://localhost:13004/dependencies](http://localhost:13004/dependencies). It will provide a list of the names and version of all dependencies.
 
-### 5.4. NuGet dependencies
+### 6.4. NuGet dependencies
 
 If the package.config file is available in the current directory of the process. The endpoint can show all NuGet dependencies and their version. This information can be accessed through [http://localhost:13004/packages](http://localhost:13004/packages).
 
 
 
-## 6. Observers
+## 7. Observers
 
 Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database. An observer storing metrics in-memory is included in the Okanshi package.
 
 An observer to send metrics to InfluxDB is provided through another NuGet package called, Okanshi.InfluxDBObserver.
 
-### 6.1. Observer setup
+### 7.1. Observer setup
 
 Setting up an observer is easy:
 
@@ -522,7 +545,7 @@ Setting up an observer is easy:
 This observer stores metrics in-memory using a poller getting data from the default monitor registry.
 
 
-### 6.2. ConsoleObserver
+### 7.2. ConsoleObserver
 
 The `ConsoleObserver` prints measurements to the console, so you can get a quick start seeing that Okanshi works. No need to mess about with a receiver system. 
 
@@ -543,7 +566,7 @@ The `ConsoleObserver` prints measurements to the console, so you can get a quick
 ```
 
 
-### 6.3. Custom observers
+### 7.3. Custom observers
 
 you can create your own observers easily as shown in the following example that not only prints to the screen but does some processing first
 
@@ -593,9 +616,15 @@ To set up this particular observer we can use the following code. It sets up som
 ```
 
 
-## 7. OWIN
 
-Using the package Okanshi.Owin it is possible to measure the request duration grouped by path, HTTP method and optionally the response status code.
+## 8. Black box monitoring
+
+So far we have discussed how to measure parts of an application in a "white box" fashion, but Okanshi also supports "black box" monitoring. That is, we look at the application only from the outside. The advantage of the black box approach is that we can very quickly measure the application as a whole with minimum code changes. And the converse for white box monitoring. We must spend more time instrumenting our code, but we get more fine grained measurements.
+
+
+### 8.1. OWIN middleware
+
+The package Okanshi.Owin is a middleware that enable you to with one line of code to measure all request/response for an application. Measurements  measure the request duration grouped by path, HTTP method and optionally the response status code.
 
 To enable use the `AppBuilder` extension method, `UseOkanshi`:
 
@@ -606,6 +635,26 @@ To enable use the `AppBuilder` extension method, `UseOkanshi`:
 You can provide a `OkanshiOwinOptions` where you can define e.g. which timer to use (and thus also which registry) 
 
 
+### 8.2. WebApi middleware
+
+The package Okanshi.WebApi is a middleware that enable you to with one line of code to measure all request/response for an application. Measurements  measure the request duration grouped by path, HTTP method and optionally the response status code.
+
+To enable use the `HttpConfiguration` extension method, `UseOkanshi`:
+
+```csharp
+using Okanshi.AspNetWebApi;
+...
+
+    public class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+		   ...
+
+           config.UseOkanshi();
+```
+
+You can provide a `OkanshiWebApiOptions` where you can define e.g. which timer to use (and thus also which registry) 
 
 
 
