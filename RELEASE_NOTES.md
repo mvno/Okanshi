@@ -1,18 +1,18 @@
 ### New in 6.1.0 (Unreleased)
 
-* Okanshi.Owin now has an option for which timer to use when monitoring.
+* `Okanshi.Owin` now has an option for which timer to use when monitoring.
 * `SlaTimer` has been added. The timer makes it easy to track SLA-breaches.
-* `CounterZeroFilter`, `GaugeZeroFilter` and `TimerZeroFilter` has been added. They wrap monitors and only returns values to the poller when changes have been registered.
+* `CounterAbsentFilter`, `GaugeAbsentFilter` and `TimerAbsentFilter` has been added. They wrap monitors and only returns values to the poller when changes have been registered.
 * `MinMaxAvgGauge` has been added. It allows you to detect extreme values that would otherwise disappear in an average calculation.
 * `OkanshiMonitor.DefaultStep` has been deleted since it was forgotten in an earlier clean up process.
-* `OkanshiMonitor.PerformanceCounter` bugfix so it now returns an instance.
+* `OkanshiMonitor.PerformanceCounter` bug fix so it now returns an instance.
 * Unnecessary calculation has been removed from `Counter`, and locks are no longer used in the counter, instead atomics are used.
 * `Counter` now allows increment by negative numbers.
 * `ConsoleObserver` has been added to make it easier to get started with Okanshi.
-* `OkanshiMonitor.WithZeroFiltering` has been added. This allows you to instantiate zero filter monitors.
-* `MonitorFactory` has been added. It allows you to administrate multiple monitors with different polling frequency.
-* `ZeroFilterFactory` has been added. It allows you to instantiate zero filter monitors.
-* `WebApi` middleware has been added. Allows you to do black box monitoring of your webapi applications.
+* `OkanshiMonitor.WithAbsentFiltering` has been added. This allows you to instantiate zero filter monitors.
+* `MonitorFactory` has been added. It allows you to create multiple monitors with different polling frequencies.
+* `AbsentMeasurementsFilterFactory` has been added. It allows you to instantiate absent filter monitors with different polling frequencies.
+* `WebApi` middleware has been added. Allows you to do black box monitoring of your WebApi applications.
 
 **BREAKING CHANGES**
 
