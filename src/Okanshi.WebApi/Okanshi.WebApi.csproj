@@ -9,7 +9,7 @@
     <PackageTags>monitoring;microservices;webapi</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
