@@ -183,7 +183,7 @@ namespace Okanshi.SplunkObservers.Tests
             return httpPoster;
         }
 
-        internal static Metric CreateMetrics(string tagname, string valueName)
+        public static Metric CreateMetrics(string tagname, string valueName)
         {
             var date = new DateTimeOffset(2022, 2, 3, 12, 33, 44, 234, TimeSpan.Zero);
             return new Metric("name",
