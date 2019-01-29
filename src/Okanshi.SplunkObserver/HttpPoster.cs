@@ -18,6 +18,15 @@ namespace Okanshi.Observers
     }
 
     /// <summary>
+    /// determine how to connect to Splunk
+    /// </summary>
+    public enum Protocol
+    {
+        Http = 1,
+        Https = 2,
+    }
+
+    /// <summary>
     /// Define how to send metrics to splunk
     /// </summary>
     public class HttpPoster : IHttpPoster
@@ -29,9 +38,10 @@ namespace Okanshi.Observers
         /// Send metric to splunk
         /// </summary>
         /// <returns>The result json from splunk</returns>
-        public HttpPoster(string host, int port, string token)
+        public HttpPoster(Protocol protocol, string host, int port, string token)
         {
-            url = $"https://{host}:{port}/services/collector/event";
+            var theProtocol = protocol == Protocol.Http ? "http" : "https";
+            url = $"{theProtocol}://{host}:{port}/services/collector/event";
             header = $"Splunk {token}";
         }
 
