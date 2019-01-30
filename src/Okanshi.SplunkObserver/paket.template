@@ -1,0 +1,33 @@
+type file
+id Okanshi.SplunkObserver
+title
+    Okanshi.SplunkObserver
+owners
+    Kasper B. Graversen & Kim Christensen
+authors
+    Kasper B. Graversen & Kim Christensen
+projectUrl
+    https://github.com/mvno/Okanshi
+iconUrl
+    https://raw.githubusercontent.com/mvno/Okanshi/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+language
+    C#
+copyright
+    Copyright 2019
+tags
+    monitoring telemetry metrics Splunk
+summary
+    Okanshi support for transferring metrics to Splunk using http/https
+description
+    Okanshi support for transferring metrics to Splunk using http/https
+
+files
+	../../bin/Okanshi.SplunkObserver ==> lib
+
+dependencies
+    FSharp.Core >= LOCKEDVERSION
+    Okanshi ~> CURRENT:[1]
