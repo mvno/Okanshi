@@ -1,5 +1,7 @@
 ﻿# ![Logo](okanshi_logo_small.png) Okanshi Tutorial
 
+by Kim Christensen and Kasper B. Graversen
+
 This part of the documentation describes the overall functionality you'll find in Okanshi. It will not cover "best practices", limitations of Okanshi, or how to get started using Okanshi.
 
 <p>
@@ -40,9 +42,12 @@ Table of Content
      * [7.1. Observer setup](#71-observer-setup)
      * [7.2. ConsoleObserver](#72-consoleobserver)
      * [7.3. Custom observers](#73-custom-observers)
-   * [8. Black box metrics](#8-black-box-metrics)
-     * [8.1. OWIN middleware](#81-owin-middleware)
-     * [8.2. WebApi middleware](#82-webapi-middleware)
+   * [8. Sending metrics to a processing system](#8-sending-metrics-to-a-processing-system)
+     * [8.1. Send data to InfluxDb](#81-send-data-to-influxdb)
+     * [8.2. Send data to Splunk](#82-send-data-to-splunk)
+   * [9. Black box monitoring](#9-black-box-monitoring)
+     * [9.1. OWIN middleware](#91-owin-middleware)
+     * [9.2. WebApi middleware](#92-webapi-middleware)
  
 
 ## 1. Introduction
@@ -127,7 +132,7 @@ By now, you are probably excited to see something running. To get an understandi
     }
 ```
 
-The main entities of the program is a *registry* which holds a set of monitors. A *poller* which with certain intervals will query the measurements of the monitors, and an *observer* that typically transports measurements to a receiver system that can do data analysis, draw graphs etc. In this case we print to the console to visually show that we are up and running. 
+The main entities of the program is a *registry* which holds a set of monitors. A *poller* which with certain intervals will query the measurements of the monitors, and an *observer* that typically transports measurements to a receiver system that can do data analysis, draw graphs, send alarms, etc. In this case we print to the console to visually show that we are up and running. 
 
 The output when running this program resembles the following:
 
@@ -530,9 +535,10 @@ If the package.config file is available in the current directory of the process.
 
 ## 7. Observers
 
-Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database. An observer storing metrics in-memory is included in the Okanshi package.
+Observers are used to store Okanshi metrics, this can be in-memory or by sending it to a database or external system. An observer storing metrics in-memory is included in the Okanshi package. 
 
-An observer to send metrics to InfluxDB is provided through another NuGet package called, Okanshi.InfluxDBObserver.
+In this chapter we cover how to write your own observers. In the next, we cover existing implementations for Splunk and InfluxDb.
+
 
 ### 7.1. Observer setup
 
@@ -542,7 +548,7 @@ Setting up an observer is easy:
     var observer = new MemoryMetricObserver(new MetricMonitorRegistryPoller(DefaultMonitorRegistry.Instance, pollingInterval, collectMetricsOnProcessExit), numberOfSamplesToStore)
 ```
 
-This observer stores metrics in-memory using a poller getting data from the default monitor registry.
+This observer stores metrics in-memory using a poller getting data from the default monitor registry. You can use this observer if you want to *pull* rather than *push* metrics. Use the `Okanshi.Endpoint` nuget package for this.
 
 
 ### 7.2. ConsoleObserver
@@ -568,7 +574,7 @@ The `ConsoleObserver` prints measurements to the console, so you can get a quick
 
 ### 7.3. Custom observers
 
-you can create your own observers easily as shown in the following example that not only prints to the screen but does some processing first
+You can create your own observers easily as shown in the following example that not only prints to the screen but does some processing first
 
 ```csharp
     class MyObserver : IMetricObserver
@@ -615,14 +621,26 @@ To set up this particular observer we can use the following code. It sets up som
     }
 ```
 
+## 8. Sending metrics to a processing system
+
+In order to make use of the measurements, you need to transfer them to some processing system which then do data analysis, draw graphs, send alarms etc. You can either write your own observer (covered in the chapter above) or use one of the supported libraries.
+
+Of course, you can also choose to pull metrics from your services rather than have your services push them to some system. Use the `Okanshi.Endpoint` nuget package for this.
+### 8.1. Sending data to InfluxDb
+
+An observer to send metrics to InfluxDB is provided through another NuGet package called, `Okanshi.InfluxDBObserver`.
+
+### 8.2. Sending data to Splunk
+
+An observer to send metrics to Splunk  is provided through another NuGet package called, `Okanshi.SplunkObserver`.
 
 
-## 8. Black box monitoring
+## 9. Black box monitoring
 
 So far we have discussed how to measure parts of an application in a "white box" fashion, but Okanshi also supports "black box" monitoring. That is, we look at the application only from the outside. The advantage of the black box approach is that we can very quickly measure the application as a whole with minimum code changes. And the converse for white box monitoring. We must spend more time instrumenting our code, but we get more fine grained measurements.
 
 
-### 8.1. OWIN middleware
+### 9.1. OWIN middleware
 
 The package Okanshi.Owin is a middleware that enable you to with one line of code to measure all request/response for an application. Measurements  measure the request duration grouped by path, HTTP method and optionally the response status code.
 
@@ -635,7 +653,7 @@ To enable use the `AppBuilder` extension method, `UseOkanshi`:
 You can provide a `OkanshiOwinOptions` where you can define e.g. which timer to use (and thus also which registry) 
 
 
-### 8.2. WebApi middleware
+### 9.2. WebApi middleware
 
 The package Okanshi.WebApi is a middleware that enable you to with one line of code to measure all request/response for an application. Measurements  measure the request duration grouped by path, HTTP method and optionally the response status code.
 
