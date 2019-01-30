@@ -15,9 +15,9 @@ licenseUrl
 requireLicenseAcceptance
     false
 language
-    F#
+    C#
 copyright
-    Copyright 2017
+    Copyright 2019
 tags
     monitoring telemetry metrics wepapi
 summary
