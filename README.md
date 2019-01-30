@@ -26,7 +26,7 @@ Okanshi is designed to be as unobtrusive as possible, to achieve this the all st
 
 Okanshi supports a number of platforms
  * [.NET Standard 2.0](https://www.microsoft.com/net) 
- * [.NET 4.5](https://www.microsoft.com/net) and above.
+ * [.NET 4.6](https://www.microsoft.com/net) and above.
 
 and works well with C# and F# alike.
 
