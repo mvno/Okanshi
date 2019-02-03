@@ -6,7 +6,7 @@ using System.Text;
 namespace Okanshi.SplunkObservers
 {
     /// <summary>
-    /// Define how to send metrics to splunk
+    /// Define how to send metrics to Splunk
     /// </summary>
     public interface IHttpPoster
     {
@@ -18,7 +18,7 @@ namespace Okanshi.SplunkObservers
         string SendToSplunk(string json);
     }
 
-   /// <summary>
+    /// <summary>
     /// Define how to send metrics to splunk
     /// </summary>
     public class HttpPoster : IHttpPoster
