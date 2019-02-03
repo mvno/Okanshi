@@ -21,7 +21,7 @@ namespace Okanshi.SplunkObservers
         {
             _poster = poster ?? throw new ArgumentNullException(nameof(poster));
             _jsonSerializer = jsonSerializer ?? throw new ArgumentNullException(nameof(jsonSerializer));
-            _metricConverter = metricConverter ?? throw new ArgumentNullException(nameof(metricConverter)); ;
+            _metricConverter = metricConverter ?? throw new ArgumentNullException(nameof(metricConverter));
         }
 
         /// <summary> process </summary>
