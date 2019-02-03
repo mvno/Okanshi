@@ -1,4 +1,4 @@
-﻿namespace Okanshi.Observers
+﻿namespace Okanshi.SplunkObservers
 {
     /// <summary>
     /// You can use this class to deserialize the answer from splunk

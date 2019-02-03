@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Okanshi.Observers
+namespace Okanshi.SplunkObservers
 {
     /// <summary>
     /// Events sendt to the splunk http endpoint needs to be wrapped in an "event"

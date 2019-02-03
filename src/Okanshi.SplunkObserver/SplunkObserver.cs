@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Okanshi.Observers
+namespace Okanshi.SplunkObservers
 {
     /// <summary> A MetricsObserver sending metrics to splunk </summary>
     public class SplunkObserver : IMetricObserver

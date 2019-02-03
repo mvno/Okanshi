@@ -6,7 +6,6 @@ using System.Linq;
 using NSubstitute;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Okanshi.Observers;
 
 namespace Okanshi.SplunkObservers.Tests
 {

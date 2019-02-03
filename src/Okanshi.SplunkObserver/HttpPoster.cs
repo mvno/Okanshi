@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace Okanshi.Observers
+namespace Okanshi.SplunkObservers
 {
     /// <summary>
     /// Define how to send metrics to splunk
