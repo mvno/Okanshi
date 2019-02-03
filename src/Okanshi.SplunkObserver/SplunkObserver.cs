@@ -34,7 +34,7 @@ namespace Okanshi.SplunkObservers
                 if (noEventsPresent)
                     return;
 
-                Logger.Trace("Sending splunk data");
+                Logger.Trace("Sending data to Splunk");
                 var response = _poster.SendToSplunk(events);
                 Logger.Trace($"Splunk response {response}"); 
             }

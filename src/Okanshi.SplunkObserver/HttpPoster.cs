@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 
@@ -17,16 +18,7 @@ namespace Okanshi.SplunkObservers
         string SendToSplunk(string json);
     }
 
-    /// <summary>
-    /// determine how to connect to Splunk
-    /// </summary>
-    public enum Protocol
-    {
-        Http = 1,
-        Https = 2,
-    }
-
-    /// <summary>
+   /// <summary>
     /// Define how to send metrics to splunk
     /// </summary>
     public class HttpPoster : IHttpPoster
@@ -38,10 +30,9 @@ namespace Okanshi.SplunkObservers
         /// Send metric to splunk
         /// </summary>
         /// <returns>The result json from splunk</returns>
-        public HttpPoster(Protocol protocol, string host, int port, string token)
+        public HttpPoster(Uri uri, string token)
         {
-            var theProtocol = protocol == Protocol.Http ? "http" : "https";
-            url = $"{theProtocol}://{host}:{port}/services/collector/event";
+            url = $"{uri}services/collector/event";
             header = $"Splunk {token}";
         }
 
