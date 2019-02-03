@@ -44,9 +44,6 @@ namespace Okanshi.SplunkObservers
             }
         }
 
-        /// <summary>
-        /// Override this in subclasses if you want to control how measurements are sent to Splunk
-        /// </summary>
         string ConvertMeasurementsToJson(IEnumerable<Metric> metrics)
         {
             var splunkEvents = metrics
@@ -58,9 +55,7 @@ namespace Okanshi.SplunkObservers
             return events;
         }
 
-        /// <summary>
-        /// A general helper to turn a metric into a structure that become json
-        /// </summary>
+        /// <summary> A general helper to turn a metric into a structure that become json </summary>
         static Dictionary<string, object> MeasurementToDictionary(Metric metric)
         {
             var result = new Dictionary<string, object>
@@ -106,6 +101,7 @@ namespace Okanshi.SplunkObservers
             return result;
         }
 
+        /// <summary>dispose </summary>
         public void Dispose()
         { }
     }
