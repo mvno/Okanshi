@@ -164,12 +164,6 @@ namespace Okanshi.SplunkObservers.Tests
             Assert.Equal(expected, jsonSentToSplunk);
         }
 
-        [Fact]
-        public async void must_fail()
-        {
-            Assert.False(true);
-        }
-
         private SplunkObserver CreateObserver()
         {
             var converter = new IsoDateTimeConverter();
