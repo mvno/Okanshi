@@ -626,13 +626,14 @@ To set up this particular observer we can use the following code. It sets up som
 In order to make use of the measurements, you need to transfer them to some processing system which then do data analysis, draw graphs, send alarms etc. You can either write your own observer (covered in the chapter above) or use one of the supported libraries.
 
 Of course, you can also choose to pull metrics from your services rather than have your services push them to some system. Use the `Okanshi.Endpoint` nuget package for this.
+
 ### 8.1. Sending data to InfluxDb
 
 An observer to send metrics to InfluxDB is provided through another NuGet package called, `Okanshi.InfluxDBObserver`.
 
 ### 8.2. Sending data to Splunk
 
-An observer to send metrics to Splunk  is provided through another NuGet package called, `Okanshi.SplunkObserver`.
+An observer to send metrics to Splunk is provided through another NuGet package called, `Okanshi.SplunkObserver`.
 
 
 ## 9. Black box monitoring
