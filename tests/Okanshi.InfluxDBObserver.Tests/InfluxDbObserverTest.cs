@@ -4,10 +4,10 @@ using System.Linq;
 using FluentAssertions;
 using InfluxDB.WriteOnly;
 using NSubstitute;
-using Okanshi.Observers;
+using Okanshi.InfluxDbObservers;
 using Xunit;
 
-namespace Okanshi.InfluxDBObserver.Tests
+namespace Okanshi.InfluxDbObservers.Tests
 {
     public class InfluxDbObserverTest
     {

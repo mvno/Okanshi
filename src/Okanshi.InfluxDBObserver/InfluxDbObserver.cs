@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using InfluxDB.WriteOnly;
 
-namespace Okanshi.Observers
+namespace Okanshi.InfluxDbObservers
 {
     /// <summary>
     /// Observer for posting metrics to InfluxDB.
