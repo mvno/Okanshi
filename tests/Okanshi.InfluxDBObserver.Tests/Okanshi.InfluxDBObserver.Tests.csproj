@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <StartupObject />
     <AssemblyName>Okanshi.InfluxDBObserver.Tests</AssemblyName>
-    <RootNamespace>Okanshi.InfluxDbObservers.Tests</RootNamespace>
+    <RootNamespace>Okanshi.InfluxDbObserver.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Okanshi.InfluxDBObserver\Okanshi.InfluxDBObserver.csproj" />
