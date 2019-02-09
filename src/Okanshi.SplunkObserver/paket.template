@@ -1,11 +1,11 @@
 type file
-id Okanshi.WepApi
+id Okanshi.SplunkObserver
 title
-    Okanshi.WepApi
+    Okanshi.SplunkObserver
 owners
-    Kim Christensen & Kasper B. Graversen
+    Kasper B. Graversen & Kim Christensen
 authors
-    Kim Christensen & Kasper B. Graversen 
+    Kasper B. Graversen & Kim Christensen
 projectUrl
     https://github.com/mvno/Okanshi
 iconUrl
@@ -19,16 +19,15 @@ language
 copyright
     Copyright 2019
 tags
-    monitoring telemetry metrics wepapi
+    monitoring telemetry metrics Splunk
 summary
-    Okanshi support for WepApi
+    Okanshi support for transferring metrics to Splunk using http/https
 description
-    Okanshi support for WepApi
+    Okanshi support for transferring metrics to Splunk using http/https
 
 files
-	../../bin/Okanshi.WebApi ==> lib
+	../../bin/Okanshi.SplunkObserver ==> lib
 
 dependencies
     FSharp.Core >= LOCKEDVERSION
     Okanshi ~> CURRENT:[1]
-	Microsoft.AspNet.WebApi.Core >= LOCKEDVERSION
