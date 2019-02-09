@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InfluxDB.WriteOnly;
 
-namespace Okanshi.Observers
+namespace Okanshi.InfluxDbObserver
 {
     /// <summary>
     /// Options for the InfluxDB observer

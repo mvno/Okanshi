@@ -17,9 +17,10 @@
 
 **BREAKING CHANGES**
 
-* Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry
-* Instead of Okanshi.Endpoint depending on Newtonsoft.Json to do the JSON serialization, it now accepts a `Func` doing the serialization, which makes it possible for the user to control dependencies and serialization
+* Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry.
+* Instead of Okanshi.Endpoint depending on Newtonsoft.Json to do the JSON serialization, it now accepts a `Func` doing the serialization, which makes it possible for the user to control dependencies and serialization.
 * `Okanshi.Endpoint` nows takes a poller to be able to easily avoid problems with multiple pollers on the default registry. This also removes `PollingInterval` and `CollectMetricsOnProcessExit` from `EndpointOptions`.
+* `Okanshi.InfluxDBObserver` has changed namespace from `Okanshi.Observers` to `Okanshi.InfluxDbObserver`.
 
 ### 6.0.0
 
