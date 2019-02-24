@@ -3,7 +3,37 @@
 open System
 open System.Collections.Generic
 
-/// The AbsentFilterFactory can create monitors wrapped in an absent filter preveing okanshi from 
+type IMonitorFactory = 
+    abstract CumulativeCounter : string -> ICounter<int64>
+    abstract CumulativeCounter : string * Tag array -> ICounter<int64>
+    abstract Counter : string -> ICounter<int64>
+    abstract Counter : string * Tag array -> ICounter<int64>
+    abstract DoubleCounter : string -> ICounter<double>
+    abstract DoubleCounter: string * Tag array -> ICounter<double>
+    abstract MaxGauge: string -> IGauge<int64>
+    abstract MaxGauge: string * Tag array -> IGauge<int64>
+    abstract MinGauge: string -> IGauge<int64>
+    abstract MinGauge: string * Tag array -> IGauge<int64>
+    abstract MinMaxAvgGauge: string -> IGauge<float>
+    abstract MinMaxAvgGauge: string * Tag array -> IGauge<float>
+    abstract AverageGauge: string -> IGauge<float>
+    abstract AverageGauge: string * Tag array -> IGauge<float>
+    abstract LongGauge: string -> IGauge<int64>
+    abstract LongGauge: string * Tag array -> IGauge<int64>
+    abstract DoubleGauge: string -> IGauge<double>
+    abstract DoubleGauge: string * Tag array -> IGauge<double>
+    abstract DecimalGauge: string -> IGauge<decimal>
+    abstract DecimalGauge: string * Tag array -> IGauge<decimal>
+    abstract Timer: string -> ITimer
+    abstract Timer: string * Tag array -> ITimer
+    abstract SlaTimer: string * TimeSpan -> ITimer
+    abstract SlaTimer: string * TimeSpan * Tag array -> ITimer
+#if NET46
+    abstract PerformanceCounter: PerformanceCounterConfig * string -> IMonitor
+    abstract PerformanceCounter: PerformanceCounterConfig * string * Tag array -> IMonitor
+#endif
+
+/// The AbsentFilterFactory can create monitors wrapped in an absent filter preventing okanshi from 
 /// sending 0-values when no measurements are made
 type AbsentMeasurementsFilterFactory (monitorRegistry : IMonitorRegistry, DefaultTags, monitorFactory : MonitorFactory) = 
     let mutable defaultTags = DefaultTags
@@ -114,6 +144,46 @@ type AbsentMeasurementsFilterFactory (monitorRegistry : IMonitorRegistry, Defaul
     member self.SlaTimer(name : string, sla : TimeSpan, tags : Tag array) = 
         let config = MonitorConfig.Build(name).WithTags(defaultTags).WithTags(tags)
         monitorRegistry.GetOrAdd(config, fun x -> new TimerAbsentFilter(new SlaTimer(x, sla)))
+
+#if NET46
+    /// Get or create a performance counter monitor
+    member self.PerformanceCounter(check, name) = self.PerformanceCounter(check, name, [||])
+    
+    /// Get or create a performance counter monitor with custom tags
+    member self.PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) = 
+        let config = MonitorConfig.Build(name).WithTags(defaultTags).WithTags(tags)
+        monitorRegistry.GetOrAdd(config, fun x -> new MonitorAbsentFilter(new PerformanceCounterMonitor(x, counterConfig)))
+#endif
+
+    interface IMonitorFactory with
+        member self.CumulativeCounter(name : string) = self.CumulativeCounter(name) :> ICounter<int64>
+        member self.CumulativeCounter(name : string, tags : Tag array) = self.CumulativeCounter(name, tags) :> ICounter<int64>
+        member self.Counter(name) = self.Counter(name) :> ICounter<int64>
+        member self.Counter(name : string, tags : Tag array) = self.Counter(name, tags) :> ICounter<int64>
+        member self.DoubleCounter(name) = self.DoubleCounter(name) :> ICounter<double>
+        member self.DoubleCounter(name : string, tags : Tag array) = self.DoubleCounter(name, tags) :> ICounter<double>
+        member self.MaxGauge(name : string) = self.MaxGauge(name) :> IGauge<int64>
+        member self.MaxGauge(name : string, tags : Tag array) = self.MaxGauge(name, tags) :> IGauge<int64>
+        member self.MinGauge(name : string) = self.MinGauge(name) :> IGauge<int64>
+        member self.MinGauge(name : string, tags : Tag array) = self.MinGauge(name, tags) :> IGauge<int64>
+        member self.MinMaxAvgGauge(name : string) = self.MinMaxAvgGauge(name) :> IGauge<float>
+        member self.MinMaxAvgGauge(name : string, tags : Tag array) = self.MinMaxAvgGauge(name, tags) :> IGauge<float>
+        member self.AverageGauge(name : string) = self.AverageGauge(name) :> IGauge<float>
+        member self.AverageGauge(name : string, tags : Tag array) = self.AverageGauge(name, tags) :> IGauge<float>
+        member self.LongGauge(name : string) = self.LongGauge(name) :> IGauge<int64>
+        member self.LongGauge(name : string, tags : Tag array) = self.LongGauge(name, tags) :> IGauge<int64>
+        member self.DoubleGauge(name : string) = self.DoubleGauge(name) :> IGauge<double>
+        member self.DoubleGauge(name : string, tags : Tag array) = self.DoubleGauge(name, tags) :> IGauge<double>
+        member self.DecimalGauge(name : string) = self.DecimalGauge(name) :> IGauge<decimal>
+        member self.DecimalGauge(name : string, tags : Tag array) = self.DecimalGauge(name, tags) :> IGauge<decimal>
+        member self.Timer(name) = self.Timer(name) :> ITimer
+        member self.Timer(name : string, tags : Tag array) = self.Timer(name, tags) :> ITimer
+        member self.SlaTimer(name : string, sla: TimeSpan) = self.SlaTimer(name, sla) :> ITimer
+        member self.SlaTimer(name : string, sla : TimeSpan, tags : Tag array) = self.SlaTimer(name, sla, tags) :> ITimer
+#if NET46
+        member self.PerformanceCounter(check, name) = self.PerformanceCounter(check, name) :> IMonitor
+        member self.PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) =  self.PerformanceCounter(counterConfig, name, tags) :> IMonitor
+#endif
 
 
 /// factory to create monitors sharing the same polling frequency
@@ -243,3 +313,32 @@ and MonitorFactory (monitorRegistry : IMonitorRegistry, DefaultTags) =
         monitorRegistry.GetOrAdd(config, fun x -> new PerformanceCounterMonitor(x, counterConfig))
 #endif
 
+    interface IMonitorFactory with
+        member self.CumulativeCounter(name : string) = self.CumulativeCounter(name) :> ICounter<int64>
+        member self.CumulativeCounter(name : string, tags : Tag array) = self.CumulativeCounter(name, tags) :> ICounter<int64>
+        member self.Counter(name) = self.Counter(name) :> ICounter<int64>
+        member self.Counter(name : string, tags : Tag array) = self.Counter(name, tags) :> ICounter<int64>
+        member self.DoubleCounter(name) = self.DoubleCounter(name) :> ICounter<double>
+        member self.DoubleCounter(name : string, tags : Tag array) = self.DoubleCounter(name, tags) :> ICounter<double>
+        member self.MaxGauge(name : string) = self.MaxGauge(name) :> IGauge<int64>
+        member self.MaxGauge(name : string, tags : Tag array) = self.MaxGauge(name, tags) :> IGauge<int64>
+        member self.MinGauge(name : string) = self.MinGauge(name) :> IGauge<int64>
+        member self.MinGauge(name : string, tags : Tag array) = self.MinGauge(name, tags) :> IGauge<int64>
+        member self.MinMaxAvgGauge(name : string) = self.MinMaxAvgGauge(name) :> IGauge<float>
+        member self.MinMaxAvgGauge(name : string, tags : Tag array) = self.MinMaxAvgGauge(name, tags) :> IGauge<float>
+        member self.AverageGauge(name : string) = self.AverageGauge(name) :> IGauge<float>
+        member self.AverageGauge(name : string, tags : Tag array) = self.AverageGauge(name, tags) :> IGauge<float>
+        member self.LongGauge(name : string) = self.LongGauge(name) :> IGauge<int64>
+        member self.LongGauge(name : string, tags : Tag array) = self.LongGauge(name, tags) :> IGauge<int64>
+        member self.DoubleGauge(name : string) = self.DoubleGauge(name) :> IGauge<double>
+        member self.DoubleGauge(name : string, tags : Tag array) = self.DoubleGauge(name, tags) :> IGauge<double>
+        member self.DecimalGauge(name : string) = self.DecimalGauge(name) :> IGauge<decimal>
+        member self.DecimalGauge(name : string, tags : Tag array) = self.DecimalGauge(name, tags) :> IGauge<decimal>
+        member self.Timer(name) = self.Timer(name) :> ITimer
+        member self.Timer(name : string, tags : Tag array) = self.Timer(name, tags) :> ITimer
+        member self.SlaTimer(name : string, sla: TimeSpan) = self.SlaTimer(name, sla) :> ITimer
+        member self.SlaTimer(name : string, sla : TimeSpan, tags : Tag array) = self.SlaTimer(name, sla, tags) :> ITimer
+#if NET46
+        member self.PerformanceCounter(check, name) = self.PerformanceCounter(check, name) :> IMonitor
+        member self.PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) =  self.PerformanceCounter(counterConfig, name, tags) :> IMonitor
+#endif

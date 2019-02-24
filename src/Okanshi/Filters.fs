@@ -3,6 +3,31 @@
 open System
 open System.Diagnostics
 
+
+/// A filter decorator for imonitors.
+/// The wrapped monitor only returns values to the poller in case a change has been registered
+/// With this you avoid sending 0-value measurements that normally is sent when no measurements are registered
+type MonitorAbsentFilter(inner : IMonitor) =
+    let syncRoot = new obj()
+    let isFloatGtZero(o :obj) : bool = 
+        match o with 
+        | :? float as f -> f > (float 0)
+        | _ -> false
+
+    member __.GetValues() = 
+         lock syncRoot (fun() -> 
+            inner.GetValues() |> Seq.where(fun x -> x.Name <> "value" || (x.Name="value" && isFloatGtZero x.Value)) |> Seq.cast)
+    member __.Config = inner.Config
+    member __.GetValuesAndReset() = 
+        lock syncRoot (fun() -> 
+            inner.GetValuesAndReset() |> Seq.where(fun x -> x.Name <> "value" || (x.Name="value" && isFloatGtZero x.Value)) |> Seq.cast)
+
+    interface IMonitor with
+        member self.GetValues() = self.GetValues()
+        member self.Config = self.Config
+        member self.GetValuesAndReset() = self.GetValuesAndReset()
+
+
 /// A filter decorator for gauges.
 /// The wrapped monitor only returns values to the poller in case a change has been registered
 /// With this you avoid sending 0-value measurements that normally is sent when no measurements are registered
