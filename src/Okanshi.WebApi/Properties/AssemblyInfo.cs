@@ -4,7 +4,7 @@ using System.Reflection;
 
 [assembly: AssemblyTitle("Okanshi.WebApi")]
 [assembly: AssemblyProduct("Okanshi")]
-[assembly: AssemblyDescription("In-process monitoring library")]
+[assembly: AssemblyDescription("In-process monitoring library for monitoring webapi requests")]
 [assembly: AssemblyVersion("6.1.0")]
 [assembly: AssemblyFileVersion("6.1.0")]
 [assembly: AssemblyConfiguration("Release")]
