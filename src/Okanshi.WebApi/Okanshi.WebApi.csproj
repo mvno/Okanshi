@@ -3,7 +3,7 @@
   <PropertyGroup>
     <VersionPrefix>6.0.0</VersionPrefix>
     <PackageId>Okanshi.WepApi</PackageId>
-    <Authors>Kasper Graversen</Authors>
+    <Authors>Kasper Graversen and Kim Christensen</Authors>
     <Company>Telenor MVNO</Company>
     <Description>WepApi middleware for Okanshi</Description>
     <PackageTags>monitoring;microservices;webapi</PackageTags>

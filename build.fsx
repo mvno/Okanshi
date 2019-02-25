@@ -40,7 +40,7 @@ let summary = "In-process monitoring library"
 let description = "In-process monitoring library. Monitor individual services in-process and collect data somewhere else."
 
 // List of author names (for NuGet package)
-let author = "Kim Christensen"
+let author = "Kim Christensen and Kasper B. Graversen"
 
 // Tags for your project (for NuGet package)
 let tags = "monitoring telemetry metrics"
@@ -198,7 +198,7 @@ let githubLink = sprintf "https://github.com/%s/%s" github_release_user gitName
 // Specify more information about your project
 let info =
   [ "project-name", "Okanshi"
-    "project-author", "Kim Christensen"
+    "project-author", "Kim Christensen and Kasper B. Graversen"
     "project-summary", "In-process monitoring library"
     "project-github", githubLink
     "project-nuget", "http://nuget.org/packages/Okanshi" ]
