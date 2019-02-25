@@ -35,10 +35,6 @@ type OkanshiMonitorRegistry() =
     
     let getRegisteredMonitors'() = monitors.Values |> Seq.toArray
     
-    let register' (monitor : IMonitor) = 
-        let hash = hash monitor.Config (monitor.GetType())
-        if not <| monitors.ContainsKey(hash) then monitors.Add(hash, monitor) |> ignore
-    
     let unregister' (monitor : IMonitor) = 
         let hash = hash monitor.Config (monitor.GetType())
         monitors.Remove(hash) |> ignore
