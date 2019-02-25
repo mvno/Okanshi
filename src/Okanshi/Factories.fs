@@ -235,7 +235,7 @@ and MonitorFactory (monitorRegistry : IMonitorRegistry, DefaultTags) =
 
 #if NET46
     /// Get or create a performance counter monitor
-    member self.PerformanceCounter(check, name) = self.PerformanceCounter(check, name)
+    member self.PerformanceCounter(check, name) = self.PerformanceCounter(check, name, [||])
     
     /// Get or create a performance counter monitor with custom tags
     member self.PerformanceCounter(counterConfig : PerformanceCounterConfig, name, tags : Tag array) = 
