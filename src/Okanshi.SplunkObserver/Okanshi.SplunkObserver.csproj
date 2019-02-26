@@ -3,7 +3,7 @@
   <PropertyGroup>
     <VersionPrefix>6.0.0</VersionPrefix>
     <PackageId>Okanshi.SplunkObserver</PackageId>
-    <Authors>Kasper B. Graversen and Kim Christensen</Authors>
+    <Authors>Kasper B. Graversen, Kim Christensen</Authors>
     <Company>KBG Inc.</Company>
     <Description>A splunk integration for Okanshi</Description>
     <PackageTags>monitoring;microservices;splunk</PackageTags>

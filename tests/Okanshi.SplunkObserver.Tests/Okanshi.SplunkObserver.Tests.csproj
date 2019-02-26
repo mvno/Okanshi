@@ -5,7 +5,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Authors>Kasper B. Graversen and Kim Christensen</Authors>
+    <Authors>Kasper B. Graversen, Kim Christensen</Authors>
     <Company>test</Company>
   </PropertyGroup>
   <ItemGroup>
