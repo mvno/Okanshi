@@ -4,7 +4,7 @@ using System.Reflection;
 
 [assembly: AssemblyTitle("Okanshi.Owin")]
 [assembly: AssemblyProduct("Okanshi")]
-[assembly: AssemblyDescription("In-process monitoring library")]
+[assembly: AssemblyDescription("A package to monitor request in the OWIN pipeline using Okanshi")]
 [assembly: AssemblyVersion("6.0.0")]
 [assembly: AssemblyFileVersion("6.0.0")]
 [assembly: AssemblyConfiguration("Release")]

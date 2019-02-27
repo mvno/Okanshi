@@ -6,6 +6,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
+    <Authors>Kim Christensen, Kasper B. Graversen</Authors>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Okanshi\Okanshi.fsproj" />

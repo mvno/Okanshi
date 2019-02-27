@@ -3,7 +3,7 @@
   <PropertyGroup>
     <VersionPrefix>6.0.0</VersionPrefix>
     <PackageId>Okanshi</PackageId>
-    <Authors>Kim Christensen</Authors>
+    <Authors>Kim Christensen, Kasper B. Graversen</Authors>
     <Company>Telenor MVNO</Company>
     <Description>In-process monitoring solution. Monitor individual services in-process and collect data somewhere else</Description>
     <PackageTags>monitoring;microservices</PackageTags>

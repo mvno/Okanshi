@@ -4,7 +4,7 @@ using System.Reflection;
 
 [assembly: AssemblyTitle("Okanshi.SplunkObserver")]
 [assembly: AssemblyProduct("Okanshi.SplunkObserver")]
-[assembly: AssemblyDescription("Integration with Splunk")]
+[assembly: AssemblyDescription("Send Okanhshi measurements to Splunk over http")]
 [assembly: AssemblyVersion("6.1.0")]
 [assembly: AssemblyFileVersion("6.1.0")]
 [assembly: AssemblyConfiguration("Release")]
