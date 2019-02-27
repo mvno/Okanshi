@@ -14,6 +14,7 @@
 * `AbsentMeasurementsFilterFactory` has been added. It allows you to instantiate absent filter monitors with different polling frequencies.
 * `WebApi` middleware has been added. Allows you to do black box monitoring of your WebApi applications.
 * `Okanshi.SplunkObserver` has been added. Post Okanshi measurements to Splunk using HTTP.
+* Add `EvictingOkanshiMonitorRegistry` that evicts monitors after a number of pulls to reduce memory footprint in the situations where very many monitors are created and each only used sparingly.
 
 **BREAKING CHANGES**
 
