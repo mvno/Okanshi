@@ -668,15 +668,17 @@ using Okanshi.AspNetWebApi;
     {
         public static void Register(HttpConfiguration config)
         {
-		   ...
+           ...
 
            config.UseOkanshi();
 ```
 
 You can provide a `OkanshiWebApiOptions` where you can define e.g. which timer to use (and thus also which registry) 
 
-
-
-
+Be aware that if you have parameters as path of your path, you will create as many monitors as you have requested URLs. Potentially, that is quite a lot!
+To mitigate alot of memory consumption, and sending a lot of data to the receiving system, you can choose different styles of path extract.
+* `RequestPathExtraction.Path` - Uses `request.RequestUri.LocalPath` which holds the path including any parameters within the path, e.g. customerId
+*  `RequestPathExtraction.CanonicalPath` - Uses the canonical representation of an endpoint. Routes must be explicitly annotated using the `[Route]` attribute for them to show up correctly. If not properly annotated this code will use an abstract path such as `"api/{controller}/{id}"` which will be the general configured fall-back path.
+ 
 
 (document sections maintained by https://github.com/kbilsted/AutonumberMarkdown)
