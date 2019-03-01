@@ -1,0 +1,34 @@
+type file
+id Okanshi.Autofac
+title
+    Okanshi.Autofac
+owners
+    Kasper B. Graversen
+authors
+    Kasper B. Graversen 
+projectUrl
+    https://github.com/mvno/Okanshi
+iconUrl
+    https://raw.githubusercontent.com/mvno/Okanshi/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/mvno/Okanshi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+language
+    C#
+copyright
+    Copyright 2019
+tags
+    monitoring telemetry metrics autofac
+summary
+    Okanshi support for monitoring Autofac performance
+description
+    Okanshi support for Autofac performance
+
+files
+	../../bin/Okanshi.Autofac ==> lib
+
+dependencies
+    FSharp.Core >= LOCKEDVERSION
+    Okanshi ~> CURRENT:[1]
+	Autofac >= LOCKEDVERSION

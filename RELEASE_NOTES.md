@@ -1,5 +1,7 @@
-### 7.0.1
+### 7.1.0 (unreleased)
 * `TimerAbsentFilter.Record()` no longer prevents Okanshi from polling metrics. No values were lost but the stalls were noticable when using low poll intervals (e.g. 1 second) and time long-running executions, 
+* `Okanshi.Autofac` has been added. Enable to monitor Autofac performance metrics such as object instantiation count pr. type and instantiation speed.
+
 
 ### 7.0.0
 
