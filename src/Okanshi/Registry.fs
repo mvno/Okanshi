@@ -105,6 +105,8 @@ type EvictingOkanshiMonitorRegistry(numberOfPullsBeforeEviction : int) =
         match iterationsLeft with
         | 0 -> 
             iterationsLeft <- numberOfPullsBeforeEviction
+            for m in monitors do 
+                Logger.Debug.Invoke (sprintf "Evicting '%s', it will no longer send any data." m.Value.Config.Name)
             monitors.Clear()
         | _ -> ()
         
