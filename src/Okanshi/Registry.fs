@@ -84,7 +84,7 @@ type OkanshiMonitorRegistry() =
 /// For example, in the OWIN or WebAPI integrations we may use the URL to the endpoint as part of the monitor
 /// thus for each argument passed to the endpoint we may create a new monitor - effectively creating a memory bottleneck
 /// and potentially require Okanshi to search through millions of monitors with each pull
-type EvictingOkanshiMonitorRegistry(numberOfPullsBeforeEviction : int) =
+type EvictingOkanshiMonitorRegistry(numberOfPullsBeforeEviction : int, logFinegrainedWhenEvicting : bool) =
     inherit OkanshiMonitorRegistry()
     let mutable iterationsLeft = numberOfPullsBeforeEviction
     let monitors = new System.Collections.Generic.Dictionary<int, IMonitor>()
@@ -99,16 +99,26 @@ type EvictingOkanshiMonitorRegistry(numberOfPullsBeforeEviction : int) =
         hash <- (hash * 16777619) ^^^ config.GetHashCode()
         (hash * 16777619) ^^^ t.FullName.GetHashCode()
     
-    let getRegisteredMonitors'() = 
-        let result = monitors.Values |> Seq.toArray
+    let decrementBookKeepingAndEvict' =
+        let logEvictions = 
+            if logFinegrainedWhenEvicting then
+                for m in monitors do 
+                    Logger.Debug.Invoke (sprintf "Evicting '%s', it will no longer send any data." m.Value.Config.Name)
+            else
+                Logger.Debug.Invoke (sprintf "Evicting '%d' monitors. They will no longer send any data." monitors.Count)
+
         iterationsLeft <- iterationsLeft - 1
         match iterationsLeft with
         | 0 -> 
             iterationsLeft <- numberOfPullsBeforeEviction
-            for m in monitors do 
-                Logger.Debug.Invoke (sprintf "Evicting '%s', it will no longer send any data." m.Value.Config.Name)
+            logEvictions
             monitors.Clear()
         | _ -> ()
+
+    let getRegisteredMonitors'() = 
+        let result = monitors.Values |> Seq.toArray
+
+        decrementBookKeepingAndEvict' 
         
         result
     
