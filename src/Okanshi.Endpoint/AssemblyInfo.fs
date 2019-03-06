@@ -5,8 +5,8 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("Okanshi.Endpoint")>]
 [<assembly: AssemblyProductAttribute("Okanshi")>]
 [<assembly: AssemblyDescriptionAttribute("In-process monitoring library")>]
-[<assembly: AssemblyVersionAttribute("6.0.0")>]
-[<assembly: AssemblyFileVersionAttribute("6.0.0")>]
+[<assembly: AssemblyVersionAttribute("7.0.0")>]
+[<assembly: AssemblyFileVersionAttribute("7.0.0")>]
 [<assembly: AssemblyConfigurationAttribute("Release")>]
 do ()
 
@@ -14,6 +14,6 @@ module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "Okanshi.Endpoint"
     let [<Literal>] AssemblyProduct = "Okanshi"
     let [<Literal>] AssemblyDescription = "In-process monitoring library"
-    let [<Literal>] AssemblyVersion = "6.0.0"
-    let [<Literal>] AssemblyFileVersion = "6.0.0"
+    let [<Literal>] AssemblyVersion = "7.0.0"
+    let [<Literal>] AssemblyFileVersion = "7.0.0"
     let [<Literal>] AssemblyConfiguration = "Release"

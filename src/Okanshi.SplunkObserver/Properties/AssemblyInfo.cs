@@ -3,18 +3,18 @@
 using System.Reflection;
 
 [assembly: AssemblyTitle("Okanshi.SplunkObserver")]
-[assembly: AssemblyProduct("Okanshi.SplunkObserver")]
-[assembly: AssemblyDescription("Send Okanhshi measurements to Splunk over http")]
-[assembly: AssemblyVersion("6.1.0")]
-[assembly: AssemblyFileVersion("6.1.0")]
+[assembly: AssemblyProduct("Okanshi")]
+[assembly: AssemblyDescription("In-process monitoring library")]
+[assembly: AssemblyVersion("7.0.0")]
+[assembly: AssemblyFileVersion("7.0.0")]
 [assembly: AssemblyConfiguration("Release")]
 namespace System {
     internal static class AssemblyVersionInformation {
         internal const System.String AssemblyTitle = "Okanshi.SplunkObserver";
         internal const System.String AssemblyProduct = "Okanshi";
         internal const System.String AssemblyDescription = "In-process monitoring library";
-        internal const System.String AssemblyVersion = "6.1.0";
-        internal const System.String AssemblyFileVersion = "6.1.0";
+        internal const System.String AssemblyVersion = "7.0.0";
+        internal const System.String AssemblyFileVersion = "7.0.0";
         internal const System.String AssemblyConfiguration = "Release";
     }
 }

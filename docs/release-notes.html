@@ -5,7 +5,7 @@
     <title>release-notes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="In-process monitoring library"/>
-    <meta name="author" content="Kim Christensen"/>
+    <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
     <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
@@ -32,6 +32,30 @@
       <div class="row">
         <div class="span9" id="main">
           
+<h3><a name="7-0-0" class="anchor" href="#7-0-0">7.0.0</a></h3>
+<ul>
+<li><code>Okanshi.Owin</code> now has an option for which timer to use when monitoring.</li>
+<li><code>SlaTimer</code> has been added. The timer makes it easy to track SLA-breaches.</li>
+<li><code>CounterAbsentFilter</code>, <code>GaugeAbsentFilter</code> and <code>TimerAbsentFilter</code> has been added. They wrap monitors and only returns values to the poller when changes have been registered.</li>
+<li><code>MinMaxAvgGauge</code> has been added. It allows you to detect extreme values that would otherwise disappear in an average calculation.</li>
+<li><code>OkanshiMonitor.DefaultStep</code> has been deleted since it was forgotten in an earlier clean up process.</li>
+<li><code>OkanshiMonitor.PerformanceCounter</code> bug fix so it now returns an instance.</li>
+<li>Unnecessary calculation has been removed from <code>Counter</code>, and locks are no longer used in the counter, instead atomics are used.</li>
+<li><code>Counter</code> now allows increment by negative numbers.</li>
+<li><code>ConsoleObserver</code> has been added to make it easier to get started with Okanshi.</li>
+<li><code>OkanshiMonitor.WithAbsentFiltering</code> has been added. This allows you to instantiate zero filter monitors.</li>
+<li><code>MonitorFactory</code> has been added. It allows you to create multiple monitors with different polling frequencies.</li>
+<li><code>AbsentMeasurementsFilterFactory</code> has been added. It allows you to instantiate absent filter monitors with different polling frequencies.</li>
+<li><code>WebApi</code> middleware has been added. Allows you to do black box monitoring of your WebApi applications.</li>
+<li><code>Okanshi.SplunkObserver</code> has been added. Post Okanshi measurements to Splunk using HTTP.</li>
+</ul>
+<p><strong>BREAKING CHANGES</strong></p>
+<ul>
+<li>Make IMonitorRegistry generic. This fixes a bug where behaviour is different depending on if the registry is stored as IMonitorRegistry or OkanshiMonitorRegistry.</li>
+<li>Instead of Okanshi.Endpoint depending on Newtonsoft.Json to do the JSON serialization, it now accepts a <code>Func</code> doing the serialization, which makes it possible for the user to control dependencies and serialization.</li>
+<li><code>Okanshi.Endpoint</code> nows takes a poller to be able to easily avoid problems with multiple pollers on the default registry. This also removes <code>PollingInterval</code> and <code>CollectMetricsOnProcessExit</code> from <code>EndpointOptions</code>.</li>
+<li><code>Okanshi.InfluxDBObserver</code> has changed namespace from <code>Okanshi.Observers</code> to <code>Okanshi.InfluxDbObserver</code>.</li>
+</ul>
 <h3><a name="6-0-0" class="anchor" href="#6-0-0">6.0.0</a></h3>
 <p>The v6.0.0 release has done a major overhaul in the naming of monitors to make it simpler for new users of the API.</p>
 <p><strong>BREAKING CHANGES</strong></p>
@@ -93,7 +117,7 @@
 </ul>
 <h3><a name="5-0-0-beta2" class="anchor" href="#5-0-0-beta2">5.0.0-beta2</a></h3>
 <p><strong>BREAKING CHANGES</strong>
-* Introduce submonitors to allowing grouping of monitors. This means that submonitors no longer should be registered in the registry, instead submonitors should be returned by <code>GetAllMonitors()</code>. This allows more control in the obsservers to decide how to process the information. Currently the InfluxDbObserver doesn't support submonitors with submonitors.</p>
+* Introduce submonitors to allowing grouping of monitors. This means that submonitors no longer should be registered in the registry, instead submonitors should be returned by <code>GetAllMonitors()</code>. This allows more control in the observers to decide how to process the information. Currently the InfluxDbObserver doesn't support submonitors with submonitors.</p>
 <h3><a name="5-0-0-beta" class="anchor" href="#5-0-0-beta">5.0.0-beta</a></h3>
 <p><strong>BREAKING CHANGES</strong>
 * Added GetOrAdd to Registry interface, this enables the caching of monitors to only occur in the registry. The Register have also been made obsolete.</p>
@@ -107,7 +131,7 @@
 </ul>
 <h3><a name="4-0-2" class="anchor" href="#4-0-2">4.0.2</a></h3>
 <ul>
-<li>Fixed bug where diposing the InfluxDB observer, would cause the underlying poller to be stopped.</li>
+<li>Fixed bug where disposing the InfluxDB observer, would cause the underlying poller to be stopped.</li>
 </ul>
 <h3><a name="4-0-1" class="anchor" href="#4-0-1">4.0.1</a></h3>
 <ul>
@@ -179,7 +203,7 @@ Add version information to response from API
 </ul>
 <h3><a name="1-0-0" class="anchor" href="#1-0-0">1.0.0</a></h3>
 <ul>
-<li>Intial project release</li>
+<li>Initial project release</li>
 </ul>
 
 

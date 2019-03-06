@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>MonitorKey - Okanshi</title>
+    <title>ConsoleObserver - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
-    <meta name="author" content="Kim Christensen"/>
+    <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
     <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
@@ -35,15 +35,44 @@
 
 
 
-<h1>MonitorKey</h1>
+<h1>ConsoleObserver</h1>
 <p>
 
     <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>Tuple representing a key used to identify a monitor</p>
+<p>Observer that prints to the Console. An easy way to see that Okanshi is working
+The serializer function could be e.g. a standard serializer such as newtonsoft Json:
+<code>observer = new ConsoleObserver(poller, x =&gt; JsonConvert.SerializeObject(x, Formatting.Indented))</code></p>
 
 </div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '63', 63)" onmouseover="showTip(event, '63', 63)">
+            new(poller, serializer)
+          </code>
+          <div class="tip" id="63">
+            <strong>Signature:</strong> (poller:IMetricPoller * serializer:Func&lt;Object,string&gt;) -&gt; ConsoleObserver<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Observer.fs#L56-56" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -53,43 +82,41 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '167', 167)" onmouseover="showTip(event, '167', 167)">
-            Item1
+          <code onmouseout="hideTip(event, '64', 64)" onmouseover="showTip(event, '64', 64)">
+            Dispose()
           </code>
-          <div class="tip" id="167">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="64">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                    
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Observer.fs#L70-70" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Dispose the observer</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '168', 168)" onmouseover="showTip(event, '168', 168)">
-            Item2
+          <code onmouseout="hideTip(event, '65', 65)" onmouseover="showTip(event, '65', 65)">
+            Update(metrics)
           </code>
-          <div class="tip" id="168">
-            <strong>Signature:</strong> Type<br />
+          <div class="tip" id="65">
+            <strong>Signature:</strong> metrics:seq&lt;Metric&gt; -&gt; Task<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                    
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Observer.fs#L62-62" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Update the observer with the specified metrics</p>
 
-          <code onmouseout="hideTip(event, '169', 169)" onmouseover="showTip(event, '169', 169)">
-            Item3
-          </code>
-          <div class="tip" id="169">
-            <strong>Signature:</strong> string<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                    
+
         </td>
       </tr>
     </tbody>

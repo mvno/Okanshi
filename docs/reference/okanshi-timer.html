@@ -5,7 +5,7 @@
     <title>Timer - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
-    <meta name="author" content="Kim Christensen"/>
+    <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
     <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
@@ -41,7 +41,7 @@
     <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>A timer providing the "total time", "count", "min" and "max" for the recordings</p>
+<p>A timer providing the "average","total time", "count", "min" and "max" for the recordings</p>
 
 </div>
   <h3>Constructors</h3>
@@ -53,10 +53,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '225', 225)" onmouseover="showTip(event, '225', 225)">
+          <code onmouseout="hideTip(event, '349', 349)" onmouseover="showTip(event, '349', 349)">
             new(config)
           </code>
-          <div class="tip" id="225">
+          <div class="tip" id="349">
             <strong>Signature:</strong> config:MonitorConfig -&gt; Timer<br />
                                   </div>
         </td>
@@ -72,10 +72,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '226', 226)" onmouseover="showTip(event, '226', 226)">
+          <code onmouseout="hideTip(event, '350', 350)" onmouseover="showTip(event, '350', 350)">
             new(config, stopwatchFactory)
           </code>
-          <div class="tip" id="226">
+          <div class="tip" id="350">
             <strong>Signature:</strong> (config:MonitorConfig * stopwatchFactory:Func&lt;IStopwatch&gt;) -&gt; Timer<br />
                                   </div>
         </td>
@@ -99,10 +99,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '227', 227)" onmouseover="showTip(event, '227', 227)">
+          <code onmouseout="hideTip(event, '351', 351)" onmouseover="showTip(event, '351', 351)">
             Config
           </code>
-          <div class="tip" id="227">
+          <div class="tip" id="351">
             <strong>Signature:</strong> MonitorConfig<br />
                                   </div>
         </td>
@@ -120,10 +120,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '228', 228)" onmouseover="showTip(event, '228', 228)">
+          <code onmouseout="hideTip(event, '352', 352)" onmouseover="showTip(event, '352', 352)">
             GetCount()
           </code>
-          <div class="tip" id="228">
+          <div class="tip" id="352">
             <strong>Signature:</strong> unit -&gt; Measurement&lt;int64&gt;<br />
                                   </div>
         </td>
@@ -140,10 +140,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '229', 229)" onmouseover="showTip(event, '229', 229)">
+          <code onmouseout="hideTip(event, '353', 353)" onmouseover="showTip(event, '353', 353)">
             GetMax()
           </code>
-          <div class="tip" id="229">
+          <div class="tip" id="353">
             <strong>Signature:</strong> unit -&gt; Measurement&lt;int64&gt;<br />
                                   </div>
         </td>
@@ -160,10 +160,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '230', 230)" onmouseover="showTip(event, '230', 230)">
+          <code onmouseout="hideTip(event, '354', 354)" onmouseover="showTip(event, '354', 354)">
             GetMin()
           </code>
-          <div class="tip" id="230">
+          <div class="tip" id="354">
             <strong>Signature:</strong> unit -&gt; Measurement&lt;int64&gt;<br />
                                   </div>
         </td>
@@ -180,10 +180,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '231', 231)" onmouseover="showTip(event, '231', 231)">
+          <code onmouseout="hideTip(event, '355', 355)" onmouseover="showTip(event, '355', 355)">
             GetTotalTime()
           </code>
-          <div class="tip" id="231">
+          <div class="tip" id="355">
             <strong>Signature:</strong> unit -&gt; Measurement&lt;int64&gt;<br />
                                   </div>
         </td>
@@ -200,10 +200,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '232', 232)" onmouseover="showTip(event, '232', 232)">
+          <code onmouseout="hideTip(event, '356', 356)" onmouseover="showTip(event, '356', 356)">
             GetValues()
           </code>
-          <div class="tip" id="232">
+          <div class="tip" id="356">
             <strong>Signature:</strong> unit -&gt; seq&lt;IMeasurement&gt;<br />
                                   </div>
         </td>
@@ -212,7 +212,7 @@
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Gets the average calls time within the specified step</p>
+          <p>Gets the values of the timer which are: "total time", "count", "min" and "max"</p>
 
 
         </td>
@@ -220,10 +220,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '233', 233)" onmouseover="showTip(event, '233', 233)">
+          <code onmouseout="hideTip(event, '357', 357)" onmouseover="showTip(event, '357', 357)">
             GetValuesAndReset()
           </code>
-          <div class="tip" id="233">
+          <div class="tip" id="357">
             <strong>Signature:</strong> unit -&gt; seq&lt;IMeasurement&gt;<br />
                                   </div>
         </td>
@@ -240,10 +240,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '234', 234)" onmouseover="showTip(event, '234', 234)">
+          <code onmouseout="hideTip(event, '358', 358)" onmouseover="showTip(event, '358', 358)">
             Record(f)
           </code>
-          <div class="tip" id="234">
+          <div class="tip" id="358">
             <strong>Signature:</strong> f:Action -&gt; unit<br />
                                   </div>
         </td>
@@ -260,10 +260,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '235', 235)" onmouseover="showTip(event, '235', 235)">
+          <code onmouseout="hideTip(event, '359', 359)" onmouseover="showTip(event, '359', 359)">
             Record(f)
           </code>
-          <div class="tip" id="235">
+          <div class="tip" id="359">
             <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; &#39;T<br />
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
@@ -280,10 +280,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '236', 236)" onmouseover="showTip(event, '236', 236)">
+          <code onmouseout="hideTip(event, '360', 360)" onmouseover="showTip(event, '360', 360)">
             Register(elapsed)
           </code>
-          <div class="tip" id="236">
+          <div class="tip" id="360">
             <strong>Signature:</strong> elapsed:TimeSpan -&gt; unit<br />
                                   </div>
         </td>
@@ -300,10 +300,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '237', 237)" onmouseover="showTip(event, '237', 237)">
+          <code onmouseout="hideTip(event, '361', 361)" onmouseover="showTip(event, '361', 361)">
             RegisterElapsed(stopwatch)
           </code>
-          <div class="tip" id="237">
+          <div class="tip" id="361">
             <strong>Signature:</strong> stopwatch:Stopwatch -&gt; unit<br />
                                   </div>
         </td>
@@ -322,10 +322,10 @@ The stopwatch is not stopped by Okanshi.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '238', 238)" onmouseover="showTip(event, '238', 238)">
+          <code onmouseout="hideTip(event, '362', 362)" onmouseover="showTip(event, '362', 362)">
             Start()
           </code>
-          <div class="tip" id="238">
+          <div class="tip" id="362">
             <strong>Signature:</strong> unit -&gt; OkanshiTimer<br />
                                   </div>
         </td>
