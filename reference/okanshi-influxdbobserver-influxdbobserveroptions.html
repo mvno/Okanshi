@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Measurement<'a> - Okanshi</title>
+    <title>InfluxDbObserverOptions - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
@@ -35,13 +35,13 @@
 
 
 
-<h1>Measurement<'a></h1>
+<h1>InfluxDbObserverOptions</h1>
 <p>
 
-    <span>Namespace: Okanshi</span><br />
+    <span>Namespace: Okanshi.InfluxDbObserver</span><br />
     </p>
 <div class="xmldoc">
-<p>A measurement from a monitor</p>
+<p>Options for the InfluxDB observer</p>
 
 </div>
   <h3>Constructors</h3>
@@ -53,20 +53,17 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
-            new(name, value)
+          <code onmouseout="hideTip(event, '389', 389)" onmouseover="showTip(event, '389', 389)">
+            new(databaseName)
           </code>
-          <div class="tip" id="205">
-            <strong>Signature:</strong> (name:string * value:&#39;a) -&gt; Measurement&lt;&#39;a&gt;<br />
+          <div class="tip" id="389">
+            <strong>Signature:</strong> databaseName:string -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L62-62" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>.ctor</code></p>
+                    <p>Create a new instance of the options.</p>
+
+
         </td>
       </tr>
     </tbody>
@@ -80,43 +77,99 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
-            Name
+          <code onmouseout="hideTip(event, '390', 390)" onmouseover="showTip(event, '390', 390)">
+            ConvertFieldType()
           </code>
-          <div class="tip" id="206">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="390">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L64-64" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The name</p>
+                    <p>Function used to convert field types. Default is no conversion.</p>
 
 
-              <p>CompiledName: <code>get_Name</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
-            Value
+          <code onmouseout="hideTip(event, '391', 391)" onmouseover="showTip(event, '391', 391)">
+            DatabaseSelector()
           </code>
-          <div class="tip" id="207">
-            <strong>Signature:</strong> &#39;a<br />
+          <div class="tip" id="391">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L67-67" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The value</p>
+                    <p>Database selector. Selects the database based on the metric.
+Default is the database name passed into constructor.</p>
 
 
-              <p>CompiledName: <code>get_Value</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '392', 392)" onmouseover="showTip(event, '392', 392)">
+            MeasurementNameSelector()
+          </code>
+          <div class="tip" id="392">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                    <p>Function used to select to measurement name. Default is the metric name.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '393', 393)" onmouseover="showTip(event, '393', 393)">
+            RetentionPolicySelector()
+          </code>
+          <div class="tip" id="393">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                    <p>Retention policy selector. Selects the retention policy based on the metric and database name.
+Default is "autogen", as this is the default retention policy in newer versions of InfluxDB.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '394', 394)" onmouseover="showTip(event, '394', 394)">
+            TagsToIgnore()
+          </code>
+          <div class="tip" id="394">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                    <p>List of tag keys to ignore.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '395', 395)" onmouseover="showTip(event, '395', 395)">
+            TagToFieldSelector()
+          </code>
+          <div class="tip" id="395">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                    <p>Predicate for converting tags to fields.</p>
+
+
         </td>
       </tr>
     </tbody>

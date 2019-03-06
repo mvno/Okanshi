@@ -5,7 +5,7 @@
     <title>Namespaces - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
-    <meta name="author" content="Kim Christensen"/>
+    <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
     <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
@@ -43,6 +43,17 @@
       <tr><td>Type</td><td>Description</td></tr>
     </thead>
     <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-absentmeasurementsfilterfactory.html">AbsentMeasurementsFilterFactory</a>
+          </td>
+          <td class="xmldoc">
+          <p>The AbsentFilterFactory can create monitors wrapped in an absent filter preventing okanshi from
+sending 0-values when no measurements are made</p>
+
+
+          </td>
+        </tr>
         <tr>
           <td class="type-name">
             <a href="okanshi-atomicdecimal.html">AtomicDecimal</a>
@@ -85,10 +96,34 @@
         </tr>
         <tr>
           <td class="type-name">
+            <a href="okanshi-consoleobserver.html">ConsoleObserver</a>
+          </td>
+          <td class="xmldoc">
+          <p>Observer that prints to the Console. An easy way to see that Okanshi is working
+The serializer function could be e.g. a standard serializer such as newtonsoft Json:
+<code>observer = new ConsoleObserver(poller, x =&gt; JsonConvert.SerializeObject(x, Formatting.Indented))</code></p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="okanshi-counter.html">Counter</a>
           </td>
           <td class="xmldoc">
           <p>Tracking the count between polls</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-counterabsentfilter-1.html">CounterAbsentFilter<'T></a>
+          </td>
+          <td class="xmldoc">
+          <p>A filter decorator for counters.
+The wrapped monitor only returns values to the poller in case a change has been registered
+With this you avoid sending 0-value measurements that normally is sent when no measurements are registered</p>
 
 
           </td>
@@ -149,6 +184,18 @@
           </td>
           <td class="xmldoc">
           <p>A gauge implemenation that invokes a func to get the current value</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-gaugeabsentfilter-1.html">GaugeAbsentFilter<'T></a>
+          </td>
+          <td class="xmldoc">
+          <p>A filter decorator for gauges.
+The wrapped monitor only returns values to the poller in case a change has been registered
+With this you avoid sending 0-value measurements that normally is sent when no measurements are registered</p>
 
 
           </td>
@@ -229,6 +276,14 @@
           <p>A monitor</p>
 
 
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-imonitorfactory.html">IMonitorFactory</a>
+          </td>
+          <td class="xmldoc">
+          
           </td>
         </tr>
         <tr>
@@ -353,6 +408,31 @@ non-negative, the initial value is 0.</p>
         </tr>
         <tr>
           <td class="type-name">
+            <a href="okanshi-minmaxavggauge.html">MinMaxAvgGauge</a>
+          </td>
+          <td class="xmldoc">
+          <p>The MinMaxAvgGauge is an extended AverageGauage in that it keeps track of the min, max and average values since last reset.
+This gauge is able to detect extreme values that would otherwise disappear in an average calculation.
+The implementation is simply wrapping the existing MinGauge, MaxGauge and AverageGauge.
+Values returned are "min", "max" and "avg"</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-monitorabsentfilter.html">MonitorAbsentFilter</a>
+          </td>
+          <td class="xmldoc">
+          <p>A filter decorator for imonitors.
+The wrapped monitor only returns values to the poller in case a change has been registered
+With this you avoid sending 0-value measurements that normally is sent when no measurements are registered</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="okanshi-monitorconfig.html">MonitorConfig</a>
           </td>
           <td class="xmldoc">
@@ -366,17 +446,7 @@ non-negative, the initial value is 0.</p>
             <a href="okanshi-monitorfactory.html">MonitorFactory</a>
           </td>
           <td class="xmldoc">
-          <p>Type representing a monitor factory</p>
-
-
-          </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="okanshi-monitorkey.html">MonitorKey</a>
-          </td>
-          <td class="xmldoc">
-          <p>Tuple representing a key used to identify a monitor</p>
+          <p>factory to create monitors sharing the same polling frequency</p>
 
 
           </td>
@@ -386,7 +456,7 @@ non-negative, the initial value is 0.</p>
             <a href="okanshi-okanshimonitor.html">OkanshiMonitor</a>
           </td>
           <td class="xmldoc">
-          <p>Static use of monitors</p>
+          <p>Global monitor factory</p>
 
 
           </td>
@@ -435,6 +505,25 @@ returning any value.</p>
         </tr>
         <tr>
           <td class="type-name">
+            <a href="okanshi-slatimer.html">SlaTimer</a>
+          </td>
+          <td class="xmldoc">
+          <p>A SLA-Timer (Servie Level Agreement timer) keeps track of your SLA's and whether they are honored.</p>
+<p>The SLA-Timer is different than a timer in that it measures strictly against the SLA, whereas the Timer operate on averages.
+If your performance characteristics are such that you are always doing very good or very bad, a normal timer can be used instead
+of the SLA-timer, since the average will suffice.</p>
+<p>The timer implements two timers one for registrations below the SLA and one above.
+Each timer provides the following data "average", "total time", "count", "min" and "max"</p>
+<p>We keep track of both executions below the SLA and above. The reason is, when things are going bad we
+want to know how bad we are doing.
+By tracking timings below our SLA we can see if we get dangerously close to our SLA, it also
+enable us to better understand the periods where we break our SLA by knowing how "business as usual" looks like.</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="okanshi-systemstopwatch.html">SystemStopwatch</a>
           </td>
           <td class="xmldoc">
@@ -456,7 +545,19 @@ returning any value.</p>
             <a href="okanshi-timer.html">Timer</a>
           </td>
           <td class="xmldoc">
-          <p>A timer providing the "total time", "count", "min" and "max" for the recordings</p>
+          <p>A timer providing the "average","total time", "count", "min" and "max" for the recordings</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-timerabsentfilter.html">TimerAbsentFilter</a>
+          </td>
+          <td class="xmldoc">
+          <p>A filter decorator for timers.
+The wrapped monitor only returns values to the poller in case a change has been registered
+With this you avoid sending 0-value measurements that normally is sent when no measurements are registered</p>
 
 
           </td>
@@ -545,7 +646,7 @@ returning any value.</p>
   </table>
 
     </div>
-  <h2>Okanshi.Observers Namespace</h2>
+  <h2>Okanshi.InfluxDbObserver Namespace</h2>
     <div>
       <table class="table table-bordered type-list">
     <thead>
@@ -554,7 +655,7 @@ returning any value.</p>
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="okanshi-observers-influxdbobserveroptions.html">InfluxDbObserverOptions</a>
+            <a href="okanshi-influxdbobserver-influxdbobserveroptions.html">InfluxDbObserverOptions</a>
           </td>
           <td class="xmldoc">
           <p>Options for the InfluxDB observer</p>
@@ -589,6 +690,108 @@ returning any value.</p>
           </td>
           <td class="xmldoc">
           <p>Okanshi options</p>
+
+
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.SplunkObservers Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-splunkobservers-httpposter.html">HttpPoster</a>
+          </td>
+          <td class="xmldoc">
+          <p>Define how to send metrics to splunk</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-splunkobservers-ihttpposter.html">IHttpPoster</a>
+          </td>
+          <td class="xmldoc">
+          <p>Define how to send metrics to Splunk</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-splunkobservers-splunkeventwrapper.html">SplunkEventWrapper</a>
+          </td>
+          <td class="xmldoc">
+          <p>Events sendt to the splunk http endpoint needs to be wrapped in an "event"</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-splunkobservers-splunkobserver.html">SplunkObserver</a>
+          </td>
+          <td class="xmldoc">
+          <p>A MetricsObserver sending metrics to splunk</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-splunkobservers-splunkresponse.html">SplunkResponse</a>
+          </td>
+          <td class="xmldoc">
+          <p>You can use this class to deserialize the answer from splunk</p>
+
+
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Okanshi.WebApi Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-webapi-okanshimiddleware.html">OkanshiMiddleware</a>
+          </td>
+          <td class="xmldoc">
+          <p>Reference for the implementation <a href="https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-message-handlers">https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-message-handlers</a></p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-webapi-okanshiwebapioptions.html">OkanshiWebApiOptions</a>
+          </td>
+          <td class="xmldoc">
+          <p>Okanshi options</p>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="okanshi-webapi-requestpathextraction.html">RequestPathExtraction</a>
+          </td>
+          <td class="xmldoc">
+          <p>How the request path is extracted</p>
 
 
           </td>

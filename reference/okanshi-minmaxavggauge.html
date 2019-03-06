@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Measurement<'a> - Okanshi</title>
+    <title>MinMaxAvgGauge - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
@@ -35,13 +35,16 @@
 
 
 
-<h1>Measurement<'a></h1>
+<h1>MinMaxAvgGauge</h1>
 <p>
 
     <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>A measurement from a monitor</p>
+<p>The MinMaxAvgGauge is an extended AverageGauage in that it keeps track of the min, max and average values since last reset.
+This gauge is able to detect extreme values that would otherwise disappear in an average calculation.
+The implementation is simply wrapping the existing MinGauge, MaxGauge and AverageGauge.
+Values returned are "min", "max" and "avg"</p>
 
 </div>
   <h3>Constructors</h3>
@@ -53,15 +56,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
-            new(name, value)
+          <code onmouseout="hideTip(event, '231', 231)" onmouseover="showTip(event, '231', 231)">
+            new(config)
           </code>
-          <div class="tip" id="205">
-            <strong>Signature:</strong> (name:string * value:&#39;a) -&gt; Measurement&lt;&#39;a&gt;<br />
+          <div class="tip" id="231">
+            <strong>Signature:</strong> config:MonitorConfig -&gt; MinMaxAvgGauge<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L62-62" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L227-227" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -80,43 +83,102 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
-            Name
+          <code onmouseout="hideTip(event, '232', 232)" onmouseover="showTip(event, '232', 232)">
+            Config
           </code>
-          <div class="tip" id="206">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="232">
+            <strong>Signature:</strong> MonitorConfig<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L64-64" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L263-263" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The name</p>
+          <p>Gets the monitor configuration</p>
 
 
-              <p>CompiledName: <code>get_Name</code></p>
+              <p>CompiledName: <code>get_Config</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
-            Value
+          <code onmouseout="hideTip(event, '233', 233)" onmouseover="showTip(event, '233', 233)">
+            GetValues()
           </code>
-          <div class="tip" id="207">
-            <strong>Signature:</strong> &#39;a<br />
+          <div class="tip" id="233">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMeasurement&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L67-67" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L254-254" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The value</p>
+          <p>Gets the average calls time within the specified step</p>
 
 
-              <p>CompiledName: <code>get_Value</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '234', 234)" onmouseover="showTip(event, '234', 234)">
+            GetValuesAndReset()
+          </code>
+          <div class="tip" id="234">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMeasurement&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L260-260" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets the value and resets the monitor</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '235', 235)" onmouseover="showTip(event, '235', 235)">
+            Reset()
+          </code>
+          <div class="tip" id="235">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L257-257" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Reset the gauge</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '236', 236)" onmouseover="showTip(event, '236', 236)">
+            Set(newValue)
+          </code>
+          <div class="tip" id="236">
+            <strong>Signature:</strong> newValue:float -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Gauges.fs#L251-251" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Sets the value</p>
+
+
         </td>
       </tr>
     </tbody>

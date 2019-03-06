@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Dependency - Okanshi</title>
+    <title>ConsoleObserver - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
@@ -35,37 +35,66 @@
 
 
 
-<h1>Dependency</h1>
+<h1>ConsoleObserver</h1>
 <p>
 
-    <span>Namespace: Okanshi.Endpoint</span><br />
+    <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>Dependecy information</p>
+<p>Observer that prints to the Console. An easy way to see that Okanshi is working
+The serializer function could be e.g. a standard serializer such as newtonsoft Json:
+<code>observer = new ConsoleObserver(poller, x =&gt; JsonConvert.SerializeObject(x, Formatting.Indented))</code></p>
 
 </div>
-  <h3>Record Fields</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '372', 372)" onmouseover="showTip(event, '372', 372)">
-            Name
+          <code onmouseout="hideTip(event, '63', 63)" onmouseover="showTip(event, '63', 63)">
+            new(poller, serializer)
           </code>
-          <div class="tip" id="372">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="63">
+            <strong>Signature:</strong> (poller:IMetricPoller * serializer:Func&lt;Object,string&gt;) -&gt; ConsoleObserver<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L13-13" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Observer.fs#L56-56" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Name of the dependency</p>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '64', 64)" onmouseover="showTip(event, '64', 64)">
+            Dispose()
+          </code>
+          <div class="tip" id="64">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Observer.fs#L70-70" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Dispose the observer</p>
 
 
         </td>
@@ -73,19 +102,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '373', 373)" onmouseover="showTip(event, '373', 373)">
-            Version
+          <code onmouseout="hideTip(event, '65', 65)" onmouseover="showTip(event, '65', 65)">
+            Update(metrics)
           </code>
-          <div class="tip" id="373">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="65">
+            <strong>Signature:</strong> metrics:seq&lt;Metric&gt; -&gt; Task<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L15-15" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Observer.fs#L62-62" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The dependency version</p>
+          <p>Update the observer with the specified metrics</p>
 
 
         </td>

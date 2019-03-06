@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Dependency - Okanshi</title>
+    <title>RequestPathExtraction - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
@@ -35,13 +35,13 @@
 
 
 
-<h1>Dependency</h1>
+<h1>RequestPathExtraction</h1>
 <p>
 
-    <span>Namespace: Okanshi.Endpoint</span><br />
+    <span>Namespace: Okanshi.WebApi</span><br />
     </p>
 <div class="xmldoc">
-<p>Dependecy information</p>
+<p>How the request path is extracted</p>
 
 </div>
   <h3>Record Fields</h3>
@@ -53,19 +53,18 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '372', 372)" onmouseover="showTip(event, '372', 372)">
-            Name
+          <code onmouseout="hideTip(event, '416', 416)" onmouseover="showTip(event, '416', 416)">
+            CanonicalPath
           </code>
-          <div class="tip" id="372">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="416">
+            <strong>Signature:</strong> RequestPathExtraction<br />
+              <strong>Modifiers:</strong> static<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L13-13" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Name of the dependency</p>
+                    <p>Uses the canonical representation of an endpoint.</p>
+<p>Routes must be explicitly annotated using the [Route] attribute for them to show up correctly. If not properly annotated
+this code will use an abstract path such as "api/{controller}/{id}" which will be the general configured fall-back path.</p>
 
 
         </td>
@@ -73,21 +72,33 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '373', 373)" onmouseover="showTip(event, '373', 373)">
-            Version
+          <code onmouseout="hideTip(event, '417', 417)" onmouseover="showTip(event, '417', 417)">
+            Path
           </code>
-          <div class="tip" id="373">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="417">
+            <strong>Signature:</strong> RequestPathExtraction<br />
+              <strong>Modifiers:</strong> static<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L15-15" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The dependency version</p>
+                    <p>Uses "request.RequestUri.LocalPath" which holds the path including any parameters within the path, e.g. customerId</p>
 
 
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '418', 418)" onmouseover="showTip(event, '418', 418)">
+            value__
+          </code>
+          <div class="tip" id="418">
+            <strong>Signature:</strong> int<br />
+              <strong>Modifiers:</strong> mutable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                    
         </td>
       </tr>
     </tbody>

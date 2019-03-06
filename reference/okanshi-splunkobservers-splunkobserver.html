@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Dependency - Okanshi</title>
+    <title>SplunkObserver - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
@@ -35,37 +35,33 @@
 
 
 
-<h1>Dependency</h1>
+<h1>SplunkObserver</h1>
 <p>
 
-    <span>Namespace: Okanshi.Endpoint</span><br />
+    <span>Namespace: Okanshi.SplunkObservers</span><br />
     </p>
 <div class="xmldoc">
-<p>Dependecy information</p>
+<p>A MetricsObserver sending metrics to splunk</p>
 
 </div>
-  <h3>Record Fields</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '372', 372)" onmouseover="showTip(event, '372', 372)">
-            Name
+          <code onmouseout="hideTip(event, '405', 405)" onmouseover="showTip(event, '405', 405)">
+            new(poster, jsonSerializer)
           </code>
-          <div class="tip" id="372">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="405">
+            <strong>Signature:</strong> (poster:IHttpPoster * jsonSerializer:Func&lt;obj,string&gt;) -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L13-13" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Name of the dependency</p>
+                    <p>A MetricsObserver sending metrics to splunk</p>
 
 
         </td>
@@ -73,19 +69,40 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '373', 373)" onmouseover="showTip(event, '373', 373)">
-            Version
+          <code onmouseout="hideTip(event, '406', 406)" onmouseover="showTip(event, '406', 406)">
+            new(...)
           </code>
-          <div class="tip" id="373">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="406">
+            <strong>Signature:</strong> (poster:IHttpPoster * metricConverter:Func&lt;Metric,Dictionary&lt;string,obj&gt;&gt; * jsonSerializer:Func&lt;obj,string&gt;) -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L15-15" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>The dependency version</p>
+                    <p>A MetricsObserver sending metrics to splunk</p>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '407', 407)" onmouseover="showTip(event, '407', 407)">
+            Dispose()
+          </code>
+          <div class="tip" id="407">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                    <p>dispose</p>
 
 
         </td>

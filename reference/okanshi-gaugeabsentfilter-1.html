@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Measurement<'a> - Okanshi</title>
+    <title>GaugeAbsentFilter<'T> - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
@@ -35,13 +35,15 @@
 
 
 
-<h1>Measurement<'a></h1>
+<h1>GaugeAbsentFilter<'T></h1>
 <p>
 
     <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>A measurement from a monitor</p>
+<p>A filter decorator for gauges.
+The wrapped monitor only returns values to the poller in case a change has been registered
+With this you avoid sending 0-value measurements that normally is sent when no measurements are registered</p>
 
 </div>
   <h3>Constructors</h3>
@@ -53,15 +55,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
-            new(name, value)
+          <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
+            new(inner)
           </code>
-          <div class="tip" id="205">
-            <strong>Signature:</strong> (name:string * value:&#39;a) -&gt; Measurement&lt;&#39;a&gt;<br />
+          <div class="tip" id="108">
+            <strong>Signature:</strong> inner:IGauge&lt;&#39;T&gt; -&gt; GaugeAbsentFilter&lt;&#39;T&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L62-62" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L34-34" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -80,43 +82,92 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
-            Name
+          <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
+            Config
           </code>
-          <div class="tip" id="206">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="109">
+            <strong>Signature:</strong> MonitorConfig<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L64-64" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L49-49" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The name</p>
-
-
-              <p>CompiledName: <code>get_Name</code></p>
+          
+              <p>CompiledName: <code>get_Config</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
-            Value
+          <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
+            GetValues()
           </code>
-          <div class="tip" id="207">
-            <strong>Signature:</strong> &#39;a<br />
+          <div class="tip" id="110">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMeasurement&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Config.fs#L67-67" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The value</p>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
 
+          <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
+            GetValuesAndReset()
+          </code>
+          <div class="tip" id="111">
+            <strong>Signature:</strong> unit -&gt; seq&lt;IMeasurement&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L54-54" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
 
-              <p>CompiledName: <code>get_Value</code></p>
+          <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
+            Reset()
+          </code>
+          <div class="tip" id="112">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L50-50" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
+            Set(newValue)
+          </code>
+          <div class="tip" id="113">
+            <strong>Signature:</strong> newValue:&#39;T -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L38-38" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
         </td>
       </tr>
     </tbody>

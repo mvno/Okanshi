@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Dependency - Okanshi</title>
+    <title>MonitorAbsentFilter - Okanshi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Kim Christensen, Kasper B. Graversen"/>
@@ -35,59 +35,103 @@
 
 
 
-<h1>Dependency</h1>
+<h1>MonitorAbsentFilter</h1>
 <p>
 
-    <span>Namespace: Okanshi.Endpoint</span><br />
+    <span>Namespace: Okanshi</span><br />
     </p>
 <div class="xmldoc">
-<p>Dependecy information</p>
+<p>A filter decorator for imonitors.
+The wrapped monitor only returns values to the poller in case a change has been registered
+With this you avoid sending 0-value measurements that normally is sent when no measurements are registered</p>
 
 </div>
-  <h3>Record Fields</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '372', 372)" onmouseover="showTip(event, '372', 372)">
-            Name
+          <code onmouseout="hideTip(event, '237', 237)" onmouseover="showTip(event, '237', 237)">
+            new(inner)
           </code>
-          <div class="tip" id="372">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="237">
+            <strong>Signature:</strong> inner:IMonitor -&gt; MonitorAbsentFilter<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L13-13" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L10-10" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Name of the dependency</p>
+          
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
 
-
+          <code onmouseout="hideTip(event, '238', 238)" onmouseover="showTip(event, '238', 238)">
+            Config
+          </code>
+          <div class="tip" id="238">
+            <strong>Signature:</strong> MonitorConfig<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L20-20" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>get_Config</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '373', 373)" onmouseover="showTip(event, '373', 373)">
-            Version
+          <code onmouseout="hideTip(event, '239', 239)" onmouseover="showTip(event, '239', 239)">
+            GetValues()
           </code>
-          <div class="tip" id="373">
-            <strong>Signature:</strong> string<br />
-                                  </div>
+          <div class="tip" id="239">
+            <strong>Signature:</strong> unit -&gt; seq&lt;&#39;?8125&gt;<br />
+                          <strong>Type parameters:</strong> '?8125                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi.Endpoint/Endpoint.fs#L15-15" class="github-link">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L17-17" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The dependency version</p>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
 
-
+          <code onmouseout="hideTip(event, '240', 240)" onmouseover="showTip(event, '240', 240)">
+            GetValuesAndReset()
+          </code>
+          <div class="tip" id="240">
+            <strong>Signature:</strong> unit -&gt; seq&lt;&#39;?8128&gt;<br />
+                          <strong>Type parameters:</strong> '?8128                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/mvno/Okanshi/tree/master/src/Okanshi/Filters.fs#L21-21" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
         </td>
       </tr>
     </tbody>
