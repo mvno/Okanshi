@@ -1,4 +1,4 @@
-### New in 6.1.0 (Unreleased)
+### 7.0.0
 
 * `Okanshi.Owin` now has an option for which timer to use when monitoring.
 * `SlaTimer` has been added. The timer makes it easy to track SLA-breaches.
