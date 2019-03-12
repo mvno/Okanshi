@@ -107,13 +107,16 @@ type EvictingOkanshiMonitorRegistry(numberOfPullsBeforeEviction : int, logFinegr
             else
                 Logger.Debug.Invoke (sprintf "Evicting '%d' monitors. They will no longer send any data." monitors.Count)
 
-        iterationsLeft <- iterationsLeft - 1
-        match iterationsLeft with
-        | 0 -> 
-            iterationsLeft <- numberOfPullsBeforeEviction
-            logEvictions
-            monitors.Clear()
-        | _ -> ()
+        match monitors.Count with
+        | 0 -> iterationsLeft <- numberOfPullsBeforeEviction
+        | _ ->
+            iterationsLeft <- iterationsLeft - 1
+            match iterationsLeft with
+            | 0 -> 
+                iterationsLeft <- numberOfPullsBeforeEviction
+                logEvictions
+                monitors.Clear()
+            | _ -> ()
 
     let getRegisteredMonitors'() = 
         let result = monitors.Values |> Seq.toArray
