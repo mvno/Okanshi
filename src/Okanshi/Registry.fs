@@ -93,6 +93,9 @@ type WeakMonitorReference(monitor: IMonitor) =
         | :? IMonitor as monitor -> Some(monitor)
         | _ -> None
 
+/// Registry that will hold a weak reference to monitors, allowing them to be garbage collected.
+/// When a monitor is garbage collected, it will be removed from the internal collection when the cleanup thread runs.
+/// This registry allows registration of monitors with the same name, but different types.
 type EvictingRegistry(cleanupInterval: TimeSpan) =
     let monitors = new System.Collections.Generic.Dictionary<int, WeakMonitorReference>()
     let syncRoot = new obj()
@@ -171,6 +174,9 @@ type EvictingRegistry(cleanupInterval: TimeSpan) =
     /// Get or add a new registration
     member __.GetOrAdd<'a when 'a :> IMonitor>(config, factory : Func<MonitorConfig, 'a>) =
         Lock.lockWithArg syncRoot (config, factory) getOrAdd'
+
+    /// Get all registered monitors, even monitors garbage collector. Should only be used for debugging
+    member __.GetAllRegisteredMonitors() = Lock.lock syncRoot (fun () -> monitors.Values)
 
     interface IMonitorRegistry with
         member self.GetRegisteredMonitors() = self.GetRegisteredMonitors()
