@@ -109,18 +109,27 @@ type CounterAbsentFilter<'T>(inner : ICounter<'T>) =
 /// A filter decorator for timers.
 /// The wrapped monitor only returns values to the poller in case a change has been registered
 /// With this you avoid sending 0-value measurements that normally is sent when no measurements are registered
-type TimerAbsentFilter(inner : ITimer) =
+type TimerAbsentFilter(inner : ITimer, stopwatchFactory : Func<IStopwatch>) =
     let mutable hasChanged = false
     let syncRoot = new obj()
     
     member __.Record(f : Func<'T>) = 
+        let stopwatch = stopwatchFactory.Invoke()
+        let (result, elapsed) = stopwatch.Time(f)
         lock syncRoot (fun() -> 
             hasChanged <- true
-            inner.Record(f))
+            inner.Register <| new TimeSpan(0,0,0,0,(int elapsed));
+            result
+            )
+
     member __.Record(f : Action) = 
+        let stopwatch = stopwatchFactory.Invoke()
+        let elapsed = stopwatch.Time(f)
         lock syncRoot (fun() -> 
             hasChanged <- true
-            inner.Record(f))
+            inner.Register <| new TimeSpan(0,0,0,0,(int elapsed));
+            )
+
     member __.GetValues() = 
         lock syncRoot (fun() -> 
             match hasChanged with
@@ -145,6 +154,8 @@ type TimerAbsentFilter(inner : ITimer) =
             | true -> 
                 hasChanged <- false
                 inner.GetValuesAndReset() |> Seq.cast)
+
+    new(inner : ITimer) = TimerAbsentFilter(inner, fun () -> SystemStopwatch() :> IStopwatch)
 
     interface ITimer with
         member self.Record(f : Func<'T>) = self.Record(f)
