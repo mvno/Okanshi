@@ -19,17 +19,20 @@ namespace Okanshi.Autofac
             {
                 case MeasurementStyleKind.None:
                     break;
+
                 case MeasurementStyleKind.CountInstantiations:
-                    var c = new CountOnlyEventHandler(options);
+                    var c = new CountEventHandler(options);
                     registration.Activating += c.CountActivatingFast;
                     break;
+
                 case MeasurementStyleKind.CountAndTimeInstantiations:
                     var t = new CountAndTimingEventHandler(options);
                     registration.Activating += t.TimerActicating;
                     registration.Activated += t.TimerActivated;
                     break;
+
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(options), options.MeasurementStyle.ToString());
             }
 
             base.AttachToComponentRegistration(componentRegistry, registration);

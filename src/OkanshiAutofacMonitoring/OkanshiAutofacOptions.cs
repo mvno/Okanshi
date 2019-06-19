@@ -12,7 +12,7 @@ namespace Okanshi.Autofac
         /// <summary>
         /// The metric name to use. Default values is Request.
         /// </summary>
-        public string MetricName { get; set; } = "Autofac instantiation";
+        public string MetricName { get; set; } = "Autofac instantiations";
 
         /// <summary>
         /// A factory method which is invoked whenever a timer is needed for <see cref="MeasurementStyleKind.CountAndTimeInstantiations"/>
