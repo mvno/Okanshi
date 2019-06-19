@@ -30,14 +30,23 @@ Okanshi supports a number of platforms
 
 and works well with C# and F# alike.
 
-Out-of-the-box support for
+Out-of-the-box support for sending data to
 
- * Influx DB
+ * Influx DB 
  * Splunk
- * OWIN
- * WebApi
- * "Push" as well as "pull" delivery of measurements
+ 
+and "Push" as well as "pull" delivery of measurements.
 
+ 
+Out-of-the-box support for monitoring of
+ 
+ * OWIN 
+ * WebApi
+ * Autofac
+ * Windows performance counters
+ 
+ 
+ 
 ## Samples & documentation
 
 The library comes with comprehensible documentation. 

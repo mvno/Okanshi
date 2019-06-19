@@ -684,5 +684,40 @@ To mitigate these problems, you can choose different styles of path extract.
 * `RequestPathExtraction.Path` - Uses `request.RequestUri.LocalPath` which holds the path including any parameters within the path, e.g. customerId
 *  `RequestPathExtraction.CanonicalPath` - Uses the canonical representation of an endpoint. Routes must be explicitly annotated using the `[Route]` attribute for them to show up correctly. If not properly annotated this code will use an abstract path such as `"api/{controller}/{id}"` which will be the general configured fall-back path.
  
+ 
+### 9.1. Autofac monitoring
+
+When using an IOC containers in your software, it is easy to loose sight of what is going in the running application. For example, you may be instantiating a lot more objects than you anticipated. Or perhaps your constructors are carrying out too much work. 
+
+The Autofac IOC container integration enables you to do the following kinds of black box monitoring
+
+* Count the number of times each type is instantiated - to identify types that are instantiated too often.
+* Count and time each type instantiation - to identify expensive constructors and/or types that are instantiated too often.
+
+The monitoring comes at a cost, however. One small unscientific test (that does mostly instantiations of objects, and very little calculations etc) suggest a slight to a significant overhead if you do a lot of instantiations. 
+Your millage may vary, so I suggest you check the overhead in your application before running in production for long periods of time. Again, remember, it is only the instantiation time that is increased.
+
+
+| Monitoring          | Runtime | %   |
+| ---                 | ---     | --- |
+| No monitoring       | 2882    | -   | 
+| Counting            | 3156    | 10% |
+| Counting and timing | 3348    | 16% | 
+
+
+To start monitoring use the module functionality of Autofac.
+
+```csharp
+    OkanshiAutofac okanshiAutofac = new OkanshiAutofac(
+        new OkanshiAutofacOptions() 
+        { 
+            MeasurementStyle = CountInstantiations // or CountAndTimeInstantiations 
+        });
+
+    ContainerBuilder builder = new ContainerBuilder();
+    builder.RegisterModule(okanshiAutofac);
+```
+
+
 
 (document sections maintained by https://github.com/kbilsted/AutonumberMarkdown)
