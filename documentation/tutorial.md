@@ -698,11 +698,11 @@ The monitoring comes at a cost, however. One small unscientific test (that does 
 Your millage may vary, so I suggest you check the overhead in your application before running in production for long periods of time. Again, remember, it is only the instantiation time that is increased.
 
 
-| Monitoring          | Runtime | % |
+| Monitoring          | Runtime | %   |
 | ---                 | ---     | --- |
-| No monitoring       | 590     | -   | 
-| Counting            | 680     | 15% |
-| Counting and timing | 890     | 50% | 
+| No monitoring       | 2882    | -   | 
+| Counting            | 3156    | 10% |
+| Counting and timing | 3348    | 16% | 
 
 
 To start monitoring use the module functionality of Autofac.
