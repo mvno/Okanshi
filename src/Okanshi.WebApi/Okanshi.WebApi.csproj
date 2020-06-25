@@ -7,7 +7,15 @@
     <Company>Telenor MVNO</Company>
     <Description>WepApi middleware for Okanshi</Description>
     <PackageTags>monitoring;microservices;webapi</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
